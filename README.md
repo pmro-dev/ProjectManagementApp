@@ -12,10 +12,12 @@ For the training purpose it supposed to be a simple ToDo List app - and it was:
 
 ![ToDoListAppAnimationShort](https://user-images.githubusercontent.com/34062651/227597191-2b70d5e4-b014-4f59-ae02-2a7728c498fa.gif)
 
+My custom Kanban for basic version of the project -> https://trello.com/b/IlCUwPL4/to-do-list-project
+
 but because of my interesting and education in Project Management (Agile approach) I decided to extend the basic project and develop something similar to monday.com: 
 
 MONDAY.COM:
 
 ![image](https://user-images.githubusercontent.com/34062651/227597593-b4a8dbc6-0fa7-45e5-aa13-ecec40c883c0.png)
 
-I'm not a front-end developer, I'm focused on backend but we will see what I can achieve ;)
+I'm not a frontend developer, I'm focused on backend but we will see what I can achieve ;)
