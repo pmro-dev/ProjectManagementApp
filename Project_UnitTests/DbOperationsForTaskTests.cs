@@ -3,7 +3,6 @@ using Autofac.Extras.Moq;
 using Moq;
 using Project_UnitTests.Helpers;
 using Project_DomainEntities;
-using Project_Main.Models.DataBases.AppDb;
 using Project_Main.Models.DataBases.Repositories;
 
 namespace Project_UnitTests

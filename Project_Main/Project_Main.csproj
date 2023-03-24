@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>TODO_List_ASPNET_MVC</RootNamespace>
+    <RootNamespace>Project_Main</RootNamespace>
     <UserSecretsId>c280322e-3341-482d-9c7d-dd05585d2b42</UserSecretsId>
   </PropertyGroup>
 
@@ -30,13 +30,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Identity_Domain_Entities\Project_IdentityDomainEntities.csproj" />
-    <ProjectReference Include="..\TODO_Domain_Entities\Project_DomainEntities.csproj" />
+    <ProjectReference Include="..\Project_DomainEntities\Project_DomainEntities.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Identity_Domain_Entities">
-      <HintPath>..\Identity_Domain_Entities\bin\Debug\net6.0\Identity_Domain_Entities.dll</HintPath>
+    <Reference Include="Project_IdentityDomainEntities">
+      <HintPath>..\Project_IdentityDomainEntities\bin\Debug\net6.0\Project_IdentityDomainEntities.dll</HintPath>
     </Reference>
   </ItemGroup>
 

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>TODO_App_Tests</RootNamespace>
+    <RootNamespace>Project_UnitTests</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TODO_Domain_Entities\Project_DomainEntities.csproj" />
-    <ProjectReference Include="..\TODO_List_ASPNET_MVC\Project_Main.csproj" />
+    <ProjectReference Include="..\Project_DomainEntities\Project_DomainEntities.csproj" />
+    <ProjectReference Include="..\Project_Main\Project_Main.csproj" />
   </ItemGroup>
 
 </Project>
