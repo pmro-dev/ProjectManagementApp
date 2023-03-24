@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Identity_Domain_Entities.Helpers;
+using Project_IdentityDomainEntities.Helpers;
 
-namespace Identity_Domain_Entities
+namespace Project_IdentityDomainEntities
 {
     public class RoleModel
 	{

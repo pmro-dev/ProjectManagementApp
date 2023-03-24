@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TODO_List_ASPNET_MVC.Models.ViewModels.HomeViewModels
+namespace Project_Main.Models.ViewModels.HomeViewModels
 {
     public class RegisterViewModel
     {

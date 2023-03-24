@@ -3,11 +3,11 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 using System.Text.RegularExpressions;
-using TODO_Domain_Entities;
-using TODO_List_ASPNET_MVC.Infrastructure.Helpers;
-using TODO_List_ASPNET_MVC.Models.DataBases.AppDb;
+using Project_DomainEntities;
+using Project_Main.Infrastructure.Helpers;
+using Project_Main.Models.DataBases.AppDb;
 
-namespace TODO_List_ASPNET_MVC.Models.DataBases.Repositories
+namespace Project_Main.Models.DataBases.Repositories
 {
 	/// <inheritdoc/>
 	public class ContextOperations : IContextOperations

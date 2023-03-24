@@ -1,9 +1,9 @@
 ﻿
-using TODO_App_Tests.Helpers;
-using TODO_Domain_Entities;
-using TODO_Domain_Entities.Helpers;
+using Project_UnitTests.Helpers;
+using Project_DomainEntities;
+using Project_DomainEntities.Helpers;
 
-namespace TODO_App_Tests
+namespace Project_UnitTests
 {
 	/// <summary>
 	/// Tests class for Task Model.

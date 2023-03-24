@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Identity_Domain_Entities;
-using TODO_List_ASPNET_MVC.Infrastructure.Helpers;
-using TODO_List_ASPNET_MVC.Models.DataBases.Common.Helpers;
+using Project_IdentityDomainEntities;
+using Project_Main.Infrastructure.Helpers;
+using Project_Main.Models.DataBases.Common.Helpers;
 
-namespace TODO_List_ASPNET_MVC.Models.DataBases.IdentityDb
+namespace Project_Main.Models.DataBases.IdentityDb
 {
 	/// <summary>
 	/// </summary>

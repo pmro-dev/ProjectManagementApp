@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace TODO_List_ASPNET_MVC.Models.DataBase.Migrations
+namespace Project_Main.Models.DataBase.Migrations
 {
     public partial class fixtaskmodeltodolistid : Migration
     {

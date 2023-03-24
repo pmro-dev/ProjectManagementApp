@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using TODO_List_ASPNET_MVC.Infrastructure.Helpers;
-using TODO_List_ASPNET_MVC.Models.ViewModels.HomeViewModels;
-using Identity_Domain_Entities;
-using TODO_List_ASPNET_MVC.Models.DataBases.Repositories;
+using Project_Main.Infrastructure.Helpers;
+using Project_Main.Models.ViewModels.HomeViewModels;
+using Project_IdentityDomainEntities;
+using Project_Main.Models.DataBases.Repositories;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
-namespace TODO_List_ASPNET_MVC.Controllers
+namespace Project_Main.Controllers
 {
 	/// <summary>
 	/// Controller to manage availability of page's resources via Authentication.
@@ -81,8 +81,10 @@ namespace TODO_List_ASPNET_MVC.Controllers
 					ClaimsIdentity userIdentity = new(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
 					ClaimsPrincipal userPrincipal = new(userIdentity);
 
-					Dictionary<string, string?> items = new();
-					items.Add(".AuthScheme", CookieAuthenticationDefaults.AuthenticationScheme);
+					Dictionary<string, string?> items = new()
+					{
+						{ ".AuthScheme", CookieAuthenticationDefaults.AuthenticationScheme }
+					};
 					AuthenticationProperties authProperties = new(items);
 
 					await HttpContext.SignInAsync(userPrincipal, authProperties);

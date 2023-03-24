@@ -1,7 +1,7 @@
 ﻿
-using TODO_Domain_Entities;
+using Project_DomainEntities;
 
-namespace TODO_List_ASPNET_MVC.Infrastructure.Helpers
+namespace Project_Main.Infrastructure.Helpers
 {
 	public class TasksComparer : IComparer<TaskModel>
 	{

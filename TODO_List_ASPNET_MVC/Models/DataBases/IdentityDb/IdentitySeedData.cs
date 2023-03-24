@@ -1,9 +1,9 @@
-﻿using Identity_Domain_Entities;
+﻿using Project_IdentityDomainEntities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace TODO_List_ASPNET_MVC.Models.DataBases.IdentityDb
+namespace Project_Main.Models.DataBases.IdentityDb
 {
 	/// <summary>
 	/// Class that manage seeding Identity data to database.

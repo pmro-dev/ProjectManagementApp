@@ -1,7 +1,7 @@
 ﻿
-using TODO_Domain_Entities;
+using Project_DomainEntities;
 
-namespace TODO_List_ASPNET_MVC.Models.ViewModels.TodoListViewModels
+namespace Project_Main.Models.ViewModels.TodoListViewModels
 {
     public class TodoListViewModel
     {

@@ -1,4 +1,4 @@
-﻿namespace TODO_Domain_Entities
+﻿namespace Project_DomainEntities
 {
     public class TaskTagModel
     {

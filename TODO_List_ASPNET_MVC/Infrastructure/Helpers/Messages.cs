@@ -1,4 +1,4 @@
-﻿namespace TODO_List_ASPNET_MVC.Infrastructure.Helpers
+﻿namespace Project_Main.Infrastructure.Helpers
 {
     /// <summary>
     /// Helper class with const messages and methods that return formated messages that could be used in different places in a solution.

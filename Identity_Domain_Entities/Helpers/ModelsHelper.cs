@@ -1,4 +1,4 @@
-﻿namespace Identity_Domain_Entities.Helpers
+﻿namespace Project_IdentityDomainEntities.Helpers
 {
 	public static class ModelsHelper
 	{

@@ -1,7 +1,7 @@
 ﻿
-using TODO_Domain_Entities;
+using Project_DomainEntities;
 
-namespace TODO_List_ASPNET_MVC.Models.DataBases.Repositories
+namespace Project_Main.Models.DataBases.Repositories
 {
     /// <summary>
     /// Provides methods to manage database operations.

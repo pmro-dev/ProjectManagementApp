@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TODO_Domain_Entities;
+using Project_DomainEntities;
 
-namespace TODO_List_ASPNET_MVC.Models.DataBases.AppDb
+namespace Project_Main.Models.DataBases.AppDb
 {
     /// <summary>
     /// Interface for DbContext with required methods and DbSets.

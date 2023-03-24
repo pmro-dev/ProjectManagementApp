@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TODO_List_ASPNET_MVC.Models.DataBases.IdentityDb;
+using Project_Main.Models.DataBases.IdentityDb;
 
 #nullable disable
 
-namespace TODO_List_ASPNET_MVC.Migrations
+namespace Project_Main.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
     [Migration("20230311195847_AddDescriptionColumn")]

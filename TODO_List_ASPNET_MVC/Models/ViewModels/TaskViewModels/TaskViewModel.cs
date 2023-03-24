@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
-using TODO_Domain_Entities;
-using TODO_Domain_Entities.Helpers;
-using static TODO_Domain_Entities.Helpers.TaskStatusHelper;
+using Project_DomainEntities;
+using Project_DomainEntities.Helpers;
+using static Project_DomainEntities.Helpers.TaskStatusHelper;
 
-namespace TODO_List_ASPNET_MVC.Models.ViewModels.TaskViewModels
+namespace Project_Main.Models.ViewModels.TaskViewModels
 {
     public class TaskViewModel
     {

@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TODO_Domain_Entities;
-using TODO_List_ASPNET_MVC.Infrastructure.Helpers;
-using TODO_List_ASPNET_MVC.Models.DataBases.Common.Helpers;
-using static TODO_Domain_Entities.Helpers.TaskStatusHelper;
+using Project_DomainEntities;
+using Project_Main.Infrastructure.Helpers;
+using Project_Main.Models.DataBases.Common.Helpers;
+using static Project_DomainEntities.Helpers.TaskStatusHelper;
 
-namespace TODO_List_ASPNET_MVC.Models.DataBases.AppDb
+namespace Project_Main.Models.DataBases.AppDb
 {
     /// <summary>
     /// Context class that implements DbContext.

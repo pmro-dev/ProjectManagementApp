@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TODO_List_ASPNET_MVC.Models.DataBases.AppDb;
+using Project_Main.Models.DataBases.AppDb;
 
 #nullable disable
 
-namespace TODO_List_ASPNET_MVC.Models.DataBase.Migrations
+namespace Project_Main.Models.DataBase.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20230216183651_Update-with-task-status-type")]

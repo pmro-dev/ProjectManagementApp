@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using TODO_Domain_Entities;
-using TODO_Domain_Entities.Helpers;
-using TODO_List_ASPNET_MVC.Infrastructure.Helpers;
-using TODO_List_ASPNET_MVC.Models.DataBases.Repositories;
-using TODO_List_ASPNET_MVC.Models.ViewModels.TodoListViewModels;
+using Project_DomainEntities;
+using Project_DomainEntities.Helpers;
+using Project_Main.Infrastructure.Helpers;
+using Project_Main.Models.DataBases.Repositories;
+using Project_Main.Models.ViewModels.TodoListViewModels;
 
-namespace TODO_List_ASPNET_MVC.Controllers
+namespace Project_Main.Controllers
 {
     /// <summary>
     /// Controller to manage To Do List actions based on certain routes.

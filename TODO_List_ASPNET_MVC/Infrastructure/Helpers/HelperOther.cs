@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 
-namespace TODO_List_ASPNET_MVC.Infrastructure.Helpers
+namespace Project_Main.Infrastructure.Helpers
 {
     public static class HelperOther
     {

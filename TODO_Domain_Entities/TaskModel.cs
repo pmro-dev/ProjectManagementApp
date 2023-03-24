@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TODO_Domain_Entities.Helpers;
-using static TODO_Domain_Entities.Helpers.TaskStatusHelper;
+using Project_DomainEntities.Helpers;
+using static Project_DomainEntities.Helpers.TaskStatusHelper;
 
-namespace TODO_Domain_Entities
+namespace Project_DomainEntities
 {
 	/// <summary>
 	/// Model for Task.

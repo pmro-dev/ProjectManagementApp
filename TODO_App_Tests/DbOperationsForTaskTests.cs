@@ -1,12 +1,12 @@
 using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
-using TODO_App_Tests.Helpers;
-using TODO_Domain_Entities;
-using TODO_List_ASPNET_MVC.Models.DataBases.AppDb;
-using TODO_List_ASPNET_MVC.Models.DataBases.Repositories;
+using Project_UnitTests.Helpers;
+using Project_DomainEntities;
+using Project_Main.Models.DataBases.AppDb;
+using Project_Main.Models.DataBases.Repositories;
 
-namespace TODO_App_Tests
+namespace Project_UnitTests
 {
 	/// <summary>
 	/// Unit Test Class for Database tests with Mocking (DbContext) approach.

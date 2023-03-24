@@ -1,16 +1,16 @@
 using EntityFramework.Exceptions.SqlServer;
-using Identity_Domain_Entities;
-using Identity_Domain_Entities.Helpers;
+using Project_IdentityDomainEntities;
+using Project_IdentityDomainEntities.Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Security.Claims;
-using TODO_List_ASPNET_MVC.Infrastructure.Helpers;
-using TODO_List_ASPNET_MVC.Models.DataBases.AppDb;
-using TODO_List_ASPNET_MVC.Models.DataBases.IdentityDb;
-using TODO_List_ASPNET_MVC.Models.DataBases.Repositories;
+using Project_Main.Infrastructure.Helpers;
+using Project_Main.Models.DataBases.AppDb;
+using Project_Main.Models.DataBases.IdentityDb;
+using Project_Main.Models.DataBases.Repositories;
 
-namespace TODO_List_ASPNET_MVC
+namespace Project_Main
 {
 	public static class Program
 	{

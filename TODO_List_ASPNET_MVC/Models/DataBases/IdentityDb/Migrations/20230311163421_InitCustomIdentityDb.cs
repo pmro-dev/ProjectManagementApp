@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace TODO_List_ASPNET_MVC.Migrations
+namespace Project_Main.Migrations
 {
     public partial class InitCustomIdentityDb : Migration
     {

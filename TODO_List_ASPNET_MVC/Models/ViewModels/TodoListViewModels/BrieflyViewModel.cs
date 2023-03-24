@@ -1,7 +1,7 @@
-﻿using TODO_Domain_Entities;
-using TODO_Domain_Entities.Helpers;
+﻿using Project_DomainEntities;
+using Project_DomainEntities.Helpers;
 
-namespace TODO_List_ASPNET_MVC.Models.ViewModels.TodoListViewModels
+namespace Project_Main.Models.ViewModels.TodoListViewModels
 {
     public class BrieflyViewModel
     {

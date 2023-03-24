@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TODO_Domain_Entities;
-using TODO_List_ASPNET_MVC.Infrastructure.Helpers;
+using Project_DomainEntities;
+using Project_Main.Infrastructure.Helpers;
 
-namespace TODO_List_ASPNET_MVC.Models.DataBases.Common.Helpers
+namespace Project_Main.Models.DataBases.Common.Helpers
 {
 	public static class DbContextValidators
 	{

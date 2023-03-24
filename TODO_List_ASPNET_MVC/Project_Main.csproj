@@ -30,7 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TODO_Domain_Entities\TODO_Domain_Entities.csproj" />
+    <ProjectReference Include="..\Identity_Domain_Entities\Project_IdentityDomainEntities.csproj" />
+    <ProjectReference Include="..\TODO_Domain_Entities\Project_DomainEntities.csproj" />
   </ItemGroup>
 
   <ItemGroup>

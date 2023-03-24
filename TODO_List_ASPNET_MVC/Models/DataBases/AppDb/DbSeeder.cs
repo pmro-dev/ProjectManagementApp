@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace TODO_List_ASPNET_MVC.Models.DataBases.AppDb
+namespace Project_Main.Models.DataBases.AppDb
 {
 	/// <summary>
 	/// Class that manage seeding data to database.

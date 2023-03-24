@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TODO_App_Tests.Helpers
+namespace Project_UnitTests.Helpers
 {
 	/// <summary>
 	/// Data Annotation validator.

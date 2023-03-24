@@ -2,14 +2,14 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using TODO_List_ASPNET_MVC.Infrastructure.Helpers;
-using static TODO_Domain_Entities.Helpers.TaskStatusHelper;
-using TODO_Domain_Entities;
-using TODO_List_ASPNET_MVC.Models.ViewModels.TaskViewModels;
-using TODO_List_ASPNET_MVC.Models.DataBases.Repositories;
+using Project_Main.Infrastructure.Helpers;
+using static Project_DomainEntities.Helpers.TaskStatusHelper;
+using Project_DomainEntities;
+using Project_Main.Models.ViewModels.TaskViewModels;
+using Project_Main.Models.DataBases.Repositories;
 using System.Security.Claims;
 
-namespace TODO_List_ASPNET_MVC.Controllers
+namespace Project_Main.Controllers
 {
 	/// <summary>
 	/// Controller to manage Task actions based on certain routes.

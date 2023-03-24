@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "TODO_List_ASPNET_MVC": {
+    "Project_Main_DevMode": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
@@ -24,7 +24,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "My_Production": {
+    "Project_Main_ProdMode": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

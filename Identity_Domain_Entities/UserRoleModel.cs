@@ -1,4 +1,4 @@
-﻿namespace Identity_Domain_Entities
+﻿namespace Project_IdentityDomainEntities
 {
 	public class UserRoleModel
 	{

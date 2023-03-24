@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TODO_List_ASPNET_MVC.Models.DataBases.AppDb;
+using Project_Main.Models.DataBases.AppDb;
 
 #nullable disable
 
-namespace TODO_List_ASPNET_MVC.Models.DataBase.Migrations
+namespace Project_Main.Models.DataBase.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20230222150202_update for status type to keep it as string")]

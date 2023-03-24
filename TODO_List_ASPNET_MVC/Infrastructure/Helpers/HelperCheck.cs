@@ -1,6 +1,6 @@
-﻿using TODO_Domain_Entities;
+﻿using Project_DomainEntities;
 
-namespace TODO_List_ASPNET_MVC.Infrastructure.Helpers
+namespace Project_Main.Infrastructure.Helpers
 {
 	/// <summary>
 	/// Helper to check for exceptions to throw.

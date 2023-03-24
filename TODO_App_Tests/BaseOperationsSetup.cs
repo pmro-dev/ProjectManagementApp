@@ -2,11 +2,11 @@
 using Autofac.Extras.Moq;
 using Autofac;
 using Microsoft.Extensions.Logging;
-using TODO_Domain_Entities;
-using TODO_List_ASPNET_MVC.Models.DataBases.AppDb;
-using TODO_List_ASPNET_MVC.Models.DataBases.Repositories;
+using Project_DomainEntities;
+using Project_Main.Models.DataBases.AppDb;
+using Project_Main.Models.DataBases.Repositories;
 
-namespace TODO_App_Tests
+namespace Project_UnitTests
 {
     /// <summary>
     /// Class that setup basic properties such Tasks and seeds data / sets data format / sets mock for DbContext

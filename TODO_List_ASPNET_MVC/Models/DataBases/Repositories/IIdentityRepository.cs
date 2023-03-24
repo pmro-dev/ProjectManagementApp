@@ -1,6 +1,6 @@
-﻿using Identity_Domain_Entities;
+﻿using Project_IdentityDomainEntities;
 
-namespace TODO_List_ASPNET_MVC.Models.DataBases.Repositories
+namespace Project_Main.Models.DataBases.Repositories
 {
 	public interface IIdentityRepository
 	{

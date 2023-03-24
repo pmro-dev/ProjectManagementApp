@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TODO_Domain_Entities.Helpers;
+using Project_DomainEntities.Helpers;
 
-namespace TODO_Domain_Entities
+namespace Project_DomainEntities
 {
 	/// <summary>
 	/// Model for To Do List.

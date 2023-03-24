@@ -1,11 +1,11 @@
 ﻿using EntityFramework.Exceptions.Common;
-using Identity_Domain_Entities;
+using Project_IdentityDomainEntities;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using TODO_List_ASPNET_MVC.Infrastructure.Helpers;
-using TODO_List_ASPNET_MVC.Models.DataBases.IdentityDb;
+using Project_Main.Infrastructure.Helpers;
+using Project_Main.Models.DataBases.IdentityDb;
 
-namespace TODO_List_ASPNET_MVC.Models.DataBases.Repositories
+namespace Project_Main.Models.DataBases.Repositories
 {
 	public class IdentityRepository : IIdentityRepository
 	{
@@ -25,7 +25,6 @@ namespace TODO_List_ASPNET_MVC.Models.DataBases.Repositories
 		public async Task<bool> AddUserAsync(UserModel newUser)
 		{
 			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(AddUserAsync), contextName);
-
 			HelperCheck.IfArgumentModelNullThrowException(operationName, newUser, nameof(newUser), _logger);
 
 			TryCatchBlockDelegateType operationsForDbTryCatchBlockAsync = new(async () =>
@@ -40,7 +39,6 @@ namespace TODO_List_ASPNET_MVC.Models.DataBases.Repositories
 		public async Task<bool> DeleteUserAsync(string userId)
 		{
 			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(DeleteUserAsync), contextName);
-
 			HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref userId, nameof(userId), _logger);
 
 			TryCatchBlockDelegateType operationsForDbTryCatchBlockAsync = new(async () =>
@@ -58,7 +56,6 @@ namespace TODO_List_ASPNET_MVC.Models.DataBases.Repositories
 		public async Task<UserModel> GetUserAsync(string userId)
 		{
 			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(GetUserAsync), contextName);
-			
 			UserModel userFromDb = new();
 
 			TryCatchBlockDelegateType operationsForDbTryCatchBlockAsync = new(async () =>
@@ -74,7 +71,6 @@ namespace TODO_List_ASPNET_MVC.Models.DataBases.Repositories
 		public async Task<UserModel> GetUserWithDetailsAsync(string userId)
 		{
 			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(GetUserAsync), contextName);
-
 			UserModel userWithDetailsFromDb = new();
 
 			TryCatchBlockDelegateType operationsForDbTryCatchBlockAsync = new(async () =>
@@ -90,7 +86,6 @@ namespace TODO_List_ASPNET_MVC.Models.DataBases.Repositories
 		public async Task<bool> UpdateUserAsync(UserModel userToUpdate)
 		{
 			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(UpdateUserAsync), contextName);
-
 			HelperCheck.IfArgumentModelNullThrowException(operationName, userToUpdate, nameof(userToUpdate), _logger);
 
 			TryCatchBlockDelegateType operationsForDbTryCatchBlockAsync = new(async () =>

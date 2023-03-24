@@ -1,7 +1,7 @@
-﻿using TODO_App_Tests.Helpers;
-using TODO_Domain_Entities;
+﻿using Project_UnitTests.Helpers;
+using Project_DomainEntities;
 
-namespace TODO_App_Tests
+namespace Project_UnitTests
 {
 	/// <summary>
 	/// Tests class for To Do List Model.

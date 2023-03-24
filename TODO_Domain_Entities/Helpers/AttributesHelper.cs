@@ -1,4 +1,4 @@
-﻿namespace TODO_Domain_Entities.Helpers
+﻿namespace Project_DomainEntities.Helpers
 {
     public static class AttributesHelper
     {
