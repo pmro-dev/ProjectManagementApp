@@ -1,0 +1,82 @@
+﻿@using TODO_Domain_Entities;
+@using TODO_Domain_Entities.Helpers;
+@model List<TaskModel>
+
+@{
+	int iterator = 1;
+	string classValue = "table-light";
+}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="page-header" style="padding: 15px 0px 10px 20px;">
+			<h5 id="tables">@ViewData["TableTitle"]</h5>
+		</div>
+		<div class="bs-component">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Title</th>
+						<th scope="col">Description</th>
+						<th scope="col">Days Left</th>
+						<th scope="col">Deadline</th>
+					</tr>
+				</thead>
+				<tbody>
+					@{
+						iterator = 1;
+						foreach (var task in Model)
+						{
+							classValue = "table-light";
+
+							if (task.Status == TaskStatusHelper.TaskStatusType.Completed)
+							{
+								classValue = "table-success";
+							}
+
+							if (task.DueDate.CompareTo(DateTime.Today) < 0)
+							{
+								classValue = "table-dark";
+							}
+
+							if (ViewData["SetClassReminder"] != null)
+							{
+								if (task.ReminderDate != null && task.ReminderDate.Value.ToShortDateString().CompareTo(DateTime.Today.ToShortDateString()) == 0)
+								{
+									classValue = "table-danger";
+								}
+							}
+
+							<tr class="@classValue">
+								<th scope="row">@iterator</th>
+								<td class="col-3">@task.Title</td>
+								<td class="col-6">@task.Description</td>
+								<td class="col-1">
+									@{
+										var days = (task.DueDate - DateTime.Now).Days;
+									}
+									@days
+								</td>
+								<td class="col-1">@task.DueDate.ToString("HH:mm dddd dd MM")</td>
+								
+								<td class="col-2 btn-group-vertical" style="width: 100%;">
+									<form asp-action="Details" asp-controller="Task" asp-route-todoListId="@task.TodoListId" asp-route-taskId="@task.Id" method="get" style="width: 100%;">
+										<button type="submit" class="btn btn-primary btn-block" style="width: 100%;">Details</button>
+									</form>
+									<form asp-action="Edit" asp-controller="Task" asp-route-todoListId="@task.TodoListId" asp-route-taskId="@task.Id" method="get" style="width: 100%;">
+										<button type="submit" class="btn btn-warning btn-block" style="width: 100%;">Edit</button>
+									</form>
+									<form asp-route="deletetask" asp-route-todoListId="@task.TodoListId" asp-route-taskId="@task.Id" method="get" style="width: 100%;">
+										<button type="submit" class="btn btn-danger btn-block" style="width: 100%;">Delete</button>
+									</form>
+								</td> 
+							</tr>
+
+							iterator++;
+						}
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

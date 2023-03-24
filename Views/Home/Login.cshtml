@@ -1,0 +1,43 @@
+﻿@model TODO_List_ASPNET_MVC.Models.ViewModels.LoginViewModel
+
+@{
+	Layout = "_LoginLayout";
+}
+
+<div class="card" style="width: 25rem;">
+	<img src="\earth-welcome.jpg" class="card-img-top" alt="...">
+	<div class="card-body">
+		<h5 class="card-title">Login Page</h5>
+
+		<form asp-action="Login" asp-controller="Home" method="post">
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<span class="input-group-text">@@</span>
+				</div>
+				<input asp-for="Name" type="text" class="form-control" placeholder="Username" aria-label="Username" />
+				<span asp-validation-for="Name" class="text-danger" style="width: 100%;"></span>
+			</div>
+
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<span class="input-group-text">#</span>
+				</div>
+				<input asp-for="Password" type="password" class="form-control" placeholder="Password" aria-label="Password" />
+				<span asp-validation-for="Password" class="text-danger" style="width: 100%;"></span>
+			</div>
+
+			<div class="card-body">
+				<button class="btn btn-primary" type="submit" style="font-weight: 500; color:white;">Log In</button>
+				<a asp-controller="Home" asp-action="Register" class="btn btn-info" style="font-weight: 500; color:white;">Register</a>
+			</div>
+			
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		</form>
+	</div>
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}
