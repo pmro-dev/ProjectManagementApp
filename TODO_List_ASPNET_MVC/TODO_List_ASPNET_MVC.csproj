@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>TODO_List_ASPNET_MVC</RootNamespace>
+    <UserSecretsId>c280322e-3341-482d-9c7d-dd05585d2b42</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFrameworkCore.Exceptions.SqlServer" Version="6.0.3.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.14">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.14">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TODO_Domain_Entities\TODO_Domain_Entities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Identity_Domain_Entities">
+      <HintPath>..\Identity_Domain_Entities\bin\Debug\net6.0\Identity_Domain_Entities.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

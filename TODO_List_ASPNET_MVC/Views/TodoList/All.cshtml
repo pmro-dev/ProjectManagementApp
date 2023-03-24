@@ -1,0 +1,23 @@
+﻿@using TODO_Domain_Entities;
+@using TODO_List_ASPNET_MVC.Infrastructure.Helpers;
+@model IEnumerable<TodoListModel>
+
+@{
+	ViewData["Title"] = "Index";
+	Layout = "_Layout";
+	List<TaskModel> sortedTasks = new();
+}
+
+<h1>All To Do Lists</h1>
+
+<p>
+	<a asp-action="Briefly" class="btn btn-primary">Back</a>
+</p>
+
+@foreach (var item in Model)
+{
+	ViewData["TableTitle"] = item.Name;
+	sortedTasks = item.Tasks.ToList();
+	sortedTasks.Sort(new TasksComparer());
+	<partial name="_TodoListTableDetails" model="@sortedTasks" view-data="ViewData" />
+}

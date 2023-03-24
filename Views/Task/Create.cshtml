@@ -1,0 +1,44 @@
+﻿@model TODO_List_ASPNET_MVC.Models.ViewModels.TaskViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h4>Create Task</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" asp-controller="Task" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="TodoListId" type="hidden" />
+			<input asp-for="UserId" type="hidden" value="@Model.UserId"/>
+            <div class="form-group">
+                <label asp-for="TodoListName" class="control-label">To Do List Name</label>
+                <input asp-for="TodoListName" class ="form-control" readonly />
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control" ></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DueDate" class="control-label">Deadline</label>
+                <input asp-for="DueDate" asp-format="{0:dd'/'MM'/'yyyy}" class="form-control" />
+                <span asp-validation-for="DueDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn" style="background-color: #671dff; color: white; font-weight: 500;"  />
+                <a asp-controller="TodoList" asp-action="SingleDetails" asp-route-id="@Model.TodoListId" class="btn btn-primary">Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "TODO_App_Tests": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:50282;http://localhost:50283"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+﻿@using TODO_Domain_Entities
+@using TODO_Domain_Entities.Helpers;
+@using TODO_List_ASPNET_MVC.Models.ViewModels.TodoListViewModels;
+@model TODO_List_ASPNET_MVC.Models.ViewModels.TodoListViewModels.BrieflyViewModel
+
+@{
+	Layout = "_Layout";
+}
+
+<h1>To Do Lists Briefly</h1>
+
+<p>
+	<a asp-action="Create" class="btn" style="background-color: #671dff; color: white; font-weight: 500;">Create Todo List</a>
+	<a asp-action="All" class="btn btn-dark" >Show All - Details</a>
+</p>
+
+@foreach (var item in Model.TodoLists)
+{
+	<div class="card border-primary mb-3 align-items-center" style="max-width: 25rem;">
+		<div class="card-header" style="font-weight: 600; width: 100%; background-color: #7866e2; color: white;">
+			
+			@Html.DisplayFor(modelItem => item.Name)
+
+			@if (Model.IsReminderForToday(item))
+			{
+				<div class="alert-danger btn-sm" role="alert" style="width: 30%; float: right; text-align: center; font-weight: 500;">
+					Reminder!
+				</div>
+			}
+		</div>
+		<div style="width: 100%; text-align: center;">
+			<img src="\list-puzzle.jpg" class="card-img-top" style="width: 30%;" alt="...">
+			<p class="card-text" style="font-size: 11px; font-weight: 500;">@Model.GetNumberOfCompletedTasks(item) / @Model.GetNumberOfAllTasks(item) tasks</p>
+
+		</div>
+		<div class="card-body">
+			<a asp-action="SingleDetails" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">Details</a>
+			<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm">Edit</a>
+			<button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal+@item.Id">Delete</button>
+			<a asp-action="Duplicate" asp-route-todoListId="@item.Id" class="btn btn-outline-info btn-sm">Duplicate</a>
+		</div>
+	</div>
+
+	<!-- Delete Modal -->
+	<partial name="_DeleteModal" model="@item" />
+}

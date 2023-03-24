@@ -1,0 +1,18 @@
+﻿@using TODO_Domain_Entities
+@model TODO_Domain_Entities.TaskModel
+
+@{
+	ViewData["Title"] = "Details";
+}
+
+<div>
+	<h4>Task Details</h4>
+	<hr />
+
+	<partial name="_TaskTableDetails" model="@Model" />
+
+	<input type="hidden" name="todoListId" asp-for="@Model.TodoListId" />
+	<input type="hidden" name="taskId" asp-for="@Model.Id" />
+	<input type="hidden" asp-for="@Model.UserId" />
+    <a asp-controller="TodoList" asp-action="SingleDetails" asp-route-id="@Model.TodoListId" class="btn btn-primary">Back</a>
+</div>

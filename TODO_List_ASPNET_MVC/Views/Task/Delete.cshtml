@@ -1,0 +1,22 @@
+﻿@using TODO_Domain_Entities
+@model TODO_Domain_Entities.TaskModel
+
+@{
+	ViewData["Title"] = "Delete";
+}
+
+<div>
+	<h4>Delete Task</h4>
+	<hr />
+	<h5>Are you sure you want to delete this?</h5>
+
+	<partial name="_TaskTableDetails" model="@Model" />
+
+	<form asp-route="deleteTaskInvoke" method="post">
+		<input type="hidden" name="todoListId" asp-for="@Model.TodoListId" />
+		<input type="hidden" name="taskId" asp-for="@Model.Id" />
+		<input type="hidden" asp-for="@Model.UserId" />
+		<input type="submit" value="Delete" class="btn btn-danger" />
+		<a asp-controller="TodoList" asp-action="SingleDetails" asp-route-id="@Model.TodoListId" class="btn btn-primary">Back</a>
+	</form>
+</div>

@@ -1,0 +1,81 @@
+﻿@model TODO_List_ASPNET_MVC.Models.ViewModels.TodoListViewModels.TodoListViewModel
+
+@{
+	ViewData["Title"] = "Details";
+	DateTime? filterDueDate = null;
+	Layout = "_Layout";
+}
+
+<div>
+	<div class="col-sm-2">
+		<h4>@Html.DisplayNameFor(model => model.Name)</h4>
+	</div>
+	<div class="col-sm-8">
+		<h4>@Html.DisplayFor(model => model.Name)</h4>
+	</div>
+	<dl class="row">
+		<dd class="col-sm-5">
+			<a asp-controller="Task" asp-action="Create" asp-route-id="@Model?.Id" method="get" class="btn" style="background-color: #671dff; color: white; font-weight: 500;">New Task</a>
+			<a asp-controller="TodoList" asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Edit</a>
+			<a asp-action="Briefly" class="btn btn-primary">Back</a>
+		</dd>
+	</dl>
+
+	@{
+		if (Model != null && Model.TasksForToday.Count > 0)
+		{
+			ViewData["SetClassReminder"] = null;
+			ViewData["TableTitle"] = "Tasks For Today";
+			<partial name="_TodoListTable" model="@Model?.TasksForToday" />
+		}
+	}
+
+	<div class="row">
+		<div class="col-md-4">
+			<div class="card-group">
+				<form id="resetDate" asp-action="SingleDetails" asp-route-id="@Model?.Id" asp-route-filterDueDate="@null" method="get">
+					<input asp-for="UserId" type="hidden" value="@Model?.UserId" />
+				</form>
+				<form id="filterDate" asp-action="SingleDetails" asp-route-id="@Model?.Id" asp-route-filterDueDate="@filterDueDate" method="get">
+					<input asp-for="UserId" type="hidden" value="@Model?.UserId" />
+					<input asp-for="@filterDueDate" asp-format="{0:dd'/'MM'/'yyyy}" class="form-control" />
+					<span asp-validation-for="@filterDueDate" class="text-danger"></span>
+				</form>
+				<button type="submit" class="btn btn-sm btn-warning" form="filterDate">Filter</button>
+				<button type="submit" class="btn btn-sm btn-danger" form="resetDate">Reset</button>
+			</div>
+		</div>
+	</div>
+	<br />
+
+	@{
+		ViewData["SetClassReminder"] = "IamNotNull";
+		ViewData["TableTitle"] = "Tasks Not Started & In Progress";
+	}
+	<partial name="_TodoListTable" model="@Model?.TasksNotCompleted" view-data="ViewData" />
+
+	@{
+		if (Model != null && Model.TasksCompleted.Count > 0)
+		{
+			ViewData["SetClassReminder"] = null;
+			ViewData["TableTitle"] = "Tasks Completed";
+			<partial name="_TodoListTable" model="@Model?.TasksCompleted" view-data="ViewData" />
+		}
+	}
+
+	@{
+		if (Model != null && Model.TasksExpired.Count > 0)
+		{
+			ViewData["SetClassReminder"] = null;
+			ViewData["TableTitle"] = "Tasks Expired!";
+			<partial name="_TodoListTable" model="@Model?.TasksExpired" view-data="ViewData" />
+		}
+	}
+
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}
