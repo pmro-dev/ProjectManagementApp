@@ -15,6 +15,7 @@ For the training purpose it supposed to be a simple ToDo List app - and it was:
 but because of my interesting and education in Project Management (Agile approach) I decided to extend the basic project and develop something similar to monday.com: 
 
 MONDAY.COM:
+
 ![image](https://user-images.githubusercontent.com/34062651/227597593-b4a8dbc6-0fa7-45e5-aa13-ecec40c883c0.png)
 
 I'm not a front-end developer, I'm focused on backend but we will see what I can achieve ;)
