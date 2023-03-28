@@ -24,7 +24,7 @@ I'm not a frontend developer but we will see what I can achieve ;)
 
 28.03.2023
 
-I designed via GIMP a few visualization of app that allows me now to focus on backend.
+I designed via GIMP a few visualization of app that allow me now to focus on backend.
 
 ![PM DASHBOARDS](https://user-images.githubusercontent.com/34062651/228310052-f25319eb-1db3-4f94-8d80-f32f99688405.gif)
 
