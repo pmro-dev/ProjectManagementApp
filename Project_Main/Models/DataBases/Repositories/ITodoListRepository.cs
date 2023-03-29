@@ -2,7 +2,7 @@
 
 namespace Project_Main.Models.DataBases.Repositories
 {
-    public interface ITodoListRepository : IRepository<TodoListModel>
+    public interface ITodoListRepository : IGenericRepository<TodoListModel>
     {
         Task<TodoListModel> GetWithDetailsAsync(int id);
 

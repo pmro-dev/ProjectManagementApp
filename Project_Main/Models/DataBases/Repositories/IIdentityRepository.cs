@@ -2,7 +2,7 @@
 
 namespace Project_Main.Models.DataBases.Repositories
 {
-	public interface IIdentityRepository
+	public interface IIdentityRepository : IGenericRepository<UserModel>
 	{
 		public Task<bool> AddUserAsync(UserModel newUser);
 		public Task<UserModel> GetUserWithDetailsAsync(string userId);

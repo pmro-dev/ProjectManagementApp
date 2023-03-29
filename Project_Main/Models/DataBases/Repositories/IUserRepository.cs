@@ -2,7 +2,7 @@
 
 namespace Project_Main.Models.DataBases.Repositories
 {
-	public interface IUserRepository : IRepository<UserModel>
+	public interface IUserRepository : IGenericRepository<UserModel>
 	{
 		Task<UserModel> GetWithDetailsAsync(int id);
 		Task<UserModel> GetByNameAndPasswordAsync(string name, string password);

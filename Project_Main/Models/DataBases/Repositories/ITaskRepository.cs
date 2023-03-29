@@ -2,7 +2,7 @@
 
 namespace Project_Main.Models.DataBases.Repositories
 {
-	public interface ITaskRepository : IRepository<TaskModel>
+	public interface ITaskRepository : IGenericRepository<TaskModel>
 	{
 	}
 }
