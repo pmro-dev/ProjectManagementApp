@@ -7,11 +7,13 @@ namespace Project_Main.Models.DataBases.Repositories
 	{
 		protected readonly DbContext Context;
 		private readonly DbSet<TEntity> _dbSet;
+		private readonly ILogger<GenericRepository<TEntity>> _logger;
 
-		public GenericRepository(DbContext dbContext)
+		public GenericRepository(DbContext dbContext, ILogger<GenericRepository<TEntity>> logger)
 		{
 			Context = dbContext;
 			_dbSet = Context.Set<TEntity>();
+			_logger = logger;
 		}
 
 		public async Task AddAsync(TEntity entity)
