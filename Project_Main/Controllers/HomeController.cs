@@ -163,7 +163,7 @@ namespace Project_Main.Controllers
 		{
 			if (this.ModelState.IsValid)
 			{
-				operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(Register), controllerName);
+				operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Register), controllerName);
 
 				if (registerViewModel.Name == null || registerViewModel.Password == null)
 				{

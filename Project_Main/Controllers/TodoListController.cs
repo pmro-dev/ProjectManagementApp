@@ -44,7 +44,7 @@ namespace Project_Main.Controllers
 		[Authorize]
 		public async Task<IActionResult> Briefly()
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(Briefly), controllerName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Briefly), controllerName);
 
 			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -81,7 +81,7 @@ namespace Project_Main.Controllers
 		[Route("All/Details")]
 		public async Task<ActionResult<IEnumerable<TodoListModel>>> All()
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(All), controllerName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(All), controllerName);
 
 			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			var allTodoLists = await _context.GetAllTodoListsWithDetailsAsync(signedInUserId);
@@ -105,7 +105,7 @@ namespace Project_Main.Controllers
 		[Route("{id:int}/SingleDetails")]
 		public async Task<IActionResult> SingleDetails(int id, DateTime? filterDueDate)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(SingleDetails), controllerName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(SingleDetails), controllerName);
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
 
 			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -197,7 +197,7 @@ namespace Project_Main.Controllers
 		[Route("{id:int}/Edit")]
 		public async Task<IActionResult> Edit(int id)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(Edit), controllerName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Edit), controllerName);
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
 
 			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -257,7 +257,7 @@ namespace Project_Main.Controllers
 		[Route("{id:int}/Delete")]
 		public async Task<IActionResult> Delete(int id)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(Delete), controllerName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Delete), controllerName);
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
 
 			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);

@@ -45,7 +45,7 @@ namespace Project_Main.Models.DataBases.AppDb
         /// <inheritdoc/>
         public async Task<int> AddTodoListAsync(TodoListModel newTodoList)
         {
-            operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(AddTodoListAsync), nameof(AppDbContext));
+            operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(AddTodoListAsync), nameof(AppDbContext));
 
             HelperCheck.IfArgumentModelNullThrowException(operationName, newTodoList, nameof(newTodoList), _logger);
 			DbContextValidators.CheckDbSetIfNullThrowException(TodoLists, _logger, this.operationName);
@@ -57,7 +57,7 @@ namespace Project_Main.Models.DataBases.AppDb
         /// <inheritdoc/>
         public async Task<TodoListModel> GetTodoListWithDetailsAsync(int todoListId, string signedInUserId)
         {
-            operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(GetTodoListWithDetailsAsync), nameof(AppDbContext));
+            operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetTodoListWithDetailsAsync), nameof(AppDbContext));
 
             HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
             HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref signedInUserId, nameof(signedInUserId), _logger);
@@ -70,7 +70,7 @@ namespace Project_Main.Models.DataBases.AppDb
         /// <inheritdoc/>
         public async Task<TodoListModel> GetTodoListAsync(int todoListId, string signedInUserId)
         {
-            operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(GetTodoListAsync), nameof(AppDbContext));
+            operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetTodoListAsync), nameof(AppDbContext));
 
             HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
             HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref signedInUserId, nameof(signedInUserId), _logger);
@@ -83,7 +83,7 @@ namespace Project_Main.Models.DataBases.AppDb
         /// <inheritdoc/>
         public async Task<List<TodoListModel>> GetAllTodoListsAsync(string signedInUserId)
         {
-            operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(GetAllTodoListsAsync), nameof(AppDbContext));
+            operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetAllTodoListsAsync), nameof(AppDbContext));
             HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref signedInUserId, nameof(signedInUserId), _logger);
 			DbContextValidators.CheckDbSetIfNullThrowException(TodoLists, _logger, this.operationName);
 
@@ -93,7 +93,7 @@ namespace Project_Main.Models.DataBases.AppDb
         /// <inheritdoc/>
         public async Task<List<TodoListModel>> GetAllTodoListsWithDetailsAsync(string signedInUserId)
         {
-            operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(GetAllTodoListsWithDetailsAsync), nameof(AppDbContext));
+            operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetAllTodoListsWithDetailsAsync), nameof(AppDbContext));
             HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref signedInUserId, nameof(signedInUserId), _logger);
 			DbContextValidators.CheckDbSetIfNullThrowException(TodoLists, _logger, this.operationName);
 			DbContextValidators.CheckDbSetIfNullThrowException(Tasks, _logger, this.operationName);
@@ -104,7 +104,7 @@ namespace Project_Main.Models.DataBases.AppDb
         /// <inheritdoc/>
         public async Task<int> UpdateTodoListAsync(TodoListModel todoListToUpdate)
         {
-            operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(UpdateTodoListAsync), nameof(AppDbContext));
+            operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(UpdateTodoListAsync), nameof(AppDbContext));
 
             HelperCheck.IfArgumentModelNullThrowException(operationName, todoListToUpdate, nameof(todoListToUpdate), _logger);
 			DbContextValidators.CheckDbSetIfNullThrowException(TodoLists, _logger, this.operationName);
@@ -118,7 +118,7 @@ namespace Project_Main.Models.DataBases.AppDb
         /// <inheritdoc/>
         public async Task<int> DeleteTodoListAsync(TodoListModel todoListToDelete)
         {
-            operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(DeleteTodoListAsync), nameof(AppDbContext));
+            operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(DeleteTodoListAsync), nameof(AppDbContext));
 
             HelperCheck.IfArgumentModelNullThrowException(operationName, todoListToDelete, nameof(todoListToDelete), _logger);
 			DbContextValidators.CheckDbSetIfNullThrowException(TodoLists, _logger, this.operationName);
@@ -148,7 +148,7 @@ namespace Project_Main.Models.DataBases.AppDb
         /// <inheritdoc/>
         public async Task<int> CreateTaskAsync(TaskModel newTask)
         {
-            operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(CreateTaskAsync), nameof(AppDbContext));
+            operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(CreateTaskAsync), nameof(AppDbContext));
 
             HelperCheck.IfArgumentModelNullThrowException(operationName, newTask, nameof(newTask), _logger);
 			DbContextValidators.CheckDbSetIfNullThrowException(Tasks, _logger, this.operationName);
@@ -160,7 +160,7 @@ namespace Project_Main.Models.DataBases.AppDb
         /// <inheritdoc/>
         public async Task<TaskModel> ReadTaskAsync(int taskId, string signedInUserId)
         {
-            operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(ReadTaskAsync), nameof(AppDbContext));
+            operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(ReadTaskAsync), nameof(AppDbContext));
 
             HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, taskId, nameof(taskId), HelperOther.idBoundryBottom, _logger);
             HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref signedInUserId, nameof(signedInUserId), _logger);
@@ -174,7 +174,7 @@ namespace Project_Main.Models.DataBases.AppDb
         /// <inheritdoc/>
         public async Task<int> UpdateTaskAsync(TaskModel taskToUpdate)
         {
-            operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(UpdateTaskAsync), nameof(AppDbContext));
+            operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(UpdateTaskAsync), nameof(AppDbContext));
 
             HelperCheck.IfArgumentModelNullThrowException(operationName, taskToUpdate, nameof(taskToUpdate), _logger);
 			DbContextValidators.CheckDbSetIfNullThrowException(Tasks, _logger, this.operationName);
@@ -187,7 +187,7 @@ namespace Project_Main.Models.DataBases.AppDb
         /// <inheritdoc/>
         public async Task<int> DeleteTaskAsync(TaskModel taskToDelete)
         {
-            operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(DeleteTaskAsync), nameof(AppDbContext));
+            operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(DeleteTaskAsync), nameof(AppDbContext));
 
             HelperCheck.IfArgumentModelNullThrowException(operationName, taskToDelete, nameof(taskToDelete), _logger);
 			DbContextValidators.CheckDbSetIfNullThrowException(Tasks, _logger, this.operationName);
@@ -199,7 +199,7 @@ namespace Project_Main.Models.DataBases.AppDb
 
         public async Task<bool> DoesTodoListExistByName(string todoListName)
         {
-            operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(DeleteTaskAsync), nameof(AppDbContext));
+            operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(DeleteTaskAsync), nameof(AppDbContext));
 
             if (string.IsNullOrEmpty(todoListName))
             {

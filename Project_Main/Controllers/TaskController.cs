@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Project_Main.Infrastructure.Helpers;
 using static Project_DomainEntities.Helpers.TaskStatusHelper;
 using Project_DomainEntities;
@@ -46,7 +45,7 @@ namespace Project_Main.Controllers
 		[Route("TodoList/{todoListId:int}/[controller]/{taskId:int}/Details")]
 		public async Task<ActionResult<TaskModel>> Details(int todoListId, int taskId)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(Details), controllerName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Details), controllerName);
 
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, taskId, nameof(taskId), HelperOther.idBoundryBottom, _logger);
@@ -96,7 +95,7 @@ namespace Project_Main.Controllers
 		[Route("TodoList/{id:int}/Create")]
 		public async Task<IActionResult> Create(int id)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(Create), controllerName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Create), controllerName);
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
 
 			if (ModelState.IsValid)
@@ -162,7 +161,7 @@ namespace Project_Main.Controllers
 		[Route("TodoList/{todoListId:int}/[controller]/{taskId:int}/[action]")]
 		public async Task<IActionResult> Edit(int todoListId, int taskId)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(Edit), controllerName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Edit), controllerName);
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, taskId, nameof(taskId), HelperOther.idBoundryBottom, _logger);
 			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -267,7 +266,7 @@ namespace Project_Main.Controllers
 		[Route("TodoList/{todoListId:int}/Task/{taskId:int}/[action]", Name = "deletetask")]
 		public async Task<IActionResult> Delete(int todoListId, int taskId)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(Delete), controllerName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Delete), controllerName);
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, taskId, nameof(taskId), HelperOther.idBoundryBottom, _logger);
 

@@ -35,7 +35,7 @@ namespace Project_Main.Models.DataBases.Repositories
 		/// <inheritdoc/>
 		public virtual async Task<bool> AddTodoListAsync(TodoListModel todoList)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(AddTodoListAsync), contextName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(AddTodoListAsync), contextName);
 
 			HelperCheck.IfArgumentModelNullThrowException(operationName, todoList, nameof(todoList), _logger);
 
@@ -51,7 +51,7 @@ namespace Project_Main.Models.DataBases.Repositories
 		/// <inheritdoc/>
 		public virtual async Task<bool> DeleteTodoListAsync(int todoListId, string signedInUserId)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(DeleteTodoListAsync), contextName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(DeleteTodoListAsync), contextName);
 
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
 			HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref signedInUserId, nameof(signedInUserId), _logger);
@@ -71,7 +71,7 @@ namespace Project_Main.Models.DataBases.Repositories
 		/// <inheritdoc/>
 		public virtual async Task<List<TodoListModel>> GetAllTodoListsAsync(string signedInUserId)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(GetAllTodoListsAsync), contextName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetAllTodoListsAsync), contextName);
 			HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref signedInUserId, nameof(signedInUserId), _logger);
 
 			List<TodoListModel> lists = new();
@@ -88,7 +88,7 @@ namespace Project_Main.Models.DataBases.Repositories
 		/// <inheritdoc/>
 		public virtual async Task<List<TodoListModel>> GetAllTodoListsWithDetailsAsync(string signedInUserId)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(GetAllTodoListsWithDetailsAsync), contextName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetAllTodoListsWithDetailsAsync), contextName);
 			HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref signedInUserId, nameof(signedInUserId), _logger);
 
 			List<TodoListModel> lists = new();
@@ -105,7 +105,7 @@ namespace Project_Main.Models.DataBases.Repositories
 		/// <inheritdoc/>
 		public virtual async Task<TodoListModel> GetTodoListWithDetailsAsync(int todoListId, string signedInUserId)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(GetTodoListWithDetailsAsync), contextName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetTodoListWithDetailsAsync), contextName);
 
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
 			HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref signedInUserId, nameof(signedInUserId), _logger);
@@ -126,7 +126,7 @@ namespace Project_Main.Models.DataBases.Repositories
 		/// <inheritdoc/>
 		public virtual async Task<TodoListModel> GetTodoListAsync(int todoListId, string signedInUserId)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(GetTodoListAsync), contextName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetTodoListAsync), contextName);
 
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
 			HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref signedInUserId, nameof(signedInUserId), _logger);
@@ -146,7 +146,7 @@ namespace Project_Main.Models.DataBases.Repositories
 		/// <inheritdoc/>
 		public virtual async Task<bool> UpdateTodoListAsync(TodoListModel todoList)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(UpdateTodoListAsync), contextName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(UpdateTodoListAsync), contextName);
 			HelperCheck.IfArgumentModelNullThrowException(operationName, todoList, nameof(todoList), _logger);
 
 			TryCatchBlockForDbDelType dbOperationsBlockAsync = new(async () =>
@@ -171,7 +171,7 @@ namespace Project_Main.Models.DataBases.Repositories
 		/// <inheritdoc/>
 		public async Task<bool> DuplicateTodoListWithDetailsAsync(int todoListId, string signedInUserId)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(DuplicateTodoListWithDetailsAsync), contextName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(DuplicateTodoListWithDetailsAsync), contextName);
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
 			HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref signedInUserId, nameof(signedInUserId), _logger);
 
@@ -211,7 +211,7 @@ namespace Project_Main.Models.DataBases.Repositories
 		/// <inheritdoc/>
 		public virtual async Task<bool> CreateTaskAsync(TaskModel newTask)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(CreateTaskAsync), contextName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(CreateTaskAsync), contextName);
 
 			HelperCheck.IfArgumentModelNullThrowException(operationName, newTask, nameof(newTask), _logger);
 
@@ -227,7 +227,7 @@ namespace Project_Main.Models.DataBases.Repositories
 		/// <inheritdoc/>
 		public virtual async Task<TaskModel> ReadTaskAsync(int taskId, string signedInUserId)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(ReadTaskAsync), contextName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(ReadTaskAsync), contextName);
 
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, taskId, nameof(taskId), HelperOther.idBoundryBottom, _logger);
 			HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref signedInUserId, nameof(signedInUserId), _logger);
@@ -247,7 +247,7 @@ namespace Project_Main.Models.DataBases.Repositories
 		/// <inheritdoc/>
 		public virtual async Task<bool> UpdateTaskAsync(TaskModel taskToUpdate)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(UpdateTaskAsync), contextName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(UpdateTaskAsync), contextName);
 
 			HelperCheck.IfArgumentModelNullThrowException(operationName, taskToUpdate, nameof(taskToUpdate), _logger);
 
@@ -274,7 +274,7 @@ namespace Project_Main.Models.DataBases.Repositories
 		/// <inheritdoc/>
 		public virtual async Task<bool> DeleteTaskAsync(int taskId, string signedInUserId)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(DeleteTaskAsync), contextName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(DeleteTaskAsync), contextName);
 
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, taskId, nameof(taskId), HelperOther.idBoundryBottom, _logger);
 			HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref signedInUserId, nameof(signedInUserId), _logger);
@@ -293,7 +293,7 @@ namespace Project_Main.Models.DataBases.Repositories
 		/// <inheritdoc/>
 		public virtual async Task<bool> DoesTodoListWithSameNameExistAsync(string todoListName)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(DeleteTaskAsync), nameof(AppDbContext));
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(DeleteTaskAsync), nameof(AppDbContext));
 
 			if (string.IsNullOrEmpty(todoListName))
 			{

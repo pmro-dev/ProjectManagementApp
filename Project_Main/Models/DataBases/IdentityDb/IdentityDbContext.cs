@@ -33,7 +33,7 @@ namespace Project_Main.Models.DataBases.IdentityDb
 
 		public async Task<int> AddUserAsync(UserModel newUser)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(AddUserAsync), nameof(IdentityDbContext));
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(AddUserAsync), nameof(IdentityDbContext));
 
 			HelperCheck.IfArgumentModelNullThrowException(operationName, newUser, nameof(newUser), _logger);
 			DbContextValidators.CheckDbSetIfNullThrowException(Users, _logger, operationName);
@@ -44,7 +44,7 @@ namespace Project_Main.Models.DataBases.IdentityDb
 
 		public async Task<UserModel> GetUserWithDetailsAsync(string userId)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(GetUserWithDetailsAsync), nameof(IdentityDbContext));
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetUserWithDetailsAsync), nameof(IdentityDbContext));
 
 			DbContextValidators.CheckDbSetIfNullThrowException(Users, _logger, operationName);
 			// First I have change Ids type from int to Guid in AppDbContext to use this method ->
@@ -55,7 +55,7 @@ namespace Project_Main.Models.DataBases.IdentityDb
 
 		public async Task<UserModel> GetUserAsync(string userId)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(GetUserAsync), nameof(IdentityDbContext));
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetUserAsync), nameof(IdentityDbContext));
 
 			DbContextValidators.CheckDbSetIfNullThrowException(Users, _logger, operationName);
 			// First I have change Ids type from int to Guid in AppDbContext to use this method ->
@@ -66,7 +66,7 @@ namespace Project_Main.Models.DataBases.IdentityDb
 
 		public async Task<UserModel> GetUserByNameAndPasswordAsync(string userName, string userPassword)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(GetUserByNameAndPasswordAsync), nameof(IdentityDbContext));
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetUserByNameAndPasswordAsync), nameof(IdentityDbContext));
 
 			DbContextValidators.CheckDbSetIfNullThrowException(Users, _logger, operationName);
 			// First I have change Ids type from int to Guid in AppDbContext to use this method ->
@@ -77,7 +77,7 @@ namespace Project_Main.Models.DataBases.IdentityDb
 
 		public async Task<int> UpdateUserAsync(UserModel userToUpdate)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(UpdateUserAsync), nameof(IdentityDbContext));
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(UpdateUserAsync), nameof(IdentityDbContext));
 
 			HelperCheck.IfArgumentModelNullThrowException(operationName, userToUpdate, nameof(userToUpdate), _logger);
 			DbContextValidators.CheckDbSetIfNullThrowException(Users, _logger, operationName);
@@ -91,7 +91,7 @@ namespace Project_Main.Models.DataBases.IdentityDb
 
 		public async Task<int> DeleteUserAsync(UserModel userToDelete)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(DeleteUserAsync), nameof(IdentityDbContext));
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(DeleteUserAsync), nameof(IdentityDbContext));
 
 			HelperCheck.IfArgumentModelNullThrowException(operationName, userToDelete, nameof(userToDelete), _logger);
 			DbContextValidators.CheckDbSetIfNullThrowException(Users, _logger, operationName);
@@ -129,7 +129,7 @@ namespace Project_Main.Models.DataBases.IdentityDb
 
 		public async Task<int> AddRoleAsync(RoleModel newRole)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(AddRoleAsync), nameof(IdentityDbContext));
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(AddRoleAsync), nameof(IdentityDbContext));
 
 			HelperCheck.IfArgumentModelNullThrowException(operationName, newRole, nameof(newRole), _logger);
 			DbContextValidators.CheckDbSetIfNullThrowException(Roles, _logger, operationName);
@@ -140,7 +140,7 @@ namespace Project_Main.Models.DataBases.IdentityDb
 
 		public async Task<RoleModel> GetRoleAsync(string roleId)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(GetRoleAsync), nameof(IdentityDbContext));
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetRoleAsync), nameof(IdentityDbContext));
 
 			DbContextValidators.CheckDbSetIfNullThrowException(Roles, _logger, operationName);
 			// First I have change Ids type from int to Guid in AppDbContext to use this method ->
@@ -151,7 +151,7 @@ namespace Project_Main.Models.DataBases.IdentityDb
 
 		public async Task<int> UpdateRoleAsync(RoleModel roleToUpdate)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(UpdateRoleAsync), nameof(IdentityDbContext));
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(UpdateRoleAsync), nameof(IdentityDbContext));
 
 			HelperCheck.IfArgumentModelNullThrowException(operationName, roleToUpdate, nameof(roleToUpdate), _logger);
 			DbContextValidators.CheckDbSetIfNullThrowException(Roles, _logger, operationName);
@@ -164,7 +164,7 @@ namespace Project_Main.Models.DataBases.IdentityDb
 
 		public async Task<int> DeleteRoleAsync(RoleModel roleToDelete)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(DeleteRoleAsync), nameof(IdentityDbContext));
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(DeleteRoleAsync), nameof(IdentityDbContext));
 
 			HelperCheck.IfArgumentModelNullThrowException(operationName, roleToDelete, nameof(roleToDelete), _logger);
 			DbContextValidators.CheckDbSetIfNullThrowException(Roles, _logger, operationName);

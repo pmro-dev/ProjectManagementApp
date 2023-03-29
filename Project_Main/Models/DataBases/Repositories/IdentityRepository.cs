@@ -38,7 +38,7 @@ namespace Project_Main.Models.DataBases.Repositories
 
 		public async Task<bool> DeleteUserAsync(string userId)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(DeleteUserAsync), contextName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(DeleteUserAsync), contextName);
 			HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref userId, nameof(userId), _logger);
 
 			TryCatchBlockDelegateType operationsForDbTryCatchBlockAsync = new(async () =>
@@ -70,7 +70,7 @@ namespace Project_Main.Models.DataBases.Repositories
 
 		public async Task<UserModel> GetUserWithDetailsAsync(string userId)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(GetUserAsync), contextName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetWithDetailsAsync), contextName);
 			UserModel userWithDetailsFromDb = new();
 
 			TryCatchBlockDelegateType operationsForDbTryCatchBlockAsync = new(async () =>
@@ -85,7 +85,7 @@ namespace Project_Main.Models.DataBases.Repositories
 
 		public async Task<bool> UpdateUserAsync(UserModel userToUpdate)
 		{
-			operationName = HelperOther.GetActionNameForLoggingAndExceptions(nameof(UpdateUserAsync), contextName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(UpdateUserAsync), contextName);
 			HelperCheck.IfArgumentModelNullThrowException(operationName, userToUpdate, nameof(userToUpdate), _logger);
 
 			TryCatchBlockDelegateType operationsForDbTryCatchBlockAsync = new(async () =>

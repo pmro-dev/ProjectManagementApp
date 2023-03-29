@@ -13,7 +13,7 @@ namespace Project_Main.Infrastructure.Helpers
 		/// <param name="actionFullName"></param>
 		/// <param name="prefix"></param>
 		/// <returns></returns>
-		public static string GetActionNameForLoggingAndExceptions(string actionFullName, string prefix)
+		public static string CreateActionNameForLoggingAndExceptions(string actionFullName, string prefix)
         {
             if (actionFullName.Contains("Async"))
             {
