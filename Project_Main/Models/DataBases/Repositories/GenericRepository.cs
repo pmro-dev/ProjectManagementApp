@@ -5,10 +5,10 @@ namespace Project_Main.Models.DataBases.Repositories
 {
 	public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
 	{
-		private readonly DbContext _dbContext;
+		private readonly CustomDbContext _dbContext;
 		private readonly DbSet<TEntity> _dbSet;
 
-		public GenericRepository(DbContext dbContext)
+		public GenericRepository(CustomDbContext dbContext)
 		{
 			_dbContext = dbContext;
 			_dbSet = _dbContext.Set<TEntity>();
