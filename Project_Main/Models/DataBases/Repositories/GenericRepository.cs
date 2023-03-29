@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace Project_Main.Models.DataBases.Repositories
 {
-	public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : class
+	public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
 	{
 		private readonly DbContext _dbContext;
 		private readonly DbSet<TEntity> _dbSet;
