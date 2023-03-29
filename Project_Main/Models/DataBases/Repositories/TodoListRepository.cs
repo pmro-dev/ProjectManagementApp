@@ -10,7 +10,7 @@ namespace Project_Main.Models.DataBases.Repositories
 		private readonly ILogger<TodoListRepository> _logger;
 		private string operationName = string.Empty;
 
-		public TodoListRepository(CustomDbContext dbContext, ILogger<TodoListRepository> logger) : base(dbContext)
+		public TodoListRepository(CustomDbContext dbContext, ILogger<TodoListRepository> logger) : base(dbContext, logger)
 		{
 			_dbContext = dbContext;
 			_logger = logger;
