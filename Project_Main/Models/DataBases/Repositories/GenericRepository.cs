@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Project_Main.Infrastructure.Helpers;
 using System.Linq.Expressions;
 
 namespace Project_Main.Models.DataBases.Repositories
@@ -8,6 +9,7 @@ namespace Project_Main.Models.DataBases.Repositories
 		protected readonly DbContext Context;
 		private readonly DbSet<TEntity> _dbSet;
 		private readonly ILogger<GenericRepository<TEntity>> _logger;
+		private string operationName = string.Empty;
 
 		public GenericRepository(DbContext dbContext, ILogger<GenericRepository<TEntity>> logger)
 		{
@@ -18,6 +20,8 @@ namespace Project_Main.Models.DataBases.Repositories
 
 		public async Task AddAsync(TEntity entity)
 		{
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(AddAsync), nameof(UserRepository));
+			HelperCheck.IfArgumentModelNullThrowException<TEntity>(operationName, entity, nameof(entity), _logger);
 			await _dbSet.AddAsync(entity);
 		}
 
@@ -28,6 +32,9 @@ namespace Project_Main.Models.DataBases.Repositories
 
 		public async Task<TEntity?> GetAsync(object id)
 		{
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetAsync), nameof(UserRepository));
+			HelperCheck.IfArgumentModelNullThrowException<object>(operationName, id, nameof(id), _logger);
+
 			return await _dbSet.FindAsync(id);
 		}
 
@@ -45,11 +52,17 @@ namespace Project_Main.Models.DataBases.Repositories
 
 		public void Remove(TEntity entity)
 		{
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Remove), nameof(UserRepository));
+			HelperCheck.IfArgumentModelNullThrowException<TEntity>(operationName, entity, nameof(entity), _logger);
+
 			_dbSet.Remove(entity);
 		}
 
 		public void Update(TEntity entity)
 		{
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Update), nameof(UserRepository));
+			HelperCheck.IfArgumentModelNullThrowException<TEntity>(operationName, entity, nameof(entity), _logger);
+
 			_dbSet.Update(entity);
 		}
 	}
