@@ -4,7 +4,7 @@ namespace Project_Main.Models.DataBases.Repositories
 {
     public interface IGenericRepository<T> where T : class
     {
-        Task Add(T entity);
+        Task AddAsync(T entity);
         Task<T?> GetAsync(object id);
         Task<IEnumerable<T>> GetByFilterAsync(Expression<Func<T, bool>>? filter = null);
 		void Update(T entity);

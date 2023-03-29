@@ -14,7 +14,7 @@ namespace Project_Main.Models.DataBases.Repositories
 			_dbSet = _dbContext.Set<TEntity>();
 		}
 
-		public async Task Add(TEntity entity)
+		public async Task AddAsync(TEntity entity)
 		{
 			await _dbSet.AddAsync(entity);
 		}
