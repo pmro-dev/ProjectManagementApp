@@ -6,7 +6,7 @@ namespace Project_Main.Models.DataBases.Repositories
     {
         Task<TodoListModel> GetWithDetailsAsync(int id);
 
-        Task<IEnumerable<TodoListModel>> GetAllWithDetailsAsync();
+        Task<IEnumerable<TodoListModel>> GetAllWithDetailsAsync(string userId);
 
         Task DuplicateWithDetailsAsync(int id);
 
