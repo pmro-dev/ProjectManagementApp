@@ -22,14 +22,14 @@ MONDAY.COM:
 
 I'm not a frontend developer but we will see what I can achieve ;)
 
-28.03.2023
-
-I designed via GIMP a few visualization of app.
+I designed a few visualizations of app (by using GIMP).
 
 ![PM DASHBOARDS](https://user-images.githubusercontent.com/34062651/228310052-f25319eb-1db3-4f94-8d80-f32f99688405.gif)
 
 For management purpose I use Jira, to keep on track, be more familiare with Jira features and practice project management.
 
 ![image](https://user-images.githubusercontent.com/34062651/228538027-7a2342e7-d1b5-430c-ad6d-61a72716152b.png)
+
+Shorter / Smaller ideas I put to Trello table -> https://trello.com/b/bxvtZ0xg/project-management-app
 
 
