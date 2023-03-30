@@ -6,6 +6,7 @@ using Project_DomainEntities.Helpers;
 using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.DataBases.Repositories;
 using Project_Main.Models.ViewModels.TodoListViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace Project_Main.Controllers
 {
@@ -16,7 +17,7 @@ namespace Project_Main.Controllers
 	[Route("TodoList")]
 	public class TodoListController : Controller
 	{
-		private readonly IContextOperations _context;
+		private readonly IDataUnitOfWork _dataUnitOfWork;
 		private readonly ILogger<TodoListController> _logger;
 		private readonly string controllerName = nameof(TodoListController);
 		private string operationName = string.Empty;
@@ -29,9 +30,9 @@ namespace Project_Main.Controllers
 		/// </summary>
 		/// <param name="context">Database context.</param>
 		/// <param name="logger">Logger provider.</param>
-		public TodoListController(IContextOperations context, ILogger<TodoListController> logger)
+		public TodoListController(IDataUnitOfWork dataUnitOfWork, ILogger<TodoListController> logger)
 		{
-			_context = context;
+			_dataUnitOfWork = dataUnitOfWork;
 			_logger = logger;
 		}
 
@@ -53,7 +54,9 @@ namespace Project_Main.Controllers
 				throw new InvalidOperationException("Error with signed In User");
 			}
 
-			List<TodoListModel> todoLists = await _context.GetAllTodoListsWithDetailsAsync(signedInUserId);
+			var todoListRepo = _dataUnitOfWork.TodoListRepository;
+			List<TodoListModel> todoLists = await todoListRepo.GetAllWithDetailsAsync(signedInUserId);
+			//List<TodoListModel> todoLists = await _context.GetAllTodoListsWithDetailsAsync(signedInUserId);
 
 			if (todoLists == null)
 			{
@@ -84,7 +87,11 @@ namespace Project_Main.Controllers
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(All), controllerName);
 
 			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			var allTodoLists = await _context.GetAllTodoListsWithDetailsAsync(signedInUserId);
+			var todoListRepo = _dataUnitOfWork.TodoListRepository;
+
+			// RETURNING only those for current user, because this feature will be remove, app won't provide all tasks from db at once
+			var allTodoLists = await todoListRepo.GetAllWithDetailsAsync(signedInUserId);
+			//var allTodoLists = await _context.GetAllTodoListsWithDetailsAsync(signedInUserId);
 
 			if (allTodoLists == null)
 			{
@@ -108,8 +115,10 @@ namespace Project_Main.Controllers
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(SingleDetails), controllerName);
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
 
-			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			var todoListModel = await _context.GetTodoListWithDetailsAsync(id, signedInUserId);
+			//var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var todoListRepo = _dataUnitOfWork.TodoListRepository;
+			var todoListModel = await todoListRepo.GetAsync(id);
+			//var todoListModel = await _context.GetTodoListWithDetailsAsync(id, signedInUserId);
 
 			if (todoListModel == null)
 			{
@@ -172,7 +181,9 @@ namespace Project_Main.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				if (await _context.DoesTodoListWithSameNameExistAsync(todoListModel.Name))
+				var todoListRepository = _dataUnitOfWork.TodoListRepository;
+
+				if (await todoListRepository.DoesAnyExistWithSameNameAsync(todoListModel.Name))
 				{
 					ModelState.AddModelError(string.Empty, Messages.NameTaken);
 
@@ -180,7 +191,9 @@ namespace Project_Main.Controllers
 				}
 
 				todoListModel.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-				await _context.AddTodoListAsync(todoListModel);
+				await todoListRepository.AddAsync(todoListModel);
+				await _dataUnitOfWork.SaveChangesAsync();
+
 				return RedirectToAction(nameof(Briefly));
 			}
 
@@ -201,7 +214,9 @@ namespace Project_Main.Controllers
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
 
 			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			var todoListModel = await _context.GetTodoListAsync(id, signedInUserId);
+			var todoListRepository = _dataUnitOfWork.TodoListRepository;
+			var todoListModel = await todoListRepository.GetAsync(id);
+			//var todoListModel = await _context.GetTodoListAsync(id, signedInUserId);
 
 			if (todoListModel == null)
 			{
@@ -237,7 +252,11 @@ namespace Project_Main.Controllers
 
 			if (ModelState.IsValid)
 			{
-				await _context.UpdateTodoListAsync(todoListModel);
+				var todoListRepository = _dataUnitOfWork.TodoListRepository;
+				todoListRepository.Update(todoListModel);
+				await _dataUnitOfWork.SaveChangesAsync();
+				//await _context.UpdateTodoListAsync(todoListModel);
+
 				return RedirectToAction(nameof(Briefly));
 			}
 
@@ -260,8 +279,10 @@ namespace Project_Main.Controllers
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Delete), controllerName);
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
 
-			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			var todoListModel = await _context.GetTodoListWithDetailsAsync(id, signedInUserId);
+			//var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var todoListRepository = _dataUnitOfWork.TodoListRepository;
+			var todoListModel = await todoListRepository.GetAsync(id);
+			//var todoListModel = await _context.GetTodoListWithDetailsAsync(id, signedInUserId);
 
 			if (todoListModel == null)
 			{
@@ -296,8 +317,10 @@ namespace Project_Main.Controllers
 
 			if (ModelState.IsValid)
 			{
-				var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-				var todoListModel = await _context.GetTodoListAsync(id, signedInUserId);
+				//var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				var todoListRepository = _dataUnitOfWork.TodoListRepository;
+				var todoListModel = await todoListRepository.GetAsync(id);
+				//var todoListModel = await _context.GetTodoListAsync(id, signedInUserId);
 
 				if (todoListModel != null)
 				{
@@ -307,7 +330,10 @@ namespace Project_Main.Controllers
 						return Conflict();
 					}
 
-					await _context.DeleteTodoListAsync(todoListModel.Id, signedInUserId);
+					todoListRepository.Remove(todoListModel);
+					await _dataUnitOfWork.SaveChangesAsync();
+
+					//await _context.DeleteTodoListAsync(todoListModel.Id, signedInUserId);
 					return RedirectToAction(nameof(Briefly));
 				}
 			}
@@ -326,8 +352,12 @@ namespace Project_Main.Controllers
 		{
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
 
-			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			await _context.DuplicateTodoListWithDetailsAsync(todoListId, signedInUserId);
+			//var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var todoListRepository = _dataUnitOfWork.TodoListRepository;
+			await todoListRepository.DuplicateWithDetailsAsync(todoListId);
+			await _dataUnitOfWork.SaveChangesAsync();
+
+			//await _context.DuplicateTodoListWithDetailsAsync(todoListId, signedInUserId);
 
 			return RedirectToAction(nameof(Briefly));
 		}
