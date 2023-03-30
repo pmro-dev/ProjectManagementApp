@@ -62,7 +62,7 @@ namespace Project_Main.Models.DataBases.Repositories
 			await AddAsync(newTodoList);
 		}
 
-		public async Task<IEnumerable<TodoListModel>> GetAllWithDetailsAsync(string userId)
+		public async Task<List<TodoListModel>> GetAllWithDetailsAsync(string userId)
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetAllWithDetailsAsync), nameof(TodoListRepository));
 			HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref userId, nameof(userId), _logger);
