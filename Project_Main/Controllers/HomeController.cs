@@ -59,7 +59,7 @@ namespace Project_Main.Controllers
 					throw new ArgumentNullException(nameof(loginViewModel));
 				}
 
-				UserModel user = await _identityRepository.GetUserForLoggingAsync(loginViewModel.Name, loginViewModel.Password);
+				UserModel? user = await _identityRepository.GetForLoggingAsync(loginViewModel.Name, loginViewModel.Password);
 				//await context userManager.FindByNameAsync(loginViewModel.Name);
 
 				if (user != null)
@@ -172,7 +172,7 @@ namespace Project_Main.Controllers
 
 				try
 				{
-					if (await _identityRepository.IsUserNameUsedAsync(registerViewModel.Name) is false)
+					if (await _identityRepository.IsNameTakenAsync(registerViewModel.Name) is false)
 					{
 						UserModel newUser = new()
 						{
