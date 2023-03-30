@@ -8,7 +8,7 @@ namespace Project_Main.Models.DataBases.Repositories
 {
 	public class CustomAppDbContext : DbContext
 	{
-		private readonly ILogger<CustomAppDbContext> _logger;
+		private readonly ILogger<CustomAppDbContext>? _logger;
 
 		/// <summary>
 		/// Initilizes object and Ensures that database is created.
@@ -18,7 +18,11 @@ namespace Project_Main.Models.DataBases.Repositories
 			_logger = logger;
 		}
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public CustomAppDbContext()
+        {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
 			var todoItemBuilder = modelBuilder.Entity<TaskModel>();
@@ -27,7 +31,7 @@ namespace Project_Main.Models.DataBases.Repositories
 
 			modelBuilder.Entity<TaskTagModel>().HasKey(tt => new { tt.TaskId, tt.TagId });
 
-			_logger.LogInformation(Messages.BuildingSucceedLogger, nameof(OnModelCreating), nameof(CustomAppDbContext));
+			_logger?.LogInformation(Messages.BuildingSucceedLogger, nameof(OnModelCreating), nameof(CustomAppDbContext));
 		}
 	}
 }
