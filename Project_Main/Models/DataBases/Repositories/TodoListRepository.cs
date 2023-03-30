@@ -6,11 +6,11 @@ namespace Project_Main.Models.DataBases.Repositories
 {
 	public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRepository
 	{
-		private readonly CustomDbContext _dbContext;
+		private readonly CustomAppDbContext _dbContext;
 		private readonly ILogger<TodoListRepository> _logger;
 		private string operationName = string.Empty;
 
-		public TodoListRepository(CustomDbContext dbContext, ILogger<TodoListRepository> logger) : base(dbContext, logger)
+		public TodoListRepository(CustomAppDbContext dbContext, ILogger<TodoListRepository> logger) : base(dbContext, logger)
 		{
 			_dbContext = dbContext;
 			_logger = logger;

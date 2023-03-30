@@ -6,14 +6,14 @@ using static Project_DomainEntities.Helpers.TaskStatusHelper;
 
 namespace Project_Main.Models.DataBases.Repositories
 {
-	public class CustomDbContext : DbContext
+	public class CustomAppDbContext : DbContext
 	{
-		private readonly ILogger<CustomDbContext> _logger;
+		private readonly ILogger<CustomAppDbContext> _logger;
 
 		/// <summary>
 		/// Initilizes object and Ensures that database is created.
 		/// </summary>
-		public CustomDbContext(DbContextOptions<CustomDbContext> options, ILogger<CustomDbContext> logger) : base(options)
+		public CustomAppDbContext(DbContextOptions<CustomAppDbContext> options, ILogger<CustomAppDbContext> logger) : base(options)
 		{
 			_logger = logger;
 		}
@@ -21,15 +21,13 @@ namespace Project_Main.Models.DataBases.Repositories
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
-
 			var todoItemBuilder = modelBuilder.Entity<TaskModel>();
-
 			todoItemBuilder.Property(x => x.Status)
 				.HasConversion(new EnumToStringConverter<TaskStatusType>());
 
 			modelBuilder.Entity<TaskTagModel>().HasKey(tt => new { tt.TaskId, tt.TagId });
 
-			_logger.LogInformation(Messages.BuildingSucceedLogger, nameof(OnModelCreating), nameof(CustomDbContext));
+			_logger.LogInformation(Messages.BuildingSucceedLogger, nameof(OnModelCreating), nameof(CustomAppDbContext));
 		}
 	}
 }
