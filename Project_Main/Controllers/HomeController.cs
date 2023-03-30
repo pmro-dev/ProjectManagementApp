@@ -186,9 +186,10 @@ namespace Project_Main.Controllers
 
 						newUser.NameIdentifier = newUser.UserId;
 
-						bool result = await _identityRepository.AddUserAsync(newUser);
+						Task cos = new(async () => await _identityRepository.AddAsync(newUser));
+						cos.Start();
 
-						if (result)
+						if (cos.IsCompletedSuccessfully)
 						{
 							return View(nameof(Login));
 						}
