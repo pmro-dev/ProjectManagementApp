@@ -9,14 +9,14 @@ namespace Project_Main.Models.DataBases.Repositories
 {
 	public class IdentityRepository : IIdentityRepository
 	{
-		private readonly IdentityDbContext _identityContext;
+		private readonly CustomIdentityDbContext _identityContext;
 		private readonly ILogger<IdentityRepository> _logger;
 		delegate Task TryCatchBlockDelegateType();
 		private string methodName = string.Empty;
 		private string operationName = string.Empty;
 		private readonly string contextName = nameof(IdentityRepository);
 
-		public IdentityRepository(IdentityDbContext identityContext, ILogger<IdentityRepository> logger)
+		public IdentityRepository(CustomIdentityDbContext identityContext, ILogger<IdentityRepository> logger) : base(identityContext, logger)
 		{
 			_identityContext = identityContext;
 			_logger = logger;

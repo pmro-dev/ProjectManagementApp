@@ -6,11 +6,11 @@ namespace Project_Main.Models.DataBases.Repositories
 {
 	public class UserRepository : GenericRepository<UserModel>, IUserRepository
 	{
-		private readonly CustomDbContext _dbContext;
+		private readonly CustomIdentityDbContext _dbContext;
 		private readonly ILogger<UserRepository> _logger;
 		private string operationName = string.Empty;
 
-		public UserRepository(CustomDbContext dbContext, ILogger<UserRepository> logger) : base(dbContext)
+		public UserRepository(CustomIdentityDbContext dbContext, ILogger<UserRepository> logger) : base(dbContext, logger)
 		{
 			_dbContext = dbContext;
 			_logger = logger;
