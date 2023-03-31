@@ -10,14 +10,14 @@ using Project_Main.Models.DataBases.Repositories.AppData;
 
 namespace Project_Main.Controllers
 {
-	/// <summary>
-	/// Controller to manage Task actions based on certain routes.
-	/// </summary>
-	[Authorize]
+    /// <summary>
+    /// Controller to manage Task actions based on certain routes.
+    /// </summary>
+    [Authorize]
 	public class TaskController : Controller
 	{
 		private readonly string controllerName = nameof(TaskController);
-		private readonly IContextOperations _context;
+		private readonly IDataUnitOfWork _dataUnitOfWork;
 		private readonly ILogger<TaskController> _logger;
 		private string operationName = string.Empty;
 
@@ -26,9 +26,9 @@ namespace Project_Main.Controllers
 		/// </summary>
 		/// <param name="context">Database context.</param>
 		/// <param name="logger">Logger provider.</param>
-		public TaskController(IContextOperations context, ILogger<TaskController> logger)
+		public TaskController(IDataUnitOfWork dataUnitOfWork, ILogger<TaskController> logger)
 		{
-			_context = context;
+			_dataUnitOfWork = dataUnitOfWork;
 			_logger = logger;
 		}
 
@@ -50,8 +50,12 @@ namespace Project_Main.Controllers
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, taskId, nameof(taskId), HelperOther.idBoundryBottom, _logger);
 
-			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			var taskModel = await _context.ReadTaskAsync(taskId, signedInUserId);
+			//string signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+			ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
+
+			TaskModel? taskModel = await taskRepository.GetAsync(taskId);
+			//var taskModel = await _context.ReadTaskAsync(taskId, signedInUserId);
 
 			if (taskModel == null)
 			{
@@ -65,7 +69,10 @@ namespace Project_Main.Controllers
 				return Conflict();
 			}
 
-			var todoList = await _context.GetTodoListAsync(todoListId, signedInUserId);
+			ITodoListRepository todoListRepository = _dataUnitOfWork.TodoListRepository;
+
+			TodoListModel? todoList = await todoListRepository.GetAsync(todoListId);
+			//var todoList = await _context.GetTodoListAsync(todoListId, signedInUserId);
 
 			if (todoList == null)
 			{
@@ -100,8 +107,12 @@ namespace Project_Main.Controllers
 
 			if (ModelState.IsValid)
 			{
-				var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-				var targetTodoList = await _context.GetTodoListAsync(id, signedInUserId);
+				//var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+				ITodoListRepository todoListRepository = _dataUnitOfWork.TodoListRepository;
+
+				var targetTodoList = await todoListRepository.GetAsync(id);
+				//var targetTodoList = await _context.GetTodoListAsync(id, signedInUserId);
 
 				if (targetTodoList is null)
 				{
@@ -143,7 +154,13 @@ namespace Project_Main.Controllers
 			if (ModelState.IsValid)
 			{
 				taskModel.TodoListId = todoListId;
-				await _context.CreateTaskAsync(taskModel);
+
+				ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
+
+				await taskRepository.AddAsync(taskModel);
+				await _dataUnitOfWork.SaveChangesAsync();
+
+				//await _context.CreateTaskAsync(taskModel);
 				return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
 			}
 
@@ -166,9 +183,18 @@ namespace Project_Main.Controllers
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, taskId, nameof(taskId), HelperOther.idBoundryBottom, _logger);
 			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-			var taskModel = await _context.ReadTaskAsync(taskId, signedInUserId);
-			var tempTodoLists = await _context.GetAllTodoListsAsync(signedInUserId);
-			var targetTodoList = tempTodoLists.Find(x => x.Id == todoListId);
+			ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
+
+			var taskModel = await taskRepository.GetAsync(taskId);
+			//var taskModel = await _context.ReadTaskAsync(taskId, signedInUserId);
+
+			ITodoListRepository todoListRepository = _dataUnitOfWork.TodoListRepository;
+
+			TodoListModel? targetTodoList = await todoListRepository.GetAsync(todoListId);
+			IEnumerable<TodoListModel> tempTodoLists = await todoListRepository.GetByFilterAsync(todoList => todoList.UserId == signedInUserId);
+
+			//var tempTodoLists = await _context.GetAllTodoListsAsync(signedInUserId);
+			//var targetTodoList = tempTodoLists.Find(x => x.Id == todoListId);
 
 			if (taskModel == null)
 			{
@@ -176,7 +202,7 @@ namespace Project_Main.Controllers
 				return NotFound();
 			}
 
-			if (tempTodoLists.Count == HelperOther.ZeroValueToIndicatesEmptyArray)
+			if (tempTodoLists.Any())
 			{
 				_logger.LogInformation(Messages.NotAnyTodoListInDb, operationName);
 				return NotFound();
@@ -245,7 +271,11 @@ namespace Project_Main.Controllers
 
 			if (ModelState.IsValid)
 			{
-				await _context.UpdateTaskAsync(taskModel);
+				ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
+				taskRepository.Update(taskModel);
+				await _dataUnitOfWork.SaveChangesAsync();
+
+				//await _context.UpdateTaskAsync(taskModel);
 				return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
 			}
 
@@ -270,8 +300,12 @@ namespace Project_Main.Controllers
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, taskId, nameof(taskId), HelperOther.idBoundryBottom, _logger);
 
-			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			var taskToDelete = await _context.ReadTaskAsync(taskId, signedInUserId);
+			//var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+			ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
+
+			TaskModel? taskToDelete = await taskRepository.GetAsync(taskId);
+			//var taskToDelete = await _context.ReadTaskAsync(taskId, signedInUserId);
 
 			if (taskToDelete == null)
 			{
@@ -309,8 +343,11 @@ namespace Project_Main.Controllers
 
 			if (ModelState.IsValid)
 			{
-				var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-				var taskToDelete = await _context.ReadTaskAsync(taskId, signedInUserId);
+				//var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
+				TaskModel? taskToDelete = await taskRepository.GetAsync(taskId);
+				
+				//var taskToDelete = await _context.ReadTaskAsync(taskId, signedInUserId);
 
 				if (taskToDelete != null)
 				{
@@ -320,7 +357,9 @@ namespace Project_Main.Controllers
 						return Conflict();
 					}
 
-					await _context.DeleteTaskAsync(taskToDelete.Id, signedInUserId);
+					taskRepository.Remove(taskToDelete);
+					await _dataUnitOfWork.SaveChangesAsync();
+					//await _context.DeleteTaskAsync(taskToDelete.Id, signedInUserId);
 					return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
 				}
 
