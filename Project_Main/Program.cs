@@ -6,9 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Security.Claims;
 using Project_Main.Infrastructure.Helpers;
-using Project_Main.Models.DataBases.AppDb;
-using Project_Main.Models.DataBases.IdentityDb;
-using Project_Main.Models.DataBases.Repositories;
+using Project_Main.Models.DataBases.Repositories.Identity;
+using Project_Main.Models.DataBases.Repositories.AppData;
+using Project_Main.Models.DataBases.Old.AppDb;
+using Project_Main.Models.DataBases.Old.IdentityDb;
+using Project_Main.Models.DataBases.Repositories.General;
 
 namespace Project_Main
 {

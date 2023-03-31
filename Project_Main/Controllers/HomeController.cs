@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.ViewModels.HomeViewModels;
 using Project_IdentityDomainEntities;
-using Project_Main.Models.DataBases.Repositories;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Project_Main.Models.DataBases.Repositories.Identity;
 
 namespace Project_Main.Controllers
 {

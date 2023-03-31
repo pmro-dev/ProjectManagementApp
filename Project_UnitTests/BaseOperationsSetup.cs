@@ -3,8 +3,8 @@ using Autofac.Extras.Moq;
 using Autofac;
 using Microsoft.Extensions.Logging;
 using Project_DomainEntities;
-using Project_Main.Models.DataBases.AppDb;
-using Project_Main.Models.DataBases.Repositories;
+using Project_Main.Models.DataBases.Old.AppDb;
+using Project_Main.Models.DataBases.Old;
 
 namespace Project_UnitTests
 {

@@ -3,14 +3,14 @@ using Autofac.Extras.Moq;
 using Moq;
 using Project_UnitTests.Helpers;
 using Project_DomainEntities;
-using Project_Main.Models.DataBases.Repositories;
+using Project_Main.Models.DataBases.Old;
 
 namespace Project_UnitTests
 {
-	/// <summary>
-	/// Unit Test Class for Database tests with Mocking (DbContext) approach.
-	/// </summary>
-	public class DatabaseOperationsTests : BaseOperationsSetup
+    /// <summary>
+    /// Unit Test Class for Database tests with Mocking (DbContext) approach.
+    /// </summary>
+    public class DatabaseOperationsTests : BaseOperationsSetup
 	{
 		private const int OnePositionFurther = 1;
 		private const int IdOfFirstTodoList = 1;

@@ -1,0 +1,9 @@
+﻿using Project_DomainEntities;
+using Project_Main.Models.DataBases.Repositories.General;
+
+namespace Project_Main.Models.DataBases.Repositories.AppData
+{
+    public interface ITaskRepository : IGenericRepository<TaskModel>
+    {
+    }
+}

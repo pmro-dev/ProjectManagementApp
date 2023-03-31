@@ -2,15 +2,14 @@ using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
 using Project_DomainEntities;
-using Project_Main.Models.DataBases.AppDb;
-using Project_Main.Models.DataBases.Repositories;
+using Project_Main.Models.DataBases.Old;
 
 namespace Project_UnitTests
 {
-	/// <summary>
-	/// Unit Test Class for Database tests with Mocking (DbContext) approach.
-	/// </summary>
-	public class DbOperationsForTodoListTests : BaseOperationsSetup
+    /// <summary>
+    /// Unit Test Class for Database tests with Mocking (DbContext) approach.
+    /// </summary>
+    public class DbOperationsForTodoListTests : BaseOperationsSetup
 	{
 		private const int OnePositionFurther = 1;
 		private const int IdOfFirstTodoList = 1;
@@ -22,7 +21,7 @@ namespace Project_UnitTests
 		}
 
 		/// <summary>
-		/// Tests <see cref="ContextOperations"/> - Add TodoList - operation as success attempt.
+		/// Tests <see cref="ContextOperations"/> - AddAsync TodoList - operation as success attempt.
 		/// </summary>
 		/// <param name="todoListName">Valid name value for new TodoList.</param>
 		[TestCase("Testowa nazwa listy")]
@@ -47,7 +46,7 @@ namespace Project_UnitTests
 		}
 
 		/// <summary>
-		/// Tests <see cref="ContextOperations"/> - Add TodoList - operation with Null Object to throw exception.
+		/// Tests <see cref="ContextOperations"/> - AddAsync TodoList - operation with Null Object to throw exception.
 		/// </summary>
 		[Test]
 		public async Task AttemptToCreateTodoListByNullObjectShouldThrowException()
