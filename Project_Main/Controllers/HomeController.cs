@@ -17,19 +17,19 @@ namespace Project_Main.Controllers
 	[AllowAnonymous]
 	public class HomeController : Controller
 	{
-		private const string GoogleUrlToLogout = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=https://localhost:7103";
+		private readonly string GoogleUrlToLogout = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=https://localhost:7103";
 		private readonly ILogger<HomeController> _logger;
 		private string operationName = string.Empty;
 		private readonly string controllerName = nameof(HomeController);
-		private readonly IIdentityRepository _identityRepository;
+		private readonly IIdentityUnitOfWork _identityUnitOfWork;
 		private const string returnToMain = "TodoList/All/Briefly";
 
 		/// <summary>
 		/// Initializes class.
 		/// </summary>
-		public HomeController(IIdentityRepository identityRepository, ILogger<HomeController> logger)
+		public HomeController(IIdentityUnitOfWork identityUnitOfWork, ILogger<HomeController> logger)
 		{
-			_identityRepository = identityRepository;
+			_identityUnitOfWork = identityUnitOfWork;
 			_logger = logger;
 		}
 
@@ -59,7 +59,10 @@ namespace Project_Main.Controllers
 					throw new ArgumentNullException(nameof(loginViewModel));
 				}
 
-				UserModel? user = await _identityRepository.GetForLoggingAsync(loginViewModel.Name, loginViewModel.Password);
+				IUserRepository userRepository = _identityUnitOfWork.UserRepository;
+
+				UserModel? user = await userRepository.GetByNameAndPasswordAsync(loginViewModel.Name, loginViewModel.Password);
+				//UserModel? user = await _identityRepository.GetForLoggingAsync(loginViewModel.Name, loginViewModel.Password);
 				//await context userManager.FindByNameAsync(loginViewModel.Name);
 
 				if (user != null)
@@ -170,9 +173,12 @@ namespace Project_Main.Controllers
 					throw new ArgumentNullException(nameof(registerViewModel));
 				}
 
+				IUserRepository userRepository = _identityUnitOfWork.UserRepository;
+
 				try
 				{
-					if (await _identityRepository.IsNameTakenAsync(registerViewModel.Name) is false)
+					//if (await _identityRepository.IsNameTakenAsync(registerViewModel.Name) is false)
+					if (await userRepository.IsNameTakenAsync(registerViewModel.Name) is false)
 					{
 						UserModel newUser = new()
 						{
@@ -186,10 +192,11 @@ namespace Project_Main.Controllers
 
 						newUser.NameIdentifier = newUser.UserId;
 
-						Task cos = new(async () => await _identityRepository.AddAsync(newUser));
-						cos.Start();
+						//Task cos = new(async () => await _identityRepository.AddAsync(newUser));
+						Task addUserTask = new(async () => await userRepository.AddAsync(newUser));
+						addUserTask.Start();
 
-						if (cos.IsCompletedSuccessfully)
+						if (addUserTask.IsCompletedSuccessfully)
 						{
 							return View(nameof(Login));
 						}
