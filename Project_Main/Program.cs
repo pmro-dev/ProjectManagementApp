@@ -44,7 +44,8 @@ namespace Project_Main
 
 			#region SETUP DATA BASES SERVICES
 
-			builder.Services.AddDbContext<IAppDbContext, AppDbContext>(
+			//builder.Services.AddDbContext<IAppDbContext, AppDbContext>(
+			builder.Services.AddDbContext<CustomAppDbContext, CustomAppDbContext>(
 				opts =>
 				{
 					opts.UseSqlServer(builder.Configuration[HelperProgram.ConnectionStringMainDb]);
@@ -52,7 +53,7 @@ namespace Project_Main
 				},
 				ServiceLifetime.Scoped);
 
-			builder.Services.AddDbContext<IdentityDbContext, IdentityDbContext>(
+			builder.Services.AddDbContext<CustomIdentityDbContext, CustomIdentityDbContext>(
 				opts =>
 				{
 					opts.UseSqlServer(builder.Configuration[HelperProgram.ConnectionStringIdentityDb]);
@@ -60,11 +61,18 @@ namespace Project_Main
 				},
 				ServiceLifetime.Scoped);
 
-			builder.Services.AddScoped<IContextOperations, ContextOperations>();
-			builder.Services.AddScoped<IIdentityRepository, IdentityRepository>();
+			builder.Services.AddScoped<IdentityUnitOfWork>();
+			builder.Services.AddScoped<IDataUnitOfWork, DataUnitOfWork>();
+			builder.Services.AddScoped<IUserRepository, UserRepository>();
+			builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+			builder.Services.AddScoped<ITodoListRepository, TodoListRepository>();
+			builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+
 			builder.Services.AddScoped<SeedData>();
 
 			#endregion
+
+
 
 			#region SETUP AUTHENTICATION
 
@@ -86,31 +94,47 @@ namespace Project_Main
 					options.Cookie.Name = HelperProgram.CustomCookieName;
 					options.Events = new CookieAuthenticationEvents()
 					{
-						OnSigningIn = async context =>
+						OnSigningIn = async cookieSigningInContext =>
 						{
-							ILogger? _logger = context.HttpContext.RequestServices.GetService<ILogger>();
-							IdentityDbContext? identityDbContext = context.HttpContext.RequestServices.GetService<IdentityDbContext>();
-							ClaimsIdentity? principle = context.Principal?.Identity as ClaimsIdentity;
+							ILogger? _logger = cookieSigningInContext.HttpContext.RequestServices.GetService<ILogger>();
+							//CustomIdentityDbContext? identityDbContext = cookieSigningInContext.HttpContext.RequestServices.GetService<CustomIdentityDbContext>();
 
-							if (identityDbContext is null)
+							IdentityUnitOfWork? _identityUnitOfWork = cookieSigningInContext.HttpContext.RequestServices.GetService<IdentityUnitOfWork>();
+
+							if (_identityUnitOfWork is null)
 							{
-								_logger?.LogCritical(Messages.ErrorDbContextIsNull, nameof(identityDbContext));
-								throw new InvalidOperationException(Messages.DbContextIsNull(nameof(identityDbContext)));
+								// TODO write new message for Unit Of Work null object
+								_logger?.LogCritical(Messages.ErrorDbContextIsNull, nameof(_identityUnitOfWork));
+								throw new InvalidOperationException(Messages.DbContextIsNull(nameof(_identityUnitOfWork)));
 							}
 
-							SetAuthSchemeClaimForUser(context, out Claim authSchemeClaimWithProviderName, principle);
-							UserModel userBasedOnProviderClaims = PrepareUserBasedOnProviderClaims(context, authSchemeClaimWithProviderName);
+							IUserRepository userRepository = _identityUnitOfWork.UserRepository;
+							IRoleRepository roleRepository = _identityUnitOfWork.RoleRepository;
 
-							if (await identityDbContext.DoesUserExist(userBasedOnProviderClaims.NameIdentifier))
+							ClaimsIdentity? principle = cookieSigningInContext.Principal?.Identity as ClaimsIdentity;
+
+							//if (identityDbContext is null)
+							//{
+							//	_logger?.LogCritical(Messages.ErrorDbContextIsNull, nameof(identityDbContext));
+							//	throw new InvalidOperationException(Messages.DbContextIsNull(nameof(identityDbContext)));
+							//}
+
+							SetAuthSchemeClaimForUser(cookieSigningInContext, out Claim authSchemeClaimWithProviderName, principle);
+							UserModel userBasedOnProviderClaims = PrepareUserBasedOnProviderClaims(cookieSigningInContext, authSchemeClaimWithProviderName);
+
+							//if (await identityDbContext.DoesUserExist(userBasedOnProviderClaims.NameIdentifier))
+							if (await userRepository.IsNameTakenAsync(userBasedOnProviderClaims.NameIdentifier))
 							{
-								await UpdateUserWhenDataOnProviderSideChangedAsync(identityDbContext, userBasedOnProviderClaims, authSchemeClaimWithProviderName);
+								await UpdateUserWhenDataOnProviderSideChangedAsync(userRepository, userBasedOnProviderClaims, authSchemeClaimWithProviderName);
 							}
 							else
 							{
-								await AddUserWhenNotExistInDbAsync(identityDbContext, userBasedOnProviderClaims);
+								await AddUserWhenItNotExistAsync(userRepository, userBasedOnProviderClaims, roleRepository);
 							}
 
-							await SetRolesForUserPrincipleAsync(identityDbContext, userBasedOnProviderClaims.UserId, principle);
+							await _identityUnitOfWork.SaveChangesAsync();
+
+							await SetRolesForUserPrincipleAsync(userRepository, userBasedOnProviderClaims.UserId, principle);
 						}
 					};
 				})
@@ -138,9 +162,17 @@ namespace Project_Main
 			}
 
 
-			async Task UpdateUserWhenDataOnProviderSideChangedAsync(IdentityDbContext identityDbContext, UserModel userBasedOnProviderClaims, Claim authSchemeClaimWithProviderName)
+			async Task UpdateUserWhenDataOnProviderSideChangedAsync(IUserRepository userRepository, UserModel userBasedOnProviderClaims, Claim authSchemeClaimWithProviderName)
 			{
-				UserModel userFromDb = await identityDbContext.GetUserAsync(userBasedOnProviderClaims.NameIdentifier);
+				UserModel? userFromDb = await userRepository.GetAsync(userBasedOnProviderClaims.NameIdentifier);
+
+				if (userFromDb is null)
+				{
+					//_logger?.LogCritical(Messages.EntityNotFoundInDbLogger, );
+					throw new InvalidOperationException(Messages.EntityNotFoundInDb(nameof(UpdateUserWhenDataOnProviderSideChangedAsync), "Identity", -2));
+				}
+
+				//UserModel userFromDb = await identityDbContext.GetUserAsync(userBasedOnProviderClaims.NameIdentifier);
 				bool doesUserUseOtherProvider = userBasedOnProviderClaims.Provider != CookieAuthenticationDefaults.AuthenticationScheme;
 
 				if (doesUserUseOtherProvider && ModelsHelper.IsUserDataFromProviderDifferentToUserDataInDb(ref userBasedOnProviderClaims, ref userFromDb))
@@ -151,23 +183,39 @@ namespace Project_Main
 					userFromDb.Provider = authSchemeClaimWithProviderName.Value;
 					userFromDb.Email = userBasedOnProviderClaims.Email;
 
-					await identityDbContext.UpdateUserAsync(userFromDb);
-					await identityDbContext.SaveChangesAsync();
+					userRepository.Update(userFromDb);
+					//await identityDbContext.UpdateUserAsync(userFromDb);
+					//await identityDbContext.SaveChangesAsync();
 				}
 			}
 
 
-			async Task AddUserWhenNotExistInDbAsync(IdentityDbContext identityDbContext, UserModel userBasedOnProviderClaims)
+			async Task AddUserWhenItNotExistAsync(IUserRepository userRepository, UserModel userBasedOnProviderClaims, IRoleRepository roleRepository)
 			{
-				await AddNewUserToDbAsync(identityDbContext, userBasedOnProviderClaims);
+				IEnumerable<RoleModel> filteredRoles = await roleRepository.GetByFilterAsync(r => r.Name == HelperProgram.DefaultRole);
+				RoleModel? roleTemp = filteredRoles.FirstOrDefault();
+
+				if (roleTemp is null)
+				{
+					throw new InvalidOperationException("message");
+				}
+
+				await userRepository.AddAsync(userBasedOnProviderClaims);
+
+				//userBasedOnClaims.UserRoles.Add(new UserRoleModel() { Role = defaultRole, User = userBasedOnClaims });
+				//identityDbContext.Users.Add(userBasedOnProviderClaims);
+				//await identityDbContext.SaveChangesAsync();
+				//await AddNewUserToDbAsync(userRepository, userBasedOnProviderClaims);
 			}
 
 
-			async Task SetRolesForUserPrincipleAsync(IdentityDbContext identityDbContext, string userId, ClaimsIdentity? principle)
+			async Task SetRolesForUserPrincipleAsync(IUserRepository userRepository, string userId, ClaimsIdentity? principle)
 			{
-				var userRoleNames = await identityDbContext.GetRolesForUserAsync(userId);
+				IEnumerable<RoleModel> userRoles = await userRepository.GetRolesAsync(userId);
+				List<string> userRolesNames = userRoles.Select(userRole => userRole.Name).ToList();
+				//var userRoleNames = await identityDbContext.GetRolesForUserAsync(userId);
 
-				foreach (string roleName in userRoleNames)
+				foreach (string roleName in userRolesNames)
 				{
 					principle?.AddClaim(new Claim(ClaimTypes.Role, roleName));
 				}
@@ -196,13 +244,10 @@ namespace Project_Main
 			}
 
 
-			async Task AddNewUserToDbAsync(IdentityDbContext identityDbContext, UserModel userBasedOnClaims)
-			{
-				RoleModel defaultRole = await identityDbContext.Roles.SingleAsync(r => r.Name == HelperProgram.DefaultRole);
-				userBasedOnClaims.UserRoles.Add(new UserRoleModel() { Role = defaultRole, User = userBasedOnClaims });
-				identityDbContext.Users.Add(userBasedOnClaims);
-				await identityDbContext.SaveChangesAsync();
-			}
+			//async Task AddNewUserToDbAsync(IIdentityRepository identityDbContext, UserModel userBasedOnClaims)
+			//{
+
+			//}
 
 			#endregion
 
