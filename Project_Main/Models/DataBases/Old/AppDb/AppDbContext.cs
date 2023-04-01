@@ -10,7 +10,7 @@ namespace Project_Main.Models.DataBases.Old.AppDb
     /// <summary>
     /// Context class that implements DbContext.
     /// </summary>
-    public class AppDbContext : DbContext, IAppDbContext
+    public class AppDbContext : DbContext
     {
         private readonly ILogger<AppDbContext> _logger;
         private string operationName = string.Empty;

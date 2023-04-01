@@ -57,13 +57,6 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 			}
 		}
 
-		////private static void SetupServices(IApplicationBuilder app, out IdentityDbContext context)
-		//private static void SetupServices(IApplicationBuilder app, out IdentityUnitOfWork identityUnitOfWork)
-		//{
-		//	IdentityUnitOfWork identityUnitOfWork = app.ApplicationServices
-		//	.CreateScope().ServiceProvider.GetRequiredService<IdentityUnitOfWork>();
-		//}
-
 		private static async Task EnsurePendingMigrationsApplied(IIdentityUnitOfWork identityUnitOfWork)
 		{
 			var migrations = await identityUnitOfWork.GetPendingMigrationsAsync();
@@ -93,8 +86,6 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 				}
 
 				await roleRepository.AddRangeAsync(defaultRoles);
-				//await context.Roles.AddRangeAsync(defaultRoles);
-				//await context.SaveChangesAsync();
 			}
 		}
 

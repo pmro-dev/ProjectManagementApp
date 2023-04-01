@@ -12,9 +12,5 @@ namespace Project_Main.Models.DataBases.Repositories.AppData
         Task DuplicateWithDetailsAsync(int id);
 
         Task<bool> DoesAnyExistWithSameNameAsync(string name);
-
-        //Task<bool> ContainsAny();
-
-        //Task AddRangeAsync(IEnumerable<TodoListModel> todoListsRange);
 	}
 }

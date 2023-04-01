@@ -146,36 +146,6 @@ namespace Project_Main.Models.DataBases.Repositories.Identity
 		//	_logger.LogError(ex, Messages.ExceptionOccuredLogger, ex.GetType(), methodName);
 		//}
 
-		//public async Task<UserModel> GetForLoggingAsync(string userName, string userPassword)
-		//{
-		//	operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetForLoggingAsync), repoName);
 
-		//	UserModel userFromDb = new();
-
-		//	TryCatchBlockDelegateType operationsForDbTryCatchBlockAsync = new(async () =>
-		//	{
-		//		userFromDb = await _identityContext.GetUserByNameAndPasswordAsync(userName, userPassword);
-		//		//HelperCheck.IfInstanceNullThrowException(operationName, userFromDb, nameof(userFromDb), _logger);
-		//	});
-
-		//	await ExecuteInTryCatchBlockToCatchEFCoreAndSQLExceptionsAsync(operationsForDbTryCatchBlockAsync);
-		//	return userFromDb;
-		//}
-
-		//public async Task<bool> IsNameTakenAsync(string userName)
-		//{
-		//	operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(IsNameTakenAsync), repoName);
-
-		//	bool result = false;
-
-		//	TryCatchBlockDelegateType operationsForDbTryCatchBlockAsync = new(async () =>
-		//	{
-		//		result = await _identityContext.Users.AnyAsync(u => u.Username == userName);
-		//		//HelperCheck.IfInstanceNullThrowException(operationName, userFromDb, nameof(userFromDb), _logger);
-		//	});
-
-		//	await ExecuteInTryCatchBlockToCatchEFCoreAndSQLExceptionsAsync(operationsForDbTryCatchBlockAsync);
-		//	return result;
-		//}
 	}
 }

@@ -13,10 +13,6 @@ namespace Project_Main.Models.DataBases.Repositories.Identity
             _logger = logger;
         }
 
-        //public CustomIdentityDbContext()
-        //{
-        //}
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

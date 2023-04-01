@@ -34,18 +34,14 @@ namespace Project_Main.Models.DataBases.Old.AppDb
 
 				if (migrations.Any())
 				{
-					//await context.Database.MigrateAsync();
 					await _unitOfWork.MigrateAsync();
 				}
 
 				ITodoListRepository todoListRepository = _unitOfWork.TodoListRepository;
 
-				//if (!await context.TodoLists.AnyAsync())
 				if (!await todoListRepository.ContainsAny())
 				{
 					await todoListRepository.AddRangeAsync(seedContainer.TodoLists);
-					//await context.TodoLists.AddRangeAsync(seedContainer.TodoLists);
-					//await context.SaveChangesAsync();
 				}
 
 				ITaskRepository taskRepository = _unitOfWork.TaskRepository;
@@ -53,9 +49,6 @@ namespace Project_Main.Models.DataBases.Old.AppDb
 				if (!await taskRepository.ContainsAny())
 				{
 					await taskRepository.AddRangeAsync(seedContainer.AllTasks);
-
-					//await context.Tasks.AddRangeAsync(seedContainer.AllTasks);
-					//await context.SaveChangesAsync();
 				}
 
 				await _unitOfWork.SaveChangesAsync();

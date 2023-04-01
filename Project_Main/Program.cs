@@ -10,7 +10,6 @@ using Project_Main.Models.DataBases.Repositories.Identity;
 using Project_Main.Models.DataBases.Repositories.AppData;
 using Project_Main.Models.DataBases.Old.AppDb;
 using Project_Main.Models.DataBases.Old.IdentityDb;
-using Project_Main.Models.DataBases.Repositories.General;
 
 namespace Project_Main
 {
@@ -72,8 +71,6 @@ namespace Project_Main
 
 			#endregion
 
-
-
 			#region SETUP AUTHENTICATION
 
 			string AuthGoogleClientId = builder.Configuration[HelperProgram.AuthGoogleClientId];
@@ -99,8 +96,6 @@ namespace Project_Main
 							ILogger? _logger = cookieSigningInContext.HttpContext.RequestServices.GetService<ILogger>();
 							//CustomIdentityDbContext? identityDbContext = cookieSigningInContext.HttpContext.RequestServices.GetService<CustomIdentityDbContext>();
 
-							IdentityUnitOfWork? _identityUnitOfWork = cookieSigningInContext.HttpContext.RequestServices.GetService<IdentityUnitOfWork>();
-
 							if (_identityUnitOfWork is null)
 							{
 								// TODO write new message for Unit Of Work null object
@@ -112,13 +107,6 @@ namespace Project_Main
 							IRoleRepository roleRepository = _identityUnitOfWork.RoleRepository;
 
 							ClaimsIdentity? principle = cookieSigningInContext.Principal?.Identity as ClaimsIdentity;
-
-							//if (identityDbContext is null)
-							//{
-							//	_logger?.LogCritical(Messages.ErrorDbContextIsNull, nameof(identityDbContext));
-							//	throw new InvalidOperationException(Messages.DbContextIsNull(nameof(identityDbContext)));
-							//}
-
 							SetAuthSchemeClaimForUser(cookieSigningInContext, out Claim authSchemeClaimWithProviderName, principle);
 							UserModel userBasedOnProviderClaims = PrepareUserBasedOnProviderClaims(cookieSigningInContext, authSchemeClaimWithProviderName);
 
@@ -168,11 +156,11 @@ namespace Project_Main
 
 				if (userFromDb is null)
 				{
+					// TODO logger
 					//_logger?.LogCritical(Messages.EntityNotFoundInDbLogger, );
 					throw new InvalidOperationException(Messages.EntityNotFoundInDb(nameof(UpdateUserWhenDataOnProviderSideChangedAsync), "Identity", -2));
 				}
 
-				//UserModel userFromDb = await identityDbContext.GetUserAsync(userBasedOnProviderClaims.NameIdentifier);
 				bool doesUserUseOtherProvider = userBasedOnProviderClaims.Provider != CookieAuthenticationDefaults.AuthenticationScheme;
 
 				if (doesUserUseOtherProvider && ModelsHelper.IsUserDataFromProviderDifferentToUserDataInDb(ref userBasedOnProviderClaims, ref userFromDb))
@@ -184,8 +172,6 @@ namespace Project_Main
 					userFromDb.Email = userBasedOnProviderClaims.Email;
 
 					userRepository.Update(userFromDb);
-					//await identityDbContext.UpdateUserAsync(userFromDb);
-					//await identityDbContext.SaveChangesAsync();
 				}
 			}
 
@@ -242,12 +228,6 @@ namespace Project_Main
 
 				return userBasedOnClaims;
 			}
-
-
-			//async Task AddNewUserToDbAsync(IIdentityRepository identityDbContext, UserModel userBasedOnClaims)
-			//{
-
-			//}
 
 			#endregion
 

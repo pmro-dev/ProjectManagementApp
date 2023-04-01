@@ -17,18 +17,6 @@ namespace Project_Main.Models.DataBases.Repositories.AppData
 			_logger = logger;
 		}
 
-		//public async Task AddRangeAsync(IEnumerable<TodoListModel> todoListsRange)
-		//{
-		//	await _dbContext.Set<TodoListModel>()
-		//		.AddRangeAsync(todoListsRange);
-		//}
-
-		//public async Task<bool> ContainsAny()
-		//{
-		//	return await _dbContext.Set<TodoListModel>()
-		//		.AnyAsync();
-		//}
-
 		public async Task<bool> DoesAnyExistWithSameNameAsync(string name)
 		{
 			return await _dbContext.Set<TodoListModel>()
