@@ -6,28 +6,38 @@ using static Project_DomainEntities.Helpers.TaskStatusHelper;
 
 namespace Project_Main.Models.DataBases.Repositories.AppData
 {
-    public class CustomAppDbContext : DbContext
-    {
-        private readonly ILogger<CustomAppDbContext>? _logger;
+	public class CustomAppDbContext : DbContext
+	{
+		private readonly ILogger<CustomAppDbContext>? _logger;
 
-        /// <summary>
-        /// Initilizes object and Ensures that database is created.
-        /// </summary>
-        public CustomAppDbContext(DbContextOptions<CustomAppDbContext> options, ILogger<CustomAppDbContext> logger) : base(options)
-        {
-            _logger = logger;
-        }
+		/// <summary>
+		/// Initilizes object and Ensures that database is created.
+		/// </summary>
+		public CustomAppDbContext(DbContextOptions<CustomAppDbContext> options, ILogger<CustomAppDbContext> logger) : base(options)
+		{
+			_logger = logger;
+		}
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            var todoItemBuilder = modelBuilder.Entity<TaskModel>();
-            todoItemBuilder.Property(x => x.Status)
-                .HasConversion(new EnumToStringConverter<TaskStatusType>());
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<TaskTagModel>().HasKey(tt => new { tt.TaskId, tt.TagId });
+			modelBuilder.Entity<TodoListModel>()
+				.ToTable("TodoLists");
+			modelBuilder.Entity<TaskModel>()
+				.ToTable("Tasks");
+			modelBuilder.Entity<TagModel>()
+				.ToTable("Tags");
+			modelBuilder.Entity<TaskTagModel>()
+				.ToTable("TaskTags");
 
-            _logger?.LogInformation(Messages.BuildingSucceedLogger, nameof(OnModelCreating), nameof(CustomAppDbContext));
-        }
-    }
+			var todoItemBuilder = modelBuilder.Entity<TaskModel>();
+			todoItemBuilder.Property(x => x.Status)
+				.HasConversion(new EnumToStringConverter<TaskStatusType>());
+
+			modelBuilder.Entity<TaskTagModel>().HasKey(tt => new { tt.TaskId, tt.TagId });
+
+			_logger?.LogInformation(Messages.BuildingSucceedLogger, nameof(OnModelCreating), nameof(CustomAppDbContext));
+		}
+	}
 }
