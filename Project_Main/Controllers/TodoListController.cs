@@ -55,7 +55,6 @@ namespace Project_Main.Controllers
 
 			var todoListRepo = _dataUnitOfWork.TodoListRepository;
 			List<TodoListModel> todoLists = await todoListRepo.GetAllWithDetailsAsync(signedInUserId);
-			//List<TodoListModel> todoLists = await _context.GetAllTodoListsWithDetailsAsync(signedInUserId);
 
 			if (todoLists == null)
 			{
@@ -89,7 +88,6 @@ namespace Project_Main.Controllers
 			var todoListRepo = _dataUnitOfWork.TodoListRepository;
 
 			var allTodoLists = await todoListRepo.GetAllWithDetailsAsync(signedInUserId);
-			//var allTodoLists = await _context.GetAllTodoListsWithDetailsAsync(signedInUserId);
 
 			if (allTodoLists == null)
 			{
@@ -114,8 +112,7 @@ namespace Project_Main.Controllers
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
 
 			var todoListRepo = _dataUnitOfWork.TodoListRepository;
-			var todoListFromDb = await todoListRepo.GetAsync(id);
-			//var todoListFromDb = await _context.GetTodoListWithDetailsAsync(id, signedInUserId);
+			var todoListFromDb = await todoListRepo.GetWithDetailsAsync(id);
 
 			if (todoListFromDb == null)
 			{
