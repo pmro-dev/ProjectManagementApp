@@ -32,10 +32,8 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 		/// <param name="app">Application builder.</param>
 		public static async Task EnsurePopulated(IApplicationBuilder app, ILogger logger)
 		{
-			//SetupServices(app, out IdentityUnitOfWork identityUnitOfWork);
-
-			IdentityUnitOfWork identityUnitOfWork = app.ApplicationServices
-				.CreateScope().ServiceProvider.GetRequiredService<IdentityUnitOfWork>();
+			IIdentityUnitOfWork identityUnitOfWork = app.ApplicationServices
+				.CreateScope().ServiceProvider.GetRequiredService<IIdentityUnitOfWork>();
 
 			//using var transaction = identityUnitOfWork.BeginTransactionAsync();
 
@@ -46,9 +44,7 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 				await EnsureAdminPopulated(identityUnitOfWork);
 
 				await identityUnitOfWork.SaveChangesAsync();
-				await identityUnitOfWork.CommitTransactionAsync();
-
-				//await transaction.CommitAsync();
+				//await identityUnitOfWork.CommitTransactionAsync();
 			}
 			catch (Exception ex)
 			{
@@ -71,7 +67,6 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 		{
 			IRoleRepository roleRepository = identityUnitOfWork.RoleRepository;
 
-			//if (!await context.Roles.AnyAsync())
 			if (!await roleRepository.ContainsAny())
 			{
 				List<RoleModel> defaultRoles = new();
@@ -94,7 +89,6 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 			IUserRepository userRepository = identityUnitOfWork.UserRepository;
 			IRoleRepository roleRepository = identityUnitOfWork.RoleRepository;
 
-			//if (!await context.Users.AnyAsync() || !await context.Users.AnyAsync(u => u.UserId == AdminId))
 			if (!await userRepository.ContainsAny())
 			{
 				IEnumerable<RoleModel> filteredRoles = await roleRepository.GetByFilterAsync(r => r.Name == BasicRoles.Keys.Last());
