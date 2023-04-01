@@ -36,7 +36,7 @@ namespace Project_Main.Models.DataBases.Repositories.Identity
             HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref userLogin, nameof(userLogin), _logger);
             HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref userPassword, nameof(userPassword), _logger);
 
-            return await _identityContext.Set<UserModel>().SingleOrDefaultAsync(user => user.NameIdentifier == userLogin && user.Password == userPassword);
+            return await _identityContext.Set<UserModel>().SingleOrDefaultAsync(user => user.Username == userLogin && user.Password == userPassword);
         }
 
         public async Task<bool> IsNameTakenAsync(string userName)
