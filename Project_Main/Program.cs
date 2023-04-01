@@ -43,24 +43,23 @@ namespace Project_Main
 
 			#region SETUP DATA BASES SERVICES
 
-			//builder.Services.AddDbContext<IAppDbContext, AppDbContext>(
-			builder.Services.AddDbContext<CustomAppDbContext, CustomAppDbContext>(
-				opts =>
+			builder.Services.AddDbContext<CustomAppDbContext>(
+			opts =>
 				{
 					opts.UseSqlServer(builder.Configuration[HelperProgram.ConnectionStringMainDb]);
 					opts.UseExceptionProcessor();
 				},
 				ServiceLifetime.Scoped);
 
-			builder.Services.AddDbContext<CustomIdentityDbContext, CustomIdentityDbContext>(
-				opts =>
+			builder.Services.AddDbContext<CustomIdentityDbContext>(
+			opts =>
 				{
 					opts.UseSqlServer(builder.Configuration[HelperProgram.ConnectionStringIdentityDb]);
 					opts.UseExceptionProcessor();
 				},
 				ServiceLifetime.Scoped);
 
-			builder.Services.AddScoped<IdentityUnitOfWork>();
+			builder.Services.AddScoped<IIdentityUnitOfWork, IdentityUnitOfWork>();
 			builder.Services.AddScoped<IDataUnitOfWork, DataUnitOfWork>();
 			builder.Services.AddScoped<IUserRepository, UserRepository>();
 			builder.Services.AddScoped<IRoleRepository, RoleRepository>();
@@ -94,7 +93,7 @@ namespace Project_Main
 						OnSigningIn = async cookieSigningInContext =>
 						{
 							ILogger? _logger = cookieSigningInContext.HttpContext.RequestServices.GetService<ILogger>();
-							//CustomIdentityDbContext? identityDbContext = cookieSigningInContext.HttpContext.RequestServices.GetService<CustomIdentityDbContext>();
+							IIdentityUnitOfWork? _identityUnitOfWork = cookieSigningInContext.HttpContext.RequestServices.GetService<IIdentityUnitOfWork>();
 
 							if (_identityUnitOfWork is null)
 							{
@@ -110,8 +109,7 @@ namespace Project_Main
 							SetAuthSchemeClaimForUser(cookieSigningInContext, out Claim authSchemeClaimWithProviderName, principle);
 							UserModel userBasedOnProviderClaims = PrepareUserBasedOnProviderClaims(cookieSigningInContext, authSchemeClaimWithProviderName);
 
-							//if (await identityDbContext.DoesUserExist(userBasedOnProviderClaims.NameIdentifier))
-							if (await userRepository.IsNameTakenAsync(userBasedOnProviderClaims.NameIdentifier))
+							if (await userRepository.IsNameTakenAsync(userBasedOnProviderClaims.Username))
 							{
 								await UpdateUserWhenDataOnProviderSideChangedAsync(userRepository, userBasedOnProviderClaims, authSchemeClaimWithProviderName);
 							}
@@ -121,7 +119,6 @@ namespace Project_Main
 							}
 
 							await _identityUnitOfWork.SaveChangesAsync();
-
 							await SetRolesForUserPrincipleAsync(userRepository, userBasedOnProviderClaims.UserId, principle);
 						}
 					};
@@ -221,10 +218,10 @@ namespace Project_Main
 					Email = claims.Single(c => c.Type == ClaimTypes.Email).Value
 				};
 
-				if (claims.Exists(c => c.Type == ClaimTypes.Name))
-				{
-					userBasedOnClaims.Username = claims.Single(c => c.Type == ClaimTypes.Name).Value;
-				}
+				//if (claims.Exists(c => c.Type == ClaimTypes.Name))
+				//{
+				//	userBasedOnClaims.Username = claims.Single(c => c.Type == ClaimTypes.Name).Value;
+				//}
 
 				return userBasedOnClaims;
 			}
