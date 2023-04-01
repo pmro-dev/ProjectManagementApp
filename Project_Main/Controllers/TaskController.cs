@@ -49,7 +49,7 @@ namespace Project_Main.Controllers
 
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, taskId, nameof(taskId), HelperOther.idBoundryBottom, _logger);
-
+			
 			ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
 			TaskModel? taskModel = await taskRepository.GetAsync(taskId);
 
@@ -148,7 +148,7 @@ namespace Project_Main.Controllers
 				ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
 				await taskRepository.AddAsync(taskModel);
 				await _dataUnitOfWork.SaveChangesAsync();
-
+				
 				return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
 			}
 
@@ -173,7 +173,7 @@ namespace Project_Main.Controllers
 
 			ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
 			var taskModel = await taskRepository.GetAsync(taskId);
-
+			
 			ITodoListRepository todoListRepository = _dataUnitOfWork.TodoListRepository;
 			TodoListModel? targetTodoList = await todoListRepository.GetAsync(todoListId);
 			IEnumerable<TodoListModel> tempTodoLists = await todoListRepository.GetByFilterAsync(todoList => todoList.UserId == signedInUserId);
@@ -184,7 +184,7 @@ namespace Project_Main.Controllers
 				return NotFound();
 			}
 
-			if (tempTodoLists.Any())
+			if (!tempTodoLists.Any())
 			{
 				_logger.LogInformation(Messages.NotAnyTodoListInDb, operationName);
 				return NotFound();
@@ -256,7 +256,7 @@ namespace Project_Main.Controllers
 				ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
 				taskRepository.Update(taskModel);
 				await _dataUnitOfWork.SaveChangesAsync();
-
+				
 				return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
 			}
 
@@ -322,7 +322,7 @@ namespace Project_Main.Controllers
 			{
 				ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
 				TaskModel? taskToDelete = await taskRepository.GetAsync(taskId);
-				
+
 				if (taskToDelete != null)
 				{
 					if (taskToDelete.TodoListId != todoListId)
