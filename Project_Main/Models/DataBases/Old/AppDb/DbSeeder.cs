@@ -13,11 +13,8 @@ namespace Project_Main.Models.DataBases.Old.AppDb
 		/// <param name="app">Application builder.</param>
 		public static async Task EnsurePopulated(IApplicationBuilder app, ILogger logger)
 		{
-			//AppDbContext context = app.ApplicationServices
-			//			.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>();
-
-			DataUnitOfWork _unitOfWork = app.ApplicationServices
-						.CreateScope().ServiceProvider.GetRequiredService<DataUnitOfWork>();
+			IDataUnitOfWork _unitOfWork = app.ApplicationServices
+						.CreateScope().ServiceProvider.GetRequiredService<IDataUnitOfWork>();
 
 			SeedData seedContainer = app.ApplicationServices
 						.CreateScope().ServiceProvider.GetRequiredService<SeedData>();
@@ -25,7 +22,7 @@ namespace Project_Main.Models.DataBases.Old.AppDb
 			//string errorPrefixMessage = nameof(DbSeeder) + " | Populating Database ";
 			//context.CheckAllDbSetsIfAnyNullThrowException(errorPrefixMessage);
 
-			using var transaction = _unitOfWork.BeginTransactionAsync();
+			//using var transaction = _unitOfWork.BeginTransactionAsync();
 			//using var transaction = await context.Database.BeginTransactionAsync();
 
 			try
@@ -52,9 +49,7 @@ namespace Project_Main.Models.DataBases.Old.AppDb
 				}
 
 				await _unitOfWork.SaveChangesAsync();
-				await _unitOfWork.CommitTransactionAsync();	
-
-				//await transaction.CommitAsync();
+				//await _unitOfWork.CommitTransactionAsync();	
 			}
 			catch (Exception ex)
 			{
