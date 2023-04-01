@@ -9,7 +9,6 @@ namespace Project_Main.Models.DataBases.Repositories.Identity
     {
         private readonly CustomIdentityDbContext _identityContext;
         private readonly ILogger<UserRepository> _logger;
-        //private string methodName = string.Empty;
         private string operationName = string.Empty;
         private readonly string repoName = nameof(UserRepository);
 
@@ -89,61 +88,6 @@ namespace Project_Main.Models.DataBases.Repositories.Identity
 
 		//	await ExecuteInTryCatchBlockToCatchEFCoreAndSQLExceptionsAsync(operationsForDbTryCatchBlockAsync);
 		//	return true;
-		//}
-
-		//private async Task ExecuteInTryCatchBlockToCatchEFCoreAndSQLExceptionsAsync(TryCatchBlockDelegateType operationsForDbTryCatchBlockAsync)
-		//{
-		//	methodName = operationsForDbTryCatchBlockAsync.Method.Name;
-
-		//	try
-		//	{
-		//		await operationsForDbTryCatchBlockAsync.Invoke();
-		//	}
-		//	catch (CannotInsertNullException ex)
-		//	{
-		//		LogError(ex, methodName);
-		//		throw;
-		//	}
-		//	catch (NumericOverflowException ex)
-		//	{
-		//		LogError(ex, methodName);
-		//		throw;
-		//	}
-		//	catch (ReferenceConstraintException ex)
-		//	{
-		//		LogError(ex, methodName);
-		//		throw;
-		//	}
-		//	catch (MaxLengthExceededException ex)
-		//	{
-		//		LogError(ex, methodName);
-		//		throw;
-		//	}
-		//	catch (UniqueConstraintException ex)
-		//	{
-		//		LogError(ex, methodName);
-		//		throw;
-		//	}
-		//	catch (SqlException ex)
-		//	{
-		//		LogError(ex, methodName);
-		//		throw;
-		//	}
-		//	catch (InvalidOperationException ex)
-		//	{
-		//		LogError(ex, methodName);
-		//		throw;
-		//	}
-		//	catch (AggregateException agg)
-		//	{
-		//		_logger.LogError(agg.Flatten().InnerException, Messages.ErrorOnMethodLogger, methodName);
-		//		throw;
-		//	}
-		//}
-
-		//private void LogError(Exception ex, string methodName)
-		//{
-		//	_logger.LogError(ex, Messages.ExceptionOccuredLogger, ex.GetType(), methodName);
 		//}
 
 
