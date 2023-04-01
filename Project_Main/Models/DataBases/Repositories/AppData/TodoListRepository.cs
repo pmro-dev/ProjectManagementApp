@@ -84,7 +84,9 @@ namespace Project_Main.Models.DataBases.Repositories.AppData
 
 			TodoListModel todoListFromDb = await _dbContext
 				.Set<TodoListModel>()
-				.FindAsync(id)
+				.Where(todoList => todoList.Id == id)
+				.Include(todoList => todoList.Tasks)
+				.SingleOrDefaultAsync()
 				?? new();
 
 			return todoListFromDb;
