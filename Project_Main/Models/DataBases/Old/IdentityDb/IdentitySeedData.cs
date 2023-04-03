@@ -1,6 +1,7 @@
 ﻿using Project_IdentityDomainEntities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Project_Main.Models.DataBases.Repositories.Identity;
+using System.Text;
 
 namespace Project_Main.Models.DataBases.Old.IdentityDb
 {
@@ -9,14 +10,29 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 	/// </summary>
 	public static class IdentitySeedData
 	{
+		private static readonly string RoleIdSuffix = "RoleId";
 		private const string AdminUser = "Admin";
+		private const string AdminRoleName = "Admin";
 		private const string AdminId = "adminId";
 		private const string AdminPassword = "Secret123$";
 		private const string AdminEmail = "admin@gmail.com";
 		private const string ProviderDbSeederName = CookieAuthenticationDefaults.AuthenticationScheme;
 
+		private static readonly UserModel AdminInitModel = new()
+		{
+			UserId = AdminId,
+			FirstName = AdminUser,
+			Lastname = AdminUser,
+			NameIdentifier = AdminId,
+			Password = AdminPassword,
+			Provider = ProviderDbSeederName,
+			Username = AdminUser,
+			Email = AdminEmail
+		};
+
 		private static Dictionary<string, string> BasicRoles { get; set; } = new Dictionary<string, string>()
 		{
+			{ AdminRoleName, "Admin may do everything!"},
 			{ "Guest", "Guest has access only to certain, public places for a short period of time." },
 			{ "Developer", "Developer has access to a project environment (including team area)" },
 			{ "ScrumMaster", "ScrumMaster inherits access from Developer and exceed it by an area with basic, statistic data of a project progression." },
@@ -46,7 +62,8 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 				await EnsureAdminPopulatedAsync(identityUnitOfWork);
 
 				await identityUnitOfWork.SaveChangesAsync();
-				identityUnitOfWork.CommitTransaction();
+				await SetRoleForAdmin(identityUnitOfWork);
+				await identityUnitOfWork.SaveChangesAsync();
 				await identityUnitOfWork.CommitTransactionAsync();
 			}
 			catch (Exception ex)
@@ -76,13 +93,30 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 			{
 				List<RoleModel> defaultRoles = new();
 
+				//await Parallel.ForEachAsync(BasicRoles, async (pair, ct) =>
+				//{
+				//	await Task.Run(() => defaultRoles.Add(new RoleModel()
+				//	{
+				//		Name = pair.Key,
+				//		Description = pair.Value
+				//	}), ct);
+				//});
+
+				StringBuilder idBuilder = new();
+
 				foreach (KeyValuePair<string, string> pair in BasicRoles)
 				{
+					idBuilder.Append(pair.Key.ToLower());
+					idBuilder.Append(RoleIdSuffix);
+
 					defaultRoles.Add(new RoleModel()
 					{
+						Id = idBuilder.ToString(),
 						Name = pair.Key,
 						Description = pair.Value
 					});
+
+					idBuilder.Clear();
 				}
 
 				await roleRepository.AddRangeAsync(defaultRoles);
@@ -97,31 +131,30 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 
 			if (!await userRepository.ContainsAny())
 			{
-				IEnumerable<RoleModel> filteredRoles = await roleRepository.GetByFilterAsync(r => r.Name == BasicRoles.Keys.Last());
-				RoleModel roleTemp = filteredRoles.First();
+				await userRepository.AddAsync(AdminInitModel);
+			}
+		}
 
-				UserModel user = new()
+		private static async Task SetRoleForAdmin(IIdentityUnitOfWork identityUnitOfWork)
 				{
-					UserId = AdminId,
-					FirstName = AdminUser,
-					Lastname = AdminUser,
-					NameIdentifier = AdminId,
-					Password = AdminPassword,
-					Provider = ProviderDbSeederName,
-					Username = AdminUser,
-					Email = AdminEmail,
-					UserRoles = new List<UserRoleModel>() { new UserRoleModel() { RoleId = roleTemp.Id, UserId = AdminId } }
-				};
+			IUserRepository userRepository = identityUnitOfWork.UserRepository;
+			IRoleRepository roleRepository = identityUnitOfWork.RoleRepository;
 				
-			//RoleModel role = await context.Roles.SingleAsync(r => r.Name == BasicRoles.Keys.Last());
+			UserModel? adminUser = await userRepository.GetWithDetailsAsync(AdminId);
+			string roleId = string.Concat(AdminRoleName.ToLower(), RoleIdSuffix);
+			RoleModel? roleForAdmin = await roleRepository.GetAsync(roleId);
 
-				//user.UserRoles.Add(new UserRoleModel() { Role = role, User = user });
+			if (adminUser != null && !adminUser.UserRoles.Any() && roleForAdmin != null)
+			{
+				UserRoleModel roleModel = new UserRoleModel()
+				{
+					UserId = adminUser.UserId,
+					User = adminUser,
+					RoleId = roleForAdmin.Id,
+					Role = roleForAdmin
+				};
 
-				await userRepository.AddAsync(user);
-				await identityUnitOfWork.SaveChangesAsync();
-
-				//await context.Users.AddAsync(user);
-				//await context.SaveChangesAsync();
+				adminUser.UserRoles.Add(roleModel);
 			}
 		}
 	}
