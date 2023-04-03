@@ -21,6 +21,7 @@ namespace Project_Main.Controllers
 		private readonly IDataUnitOfWork _dataUnitOfWork;
 		private readonly ILogger<TaskController> _logger;
 		private string operationName = string.Empty;
+		private const string taskDataToBind = "Title,Description,DueDate,ReminderDate,UserId";
 
 		/// <summary>
 		/// Initializes controller with DbContext and Logger.
@@ -43,7 +44,7 @@ namespace Project_Main.Controllers
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
 		[HttpGet]
-		[Route("TodoList/{todoListId:int}/[controller]/{taskId:int}/Details")]
+		[Route(CustomRoutes.TaskDetailsRoute)]
 		public async Task<ActionResult<TaskModel>> Details(int todoListId, int taskId)
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Details), controllerName);
@@ -95,7 +96,7 @@ namespace Project_Main.Controllers
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
 		[HttpGet]
-		[Route("TodoList/{id:int}/Create")]
+		[Route(CustomRoutes.CreateTaskRoute)]
 		public async Task<IActionResult> Create(int id)
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Create), controllerName);
@@ -137,9 +138,9 @@ namespace Project_Main.Controllers
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
 		[HttpPost]
-		[Route("TodoList/{todoListId:int}/Create")]
+		[Route(CustomRoutes.CreateTaskPostRoute)]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(int todoListId, [Bind("Title,Description,DueDate,ReminderDate,UserId")] TaskModel taskModel)
+		public async Task<IActionResult> Create(int todoListId, [Bind(taskDataToBind)] TaskModel taskModel)
 		{
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
 
@@ -164,7 +165,7 @@ namespace Project_Main.Controllers
 		/// <returns>Return different view based on the final result.</returns>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
 		[HttpGet]
-		[Route("TodoList/{todoListId:int}/[controller]/{taskId:int}/[action]")]
+		[Route(CustomRoutes.TaskEditRoute)]
 		public async Task<IActionResult> Edit(int todoListId, int taskId)
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Edit), controllerName);
@@ -203,12 +204,15 @@ namespace Project_Main.Controllers
 				return Conflict();
 			}
 
+			string dataValueField = "Value";
+			string dataTextField = "Text";
+
 			var todoListsSelectorData = new SelectList(tempTodoLists, nameof(TodoListModel.Id), nameof(TodoListModel.Name), todoListId);
 			var statusesSelectorData = new SelectList(Enum.GetValues(typeof(TaskStatusType)).Cast<TaskStatusType>().Select(v => new SelectListItem
 			{
 				Text = v.ToString(),
 				Value = ((int)v).ToString()
-			}).ToList(), "Value", "Text", taskModel.Status);
+			}).ToList(), dataValueField, dataTextField, taskModel.Status);
 
 			var taskViewModel = new TaskViewModel
 			{
@@ -239,7 +243,7 @@ namespace Project_Main.Controllers
 		/// <returns>Return different respond based on the final result.</returns>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
 		[HttpPost]
-		[Route("TodoList/{todoListId:int}/[controller]/{taskId:int}/[action]")]
+		[Route(CustomRoutes.TaskEditRoute)]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(int todoListId, int id, TaskModel taskModel)
 		{
@@ -275,7 +279,7 @@ namespace Project_Main.Controllers
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
 		[HttpGet]
-		[Route("TodoList/{todoListId:int}/Task/{taskId:int}/[action]", Name = "deletetask")]
+		[Route(CustomRoutes.TaskDeleteRoute, Name = "deletetask")]
 		public async Task<IActionResult> Delete(int todoListId, int taskId)
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Delete), controllerName);
@@ -312,7 +316,7 @@ namespace Project_Main.Controllers
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
 		[HttpPost, ActionName("Delete")]
-		[Route("TodoList/{todoListId:int}/Task/{taskId:int}/[action]", Name = "deleteTaskInvoke")]
+		[Route(CustomRoutes.TaskDeleteRoute, Name = "deleteTaskInvoke")]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int todoListId, int taskId)
 		{

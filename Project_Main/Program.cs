@@ -14,7 +14,7 @@ using Project_Main.Controllers.Helpers;
 
 namespace Project_Main
 {
-	public static class Program
+    public static class Program
 	{
 		public static async Task Main(string[] args)
 		{
@@ -47,7 +47,7 @@ namespace Project_Main
 			builder.Services.AddDbContext<CustomAppDbContext>(
 			opts =>
 				{
-					opts.UseSqlServer(builder.Configuration[HelperProgram.ConnectionStringMainDb]);
+					opts.UseSqlServer(builder.Configuration[HelperProgramAndAuth.ConnectionStringMainDb]);
 					opts.UseExceptionProcessor();
 				},
 				ServiceLifetime.Scoped);
@@ -55,7 +55,7 @@ namespace Project_Main
 			builder.Services.AddDbContext<CustomIdentityDbContext>(
 			opts =>
 				{
-					opts.UseSqlServer(builder.Configuration[HelperProgram.ConnectionStringIdentityDb]);
+					opts.UseSqlServer(builder.Configuration[HelperProgramAndAuth.ConnectionStringIdentityDb]);
 					opts.UseExceptionProcessor();
 				},
 				ServiceLifetime.Scoped);
@@ -73,22 +73,22 @@ namespace Project_Main
 
 			#region SETUP AUTHENTICATION
 
-			string AuthGoogleClientId = builder.Configuration[HelperProgram.AuthGoogleClientId];
-			string AuthGoogleClientSecret = builder.Configuration[HelperProgram.AuthGoogleClientSecret];
+			string AuthGoogleClientId = builder.Configuration[HelperProgramAndAuth.AuthGoogleClientId];
+			string AuthGoogleClientSecret = builder.Configuration[HelperProgramAndAuth.AuthGoogleClientSecret];
 
 			builder.Services.AddAuthentication(options =>
 			{
-				options.DefaultScheme = HelperProgram.DefaultScheme;
-				options.DefaultChallengeScheme = HelperProgram.DefaultChallengeScheme;
+				options.DefaultScheme = HelperProgramAndAuth.DefaultScheme;
+				options.DefaultChallengeScheme = HelperProgramAndAuth.DefaultChallengeScheme;
 			})
 			#region COOKIE AUTHENTICATION
 				.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
 				{
-					options.AccessDeniedPath = HelperProgram.AccessDeniedPath;
-					options.LoginPath = HelperProgram.LoginPath;
+					options.AccessDeniedPath = CustomRoutes.AccessDeniedPath;
+					options.LoginPath = CustomRoutes.LoginPath;
 					options.ExpireTimeSpan = TimeSpan.FromDays(30);
 					options.Cookie.HttpOnly = true;
-					options.Cookie.Name = HelperProgram.CustomCookieName;
+					options.Cookie.Name = HelperProgramAndAuth.CustomCookieName;
 					options.Events = new CookieAuthenticationEvents()
 					{
 						OnSigningIn = async cookieSigningInContext =>
@@ -126,14 +126,14 @@ namespace Project_Main
 				})
 			#endregion
 			#region OPEN_ID_CONNECT AUTHENTICATION
-				.AddOpenIdConnect(HelperProgram.GoogleOpenIDScheme, options =>
+				.AddOpenIdConnect(HelperProgramAndAuth.GoogleOpenIDScheme, options =>
 				{
-					options.Authority = HelperProgram.GoogleAuthority;
+					options.Authority = HelperProgramAndAuth.GoogleAuthority;
 					options.ClientId = AuthGoogleClientId;
 					options.ClientSecret = AuthGoogleClientSecret;
-					options.CallbackPath = HelperProgram.GoogleOpenIdCallBackPath;
+					options.CallbackPath = HelperProgramAndAuth.GoogleOpenIdCallBackPath;
 					options.SaveTokens = true;
-					options.Scope.Add(HelperProgram.GoogleEmailScope);
+					options.Scope.Add(HelperProgramAndAuth.GoogleEmailScope);
 				});
 			#endregion
 
@@ -141,8 +141,8 @@ namespace Project_Main
 
 			void SetAuthSchemeClaimForUser(CookieSigningInContext context, out Claim authSchemeClaimWithProviderName, ClaimsIdentity? principle)
 			{
-				var authScheme = context.Properties.Items.SingleOrDefault(i => i.Key == HelperProgram.AuthSchemeClaimKey);
-				authSchemeClaimWithProviderName = new Claim(authScheme.Key, authScheme.Value ?? HelperProgram.AuthSchemeClaimValue);
+				var authScheme = context.Properties.Items.SingleOrDefault(i => i.Key == HelperProgramAndAuth.AuthSchemeClaimKey);
+				authSchemeClaimWithProviderName = new Claim(authScheme.Key, authScheme.Value ?? HelperProgramAndAuth.AuthSchemeClaimValue);
 
 				principle?.AddClaim(authSchemeClaimWithProviderName);
 			}
@@ -176,7 +176,7 @@ namespace Project_Main
 
 			async Task AddUserWhenItNotExistAsync(IUserRepository userRepository, UserModel userBasedOnProviderClaims, IRoleRepository roleRepository)
 			{
-				IEnumerable<RoleModel> filteredRoles = await roleRepository.GetByFilterAsync(r => r.Name == HelperProgram.DefaultRole);
+				IEnumerable<RoleModel> filteredRoles = await roleRepository.GetByFilterAsync(r => r.Name == IdentitySeedData.DefaultRole);
 				RoleModel? roleTemp = filteredRoles.FirstOrDefault();
 
 				if (roleTemp is null)
@@ -186,6 +186,7 @@ namespace Project_Main
 
 				await userRepository.AddAsync(userBasedOnProviderClaims);
 
+				// TODO Logging by provider does not add UserRoles to Db
 				//userBasedOnClaims.UserRoles.Add(new UserRoleModel() { Role = defaultRole, User = userBasedOnClaims });
 				//identityDbContext.Users.Add(userBasedOnProviderClaims);
 				//await identityDbContext.SaveChangesAsync();
@@ -242,7 +243,7 @@ namespace Project_Main
 			}
 			else
 			{
-				app.UseExceptionHandler(HelperProgram.ErrorHandlingPath);
+				app.UseExceptionHandler(CustomRoutes.ErrorHandlingPath);
 				app.UseHsts();
 			}
 
@@ -258,8 +259,8 @@ namespace Project_Main
 			#region SETUP ROUTES
 
 			app.MapControllerRoute(
-				name: HelperProgram.DefaultRouteName,
-				pattern: HelperProgram.DefaultRoutePattern);
+				name: CustomRoutes.DefaultRouteName,
+				pattern: CustomRoutes.DefaultRoutePattern);
 
 			#endregion
 

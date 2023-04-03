@@ -18,12 +18,10 @@ namespace Project_Main.Controllers
 	[AllowAnonymous]
 	public class HomeController : Controller
 	{
-		private readonly string GoogleUrlToLogout = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=https://localhost:7103";
 		private readonly ILogger<HomeController> _logger;
+		private readonly IIdentityUnitOfWork _identityUnitOfWork;
 		private string operationName = string.Empty;
 		private readonly string controllerName = nameof(HomeController);
-		private readonly IIdentityUnitOfWork _identityUnitOfWork;
-		private const string returnToMain = "TodoList/All/Briefly";
 
 		/// <summary>
 		/// Initializes class.
@@ -63,8 +61,6 @@ namespace Project_Main.Controllers
 				IUserRepository userRepository = _identityUnitOfWork.UserRepository;
 
 				UserModel? user = await userRepository.GetByNameAndPasswordAsync(loginViewModel.Name, loginViewModel.Password);
-				//UserModel? user = await _identityRepository.GetForLoggingAsync(loginViewModel.Name, loginViewModel.Password);
-				//await context userManager.FindByNameAsync(loginViewModel.Name);
 
 				if (user != null)
 				{
@@ -85,16 +81,15 @@ namespace Project_Main.Controllers
 					ClaimsIdentity userIdentity = new(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
 					ClaimsPrincipal userPrincipal = new(userIdentity);
 
-					Dictionary<string, string?> items = new()
+					Dictionary<string, string?> itemsForAuthProperties = new()
 					{
-						{ ".AuthScheme", CookieAuthenticationDefaults.AuthenticationScheme }
+						{ HelperProgramAndAuth.AuthSchemeClaimKey, CookieAuthenticationDefaults.AuthenticationScheme }
 					};
-					AuthenticationProperties authProperties = new(items);
 
+					AuthenticationProperties authProperties = new(itemsForAuthProperties);
 					await HttpContext.SignInAsync(userPrincipal, authProperties);
-					//await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal);
 
-					return RedirectToAction("Briefly", TodoListController.ShortName);
+					return RedirectToRoute(CustomRoutes.MainBoardRouteName);
 				}
 
 				ModelState.AddModelError(string.Empty, Messages.InvalidLoginData);
@@ -109,18 +104,17 @@ namespace Project_Main.Controllers
 		/// <param name="provider">Authentication provider name.</param>
 		/// <returns>Challenge for a certain Authentication.</returns>
 		[HttpGet]
-		[Route("Login/{provider}")]
+		[Route(CustomRoutes.LoginByProviderRoute)]
 		public IActionResult LoginByProvider([FromRoute] string provider)
 		{
 			if (User != null && User.Identities.Any(i => i.IsAuthenticated))
 			{
-				RedirectToAction("Briefly", TodoListController.ShortName);
+				return RedirectToRoute(CustomRoutes.MainBoardRouteName);
 			}
 
-			string returnUrl = returnToMain;
 			AuthenticationProperties authProperties = new()
 			{
-				RedirectUri = returnUrl
+				RedirectUri = CustomRoutes.MainBoardFullRoute
 			};
 
 			return new ChallengeResult(provider, authProperties);
@@ -132,18 +126,18 @@ namespace Project_Main.Controllers
 		/// <returns>Return Login View.</returns>
 		public async Task<IActionResult> LogOut()
 		{
-			string scheme = User.Claims.First(c => c.Type == ".AuthScheme").Value;
+			string userAuthScheme = User.Claims.First(c => c.Type == HelperProgramAndAuth.AuthSchemeClaimKey).Value;
 
-			switch (scheme)
+			switch (userAuthScheme)
 			{
-				case "google":
+				case HelperProgramAndAuth.GoogleOpenIDScheme:
 					await HttpContext.SignOutAsync();
-					return Redirect(GoogleUrlToLogout);
+					return Redirect(HelperProgramAndAuth.GoogleUrlToLogout);
 				case CookieAuthenticationDefaults.AuthenticationScheme:
 					await HttpContext.SignOutAsync();
 					return RedirectToAction(nameof(Login));
 				default:
-					return new SignOutResult(new[] { CookieAuthenticationDefaults.AuthenticationScheme, scheme });
+					return new SignOutResult(new[] { CookieAuthenticationDefaults.AuthenticationScheme, userAuthScheme });
 			}
 		}
 
@@ -165,7 +159,7 @@ namespace Project_Main.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
 		{
-			if (this.ModelState.IsValid)
+			if (ModelState.IsValid)
 			{
 				operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Register), controllerName);
 
@@ -178,7 +172,6 @@ namespace Project_Main.Controllers
 
 				try
 				{
-					//if (await _identityRepository.IsNameTakenAsync(registerViewModel.Name) is false)
 					if (await userRepository.IsNameTakenAsync(registerViewModel.Name) is false)
 					{
 						UserModel newUser = new()
@@ -187,7 +180,7 @@ namespace Project_Main.Controllers
 							FirstName = registerViewModel.Name,
 							Lastname = registerViewModel.Name,
 							Password = registerViewModel.Password,
-							Provider = "CustomProvider",
+							Provider = HelperProgramAndAuth.CustomProvider,
 							Username = registerViewModel.Name,
 						};
 

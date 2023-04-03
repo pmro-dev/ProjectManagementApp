@@ -14,7 +14,7 @@ namespace Project_Main.Controllers
     /// Controller to manage To Do List actions based on certain routes.
     /// </summary>
     [Authorize]
-	[Route("TodoList")]
+	[Route(CustomRoutes.TodoListControllerRoute)]
 	public class TodoListController : Controller
 	{
 		private readonly IDataUnitOfWork _dataUnitOfWork;
@@ -22,6 +22,7 @@ namespace Project_Main.Controllers
 		private readonly string controllerName = nameof(TodoListController);
 		private string operationName = string.Empty;
 		private const int DateCompareValueEarlier = 0;
+		private const string todoListDataToBind = "Name, UserId";
 
 		public static string ShortName { get; } = nameof(TodoListController).Replace("Controller", string.Empty);
 
@@ -41,7 +42,7 @@ namespace Project_Main.Controllers
 		/// </summary>
 		/// <returns>All To Do Lists.</returns>
 		[HttpGet]
-		[Route("All/Briefly")]
+		[Route(CustomRoutes.MainBoardRoute, Name = CustomRoutes.MainBoardRouteName)]
 		[Authorize]
 		public async Task<IActionResult> Briefly()
 		{
@@ -80,7 +81,7 @@ namespace Project_Main.Controllers
 		/// or view with data.
 		/// </returns>
 		[HttpGet]
-		[Route("All/Details")]
+		[Route(CustomRoutes.AllDetailsRoute)]
 		public async Task<ActionResult<IEnumerable<TodoListModel>>> All()
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(All), controllerName);
@@ -106,7 +107,7 @@ namespace Project_Main.Controllers
 		/// <returns>Single To Do List with details.</returns>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
 		[HttpGet]
-		[Route("{id:int}/SingleDetails")]
+		[Route(CustomRoutes.SingleTodoListDetailsRoute)]
 		public async Task<IActionResult> SingleDetails(int id, DateTime? filterDueDate)
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(SingleDetails), controllerName);
@@ -172,7 +173,7 @@ namespace Project_Main.Controllers
 		/// <returns>Return different view based on the final result. Redirect to Briefly or to view with form.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Name, UserId")] TodoListModel todoListModel)
+		public async Task<IActionResult> Create([Bind(todoListDataToBind)] TodoListModel todoListModel)
 		{
 			if (ModelState.IsValid)
 			{
@@ -202,7 +203,7 @@ namespace Project_Main.Controllers
 		/// <returns>Return different view based on the final result. Return Bad Request when given id is invalid, Return Not Found when there isn't such To Do List in Db or return edit view.</returns>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
 		[HttpGet]
-		[Route("{id:int}/Edit")]
+		[Route(CustomRoutes.TodoListEditRoute)]
 		public async Task<IActionResult> Edit(int id)
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Edit), controllerName);
@@ -231,7 +232,7 @@ namespace Project_Main.Controllers
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
 		[HttpPost]
-		[Route("{id:int}/Edit")]
+		[Route(CustomRoutes.TodoListEditRoute)]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(int id, TodoListModel todoListModel)
 		{
@@ -265,7 +266,7 @@ namespace Project_Main.Controllers
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
 		[HttpGet]
-		[Route("{id:int}/Delete")]
+		[Route(CustomRoutes.TodoListDeleteRoute)]
 		public async Task<IActionResult> Delete(int id)
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Delete), controllerName);
@@ -299,7 +300,7 @@ namespace Project_Main.Controllers
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
 		[HttpPost, ActionName("Delete")]
-		[Route("{id:int}/Delete")]
+		[Route(CustomRoutes.TodoListDeleteRoute)]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
@@ -334,7 +335,7 @@ namespace Project_Main.Controllers
 		/// <param name="todoListId">Target To Do List to duplicate.</param>
 		/// <returns>Redirect to view.</returns>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when To Do List's id is out of range.</exception>
-		[Route("{todoListId:int}/Duplicate")]
+		[Route(CustomRoutes.TodoListDuplicateRoute)]
 		public async Task<IActionResult> Duplicate(int todoListId)
 		{
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
