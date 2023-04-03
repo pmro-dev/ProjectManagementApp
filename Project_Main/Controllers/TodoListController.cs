@@ -247,7 +247,7 @@ namespace Project_Main.Controllers
 			if (ModelState.IsValid)
 			{
 				var todoListRepository = _dataUnitOfWork.TodoListRepository;
-				todoListRepository.Update(todoListModel);
+				await todoListRepository.Update(todoListModel);
 				await _dataUnitOfWork.SaveChangesAsync();
 
 				return RedirectToAction(nameof(Briefly));
@@ -319,7 +319,7 @@ namespace Project_Main.Controllers
 						return Conflict();
 					}
 
-					todoListRepository.Remove(todoListModel);
+					await todoListRepository.Remove(todoListModel);
 					await _dataUnitOfWork.SaveChangesAsync();
 
 					return RedirectToAction(nameof(Briefly));
