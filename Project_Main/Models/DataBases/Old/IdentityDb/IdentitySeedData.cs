@@ -1,6 +1,7 @@
 ﻿using Project_IdentityDomainEntities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Project_Main.Models.DataBases.Repositories.Identity;
+using MethodTimer;
 using System.Text;
 
 namespace Project_Main.Models.DataBases.Old.IdentityDb
@@ -42,8 +43,6 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 			{ "Analyst", "Analyst has access to a specific module with statistics details and project plans." }
 		};
 
-		//private static IIdentityUnitOfWork? identityUnitOfWork;
-
 		/// <summary>
 		/// Checks that Identity Database is set and populated, if not, try to create database, applies migrations and seed data to it.
 		/// </summary>
@@ -72,7 +71,7 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 				logger.LogError(ex, "An error occurred while populating the database.");
 				throw;
 			}
-			}
+		}
 
 		private static async Task EnsurePendingMigrationsAppliedAsync(IIdentityUnitOfWork identityUnitOfWork)
 		{
@@ -84,7 +83,7 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 			}
 		}
 
-		private static async Task EnsureRolesPopulated(IIdentityUnitOfWork identityUnitOfWork)
+		[Time]
 		private static async Task EnsureRolesPopulatedAsync(IIdentityUnitOfWork identityUnitOfWork)
 		{
 			IRoleRepository roleRepository = identityUnitOfWork.RoleRepository;
@@ -120,26 +119,24 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 				}
 
 				await roleRepository.AddRangeAsync(defaultRoles);
-				await identityUnitOfWork.SaveChangesAsync();
 			}
 		}
 
 		private static async Task EnsureAdminPopulatedAsync(IIdentityUnitOfWork identityUnitOfWork)
 		{
 			IUserRepository userRepository = identityUnitOfWork.UserRepository;
-			IRoleRepository roleRepository = identityUnitOfWork.RoleRepository;
 
 			if (!await userRepository.ContainsAny())
 			{
 				await userRepository.AddAsync(AdminInitModel);
 			}
 		}
-
+	
 		private static async Task SetRoleForAdmin(IIdentityUnitOfWork identityUnitOfWork)
-				{
+		{
 			IUserRepository userRepository = identityUnitOfWork.UserRepository;
 			IRoleRepository roleRepository = identityUnitOfWork.RoleRepository;
-				
+
 			UserModel? adminUser = await userRepository.GetWithDetailsAsync(AdminId);
 			string roleId = string.Concat(AdminRoleName.ToLower(), RoleIdSuffix);
 			RoleModel? roleForAdmin = await roleRepository.GetAsync(roleId);
