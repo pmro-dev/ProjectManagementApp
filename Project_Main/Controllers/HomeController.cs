@@ -66,16 +66,16 @@ namespace Project_Main.Controllers
 				{
 					List<Claim> userClaims = new()
 					{
-						new Claim("username", user.Username),
+						new Claim(ClaimTypes.Name, user.Username),
 						new Claim(ClaimTypes.Email, user.Email),
 						new Claim(ClaimTypes.NameIdentifier, user.NameIdentifier),
 						new Claim(ClaimTypes.Surname, user.Lastname),
-						new Claim(ClaimTypes.Name, user.FirstName),
+						new Claim(ClaimTypes.GivenName, user.FirstName),
 					};
 
 					foreach (var userRole in user.UserRoles)
 					{
-						userClaims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name.ToString()));
+						userClaims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
 					}
 
 					ClaimsIdentity userIdentity = new(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -186,14 +186,16 @@ namespace Project_Main.Controllers
 
 						newUser.NameIdentifier = newUser.UserId;
 
-						//Task cos = new(async () => await _identityRepository.AddAsync(newUser));
-						Task addUserTask = new(async () => await userRepository.AddAsync(newUser));
+						Task addUserTask = new(async () =>
+						{
+							await userRepository.AddAsync(newUser);
+							await _identityUnitOfWork.SaveChangesAsync();
+						});
+
 						addUserTask.Start();
 
-						if (addUserTask.IsCompletedSuccessfully)
-						{
-							return View(nameof(Login));
-						}
+						Task.WaitAny(addUserTask);
+						return View(nameof(Login));
 					}
 				}
 				catch (Exception ex)
