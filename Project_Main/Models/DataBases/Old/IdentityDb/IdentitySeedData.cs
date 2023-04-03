@@ -37,39 +37,38 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 			IIdentityUnitOfWork identityUnitOfWork = app.ApplicationServices
 				.CreateScope().ServiceProvider.GetRequiredService<IIdentityUnitOfWork>();
 
-			using var transaction = identityUnitOfWork.BeginTransaction();
+			using var transaction = await identityUnitOfWork.BeginTransactionAsync();
 
 			try
 			{
-				EnsurePendingMigrationsApplied(identityUnitOfWork);
-				await EnsureRolesPopulated(identityUnitOfWork);
-				await EnsureAdminPopulated(identityUnitOfWork);
+				await EnsurePendingMigrationsAppliedAsync(identityUnitOfWork);
+				await EnsureRolesPopulatedAsync(identityUnitOfWork);
+				await EnsureAdminPopulatedAsync(identityUnitOfWork);
 
-				identityUnitOfWork.SaveChanges();
+				await identityUnitOfWork.SaveChangesAsync();
 				identityUnitOfWork.CommitTransaction();
+				await identityUnitOfWork.CommitTransactionAsync();
 			}
 			catch (Exception ex)
 			{
-				identityUnitOfWork.RollbackTransaction();
+				await identityUnitOfWork.RollbackTransactionAsync();
 				logger.LogError(ex, "An error occurred while populating the database.");
+				throw;
 			}
-			finally
-			{
-				transaction.Dispose();
 			}
-		}
 
-		private static void EnsurePendingMigrationsApplied(IIdentityUnitOfWork identityUnitOfWork)
+		private static async Task EnsurePendingMigrationsAppliedAsync(IIdentityUnitOfWork identityUnitOfWork)
 		{
-			var migrations = identityUnitOfWork.GetPendingMigrations();
+			var migrations = await identityUnitOfWork.GetPendingMigrationsAsync();
 
 			if (migrations.Any())
 			{
-				identityUnitOfWork.Migrate();
+				await identityUnitOfWork.MigrateAsync();
 			}
 		}
 
 		private static async Task EnsureRolesPopulated(IIdentityUnitOfWork identityUnitOfWork)
+		private static async Task EnsureRolesPopulatedAsync(IIdentityUnitOfWork identityUnitOfWork)
 		{
 			IRoleRepository roleRepository = identityUnitOfWork.RoleRepository;
 
@@ -91,7 +90,7 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 			}
 		}
 
-		private static async Task EnsureAdminPopulated(IIdentityUnitOfWork identityUnitOfWork)
+		private static async Task EnsureAdminPopulatedAsync(IIdentityUnitOfWork identityUnitOfWork)
 		{
 			IUserRepository userRepository = identityUnitOfWork.UserRepository;
 			IRoleRepository roleRepository = identityUnitOfWork.RoleRepository;

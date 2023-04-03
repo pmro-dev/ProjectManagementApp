@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Project_Main.Models.DataBases.Repositories.General
 {
@@ -7,16 +6,15 @@ namespace Project_Main.Models.DataBases.Repositories.General
     {
         Task SaveChangesAsync();
 
-        void SaveChanges();
 
-		public IDbContextTransaction BeginTransaction();
+		public Task<IDbContextTransaction> BeginTransactionAsync();
 
-        public void CommitTransaction();
+		public Task CommitTransactionAsync();
 
-        public void RollbackTransaction();
+		public Task RollbackTransactionAsync();
 
-        public IEnumerable<string> GetPendingMigrations();
+		public Task<IEnumerable<string>> GetPendingMigrationsAsync();
 
-        public void Migrate();
+		public Task MigrateAsync();
 	}
 }

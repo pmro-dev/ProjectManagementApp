@@ -27,11 +27,11 @@ namespace Project_Main.Models.DataBases.Old.AppDb
 
 			try
 			{
-				var migrations = _unitOfWork.GetPendingMigrations();
+				var migrations = await _unitOfWork.GetPendingMigrationsAsync();
 
 				if (migrations.Any())
 				{
-					_unitOfWork.Migrate();
+					await _unitOfWork.MigrateAsync();
 				}
 
 				ITodoListRepository todoListRepository = _unitOfWork.TodoListRepository;
@@ -48,12 +48,13 @@ namespace Project_Main.Models.DataBases.Old.AppDb
 					await taskRepository.AddRangeAsync(seedContainer.AllTasks);
 				}
 
-				_unitOfWork.SaveChanges();
+				await _unitOfWork.SaveChangesAsync();
 				//await _unitOfWork.CommitTransactionAsync();	
 			}
 			catch (Exception ex)
 			{
 				logger.LogCritical(ex, "Populating Database | Critical Error! Couldn't finish transactions -> Add range to To Do Lists DbSet and Tasks DbSet.");
+				logger.LogCritical(ex, "An error occurred while populating the database.");
 				throw;
 			}
 		}

@@ -18,45 +18,43 @@ namespace Project_Main.Models.DataBases.Repositories.General
             await _context.SaveChangesAsync();
         }
 
-		public virtual void SaveChanges()
+		public async Task<IDbContextTransaction> BeginTransactionAsync()
 		{
-			_context.SaveChanges();
+			return await _context.Database.BeginTransactionAsync();
 		}
 
-		public IDbContextTransaction BeginTransaction()
+		public async Task CommitTransactionAsync()
 		{
-			return _context.Database.BeginTransaction();
+			await _context.Database.CommitTransactionAsync();
 		}
 
-		public void CommitTransaction()
+		public async Task RollbackTransactionAsync()
 		{
-            _context.Database.CommitTransaction();
+			await _context.Database.RollbackTransactionAsync();
 		}
 
-		public void RollbackTransaction()
+		public async Task<IEnumerable<string>> GetPendingMigrationsAsync()
 		{
-			_context.Database.RollbackTransaction();
+			return await _context.Database.GetPendingMigrationsAsync();
 		}
 
-		public IEnumerable<string> GetPendingMigrations()
+		public async Task MigrateAsync()
 		{
-			return _context.Database.GetPendingMigrations();
-		}
-
-        public void Migrate()
-        {
-			 _context.Database.Migrate();
+			await _context.Database.MigrateAsync();
 		}
 
 		public void Dispose()
         {
-			//_context.Dispose();
-
 			Dispose(true);
-            GC.SuppressFinalize(this);
+			GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+		//public async Task DoAsyncCleanup()
+		//{
+		//	await _context.SaveChangesAsync();
+		//}
+
+		protected virtual void Dispose(bool disposing)
         {
             if (!_disposed)
             {
