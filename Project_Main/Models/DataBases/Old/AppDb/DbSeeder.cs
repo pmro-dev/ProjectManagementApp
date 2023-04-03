@@ -19,11 +19,7 @@ namespace Project_Main.Models.DataBases.Old.AppDb
 			SeedData seedContainer = app.ApplicationServices
 						.CreateScope().ServiceProvider.GetRequiredService<SeedData>();
 
-			//string errorPrefixMessage = nameof(DbSeeder) + " | Populating Database ";
-			//context.CheckAllDbSetsIfAnyNullThrowException(errorPrefixMessage);
-
-			//using var transaction = _unitOfWork.BeginTransactionAsync();
-			//using var transaction = await context.Database.BeginTransactionAsync();
+			using var transaction = await _unitOfWork.BeginTransactionAsync();
 
 			try
 			{
@@ -49,11 +45,11 @@ namespace Project_Main.Models.DataBases.Old.AppDb
 				}
 
 				await _unitOfWork.SaveChangesAsync();
-				//await _unitOfWork.CommitTransactionAsync();	
+				await _unitOfWork.CommitTransactionAsync();
 			}
 			catch (Exception ex)
 			{
-				logger.LogCritical(ex, "Populating Database | Critical Error! Couldn't finish transactions -> Add range to To Do Lists DbSet and Tasks DbSet.");
+				await _unitOfWork.RollbackTransactionAsync();
 				logger.LogCritical(ex, "An error occurred while populating the database.");
 				throw;
 			}
