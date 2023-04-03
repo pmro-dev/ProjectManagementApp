@@ -2,20 +2,16 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Project_Main.Models.DataBases.Old.AppDb;
+using Project_Main.Models.DataBases.AppData;
 
 #nullable disable
 
 namespace Project_Main.Models.DataBase.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
-    [Migration("20230228104339_add ownership of To Do Lists and Tasks")]
-    partial class addownershipofToDoListsandTasks
+    [DbContext(typeof(CustomAppDbContext))]
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

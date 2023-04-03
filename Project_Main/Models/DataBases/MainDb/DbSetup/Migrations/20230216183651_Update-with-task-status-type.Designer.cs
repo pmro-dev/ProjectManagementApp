@@ -2,18 +2,16 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Project_Main.Models.DataBases.Old.AppDb;
+using Project_Main.Models.DataBases.AppData;
 
 #nullable disable
 
 namespace Project_Main.Models.DataBase.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
-    [Migration("20230218190450_fix-task-model-todolistid")]
-    partial class fixtaskmodeltodolistid
+	[DbContext(typeof(CustomAppDbContext))]
+	[Migration("20230216183651_Update-with-task-status-type")]
+    partial class Updatewithtaskstatustype
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,15 +30,13 @@ namespace Project_Main.Models.DataBase.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<DateTime>("DueDate")
+                    b.Property<DateTime?>("DueDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Status")

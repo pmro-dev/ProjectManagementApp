@@ -2,18 +2,16 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Project_Main.Models.DataBases.Old.AppDb;
+using Project_Main.Models.DataBases.AppData;
 
 #nullable disable
 
 namespace Project_Main.Models.DataBase.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
-    [Migration("20230220093140_add-last-modification-date-to-task-model")]
-    partial class addlastmodificationdatetotaskmodel
+    [DbContext(typeof(CustomAppDbContext))]
+    [Migration("20230216150515_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,34 +30,30 @@ namespace Project_Main.Models.DataBase.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<DateTime>("DueDate")
+                    b.Property<DateTime?>("DueDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("LastModificationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("TodoListId")
+                    b.Property<int>("TodoListModelId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TodoListId");
+                    b.HasIndex("TodoListModelId");
 
                     b.ToTable("Tasks");
                 });
@@ -84,13 +78,11 @@ namespace Project_Main.Models.DataBase.Migrations
 
             modelBuilder.Entity("TODO_Domain_Entities.TaskModel", b =>
                 {
-                    b.HasOne("TODO_Domain_Entities.TodoListModel", "TodoList")
+                    b.HasOne("TODO_Domain_Entities.TodoListModel", null)
                         .WithMany("Tasks")
-                        .HasForeignKey("TodoListId")
+                        .HasForeignKey("TodoListModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("TodoList");
                 });
 
             modelBuilder.Entity("TODO_Domain_Entities.TodoListModel", b =>
