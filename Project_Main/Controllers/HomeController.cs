@@ -6,7 +6,8 @@ using Project_Main.Models.ViewModels.HomeViewModels;
 using Project_IdentityDomainEntities;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Project_Main.Models.DataBases.Repositories.Identity;
+using Project_Main.Models.DataBases.Identity;
+using Project_Main.Controllers.Helpers;
 
 namespace Project_Main.Controllers
 {

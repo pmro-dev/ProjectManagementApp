@@ -1,7 +1,7 @@
 ﻿
 using Project_DomainEntities;
 
-namespace Project_Main.Models.DataBases.Old.AppDb
+namespace Project_Main.Models.DataBases.AppData.DbSetup
 {
     /// <summary>
     /// Class with properties that contains data.

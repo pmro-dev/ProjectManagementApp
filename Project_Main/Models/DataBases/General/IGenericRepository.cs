@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Project_Main.Models.DataBases.Repositories.General
+namespace Project_Main.Models.DataBases.General
 {
     public interface IGenericRepository<T> where T : class
     {
@@ -10,7 +10,7 @@ namespace Project_Main.Models.DataBases.Repositories.General
         Task Update(T entity);
         Task Remove(T entity);
         Task<IEnumerable<T>> GetAllAsync();
-		Task<bool> ContainsAny();
-		Task AddRangeAsync(IEnumerable<T> range);
-	}
+        Task<bool> ContainsAny();
+        Task AddRangeAsync(IEnumerable<T> range);
+    }
 }

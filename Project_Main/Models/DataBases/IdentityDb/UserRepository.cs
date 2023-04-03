@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Project_IdentityDomainEntities;
 using Project_Main.Infrastructure.Helpers;
-using Project_Main.Models.DataBases.Repositories.General;
+using Project_Main.Models.DataBases.General;
 
-namespace Project_Main.Models.DataBases.Repositories.Identity
+namespace Project_Main.Models.DataBases.Identity
 {
     public class UserRepository : GenericRepository<UserModel>, IUserRepository
     {
@@ -49,47 +49,47 @@ namespace Project_Main.Models.DataBases.Repositories.Identity
             return result;
         }
 
-		public async Task<IEnumerable<RoleModel>> GetRolesAsync(string userId)
-		{
-			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetRolesAsync), repoName);
-			List<RoleModel> userRoles = await _identityContext.Set<UserRoleModel>()
-			.Where(user => user.UserId == userId)
-			.Select(user => user.Role)
-			.ToListAsync();
+        public async Task<IEnumerable<RoleModel>> GetRolesAsync(string userId)
+        {
+            operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetRolesAsync), repoName);
+            List<RoleModel> userRoles = await _identityContext.Set<UserRoleModel>()
+            .Where(user => user.UserId == userId)
+            .Select(user => user.Role)
+            .ToListAsync();
 
-			return userRoles;
-		}
+            return userRoles;
+        }
 
-		//public async Task<bool> UpdateUserAsync(UserModel userToUpdate)
-		//{
-		//	operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(UpdateUserAsync), repoName);
-		//	HelperCheck.IfArgumentModelNullThrowException(operationName, userToUpdate, nameof(userToUpdate), _logger);
+        //public async Task<bool> UpdateUserAsync(UserModel userToUpdate)
+        //{
+        //	operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(UpdateUserAsync), repoName);
+        //	HelperCheck.IfArgumentModelNullThrowException(operationName, userToUpdate, nameof(userToUpdate), _logger);
 
-		//	TryCatchBlockDelegateType operationsForDbTryCatchBlockAsync = new(async () =>
-		//	{
-		//		UserModel? userToUpdateFromDb = await _identityContext.GetUserWithDetailsAsync(userToUpdate.UserId);
-		//		//HelperCheck.IfInstanceNullThrowException(operationName, userToUpdateFromDb, nameof(userToUpdateFromDb), _logger);
+        //	TryCatchBlockDelegateType operationsForDbTryCatchBlockAsync = new(async () =>
+        //	{
+        //		UserModel? userToUpdateFromDb = await _identityContext.GetUserWithDetailsAsync(userToUpdate.UserId);
+        //		//HelperCheck.IfInstanceNullThrowException(operationName, userToUpdateFromDb, nameof(userToUpdateFromDb), _logger);
 
-		//		userToUpdateFromDb.Username = userToUpdate.Username;
-		//		userToUpdateFromDb.Password = userToUpdate.Password;
-		//		userToUpdateFromDb.Email = userToUpdate.Email;
-		//		userToUpdateFromDb.FirstName = userToUpdate.FirstName;
-		//		userToUpdateFromDb.Lastname = userToUpdate.Lastname;
-		//		userToUpdateFromDb.Provider = userToUpdate.Provider;
-		//		userToUpdateFromDb.NameIdentifier = userToUpdate.NameIdentifier;
+        //		userToUpdateFromDb.Username = userToUpdate.Username;
+        //		userToUpdateFromDb.Password = userToUpdate.Password;
+        //		userToUpdateFromDb.Email = userToUpdate.Email;
+        //		userToUpdateFromDb.FirstName = userToUpdate.FirstName;
+        //		userToUpdateFromDb.Lastname = userToUpdate.Lastname;
+        //		userToUpdateFromDb.Provider = userToUpdate.Provider;
+        //		userToUpdateFromDb.NameIdentifier = userToUpdate.NameIdentifier;
 
-		//		if (!userToUpdate.UserRoles.Any())
-		//		{
-		//			userToUpdateFromDb.UserRoles = userToUpdate.UserRoles;
-		//		}
+        //		if (!userToUpdate.UserRoles.Any())
+        //		{
+        //			userToUpdateFromDb.UserRoles = userToUpdate.UserRoles;
+        //		}
 
-		//		await _identityContext.UpdateUserAsync(userToUpdateFromDb);
-		//	});
+        //		await _identityContext.UpdateUserAsync(userToUpdateFromDb);
+        //	});
 
-		//	await ExecuteInTryCatchBlockToCatchEFCoreAndSQLExceptionsAsync(operationsForDbTryCatchBlockAsync);
-		//	return true;
-		//}
+        //	await ExecuteInTryCatchBlockToCatchEFCoreAndSQLExceptionsAsync(operationsForDbTryCatchBlockAsync);
+        //	return true;
+        //}
 
 
-	}
+    }
 }

@@ -1,7 +1,7 @@
 ﻿using Project_DomainEntities;
-using Project_Main.Models.DataBases.Repositories.General;
+using Project_Main.Models.DataBases.General;
 
-namespace Project_Main.Models.DataBases.Repositories.AppData
+namespace Project_Main.Models.DataBases.AppData
 {
     public interface ITodoListRepository : IGenericRepository<TodoListModel>
     {
@@ -12,5 +12,5 @@ namespace Project_Main.Models.DataBases.Repositories.AppData
         Task DuplicateWithDetailsAsync(int id);
 
         Task<bool> DoesAnyExistWithSameNameAsync(string name);
-	}
+    }
 }
