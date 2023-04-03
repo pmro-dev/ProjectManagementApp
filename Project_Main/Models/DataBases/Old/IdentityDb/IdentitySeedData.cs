@@ -26,6 +26,8 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 			{ "Analyst", "Analyst has access to a specific module with statistics details and project plans." }
 		};
 
+		//private static IIdentityUnitOfWork? identityUnitOfWork;
+
 		/// <summary>
 		/// Checks that Identity Database is set and populated, if not, try to create database, applies migrations and seed data to it.
 		/// </summary>
@@ -35,31 +37,35 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 			IIdentityUnitOfWork identityUnitOfWork = app.ApplicationServices
 				.CreateScope().ServiceProvider.GetRequiredService<IIdentityUnitOfWork>();
 
-			//using var transaction = identityUnitOfWork.BeginTransactionAsync();
+			using var transaction = identityUnitOfWork.BeginTransaction();
 
 			try
 			{
-				await EnsurePendingMigrationsApplied(identityUnitOfWork);
+				EnsurePendingMigrationsApplied(identityUnitOfWork);
 				await EnsureRolesPopulated(identityUnitOfWork);
 				await EnsureAdminPopulated(identityUnitOfWork);
 
-				await identityUnitOfWork.SaveChangesAsync();
-				//await identityUnitOfWork.CommitTransactionAsync();
+				identityUnitOfWork.SaveChanges();
+				identityUnitOfWork.CommitTransaction();
 			}
 			catch (Exception ex)
 			{
-				logger.LogCritical(ex, "Populating Identity Database | Critical Error! Could not to finish transaction.");
-				throw;
+				identityUnitOfWork.RollbackTransaction();
+				logger.LogError(ex, "An error occurred while populating the database.");
+			}
+			finally
+			{
+				transaction.Dispose();
 			}
 		}
 
-		private static async Task EnsurePendingMigrationsApplied(IIdentityUnitOfWork identityUnitOfWork)
+		private static void EnsurePendingMigrationsApplied(IIdentityUnitOfWork identityUnitOfWork)
 		{
-			var migrations = await identityUnitOfWork.GetPendingMigrationsAsync();
+			var migrations = identityUnitOfWork.GetPendingMigrations();
 
 			if (migrations.Any())
 			{
-				await identityUnitOfWork.MigrateAsync();
+				identityUnitOfWork.Migrate();
 			}
 		}
 
@@ -81,6 +87,7 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 				}
 
 				await roleRepository.AddRangeAsync(defaultRoles);
+				await identityUnitOfWork.SaveChangesAsync();
 			}
 		}
 
@@ -112,6 +119,7 @@ namespace Project_Main.Models.DataBases.Old.IdentityDb
 				//user.UserRoles.Add(new UserRoleModel() { Role = role, User = user });
 
 				await userRepository.AddAsync(user);
+				await identityUnitOfWork.SaveChangesAsync();
 
 				//await context.Users.AddAsync(user);
 				//await context.SaveChangesAsync();

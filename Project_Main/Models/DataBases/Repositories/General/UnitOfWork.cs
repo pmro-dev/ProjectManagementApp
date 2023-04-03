@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Project_Main.Models.DataBases.Repositories.General
 {
     public abstract class UnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
 	{
         protected readonly TContext _context;
-        private bool _disposed;
+        private bool _disposed = false;
 
         protected UnitOfWork(TContext context)
         {
@@ -17,34 +18,41 @@ namespace Project_Main.Models.DataBases.Repositories.General
             await _context.SaveChangesAsync();
         }
 
-		public Task BeginTransactionAsync()
+		public virtual void SaveChanges()
 		{
-			return _context.Database.BeginTransactionAsync();
+			_context.SaveChanges();
 		}
 
-		public Task CommitTransactionAsync()
+		public IDbContextTransaction BeginTransaction()
 		{
-			return _context.Database.CommitTransactionAsync();
+			return _context.Database.BeginTransaction();
 		}
 
-		public Task RollbackTransactionAsync()
+		public void CommitTransaction()
 		{
-			return _context.Database.RollbackTransactionAsync();
+            _context.Database.CommitTransaction();
 		}
 
-		public async Task<IEnumerable<string>> GetPendingMigrationsAsync()
+		public void RollbackTransaction()
 		{
-			return await _context.Database.GetPendingMigrationsAsync();
+			_context.Database.RollbackTransaction();
 		}
 
-        public Task MigrateAsync()
+		public IEnumerable<string> GetPendingMigrations()
+		{
+			return _context.Database.GetPendingMigrations();
+		}
+
+        public void Migrate()
         {
-			return _context.Database.MigrateAsync();
+			 _context.Database.Migrate();
 		}
 
 		public void Dispose()
         {
-            Dispose(true);
+			//_context.Dispose();
+
+			Dispose(true);
             GC.SuppressFinalize(this);
         }
 

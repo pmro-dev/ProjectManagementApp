@@ -27,11 +27,11 @@ namespace Project_Main.Models.DataBases.Old.AppDb
 
 			try
 			{
-				var migrations = await _unitOfWork.GetPendingMigrationsAsync();
+				var migrations = _unitOfWork.GetPendingMigrations();
 
 				if (migrations.Any())
 				{
-					await _unitOfWork.MigrateAsync();
+					_unitOfWork.Migrate();
 				}
 
 				ITodoListRepository todoListRepository = _unitOfWork.TodoListRepository;
@@ -48,7 +48,7 @@ namespace Project_Main.Models.DataBases.Old.AppDb
 					await taskRepository.AddRangeAsync(seedContainer.AllTasks);
 				}
 
-				await _unitOfWork.SaveChangesAsync();
+				_unitOfWork.SaveChanges();
 				//await _unitOfWork.CommitTransactionAsync();	
 			}
 			catch (Exception ex)
