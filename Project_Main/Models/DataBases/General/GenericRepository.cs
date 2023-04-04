@@ -51,7 +51,17 @@ namespace Project_Main.Models.DataBases.General
             return await entities.ToListAsync();
         }
 
-        public Task Remove(TEntity entity)
+		public async Task<TEntity?> GetSingleByFilterAsync(Expression<Func<TEntity, bool>>? filter)
+		{
+			if (filter != null)
+			{
+				return await _dbSet.SingleOrDefaultAsync(filter);
+			}
+
+            return null;
+		}
+
+		public Task Remove(TEntity entity)
         {
             return Task.Run(() =>
             {

@@ -7,7 +7,8 @@ namespace Project_Main.Models.DataBases.General
         Task AddAsync(T entity);
         Task<T?> GetAsync(object id);
         Task<IEnumerable<T>> GetByFilterAsync(Expression<Func<T, bool>>? filter = null);
-        Task Update(T entity);
+        Task<T?> GetSingleByFilterAsync(Expression<Func<T, bool>>? filter);
+		Task Update(T entity);
         Task Remove(T entity);
         Task<IEnumerable<T>> GetAllAsync();
         Task<bool> ContainsAny();
