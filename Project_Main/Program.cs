@@ -199,7 +199,6 @@ namespace Project_Main
 			{
 				IEnumerable<RoleModel> userRoles = await userRepository.GetRolesAsync(userId);
 				List<string> userRolesNames = userRoles.Select(userRole => userRole.Name).ToList();
-				//var userRoleNames = await identityDbContext.GetRolesForUserAsync(userId);
 
 				foreach (string roleName in userRolesNames)
 				{
@@ -208,9 +207,9 @@ namespace Project_Main
 			}
 
 
-			UserModel PrepareUserBasedOnProviderClaims(CookieSigningInContext context, Claim authSchemeClaimWithProviderName)
+			UserModel PrepareUserBasedOnProviderClaims(CookieSigningInContext cookieSigningInContext, Claim authSchemeClaimWithProviderName)
 			{
-				List<Claim> claims = context.Principal?.Claims.ToList() ?? new();
+				List<Claim> claims = cookieSigningInContext.Principal?.Claims.ToList() ?? new();
 
 				UserModel userBasedOnClaims = new()
 				{
@@ -220,11 +219,6 @@ namespace Project_Main
 					Provider = authSchemeClaimWithProviderName.Value,
 					Email = claims.Single(c => c.Type == ClaimTypes.Email).Value
 				};
-
-				//if (claims.Exists(c => c.Type == ClaimTypes.Name))
-				//{
-				//	userBasedOnClaims.Username = claims.Single(c => c.Type == ClaimTypes.Name).Value;
-				//}
 
 				return userBasedOnClaims;
 			}

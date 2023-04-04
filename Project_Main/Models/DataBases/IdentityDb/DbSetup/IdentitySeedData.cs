@@ -1,7 +1,7 @@
 ﻿using Project_IdentityDomainEntities;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using MethodTimer;
 using System.Text;
+using Project_Main.Infrastructure.Helpers;
 
 namespace Project_Main.Models.DataBases.Identity.DbSetup
 {
@@ -17,7 +17,7 @@ namespace Project_Main.Models.DataBases.Identity.DbSetup
         private const string AdminId = "adminId";
         private const string AdminPassword = "Secret123$";
         private const string AdminEmail = "admin@gmail.com";
-        private const string ProviderDbSeederName = CookieAuthenticationDefaults.AuthenticationScheme;
+        private const string ProviderName = HelperProgramAndAuth.DefaultScheme;
 
         private static readonly UserModel AdminInitModel = new()
         {
@@ -26,7 +26,7 @@ namespace Project_Main.Models.DataBases.Identity.DbSetup
             Lastname = AdminUser,
             NameIdentifier = AdminId,
             Password = AdminPassword,
-            Provider = ProviderDbSeederName,
+            Provider = ProviderName,
             Username = AdminUser,
             Email = AdminEmail
         };
@@ -91,16 +91,6 @@ namespace Project_Main.Models.DataBases.Identity.DbSetup
             if (!await roleRepository.ContainsAny())
             {
                 List<RoleModel> defaultRoles = new();
-
-                //await Parallel.ForEachAsync(BasicRoles, async (pair, ct) =>
-                //{
-                //	await Task.Run(() => defaultRoles.Add(new RoleModel()
-                //	{
-                //		Name = pair.Key,
-                //		Description = pair.Value
-                //	}), ct);
-                //});
-
                 StringBuilder idBuilder = new();
 
                 foreach (KeyValuePair<string, string> pair in BasicRoles)

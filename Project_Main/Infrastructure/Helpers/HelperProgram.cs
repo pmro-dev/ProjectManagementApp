@@ -15,7 +15,6 @@ namespace Project_Main.Infrastructure.Helpers
 
 		public const string GoogleEmailScope = "https://www.googleapis.com/auth/userinfo.email";
 		public const string GoogleUrlToLogout = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=https://localhost:7103";
-		public const string CustomProvider = "CustomProvider";
 		public const string GoogleOpenIdCallBackPath = "/auth";
 		public const string AuthSchemeClaimKey = ".AuthScheme";
 		public const string DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
