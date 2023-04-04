@@ -8,6 +8,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Project_Main.Models.DataBases.Identity;
 using Project_Main.Controllers.Helpers;
+using Project_Main.Models.DataBases.Identity.DbSetup;
 
 namespace Project_Main.Controllers
 {
@@ -180,11 +181,27 @@ namespace Project_Main.Controllers
 							FirstName = registerViewModel.Name,
 							Lastname = registerViewModel.Name,
 							Password = registerViewModel.Password,
-							Provider = HelperProgramAndAuth.CustomProvider,
+							Provider = HelperProgramAndAuth.DefaultScheme,
 							Username = registerViewModel.Name,
 						};
 
+						IRoleRepository roleRepository = _identityUnitOfWork.RoleRepository;
+						RoleModel? roleForNewUser = await roleRepository.GetSingleByFilterAsync(role => role.Name == IdentitySeedData.DefaultRole);
+
+						if (roleForNewUser is null)
+						{
+							// TODO 
+							throw new InvalidOperationException("no role in db for new user!");
+						}
+
 						newUser.NameIdentifier = newUser.UserId;
+						newUser.UserRoles.Add(new UserRoleModel()
+						{
+							User = newUser,
+							UserId = newUser.UserId,
+							Role = roleForNewUser,
+							RoleId = roleForNewUser.Id,
+						});
 
 						Task addUserTask = new(async () =>
 						{

@@ -176,21 +176,22 @@ namespace Project_Main
 
 			async Task AddUserWhenItNotExistAsync(IUserRepository userRepository, UserModel userBasedOnProviderClaims, IRoleRepository roleRepository)
 			{
-				IEnumerable<RoleModel> filteredRoles = await roleRepository.GetByFilterAsync(r => r.Name == IdentitySeedData.DefaultRole);
-				RoleModel? roleTemp = filteredRoles.FirstOrDefault();
+				RoleModel? roleForNewUser = await roleRepository.GetSingleByFilterAsync(r => r.Name == IdentitySeedData.DefaultRole);
 
-				if (roleTemp is null)
+				if (roleForNewUser is null)
 				{
 					throw new InvalidOperationException("message");
 				}
 
-				await userRepository.AddAsync(userBasedOnProviderClaims);
+				userBasedOnProviderClaims.UserRoles.Add(new UserRoleModel() 
+				{
+					User = userBasedOnProviderClaims,
+					UserId = userBasedOnProviderClaims.UserId,
+					Role = roleForNewUser,
+					RoleId = roleForNewUser.Id
+				});
 
-				// TODO Logging by provider does not add UserRoles to Db
-				//userBasedOnClaims.UserRoles.Add(new UserRoleModel() { Role = defaultRole, User = userBasedOnClaims });
-				//identityDbContext.Users.Add(userBasedOnProviderClaims);
-				//await identityDbContext.SaveChangesAsync();
-				//await AddNewUserToDbAsync(userRepository, userBasedOnProviderClaims);
+				await userRepository.AddAsync(userBasedOnProviderClaims);
 			}
 
 
