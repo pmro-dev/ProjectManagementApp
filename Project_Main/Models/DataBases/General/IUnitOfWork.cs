@@ -6,7 +6,6 @@ namespace Project_Main.Models.DataBases.General
     {
         Task SaveChangesAsync();
 
-
         public Task<IDbContextTransaction> BeginTransactionAsync();
 
         public Task CommitTransactionAsync();
