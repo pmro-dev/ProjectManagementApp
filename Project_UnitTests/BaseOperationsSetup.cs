@@ -1,9 +1,10 @@
 ﻿using Moq;
 using Autofac.Extras.Moq;
 using Autofac;
-using Microsoft.Extensions.Logging;
 using Project_DomainEntities;
 using Project_Main.Models.DataBases.AppData.DbSetup;
+using Project_Main.Models.DataBases.AppData;
+using Project_Main.Models.DataBases.General;
 
 namespace Project_UnitTests
 {
@@ -18,12 +19,15 @@ namespace Project_UnitTests
         protected List<TaskModel> TasksBackend { get; set; }
         protected List<TaskModel> TasksTesting { get; set; }
         protected List<TaskModel> TasksProjectManagement { get; set; }
+		protected Mock<IDataUnitOfWork> DataUnitOfWorkMock { get; set; }
+		protected Mock<CustomAppDbContext> AppDbContextMock { get; set; }
+		protected Mock<ITaskRepository> TaskRepositoryMock { get; set; }
+		protected Mock<ITodoListRepository> TodoListRepositoryMock { get; set; }
+        protected Mock<IGenericRepository<TaskModel>> GenericRepoTaskMock { get; set; }
+        protected Mock<IGenericRepository<TodoListModel>> GenericRepoTodoListMock { get; set; }
+        protected List<Action> ActionsOnDbToSave { get; set; } = new();
 
-        protected Mock<IAppDbContext> DbContextMock { get; set; }
-        protected Mock<ILogger<ContextOperations>> LoggerMock { get; set; }
-        protected ContextOperations ContextOperations { get; set; }
-
-        private const int startingIndex = 0;
+		private const int startingIndex = 0;
         private const int BoundaryIndexForTasksUX = 3;
         private const int BoundaryIndexForTasksBackend = 6;
         private const int BoundaryIndexForTasksTesting = 9;
@@ -41,15 +45,14 @@ namespace Project_UnitTests
         public void SetUp()
         {
             SeedData seedData = new();
+            ActionsOnDbToSave = new();
 
-            SetIdsForTasks(seedData);
-
+			SetIdsForTasks(seedData);
             this.TodoLists = seedData.TodoLists;
 
             SetIdsForLists();
 
             this.AllTasks = SeedAllTasks();
-
             var sameAmountOfTasks = this.TasksUX.Count;
 
             if (this.TasksBackend.Count == sameAmountOfTasks && this.TasksTesting.Count == sameAmountOfTasks && this.TasksProjectManagement.Count == sameAmountOfTasks)
@@ -67,14 +70,16 @@ namespace Project_UnitTests
                 throw new InvalidOperationException("Number of elements in tasks lists have to be the same to execute this part of code!");
             }
 
-            this.DbContextMock = new Mock<IAppDbContext>();
-            this.LoggerMock = new Mock<ILogger<ContextOperations>>();
-            this.ContextOperations = new ContextOperations(this.DbContextMock.Object, this.LoggerMock.Object);
+            AppDbContextMock = new Mock<CustomAppDbContext>();
+			TodoListRepositoryMock = new Mock<ITodoListRepository>();
+			TaskRepositoryMock = new Mock<ITaskRepository>();
+            GenericRepoTaskMock = new Mock<IGenericRepository<TaskModel>>();
+            GenericRepoTodoListMock = new Mock<IGenericRepository<TodoListModel>>();
+			DataUnitOfWorkMock = new Mock<IDataUnitOfWork>();
+			using AutoMock mock = AutoMock.GetLoose(cfg => cfg.RegisterInstance(this.DataUnitOfWorkMock.Object).As<IDataUnitOfWork>());
+		}
 
-            using AutoMock mock = AutoMock.GetLoose(cfg => cfg.RegisterInstance(this.ContextOperations).As<IContextOperations>());
-        }
-
-        private List<TaskModel> SeedAllTasks()
+		private List<TaskModel> SeedAllTasks()
         {
             return new List<TaskModel>()
             {
@@ -103,7 +108,7 @@ namespace Project_UnitTests
             int taskIndex = startingIndex;
             numberOfAllTasks = this.TasksUX.Count + this.TasksTesting.Count + this.TasksBackend.Count + this.TasksProjectManagement.Count;
             int boundaryIndexForCurrentTasks = 0;
-
+            
             while (iterator < numberOfAllTasks)
             {
                 switch (iterator)
