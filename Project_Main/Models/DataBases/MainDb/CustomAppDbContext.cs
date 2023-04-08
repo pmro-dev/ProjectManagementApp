@@ -18,6 +18,10 @@ namespace Project_Main.Models.DataBases.AppData
             _logger = logger;
         }
 
+        public CustomAppDbContext()
+        {
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

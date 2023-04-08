@@ -4,7 +4,6 @@ using Moq;
 using Project_UnitTests.Helpers;
 using Project_DomainEntities;
 using Project_Main.Models.DataBases.AppData;
-using Project_Main.Models.DataBases.General;
 
 namespace Project_UnitTests
 {
@@ -23,9 +22,7 @@ namespace Project_UnitTests
 		{
 			return AutoMock.GetLoose(cfg =>
 			{
-				cfg.RegisterInstance(this.DataUnitOfWorkMock.Object).As<IDataUnitOfWork>();
-				cfg.RegisterInstance(this.GenericRepoTaskMock.Object).As<IGenericRepository<TaskModel>>();
-				cfg.RegisterInstance(this.GenericRepoTodoListMock.Object).As<IGenericRepository<TodoListModel>>();
+				cfg.RegisterInstance(this.DataUnitOfWork).As<IDataUnitOfWork>();
 			});
 		}
 
@@ -48,63 +45,31 @@ namespace Project_UnitTests
 			};
 
 			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
-			
-			await SetupTaskRepository();
 			var taskRepo = dataUnitOfWork.TaskRepository;
-
 			await SetupMockAddTask(assertTask);
 			await taskRepo.AddAsync(assertTask);
-
-			await SetupUnitOfWorkSaveChangesAsync();
 			await dataUnitOfWork.SaveChangesAsync();
 
 			await SetupMockGetTask(assertTask.Id);
 			TaskModel? tempTask = await taskRepo.GetAsync(assertTask.Id) ?? throw new AssertionException("Cannot find targeted Task in seeded data for unit tests.");
 
-			this.TaskRepositoryMock.Verify(x => x.AddAsync(It.IsAny<TaskModel>()), Times.Once);
-			this.TaskRepositoryMock.Verify(x => x.GetAsync(It.IsAny<int>()), Times.Once);
-			this.DataUnitOfWorkMock.Verify(x => x.SaveChangesAsync(), Times.Once);
+			this.DbSetTaskMock.Verify(x => x.AddAsync(It.IsAny<TaskModel>(), It.IsAny<CancellationToken>()), Times.Once);
+			this.DbSetTaskMock.Verify(x => x.FindAsync(It.IsAny<object>()), Times.Once);
+			this.AppDbContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
 			Assert.That(tempTask, Is.EqualTo(assertTask));
 		}
 
-		private async Task SetupTaskRepository()
+		private async Task SetupMockAddTask(TaskModel assertTask)
 		{
+			Action action = () => this.AllTasks.Add(assertTask);
+
 			await Task.Run(() =>
 			{
-				DataUnitOfWorkMock.Setup(d => d.TaskRepository)
-					.Returns(this.TaskRepositoryMock.Object);
-			});
-		}
-
-		private async Task SetupMockAddTask(TaskModel? assertTask)
-		{
-			if (assertTask != null)
-			{
-				Action action = () => this.AllTasks.Add(assertTask);
-
-				await Task.Run(() =>
-				{
-					this.TaskRepositoryMock.Setup(x => x.AddAsync(It.IsAny<TaskModel>()))
-						.Callback(() =>
-						{
-							this.ActionsOnDbToSave.Add(action);
-						}).Returns(Task.CompletedTask);
-				});
-			}
-		}
-
-		private async Task SetupUnitOfWorkSaveChangesAsync()
-		{
-			await Task.Run(() =>
-			{
-				this.DataUnitOfWorkMock.Setup(x => x.SaveChangesAsync())
+				this.DbSetTaskMock.Setup(x => x.AddAsync(It.IsAny<TaskModel>(), default))
 					.Callback(() =>
 					{
-						foreach (Action dbOperation in ActionsOnDbToSave)
-						{
-							dbOperation.Invoke();
-						}
-					}).Returns(Task.CompletedTask);
+						this.ActionsOnDbToSave.Add(action);
+					}).Returns(new ValueTask<Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<TaskModel>>());
 			});
 		}
 
@@ -112,7 +77,7 @@ namespace Project_UnitTests
 		{
 			await Task.Run(() =>
 			{
-				this.TaskRepositoryMock.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync(this.AllTasks.Single(t => t.Id == assertTaskId));
+				this.DbSetTaskMock.Setup(x => x.FindAsync(It.IsAny<object>())).Returns(new ValueTask<TaskModel?>(this.AllTasks.SingleOrDefault(t => t.Id == assertTaskId)));
 			});
 		}
 
@@ -126,14 +91,11 @@ namespace Project_UnitTests
 			using AutoMock mock = RegisterContextInstance();
 
 			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
-			await SetupTaskRepository();
 			var taskRepo = dataUnitOfWork.TaskRepository;
 
-			await SetupMockAddTask(assertNullTask);
-			await taskRepo.AddAsync(assertNullTask);
+			await SetupMockAddTask(assertNullTask!);
 
-			Assert.Pass();
-			//Assert.ThrowsAsync<ArgumentNullException>(async () => await mockContext.CreateTaskAsync(assertNullTask));
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.AddAsync(assertNullTask!));
 		}
 
 		//		/// <summary>

@@ -1,10 +1,10 @@
 ﻿using Moq;
-using Autofac.Extras.Moq;
-using Autofac;
 using Project_DomainEntities;
 using Project_Main.Models.DataBases.AppData.DbSetup;
 using Project_Main.Models.DataBases.AppData;
 using Project_Main.Models.DataBases.General;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace Project_UnitTests
 {
@@ -19,13 +19,20 @@ namespace Project_UnitTests
         protected List<TaskModel> TasksBackend { get; set; }
         protected List<TaskModel> TasksTesting { get; set; }
         protected List<TaskModel> TasksProjectManagement { get; set; }
-		protected Mock<IDataUnitOfWork> DataUnitOfWorkMock { get; set; }
 		protected Mock<CustomAppDbContext> AppDbContextMock { get; set; }
-		protected Mock<ITaskRepository> TaskRepositoryMock { get; set; }
-		protected Mock<ITodoListRepository> TodoListRepositoryMock { get; set; }
-        protected Mock<IGenericRepository<TaskModel>> GenericRepoTaskMock { get; set; }
-        protected Mock<IGenericRepository<TodoListModel>> GenericRepoTodoListMock { get; set; }
-        protected List<Action> ActionsOnDbToSave { get; set; } = new();
+		protected Mock<DbSet<TaskModel>> DbSetTaskMock { get; set; }
+        protected Mock<DbSet<TodoListModel>> DbSetTodoListMock { get; set; }
+		protected Mock<ILogger<TodoListRepository>> TodoListRepoLoggerMock { get; set; }
+		protected Mock<ILogger<GenericRepository<TodoListModel>>> GenericTodoListRepoLoggerMock { get; set; }
+		protected Mock<ILogger<TaskRepository>> TaskRepoLoggerMock { get; set; }
+		protected Mock<ILogger<GenericRepository<TaskModel>>> GenericTaskRepoLoggerMock { get; set; }
+		protected Mock<ILogger<CustomAppDbContext>> AppDbContextLoggerMock { get; set; }
+		protected DataUnitOfWork DataUnitOfWork { get; set; }
+		protected TodoListRepository TodoListRepo { get; set; }
+        protected GenericRepository<TodoListModel> TodoListGenericRepo { get; set; }
+		protected TaskRepository TaskRepo { get; set; }
+		protected GenericRepository<TaskModel> TaskGenericRepo { get; set; }
+		protected List<Action> ActionsOnDbToSave { get; set; } = new();
 
 		private const int startingIndex = 0;
         private const int BoundaryIndexForTasksUX = 3;
@@ -70,13 +77,30 @@ namespace Project_UnitTests
                 throw new InvalidOperationException("Number of elements in tasks lists have to be the same to execute this part of code!");
             }
 
-            AppDbContextMock = new Mock<CustomAppDbContext>();
-			TodoListRepositoryMock = new Mock<ITodoListRepository>();
-			TaskRepositoryMock = new Mock<ITaskRepository>();
-            GenericRepoTaskMock = new Mock<IGenericRepository<TaskModel>>();
-            GenericRepoTodoListMock = new Mock<IGenericRepository<TodoListModel>>();
-			DataUnitOfWorkMock = new Mock<IDataUnitOfWork>();
-			using AutoMock mock = AutoMock.GetLoose(cfg => cfg.RegisterInstance(this.DataUnitOfWorkMock.Object).As<IDataUnitOfWork>());
+            TodoListRepoLoggerMock = new();
+			TaskRepoLoggerMock = new();
+            AppDbContextLoggerMock = new();
+			DbSetTaskMock = new();
+			DbSetTodoListMock = new();
+			AppDbContextMock = new();
+			this.AppDbContextMock.Setup(ctx => ctx.Set<TaskModel>())
+                .Returns(this.DbSetTaskMock.Object);
+			this.AppDbContextMock.Setup(ctx => ctx.SaveChangesAsync(default))
+                .Callback(() =>
+                        {
+                            foreach (Action dbOperation in ActionsOnDbToSave)
+                            {
+                                dbOperation.Invoke();
+                            }
+                        }).ReturnsAsync(1);
+            GenericTodoListRepoLoggerMock = new();
+            GenericTaskRepoLoggerMock = new();
+			TodoListGenericRepo = new(AppDbContextMock.Object, GenericTodoListRepoLoggerMock.Object);
+            TaskGenericRepo = new(AppDbContextMock.Object, GenericTaskRepoLoggerMock.Object);
+			TodoListRepo = new(AppDbContextMock.Object, TodoListRepoLoggerMock.Object);
+			TaskRepo = new(AppDbContextMock.Object, TaskRepoLoggerMock.Object);
+            DataUnitOfWork = new(AppDbContextMock.Object, TodoListRepo, TaskRepo);
+			//using AutoMock mock = AutoMock.GetLoose(cfg => cfg.RegisterInstance(this.DataUnitOfWorkMock.Object).As<IDataUnitOfWork>());
 		}
 
 		private List<TaskModel> SeedAllTasks()
