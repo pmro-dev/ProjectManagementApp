@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Project_Main.Models.DataBases.General
 {
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
+	public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
         protected readonly DbContext Context;
         private readonly DbSet<TEntity> _dbSet;
@@ -34,7 +34,7 @@ namespace Project_Main.Models.DataBases.General
 
         public async Task<TEntity?> GetAsync(object id)
         {
-            operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetAsync), nameof(UserRepository));
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetAsync), nameof(UserRepository));
             HelperCheck.IfArgumentNullThrowException(operationName, id, nameof(id), _logger);
 
             return await _dbSet.FindAsync(id);
@@ -64,7 +64,7 @@ namespace Project_Main.Models.DataBases.General
 
 		public Task Remove(TEntity entity)
         {
-            return Task.Run(() =>
+			return Task.Run(() =>
             {
                 operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Remove), nameof(UserRepository));
                 HelperCheck.IfArgumentNullThrowException(operationName, entity, nameof(entity), _logger);
@@ -75,7 +75,7 @@ namespace Project_Main.Models.DataBases.General
 
         public Task Update(TEntity entity)
         {
-            return Task.Run(() =>
+			return Task.Run(() =>
             {
                 operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Update), nameof(UserRepository));
                 HelperCheck.IfArgumentNullThrowException(operationName, entity, nameof(entity), _logger);
@@ -86,7 +86,12 @@ namespace Project_Main.Models.DataBases.General
 
         public async Task AddRangeAsync(IEnumerable<TEntity> range)
         {
-            await _dbSet.AddRangeAsync(range);
+			if (range is null)
+			{
+				throw new ArgumentNullException(nameof(range));
+			}
+
+			await _dbSet.AddRangeAsync(range);
         }
 
         public async Task<bool> ContainsAny()
