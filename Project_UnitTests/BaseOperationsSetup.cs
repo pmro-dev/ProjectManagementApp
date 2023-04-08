@@ -5,6 +5,7 @@ using Project_Main.Models.DataBases.AppData;
 using Project_Main.Models.DataBases.General;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using Project_UnitTests.Helpers;
 
 namespace Project_UnitTests
 {
@@ -83,17 +84,11 @@ namespace Project_UnitTests
 			DbSetTaskMock = new();
 			DbSetTodoListMock = new();
 			AppDbContextMock = new();
-			this.AppDbContextMock.Setup(ctx => ctx.Set<TaskModel>())
-                .Returns(this.DbSetTaskMock.Object);
-			this.AppDbContextMock.Setup(ctx => ctx.SaveChangesAsync(default))
-                .Callback(() =>
-                        {
-                            foreach (Action dbOperation in ActionsOnDbToSave)
-                            {
-                                dbOperation.Invoke();
-                            }
-                        }).ReturnsAsync(1);
-            GenericTodoListRepoLoggerMock = new();
+
+            MockHelper.SetupDbSetTaskModel(AppDbContextMock, DbSetTaskMock);
+            MockHelper.SetupDbContextSaveChangesAsync(AppDbContextMock, ActionsOnDbToSave);
+
+			GenericTodoListRepoLoggerMock = new();
             GenericTaskRepoLoggerMock = new();
 			TodoListGenericRepo = new(AppDbContextMock.Object, GenericTodoListRepoLoggerMock.Object);
             TaskGenericRepo = new(AppDbContextMock.Object, GenericTaskRepoLoggerMock.Object);

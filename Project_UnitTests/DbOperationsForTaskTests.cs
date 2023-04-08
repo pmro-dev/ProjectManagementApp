@@ -13,9 +13,6 @@ namespace Project_UnitTests
 	public class DatabaseOperationsTests : BaseOperationsSetup
 	{
 		private const int OnePositionFurther = 1;
-		private const int IdOfFirstTodoList = 1;
-		private const TaskModel NullTask = null;
-
 		private static readonly object[] ValidTasksExamples = TaskData.ValidTasksExamples;
 
 		private AutoMock RegisterContextInstance()
@@ -46,38 +43,19 @@ namespace Project_UnitTests
 
 			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
 			var taskRepo = dataUnitOfWork.TaskRepository;
-			await SetupMockAddTask(assertTask);
+			await MockHelper.SetupAddTask(assertTask, AllTasks, DbSetTaskMock, ActionsOnDbToSave);
 			await taskRepo.AddAsync(assertTask);
 			await dataUnitOfWork.SaveChangesAsync();
 
-			await SetupMockGetTask(assertTask.Id);
-			TaskModel? tempTask = await taskRepo.GetAsync(assertTask.Id) ?? throw new AssertionException("Cannot find targeted Task in seeded data for unit tests.");
+			await MockHelper.SetupGetTask(assertTask.Id, DbSetTaskMock, AllTasks);
+			TaskModel tempTask = await taskRepo.GetAsync(assertTask.Id) ?? throw new AssertionException("Cannot find targeted Task in seeded data for unit tests.");
 
+			Assert.Multiple(() =>
+			{
 			this.DbSetTaskMock.Verify(x => x.AddAsync(It.IsAny<TaskModel>(), It.IsAny<CancellationToken>()), Times.Once);
 			this.DbSetTaskMock.Verify(x => x.FindAsync(It.IsAny<object>()), Times.Once);
 			this.AppDbContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
 			Assert.That(tempTask, Is.EqualTo(assertTask));
-		}
-
-		private async Task SetupMockAddTask(TaskModel assertTask)
-		{
-			Action action = () => this.AllTasks.Add(assertTask);
-
-			await Task.Run(() =>
-			{
-				this.DbSetTaskMock.Setup(x => x.AddAsync(It.IsAny<TaskModel>(), default))
-					.Callback(() =>
-					{
-						this.ActionsOnDbToSave.Add(action);
-					}).Returns(new ValueTask<Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<TaskModel>>());
-			});
-		}
-
-		private async Task SetupMockGetTask(int assertTaskId)
-		{
-			await Task.Run(() =>
-			{
-				this.DbSetTaskMock.Setup(x => x.FindAsync(It.IsAny<object>())).Returns(new ValueTask<TaskModel?>(this.AllTasks.SingleOrDefault(t => t.Id == assertTaskId)));
 			});
 		}
 
@@ -93,7 +71,7 @@ namespace Project_UnitTests
 			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
 			var taskRepo = dataUnitOfWork.TaskRepository;
 
-			await SetupMockAddTask(assertNullTask!);
+			await MockHelper.SetupAddTask(assertNullTask!, AllTasks, DbSetTaskMock, ActionsOnDbToSave);
 
 			Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.AddAsync(assertNullTask!));
 		}
