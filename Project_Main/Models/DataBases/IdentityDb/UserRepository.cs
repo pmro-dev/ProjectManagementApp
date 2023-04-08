@@ -63,7 +63,7 @@ namespace Project_Main.Models.DataBases.Identity
         //public async Task<bool> UpdateUserAsync(UserModel userToUpdate)
         //{
         //	operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(UpdateUserAsync), repoName);
-        //	HelperCheck.IfArgumentModelNullThrowException(operationName, userToUpdate, nameof(userToUpdate), _logger);
+        //	HelperCheck.IfArgumentNullThrowException(operationName, userToUpdate, nameof(userToUpdate), _logger);
 
         //	TryCatchBlockDelegateType operationsForDbTryCatchBlockAsync = new(async () =>
         //	{

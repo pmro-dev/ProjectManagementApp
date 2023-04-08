@@ -21,8 +21,9 @@ namespace Project_Main.Models.DataBases.General
 
         public async Task AddAsync(TEntity entity)
         {
-            operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(AddAsync), nameof(UserRepository));
-            HelperCheck.IfArgumentModelNullThrowException(operationName, entity, nameof(entity), _logger);
+            string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(AddAsync), classAndEntityInfo);
+            HelperCheck.IfArgumentNullThrowException(operationName, entity, nameof(entity), _logger);
             await _dbSet.AddAsync(entity);
         }
 
@@ -34,7 +35,7 @@ namespace Project_Main.Models.DataBases.General
         public async Task<TEntity?> GetAsync(object id)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetAsync), nameof(UserRepository));
-            HelperCheck.IfArgumentModelNullThrowException(operationName, id, nameof(id), _logger);
+            HelperCheck.IfArgumentNullThrowException(operationName, id, nameof(id), _logger);
 
             return await _dbSet.FindAsync(id);
         }
@@ -66,7 +67,7 @@ namespace Project_Main.Models.DataBases.General
             return Task.Run(() =>
             {
                 operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Remove), nameof(UserRepository));
-                HelperCheck.IfArgumentModelNullThrowException(operationName, entity, nameof(entity), _logger);
+                HelperCheck.IfArgumentNullThrowException(operationName, entity, nameof(entity), _logger);
 
                 _dbSet.Remove(entity);
             });
@@ -77,7 +78,7 @@ namespace Project_Main.Models.DataBases.General
             return Task.Run(() =>
             {
                 operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Update), nameof(UserRepository));
-                HelperCheck.IfArgumentModelNullThrowException(operationName, entity, nameof(entity), _logger);
+                HelperCheck.IfArgumentNullThrowException(operationName, entity, nameof(entity), _logger);
 
                 _dbSet.Update(entity);
             });
