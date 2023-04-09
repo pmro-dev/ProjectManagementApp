@@ -48,10 +48,14 @@
 		public const string EntityNotFoundInDbLogger = "{operationName} | Context returned null for object {objectName}.";
 		public const string EntityNotFoundInDbSetLogger = "{actionName} | Entity with given id ( {entityId} ) not found in {dbSetName} DbSet.";
 		public const string OutOfRangeLogger = "{actionName} | Given param {paramName} with value ( {paramValue} ) is out of range!";
+		public const string InvalidArgumentTypeLogger = "{actionName} | Given param {paramName} has invalid type!";
 		public const string BuildingSucceedLogger = "{typeName} - {actionName} succeed!";
 		public const string ParamNullOrEmptyLogger = "{actionName} | Provided param object {objectName} cannot be null, nor empty!";
 		public const string DbSetNullLogger = "{actionName} | DbSet - {dbSetName} cannot be null!";
 		public const string ProvidedObjectNullEx = "Critical error! Provided object cannot be null!";
+		public const string ProvidedArgumentNullOrEmpty = "Passed argument cannot be null or empty!";
+		public const string ProvidedArgumentOutOfRange = "Passed argument is out of range!";
+		public const string ProvidedArgumentWithInvalidType = "The id parameter is not a valid type.";
 		public const string DbSetNullEx = "Critical error! Dbset object cannot be null!";
 		public const string ItemNotFoundInDb = "There's not such item in Database with given id.";
 		public const string NotAnyTodoListInDb = "{operationName} | There's not any To Do List in Database.";

@@ -1,4 +1,5 @@
-﻿using Project_DomainEntities;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Project_DomainEntities;
 
 namespace Project_Main.Infrastructure.Helpers
 {
@@ -22,6 +23,37 @@ namespace Project_Main.Infrastructure.Helpers
 			{
 				logger.LogError(Messages.ParamNullOrEmptyLogger, operationName, modelName);
 				throw new ArgumentNullException(modelName, Messages.ProvidedObjectNullEx);
+			}
+		}
+
+		public static void IfArgumentIsNullOrEmptyThrowException(string operationName, object argument, string argumentName, ILogger logger)
+		{
+			if (argument is null)
+			{
+				logger.LogError(Messages.ParamNullOrEmptyLogger, operationName, argumentName);
+				throw new ArgumentNullException(argumentName, Messages.ProvidedObjectNullEx);
+			}
+
+			if (argument is string idString)
+			{
+				if (string.IsNullOrEmpty(idString))
+				{
+					logger.LogError(Messages.ParamNullOrEmptyLogger, operationName, argumentName);
+					throw new ArgumentNullException(argumentName, Messages.ProvidedArgumentNullOrEmpty);
+				}
+			}
+			else if (argument is int idInt)
+			{
+				if (idInt < 0)
+				{
+					logger.LogError(Messages.OutOfRangeLogger, operationName, argumentName, argument);
+					throw new ArgumentOutOfRangeException(argumentName, Messages.ProvidedArgumentOutOfRange);
+				}
+			}
+			else
+			{
+				logger.LogError(Messages.InvalidArgumentTypeLogger, operationName, argumentName);
+				throw new ArgumentException(Messages.ProvidedArgumentWithInvalidType, argumentName);
 			}
 		}
 
