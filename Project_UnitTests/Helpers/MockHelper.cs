@@ -40,6 +40,20 @@ namespace Project_UnitTests.Helpers
 			});
 		}
 
+		public static async Task SetupAddRangeOfTasks(IEnumerable<TaskModel> range, List<TaskModel> AllTasks, Mock<DbSet<TaskModel>> DbSetTaskMock, List<Action> ActionsOnDbToSave)
+		{
+			await Task.Run(() =>
+			{
+				Action action = () => AllTasks.AddRange(range);
+
+				DbSetTaskMock.Setup(x => x.AddRangeAsync(It.IsAny<IEnumerable<TaskModel>>(), default))
+					.Callback(() =>
+					{
+						ActionsOnDbToSave.Add(action);
+					});
+			});
+		}
+
 		public static async Task SetupGetTask(int assertTaskId, Mock<DbSet<TaskModel>> DbSetTaskMock, List<TaskModel> AllTasks)
 		{
 			await Task.Run(() =>

@@ -97,6 +97,35 @@ namespace Project_UnitTests
 			Assert.That(resultTask, Is.EqualTo(assertTask));
 		}
 
+		[Test]
+		[TestCase(null, typeof(ArgumentNullException))]
+		[TestCase("", typeof(ArgumentNullException))]
+		[TestCase(-1, typeof(ArgumentOutOfRangeException))]
+		[TestCase(-5, typeof(ArgumentOutOfRangeException))]
+		public async Task AttemptToGetTaskByInvalidIdShouldThrowException(object id, Type exceptionType)
+		{
+			int taskIdForMockSetup = this.AllTasks.First().Id;
+
+			using AutoMock mock = RegisterContextInstance();
+			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
+			var taskRepo = dataUnitOfWork.TaskRepository;
+
+			await MockHelper.SetupGetTask(taskIdForMockSetup, DbSetTaskMock, AllTasks);
+
+			if (Equals(exceptionType, typeof(ArgumentNullException)))
+			{
+				Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.GetAsync(id!));
+			}
+			else if (Equals(exceptionType, typeof(ArgumentOutOfRangeException)))
+			{
+				Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await taskRepo.GetAsync(id!));
+			}
+			else
+			{
+				Assert.ThrowsAsync<ArgumentException>(async () => await taskRepo.GetAsync(id!));
+			}
+		}
+
 		/// <summary>
 		/// Tests <see cref="ContextOperations.UpdateTaskAsync(TaskModel)"/> - Update Task - operation as success attempt.
 		/// </summary>
@@ -181,6 +210,42 @@ namespace Project_UnitTests
 				Assert.That(itemsNumberAfterDelete, Is.LessThan(itemsNumberBeforeDelete));
 				Assert.That(resultOfGetRemovedTask, Is.Null);
 			});
+		}
+
+		public async Task AttemptToDeleteTaskByNullObjectShouldThrowException()
+		{
+			TaskModel? NullTask = null;
+			using AutoMock mock = RegisterContextInstance();
+			await MockHelper.SetupDeleteTask(NullTask!, DbSetTaskMock, AllTasks, ActionsOnDbToSave);
+
+			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
+			var taskRepo = dataUnitOfWork.TaskRepository;
+
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.Remove(NullTask!));
+		}
+
+		public async Task AttemptToUpdateTaskByNullObjectShouldThrowException()
+		{
+			TaskModel? NullTask = null;
+			using AutoMock mock = RegisterContextInstance();
+			await MockHelper.SetupUpdateTask(NullTask!, DbSetTaskMock, AllTasks, ActionsOnDbToSave);
+
+			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
+			var taskRepo = dataUnitOfWork.TaskRepository;
+
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.Update(NullTask!));
+		}
+
+		public async Task AttemptToAddRangeOfTasksByNullObjectShouldThrowException()
+		{
+			IEnumerable<TaskModel>? nullRange = null;
+			using AutoMock mock = RegisterContextInstance();
+			await MockHelper.SetupAddRangeOfTasks(nullRange!, AllTasks, DbSetTaskMock, ActionsOnDbToSave);
+
+			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
+			var taskRepo = dataUnitOfWork.TaskRepository;
+
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.AddRangeAsync(nullRange!));
 		}
 	}
 }
