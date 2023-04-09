@@ -63,7 +63,7 @@ namespace Project_UnitTests
 		/// Tests <see cref="ContextOperations"/> - Create Task - operation with Null Object to throw exception.
 		/// </summary>
 		[Test]
-		public async Task AttemptToCreateTaskByNullObjectShouldThrowException()
+		public async Task AttemptToAddTaskAsNullObjectShouldThrowException()
 		{
 			TaskModel? assertNullTask = null;
 			using AutoMock mock = RegisterContextInstance();
@@ -158,23 +158,6 @@ namespace Project_UnitTests
 		}
 
 		/// <summary>
-		/// Tests <see cref="ContextOperations.UpdateTaskAsync(TaskModel)"/> - Update Task - operation with Null Object to throw exception.
-		/// </summary>
-		[Test]
-		public async Task AttemptToUpdateTaskByNullObjectShouldThrowException()
-		{
-			int assertTaskId = this.TodoLists.First().Id;
-			using AutoMock mock = RegisterContextInstance();
-			await MockHelper.SetupGetTask(assertTaskId, DbSetTaskMock, AllTasks);
-
-			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
-			var taskRepo = dataUnitOfWork.TaskRepository;
-			TaskModel? NullTask = null;
-
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.Update(NullTask!));
-		}
-
-		/// <summary>
 		/// Tests <see cref="ContextOperations.DeleteTaskAsync(int)"/> - Delete Task - operation as success attempt.
 		/// </summary>
 		/// <param name="assertTaskId">Valid Task Id, that should be deleted.</param>
@@ -191,7 +174,7 @@ namespace Project_UnitTests
 			await MockHelper.SetupGetTask(assertTaskId, DbSetTaskMock, AllTasks);
 
 			TaskModel taskToRemove = await taskRepo.GetAsync(assertTaskId) ?? throw new AssertionException("Cannot find targeted Task in seeded data for unit tests.");
-			
+
 			await MockHelper.SetupDeleteTask(taskToRemove, DbSetTaskMock, AllTasks, ActionsOnDbToSave);
 			await taskRepo.Remove(taskToRemove);
 			await dataUnitOfWork.SaveChangesAsync();

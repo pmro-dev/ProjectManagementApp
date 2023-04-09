@@ -16,7 +16,7 @@ namespace Project_Main.Infrastructure.Helpers
 		/// <param name="modelName">Model name.</param>
 		/// <param name="logger">Logger from class that invokes method.</param>
 		/// <exception cref="ArgumentNullException">Occurs when model is null.</exception>
-		public static void IfArgumentNullThrowException<T>(string operationName, T model, string modelName, ILogger logger) where T : class
+		public static void IfModelNullThrowException<T>(string operationName, T model, string modelName, ILogger logger) where T : class
 		{
 			if (model == null)
 			{

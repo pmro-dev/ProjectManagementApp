@@ -202,21 +202,7 @@ namespace Project_Main.Models.DataBases.AppData.DbSetup
 
         private void SeedAllTasks()
         {
-            AllTasks = new List<TaskModel>()
-            {
-                //TasksUX[0],
-                //TasksUX[1],
-                //TasksUX[2],
-                //TasksBackend[0],
-                //TasksBackend[1],
-                //TasksBackend[2],
-                //TasksTesting[0],
-                //TasksTesting[1],
-                //TasksTesting[2],
-                //TasksProjectManagement[0],
-                //TasksProjectManagement[1],
-                //TasksProjectManagement[2],
-            };
+            AllTasks = new List<TaskModel>();
 
             AllTasks.AddRange(TasksUX);
             AllTasks.AddRange(TasksBackend);
