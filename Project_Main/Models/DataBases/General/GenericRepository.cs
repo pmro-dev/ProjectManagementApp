@@ -25,7 +25,7 @@ namespace Project_Main.Models.DataBases.General
 
 			await _dbSet.AddAsync(entity);
 		}
-
+		
 		public async Task<IEnumerable<TEntity>> GetAllAsync()
 		{
 			return await _dbSet.ToListAsync();
@@ -40,7 +40,7 @@ namespace Project_Main.Models.DataBases.General
 			return await _dbSet.FindAsync(id);
 		}
 
-		public async Task<IEnumerable<TEntity>> GetByFilterAsync(Expression<Func<TEntity, bool>>? filter = null)
+		public async Task<IEnumerable<TEntity>> GetAllByFilterAsync(Expression<Func<TEntity, bool>>? filter = null)
 		{
 			IQueryable<TEntity> entities = _dbSet;
 
@@ -92,7 +92,7 @@ namespace Project_Main.Models.DataBases.General
 			string operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(AddRangeAsync), classAndEntityInfo);
 			HelperCheck.IfModelNullThrowException(operationName, range, nameof(range), _logger);
 
-			await _dbSet.AddRangeAsync(range);
+			await _dbSet.AddRangeAsync(range, default);
 		}
 
 		public async Task<bool> ContainsAny()

@@ -178,7 +178,7 @@ namespace Project_Main.Controllers
 			
 			ITodoListRepository todoListRepository = _dataUnitOfWork.TodoListRepository;
 			TodoListModel? targetTodoList = await todoListRepository.GetAsync(todoListId);
-			IEnumerable<TodoListModel> tempTodoLists = await todoListRepository.GetByFilterAsync(todoList => todoList.UserId == signedInUserId);
+			IEnumerable<TodoListModel> tempTodoLists = await todoListRepository.GetAllByFilterAsync(todoList => todoList.UserId == signedInUserId);
 
 			if (taskModel == null)
 			{

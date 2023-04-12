@@ -49,11 +49,6 @@ namespace Project_Main.Models.DataBases.General
             GC.SuppressFinalize(this);
         }
 
-        //public async Task DoAsyncCleanup()
-        //{
-        //	await _context.SaveChangesAsync();
-        //}
-
         protected virtual void Dispose(bool disposing)
         {
             if (!_disposed)

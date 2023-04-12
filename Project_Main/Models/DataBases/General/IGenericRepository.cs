@@ -6,7 +6,7 @@ namespace Project_Main.Models.DataBases.General
     {
         Task AddAsync(T entity);
         Task<T?> GetAsync(object id);
-        Task<IEnumerable<T>> GetByFilterAsync(Expression<Func<T, bool>>? filter = null);
+        Task<IEnumerable<T>> GetAllByFilterAsync(Expression<Func<T, bool>>? filter = null);
         Task<T?> GetSingleByFilterAsync(Expression<Func<T, bool>>? filter);
 		Task Update(T entity);
         Task Remove(T entity);

@@ -7,12 +7,6 @@ namespace Project_UnitTests.Helpers
 {
 	public static class MockHelper
 	{
-		public static void SetupDbSetTaskModel(Mock<CustomAppDbContext> AppDbContextMock, Mock<DbSet<TaskModel>> DbSetTaskMock)
-		{
-			AppDbContextMock.Setup(ctx => ctx.Set<TaskModel>())
-				.Returns(DbSetTaskMock.Object);
-		}
-
 		public static void SetupDbContextSaveChangesAsync(Mock<CustomAppDbContext> AppDbContextMock, List<Action> ActionsOnDbToSave)
 		{
 			AppDbContextMock.Setup(ctx => ctx.SaveChangesAsync(default))
@@ -36,11 +30,10 @@ namespace Project_UnitTests.Helpers
 					{
 						ActionsOnDbToSave.Add(action);
 					});
-				//}).Returns(new ValueTask<EntityEntry<TaskModel>>());
 			});
 		}
 
-		public static async Task SetupAddRangeOfTasks(IEnumerable<TaskModel> range, List<TaskModel> AllTasks, Mock<DbSet<TaskModel>> DbSetTaskMock, List<Action> ActionsOnDbToSave)
+		public static async Task SetupAddTasksRange(IEnumerable<TaskModel> range, List<TaskModel> AllTasks, Mock<DbSet<TaskModel>> DbSetTaskMock, List<Action> ActionsOnDbToSave)
 		{
 			await Task.Run(() =>
 			{
