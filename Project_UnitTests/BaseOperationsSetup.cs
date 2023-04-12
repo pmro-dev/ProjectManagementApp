@@ -6,6 +6,7 @@ using Project_Main.Models.DataBases.General;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Project_UnitTests.Helpers;
+using MockQueryable.Moq;
 
 namespace Project_UnitTests
 {
@@ -81,11 +82,11 @@ namespace Project_UnitTests
             TodoListRepoLoggerMock = new();
 			TaskRepoLoggerMock = new();
             AppDbContextLoggerMock = new();
-			DbSetTaskMock = new();
-			DbSetTodoListMock = new();
+			DbSetTaskMock = AllTasks.AsQueryable().BuildMockDbSet();
+			DbSetTodoListMock = TodoLists.AsQueryable().BuildMockDbSet();
 			AppDbContextMock = new();
-
-            MockHelper.SetupDbSetTaskModel(AppDbContextMock, DbSetTaskMock);
+			AppDbContextMock.Setup(ctx => ctx.Set<TaskModel>())
+	            .Returns(DbSetTaskMock.Object);
             MockHelper.SetupDbContextSaveChangesAsync(AppDbContextMock, ActionsOnDbToSave);
 
 			GenericTodoListRepoLoggerMock = new();
@@ -95,7 +96,6 @@ namespace Project_UnitTests
 			TodoListRepo = new(AppDbContextMock.Object, TodoListRepoLoggerMock.Object);
 			TaskRepo = new(AppDbContextMock.Object, TaskRepoLoggerMock.Object);
             DataUnitOfWork = new(AppDbContextMock.Object, TodoListRepo, TaskRepo);
-			//using AutoMock mock = AutoMock.GetLoose(cfg => cfg.RegisterInstance(this.DataUnitOfWorkMock.Object).As<IDataUnitOfWork>());
 		}
 
 		private List<TaskModel> SeedAllTasks()

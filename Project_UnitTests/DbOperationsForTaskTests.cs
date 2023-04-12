@@ -4,6 +4,7 @@ using Moq;
 using Project_UnitTests.Helpers;
 using Project_DomainEntities;
 using Project_Main.Models.DataBases.AppData;
+using Project_DomainEntities.Helpers;
 
 namespace Project_UnitTests
 {
@@ -98,6 +99,48 @@ namespace Project_UnitTests
 		}
 
 		[Test]
+		public async Task GetAllTasksShouldSucceed()
+		{
+			using AutoMock mock = RegisterContextInstance();
+			var assertTasks = AllTasks.ToList();
+
+			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
+			var taskRepo = dataUnitOfWork.TaskRepository;
+
+			var resultTasks = await taskRepo.GetAllAsync();
+			CollectionAssert.AreEqual(assertTasks, resultTasks);
+		}
+
+		[Test]
+		[TestCase(2)]
+		public async Task GetSingleTaskByFilterShouldSucceed(int taskId)
+		{
+			using AutoMock mock = RegisterContextInstance();
+			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
+			var taskRepo = dataUnitOfWork.TaskRepository;
+
+			TaskModel? assertTask = AllTasks.Find(t => t.Id == taskId);
+			TaskModel? taskFromDb = await taskRepo.GetSingleByFilterAsync(t => t.Id == taskId);
+
+			Assert.That(assertTask, Is.EqualTo(taskFromDb));
+		}
+
+		[Test]
+		[TestCase(TaskStatusHelper.TaskStatusType.InProgress)]
+		[TestCase(TaskStatusHelper.TaskStatusType.NotStarted)]
+		public async Task GetTasksByFilterShouldSucceed(TaskStatus taskStatus)
+		{
+			using AutoMock mock = RegisterContextInstance();
+			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
+			var taskRepo = dataUnitOfWork.TaskRepository;
+
+			IEnumerable<TaskModel> assertTasks = AllTasks.FindAll(t => t.Status.ToString() == taskStatus.ToString());
+			IEnumerable<TaskModel> tasksFromDb = await taskRepo.GetAllByFilterAsync(t => t.Status.ToString() == taskStatus.ToString());
+
+			CollectionAssert.AreEqual(assertTasks, tasksFromDb);
+		}
+
+		[Test]
 		[TestCase(null, typeof(ArgumentNullException))]
 		[TestCase("", typeof(ArgumentNullException))]
 		[TestCase(-1, typeof(ArgumentOutOfRangeException))]
@@ -157,6 +200,19 @@ namespace Project_UnitTests
 			});
 		}
 
+		[Test]
+		public async Task AttemptToUpdateTaskByNullObjectShouldThrowException()
+		{
+			TaskModel? NullTask = null;
+			using AutoMock mock = RegisterContextInstance();
+			await MockHelper.SetupUpdateTask(NullTask!, DbSetTaskMock, AllTasks, ActionsOnDbToSave);
+
+			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
+			var taskRepo = dataUnitOfWork.TaskRepository;
+
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.Update(NullTask!));
+		}
+
 		/// <summary>
 		/// Tests <see cref="ContextOperations.DeleteTaskAsync(int)"/> - Delete Task - operation as success attempt.
 		/// </summary>
@@ -195,6 +251,7 @@ namespace Project_UnitTests
 			});
 		}
 
+		[Test]
 		public async Task AttemptToDeleteTaskByNullObjectShouldThrowException()
 		{
 			TaskModel? NullTask = null;
@@ -207,28 +264,67 @@ namespace Project_UnitTests
 			Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.Remove(NullTask!));
 		}
 
-		public async Task AttemptToUpdateTaskByNullObjectShouldThrowException()
-		{
-			TaskModel? NullTask = null;
-			using AutoMock mock = RegisterContextInstance();
-			await MockHelper.SetupUpdateTask(NullTask!, DbSetTaskMock, AllTasks, ActionsOnDbToSave);
-
-			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
-			var taskRepo = dataUnitOfWork.TaskRepository;
-
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.Update(NullTask!));
-		}
-
+		[Test]
 		public async Task AttemptToAddRangeOfTasksByNullObjectShouldThrowException()
 		{
 			IEnumerable<TaskModel>? nullRange = null;
 			using AutoMock mock = RegisterContextInstance();
-			await MockHelper.SetupAddRangeOfTasks(nullRange!, AllTasks, DbSetTaskMock, ActionsOnDbToSave);
+			await MockHelper.SetupAddTasksRange(nullRange!, AllTasks, DbSetTaskMock, ActionsOnDbToSave);
 
 			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
 			var taskRepo = dataUnitOfWork.TaskRepository;
 
 			Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.AddRangeAsync(nullRange!));
+		}
+
+		[Test]
+		public async Task AddTasksAsRangeShouldSucceed()
+		{
+			using AutoMock mock = RegisterContextInstance();
+			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
+			var taskRepo = dataUnitOfWork.TaskRepository;
+
+			var tasksRange = new List<TaskModel>()
+			{
+				new TaskModel(){ Title = "First Range Test", Description = "First Description", DueDate = DateTime.ParseExact("2023 10 27 10:30", DueDateFormat, null)},
+				new TaskModel(){ Title = "Second Range Test", Description = "Second Description", DueDate = DateTime.ParseExact("2023 08 22 09:00", DueDateFormat, null)},
+				new TaskModel(){ Title = "Third Range Test", Description = "Third Description", DueDate = DateTime.ParseExact("2023 09 12 09:30", DueDateFormat, null)},
+				new TaskModel(){ Title = "Fourth Range Test", Description = "Fourth Description", DueDate = DateTime.ParseExact("2023 11 07 12:30", DueDateFormat, null)},
+				new TaskModel(){ Title = "Fifth Range Test", Description = "Fifth Description", DueDate = DateTime.ParseExact("2023 06 30 11:00", DueDateFormat, null)},
+			};
+
+			await MockHelper.SetupAddTasksRange(tasksRange, AllTasks, DbSetTaskMock, ActionsOnDbToSave);
+			await taskRepo.AddRangeAsync(tasksRange);
+			await dataUnitOfWork.SaveChangesAsync();
+
+			var tasksFromDb = await taskRepo.GetAllByFilterAsync(t => t.Title.Contains("Range Test"));
+
+			Assert.That(tasksFromDb.Count(), Is.EqualTo(tasksRange.Count));
+		}
+
+		[Test]
+		public async Task AttempToAddTasksAsRangeByNullObjectShouldThrowException()
+		{
+			using AutoMock mock = RegisterContextInstance();
+			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
+			var taskRepo = dataUnitOfWork.TaskRepository;
+
+			List<TaskModel>? nullRange = null;
+			await MockHelper.SetupAddTasksRange(nullRange!, AllTasks, DbSetTaskMock, ActionsOnDbToSave);
+			
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.AddRangeAsync(nullRange!));
+		}
+
+		[Test]
+		public async Task ContainsAnyShouldSucced()
+		{
+			using AutoMock mock = RegisterContextInstance();
+			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
+			var taskRepo = dataUnitOfWork.TaskRepository;
+
+			var result = await taskRepo.ContainsAny();
+
+			Assert.That(result, Is.True);
 		}
 	}
 }
