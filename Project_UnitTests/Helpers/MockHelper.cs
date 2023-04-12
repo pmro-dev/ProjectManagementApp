@@ -43,7 +43,7 @@ namespace Project_UnitTests.Helpers
 					.Callback(() =>
 					{
 						ActionsOnDbToSave.Add(action);
-					});
+					}).Returns(Task.CompletedTask);
 			});
 		}
 
