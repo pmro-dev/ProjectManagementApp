@@ -1,5 +1,3 @@
-using Autofac;
-using Autofac.Extras.Moq;
 using Moq;
 using Project_UnitTests.Helpers;
 using Project_DomainEntities;
@@ -13,92 +11,56 @@ namespace Project_UnitTests
 	/// </summary>
 	public class DatabaseOperationsTests : BaseOperationsSetup
 	{
-		private const int OnePositionFurther = 1;
-		private static readonly object[] ValidTasksExamples = TaskData.ValidTasksExamples;
+		private static readonly string MessageInvalidResult = "Repository returned null value!";
 
-		private AutoMock RegisterContextInstance()
-		{
-			return AutoMock.GetLoose(cfg =>
-			{
-				cfg.RegisterInstance(this.DataUnitOfWork).As<IDataUnitOfWork>();
-			});
-		}
+		private static readonly object[] ValidTasksExamples = TasksData.ValidTasksExamples;
 
-		/// <summary>
-		/// Tests <see cref="ContextOperations"/> - Create Task - operation as succees.
-		/// </summary>
-		/// <param name="taskName">Valid name value for new Task.</param>
 		[TestCaseSource(nameof(ValidTasksExamples))]
 		public async Task AddTaskShouldSucceed(string taskTitle, string taskDescription, DateTime taskDueDate)
 		{
-			using AutoMock mock = RegisterContextInstance();
+			var assertTask = TasksData.PrepareTask(taskTitle, taskDescription, taskDueDate);
 
-			TaskModel assertTask = new()
-			{
-				Id = this.AllTasks.Last().Id + OnePositionFurther,
-				Title = taskTitle + "NEW",
-				Description = taskDescription,
-				DueDate = taskDueDate,
-				TodoListId = 0
-			};
+			await MockHelper.SetupAddTask(assertTask, TasksCollection, DbSetTaskMock, UnitOfWorkActionsForSaveChanges);
+			await TaskRepo.AddAsync(assertTask);
 
-			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
-			var taskRepo = dataUnitOfWork.TaskRepository;
-			await MockHelper.SetupAddTask(assertTask, AllTasks, DbSetTaskMock, ActionsOnDbToSave);
-			await taskRepo.AddAsync(assertTask);
-			await dataUnitOfWork.SaveChangesAsync();
-
-			await MockHelper.SetupGetTask(assertTask.Id, DbSetTaskMock, AllTasks);
-			TaskModel tempTask = await taskRepo.GetAsync(assertTask.Id) ?? throw new AssertionException("Cannot find targeted Task in seeded data for unit tests.");
+			await DataUnitOfWork.SaveChangesAsync();
+			await MockHelper.SetupGetTask(assertTask.Id, DbSetTaskMock, TasksCollection);
+			
+			TaskModel resultTask = await TaskRepo.GetAsync(assertTask.Id) ?? throw new AssertionException(MessageInvalidResult);
 
 			Assert.Multiple(() =>
 			{
-				this.DbSetTaskMock.Verify(x => x.AddAsync(It.IsAny<TaskModel>(), It.IsAny<CancellationToken>()), Times.Once);
-				this.DbSetTaskMock.Verify(x => x.FindAsync(It.IsAny<object>()), Times.Once);
-				this.AppDbContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-				Assert.That(tempTask, Is.EqualTo(assertTask));
+				DbSetTaskMock.Verify(x => x.AddAsync(It.IsAny<TaskModel>(), It.IsAny<CancellationToken>()), Times.Once);
+				DbSetTaskMock.Verify(x => x.FindAsync(It.IsAny<object>()), Times.Once);
+				Assert.That(resultTask, Is.EqualTo(assertTask));
 			});
 		}
 
-		/// <summary>
-		/// Tests <see cref="ContextOperations"/> - Create Task - operation with Null Object to throw exception.
-		/// </summary>
 		[Test]
 		public async Task AttemptToAddTaskAsNullObjectShouldThrowException()
 		{
 			TaskModel? assertNullTask = null;
-			using AutoMock mock = RegisterContextInstance();
 
-			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
-			var taskRepo = dataUnitOfWork.TaskRepository;
+			await MockHelper.SetupAddTask(assertNullTask!, TasksCollection, DbSetTaskMock, UnitOfWorkActionsForSaveChanges);
 
-			await MockHelper.SetupAddTask(assertNullTask!, AllTasks, DbSetTaskMock, ActionsOnDbToSave);
-
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.AddAsync(assertNullTask!));
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await TaskRepo.AddAsync(assertNullTask!));
 		}
 
-		/// <summary>
-		/// Tests <see cref="ContextOperations"/> - Read Task - operation as success.
-		/// </summary>
-		/// <param name="taskId">Id of Task.</param>
 		[TestCase(1)]
 		[TestCase(2)]
 		[TestCase(3)]
 		[TestCase(4)]
 		public async Task GetTaskShouldSucceed(int taskId)
 		{
-			using AutoMock mock = RegisterContextInstance();
-			var assertTask = this.AllTasks.Single(t => t.Id == taskId);
-			await MockHelper.SetupGetTask(assertTask.Id, DbSetTaskMock, AllTasks);
+			var assertTask = TasksCollection.Single(t => t.Id == taskId);
 
-			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
-			var taskRepo = dataUnitOfWork.TaskRepository;
+			await MockHelper.SetupGetTask(assertTask.Id, DbSetTaskMock, TasksCollection);
 
-			var resultTask = await taskRepo.GetAsync(assertTask.Id) ?? throw new AssertionException("Cannot find targeted Task in seeded data for unit tests.");
+			var resultTask = await TaskRepo.GetAsync(assertTask.Id) ?? throw new AssertionException(MessageInvalidResult);
 
 			Assert.Multiple(() =>
 			{
-				this.DbSetTaskMock.Verify(x => x.FindAsync(It.IsAny<object>()), Times.Once);
+				DbSetTaskMock.Verify(x => x.FindAsync(It.IsAny<object>()), Times.Once);
 				Assert.That(resultTask, Is.EqualTo(assertTask));
 			});
 		}
@@ -106,13 +68,10 @@ namespace Project_UnitTests
 		[Test]
 		public async Task GetAllTasksShouldSucceed()
 		{
-			using AutoMock mock = RegisterContextInstance();
-			var assertTasks = AllTasks.ToList();
+			var assertTasks = TasksCollection.ToList();
 
-			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
-			var taskRepo = dataUnitOfWork.TaskRepository;
-
-			var resultTasks = await taskRepo.GetAllAsync();
+			var resultTasks = await TaskRepo.GetAllAsync();
+			
 			CollectionAssert.AreEqual(assertTasks, resultTasks);
 		}
 
@@ -120,12 +79,9 @@ namespace Project_UnitTests
 		[TestCase(2)]
 		public async Task GetSingleTaskByFilterShouldSucceed(int taskId)
 		{
-			using AutoMock mock = RegisterContextInstance();
-			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
-			var taskRepo = dataUnitOfWork.TaskRepository;
-
-			TaskModel? assertTask = AllTasks.Find(t => t.Id == taskId);
-			TaskModel? taskFromDb = await taskRepo.GetSingleByFilterAsync(t => t.Id == taskId);
+			TaskModel? assertTask = TasksCollection.Find(t => t.Id == taskId);
+			
+			TaskModel? taskFromDb = await TaskRepo.GetSingleByFilterAsync(t => t.Id == taskId);
 
 			Assert.That(assertTask, Is.EqualTo(taskFromDb));
 		}
@@ -135,12 +91,9 @@ namespace Project_UnitTests
 		[TestCase(TaskStatusHelper.TaskStatusType.NotStarted)]
 		public async Task GetTasksByFilterShouldSucceed(TaskStatus taskStatus)
 		{
-			using AutoMock mock = RegisterContextInstance();
-			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
-			var taskRepo = dataUnitOfWork.TaskRepository;
-
-			var assertTasks = AllTasks.FindAll(t => t.Status.ToString() == taskStatus.ToString());
-			var tasksFromDb = await taskRepo.GetAllByFilterAsync(t => t.Status.ToString() == taskStatus.ToString());
+			var assertTasks = TasksCollection.FindAll(t => t.Status.ToString() == taskStatus.ToString());
+			
+			var tasksFromDb = await TaskRepo.GetAllByFilterAsync(t => t.Status.ToString() == taskStatus.ToString());
 
 			CollectionAssert.AreEqual(assertTasks, tasksFromDb);
 		}
@@ -152,51 +105,39 @@ namespace Project_UnitTests
 		[TestCase(-5, typeof(ArgumentOutOfRangeException))]
 		public async Task AttemptToGetTaskByInvalidIdShouldThrowException(object id, Type exceptionType)
 		{
-			int taskIdForMockSetup = this.AllTasks.First().Id;
+			int taskIdForMockSetup = TasksCollection.First().Id;
 
-			using AutoMock mock = RegisterContextInstance();
-			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
-			var taskRepo = dataUnitOfWork.TaskRepository;
-
-			await MockHelper.SetupGetTask(taskIdForMockSetup, DbSetTaskMock, AllTasks);
+			await MockHelper.SetupGetTask(taskIdForMockSetup, DbSetTaskMock, TasksCollection);
 
 			switch (exceptionType)
 			{
 				case Type argExNull when argExNull == typeof(ArgumentNullException):
-					Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.GetAsync(id!));
+					Assert.ThrowsAsync<ArgumentNullException>(async () => await TaskRepo.GetAsync(id!));
 					break;
 				case Type argExOutOfRange when argExOutOfRange == typeof(ArgumentOutOfRangeException):
-					Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await taskRepo.GetAsync(id!));
+					Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await TaskRepo.GetAsync(id!));
 					break;
 				case Type argEx when argEx == typeof(ArgumentException):
-					Assert.ThrowsAsync<ArgumentException>(async () => await taskRepo.GetAsync(id!));
+					Assert.ThrowsAsync<ArgumentException>(async () => await TaskRepo.GetAsync(id!));
 					break;
 			}
 		}
 
-		/// <summary>
-		/// Tests <see cref="ContextOperations.UpdateTaskAsync(TaskModel)"/> - Update Task - operation as success attempt.
-		/// </summary>
 		[Test]
 		public async Task UpdateTaskShouldSucceed()
 		{
-			int taskToUpdateId = this.TodoLists.First().Id;
-			using AutoMock mock = RegisterContextInstance();
-			await MockHelper.SetupGetTask(taskToUpdateId, DbSetTaskMock, AllTasks);
+			int taskToUpdateId = TodoListsCollection.First().Id;
 
-			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
-			var taskRepo = dataUnitOfWork.TaskRepository;
+			await MockHelper.SetupGetTask(taskToUpdateId, DbSetTaskMock, TasksCollection);
 
-			TaskModel taskToUpdate = await taskRepo.GetAsync(taskToUpdateId) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
-			taskToUpdate.Title = "New Title Set";
-			taskToUpdate.Description = "Lorem Ipsum lorem lorem ipsum Lorem Ipsum lorem lorem ipsum";
-			taskToUpdate.DueDate = DateTime.Now;
+			TaskModel taskToUpdate = await TaskRepo.GetAsync(taskToUpdateId) ?? throw new AssertionException(MessageInvalidResult);
+			TasksData.PrepareUpdatedTask(taskToUpdate);
 
-			await MockHelper.SetupUpdateTask(taskToUpdate, DbSetTaskMock, AllTasks, ActionsOnDbToSave);
-			await taskRepo.Update(taskToUpdate);
-			await dataUnitOfWork.SaveChangesAsync();
+			await MockHelper.SetupUpdateTask(taskToUpdate, DbSetTaskMock, TasksCollection, UnitOfWorkActionsForSaveChanges);
+			await TaskRepo.Update(taskToUpdate);
+			await DataUnitOfWork.SaveChangesAsync();
 
-			TaskModel updatedTask = await taskRepo.GetAsync(taskToUpdateId) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
+			TaskModel updatedTask = await TaskRepo.GetAsync(taskToUpdateId) ?? throw new AssertionException(MessageInvalidResult);
 			Assert.Multiple(() =>
 			{
 				Assert.That(updatedTask.Title, Is.EqualTo(taskToUpdate.Title));
@@ -209,50 +150,41 @@ namespace Project_UnitTests
 		public async Task AttemptToUpdateTaskByNullObjectShouldThrowException()
 		{
 			TaskModel? NullTask = null;
-			using AutoMock mock = RegisterContextInstance();
-			await MockHelper.SetupUpdateTask(NullTask!, DbSetTaskMock, AllTasks, ActionsOnDbToSave);
 
-			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
-			var taskRepo = dataUnitOfWork.TaskRepository;
+			await MockHelper.SetupUpdateTask(NullTask!, DbSetTaskMock, TasksCollection, UnitOfWorkActionsForSaveChanges);
 
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.Update(NullTask!));
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await TaskRepo.Update(NullTask!));
 		}
 
-		/// <summary>
-		/// Tests <see cref="ContextOperations.DeleteTaskAsync(int)"/> - Delete Task - operation as success attempt.
-		/// </summary>
-		/// <param name="assertTaskId">Valid Task Id, that should be deleted.</param>
 		[TestCase(1)]
 		[TestCase(2)]
 		[TestCase(3)]
 		[TestCase(4)]
 		public async Task DeleteTaskShouldSucceed(int assertTaskId)
 		{
-			var itemsNumberBeforeDelete = this.AllTasks.Count;
-			using AutoMock mock = RegisterContextInstance();
-			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
-			var taskRepo = dataUnitOfWork.TaskRepository;
-			await MockHelper.SetupGetTask(assertTaskId, DbSetTaskMock, AllTasks);
+			var itemsNumberBeforeDelete = TasksCollection.Count;
+			await MockHelper.SetupGetTask(assertTaskId, DbSetTaskMock, TasksCollection);
 
-			TaskModel taskToRemove = await taskRepo.GetAsync(assertTaskId) ?? throw new AssertionException("Cannot find targeted Task in seeded data for unit tests.");
+			TaskModel taskToRemove = await TaskRepo.GetAsync(assertTaskId) ?? throw new AssertionException(MessageInvalidResult);
 
-			await MockHelper.SetupDeleteTask(taskToRemove, DbSetTaskMock, AllTasks, ActionsOnDbToSave);
-			await taskRepo.Remove(taskToRemove);
-			await dataUnitOfWork.SaveChangesAsync();
+			await MockHelper.SetupDeleteTask(taskToRemove, DbSetTaskMock, TasksCollection, UnitOfWorkActionsForSaveChanges);
+			await TaskRepo.Remove(taskToRemove);
+			await DataUnitOfWork.SaveChangesAsync();
 
-			var itemsNumberAfterDelete = this.AllTasks.Count;
+			var itemsNumberAfterDelete = TasksCollection.Count;
 
-			// I don't know why but I have to "refresh" this.AllTasks because somehow it can get "deleted" task from memory.
-			await MockHelper.SetupGetTask(assertTaskId, DbSetTaskMock, AllTasks);
-			TaskModel? resultOfGetRemovedTask = await TaskRepo.GetAsync(assertTaskId);
+			// I don't know why but I have to "refresh" TasksCollection because somehow it can get "deleted" task from memory.
+			await MockHelper.SetupGetTask(assertTaskId, DbSetTaskMock, TasksCollection);
+
+			TaskModel? resultOfTryToGetRemovedTask = await TaskRepo.GetAsync(assertTaskId);
 
 			Assert.Multiple(() =>
 			{
-				this.DbSetTaskMock.Verify(x => x.FindAsync(It.IsAny<int>()), Times.Exactly(2));
-				this.DbSetTaskMock.Verify(x => x.Remove(It.IsAny<TaskModel>()), Times.Once);
+				DbSetTaskMock.Verify(x => x.FindAsync(It.IsAny<int>()), Times.Exactly(2));
+				DbSetTaskMock.Verify(x => x.Remove(It.IsAny<TaskModel>()), Times.Once);
 				Assert.That(itemsNumberAfterDelete, Is.Not.EqualTo(itemsNumberBeforeDelete));
 				Assert.That(itemsNumberAfterDelete, Is.LessThan(itemsNumberBeforeDelete));
-				Assert.That(resultOfGetRemovedTask, Is.Null);
+				Assert.That(resultOfTryToGetRemovedTask, Is.Null);
 			});
 		}
 
@@ -260,49 +192,32 @@ namespace Project_UnitTests
 		public async Task AttemptToDeleteTaskByNullObjectShouldThrowException()
 		{
 			TaskModel? NullTask = null;
-			using AutoMock mock = RegisterContextInstance();
-			await MockHelper.SetupDeleteTask(NullTask!, DbSetTaskMock, AllTasks, ActionsOnDbToSave);
 
-			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
-			var taskRepo = dataUnitOfWork.TaskRepository;
+			await MockHelper.SetupDeleteTask(NullTask!, DbSetTaskMock, TasksCollection, UnitOfWorkActionsForSaveChanges);
 
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.Remove(NullTask!));
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await TaskRepo.Remove(NullTask!));
 		}
 
 		[Test]
 		public async Task AttemptToAddRangeOfTasksByNullObjectShouldThrowException()
 		{
 			IEnumerable<TaskModel>? nullRange = null;
-			using AutoMock mock = RegisterContextInstance();
-			await MockHelper.SetupAddTasksRange(nullRange!, AllTasks, DbSetTaskMock, ActionsOnDbToSave);
 
-			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
-			var taskRepo = dataUnitOfWork.TaskRepository;
+			await MockHelper.SetupAddTasksRange(nullRange!, TasksCollection, DbSetTaskMock, UnitOfWorkActionsForSaveChanges);
 
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.AddRangeAsync(nullRange!));
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await TaskRepo.AddRangeAsync(nullRange!));
 		}
 
 		[Test]
 		public async Task AddTasksAsRangeShouldSucceed()
 		{
-			using AutoMock mock = RegisterContextInstance();
-			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
-			var taskRepo = dataUnitOfWork.TaskRepository;
+			var tasksRange = TasksData.PrepareTasksRange();
 
-			var tasksRange = new List<TaskModel>()
-			{
-				new TaskModel(){ Title = "First Range Test", Description = "First Description", DueDate = DateTime.ParseExact("2023 10 27 10:30", DueDateFormat, null)},
-				new TaskModel(){ Title = "Second Range Test", Description = "Second Description", DueDate = DateTime.ParseExact("2023 08 22 09:00", DueDateFormat, null)},
-				new TaskModel(){ Title = "Third Range Test", Description = "Third Description", DueDate = DateTime.ParseExact("2023 09 12 09:30", DueDateFormat, null)},
-				new TaskModel(){ Title = "Fourth Range Test", Description = "Fourth Description", DueDate = DateTime.ParseExact("2023 11 07 12:30", DueDateFormat, null)},
-				new TaskModel(){ Title = "Fifth Range Test", Description = "Fifth Description", DueDate = DateTime.ParseExact("2023 06 30 11:00", DueDateFormat, null)},
-			};
+			await MockHelper.SetupAddTasksRange(tasksRange, TasksCollection, DbSetTaskMock, UnitOfWorkActionsForSaveChanges);
+			await TaskRepo.AddRangeAsync(tasksRange);
+			await DataUnitOfWork.SaveChangesAsync();
 
-			await MockHelper.SetupAddTasksRange(tasksRange, AllTasks, DbSetTaskMock, ActionsOnDbToSave);
-			await taskRepo.AddRangeAsync(tasksRange);
-			await dataUnitOfWork.SaveChangesAsync();
-
-			var tasksFromDb = await taskRepo.GetAllByFilterAsync(t => t.Title.Contains("Range Test"));
+			var tasksFromDb = await TaskRepo.GetAllByFilterAsync(t => t.Title.Contains(TasksData.RangeSuffix));
 
 			Assert.That(tasksFromDb.Count(), Is.EqualTo(tasksRange.Count));
 		}
@@ -310,24 +225,17 @@ namespace Project_UnitTests
 		[Test]
 		public async Task AttempToAddTasksAsRangeByNullObjectShouldThrowException()
 		{
-			using AutoMock mock = RegisterContextInstance();
-			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
-			var taskRepo = dataUnitOfWork.TaskRepository;
-
 			List<TaskModel>? nullRange = null;
-			await MockHelper.SetupAddTasksRange(nullRange!, AllTasks, DbSetTaskMock, ActionsOnDbToSave);
 
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.AddRangeAsync(nullRange!));
+			await MockHelper.SetupAddTasksRange(nullRange!, TasksCollection, DbSetTaskMock, UnitOfWorkActionsForSaveChanges);
+
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await TaskRepo.AddRangeAsync(nullRange!));
 		}
 
 		[Test]
 		public async Task ContainsAnyShouldSucceed()
 		{
-			using AutoMock mock = RegisterContextInstance();
-			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
-			var taskRepo = dataUnitOfWork.TaskRepository;
-
-			var result = await taskRepo.ContainsAny();
+			var result = await TaskRepo.ContainsAny();
 
 			Assert.That(result, Is.True);
 		}

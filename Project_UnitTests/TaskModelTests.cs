@@ -11,8 +11,8 @@ namespace Project_UnitTests
 	public class TaskModelTests
 	{
 		private const int numberOfFails = 1;
-		private static readonly object[] ValidTasksExamples = TaskData.ValidTasksExamples;
-		private static readonly object[] InvalidTasksExamples = TaskData.InvalidTasksExamples;
+		private static readonly object[] ValidTasksExamples = TasksData.ValidTasksExamples;
+		private static readonly object[] InvalidTasksExamples = TasksData.InvalidTasksExamples;
 		protected const string AdminId = "adminId";
 
 		/// <summary>

@@ -29,7 +29,7 @@ namespace Project_UnitTests
 //			using AutoMock mock = RegisterContextInstance();
 //			TodoListModel assertTodoList = new()
 //			{
-//				Id = this.TodoLists.Last().Id + OnePositionFurther,
+//				Id = this.TodoListsCollection.Last().Id + OnePositionFurther,
 //				Name = todoListName
 //			};
 
@@ -39,8 +39,8 @@ namespace Project_UnitTests
 
 //			await SetupMockGetTodoListWithDetails(assertTodoList.Id);
 //			TodoListModel? tempTodoList = await mockContext.GetTodoListWithDetailsAsync(assertTodoList.Id, AdminId) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
-//            this.AppDbContextMock.Verify(x => x.AddTodoListAsync(It.IsAny<TodoListModel>()), Times.Once);
-//			this.AppDbContextMock.Verify(x => x.GetTodoListWithDetailsAsync(It.IsAny<int>(), It.IsAny<string>()), Times.Once);
+//            this.MainDbContextMock.Verify(x => x.AddTodoListAsync(It.IsAny<TodoListModel>()), Times.Once);
+//			this.MainDbContextMock.Verify(x => x.GetTodoListWithDetailsAsync(It.IsAny<int>(), It.IsAny<string>()), Times.Once);
 //			Assert.That(tempTodoList.IsTheSame(assertTodoList), Is.True);
 //		}
 
@@ -71,7 +71,7 @@ namespace Project_UnitTests
 //		public async Task GetTodoListShouldSucceed(int listId)
 //		{
 //			using AutoMock mock = RegisterContextInstance();
-//			var assertTodoList = this.TodoLists.Single(l => l.Id == listId);
+//			var assertTodoList = this.TodoListsCollection.Single(l => l.Id == listId);
 //			await SetupMockGetTodoList(assertTodoList.Id);
 //			var mockContext = mock.Create<IContextOperations>();
 
@@ -104,14 +104,14 @@ namespace Project_UnitTests
 //		[TestCase(4)]
 //		public async Task GetTodoListWithDetailsShouldSucceed(int listId)
 //		{
-//			var assertTodoList = this.TodoLists.Single(l => l.Id == listId);
+//			var assertTodoList = this.TodoListsCollection.Single(l => l.Id == listId);
 //			using AutoMock mock = RegisterContextInstance();
 //			await SetupMockGetTodoListWithDetails(assertTodoList.Id);
 //			var mockContext = mock.Create<IContextOperations>();
 
 //			var expected = assertTodoList;
 //			var result = await mockContext.GetTodoListWithDetailsAsync(assertTodoList.Id, AdminId) ?? throw new AssertionException("Cannot find targeted result in seeded data for unit tests.");
-//            this.AppDbContextMock.Verify(x => x.GetTodoListWithDetailsAsync(assertTodoList.Id, AdminId), Times.Once);
+//            this.MainDbContextMock.Verify(x => x.GetTodoListWithDetailsAsync(assertTodoList.Id, AdminId), Times.Once);
 //			Assert.That(expected.IsTheSame(result), Is.True);
 //		}
 
@@ -131,7 +131,7 @@ namespace Project_UnitTests
 //        }
 
 //        /// <summary>
-//        /// Tests <see cref="ContextOperations.GetAllTodoListsAsync"/> - Get All TodoLists - operation as success attempt.
+//        /// Tests <see cref="ContextOperations.GetAllTodoListsAsync"/> - Get All TodoListsCollection - operation as success attempt.
 //        /// </summary>
 //        [Test]
 //		public async Task GetAllTodoListsShouldSucceed()
@@ -140,16 +140,16 @@ namespace Project_UnitTests
 //			await SetupMockGetAllTodoLists();
 //			var mockContext = mock.Create<IContextOperations>();
 
-//			var expected = this.TodoLists;
+//			var expected = this.TodoListsCollection;
 //			var actual = await mockContext.GetAllTodoListsAsync(AdminId);
 
-//			this.AppDbContextMock.Verify(x => x.GetAllTodoListsAsync(It.IsAny<string>()), Times.Once);
+//			this.MainDbContextMock.Verify(x => x.GetAllTodoListsAsync(It.IsAny<string>()), Times.Once);
 //			Assert.That(actual, Is.Not.EqualTo(null));
 //			CollectionAssert.AreEqual(expected, actual);
 //		}
 
 //        /// <summary>
-//        /// Tests <see cref="ContextOperations.GetAllTodoListsWithDetailsAsync"/> - Get All TodoLists with details - operation as success attempt.
+//        /// Tests <see cref="ContextOperations.GetAllTodoListsWithDetailsAsync"/> - Get All TodoListsCollection with details - operation as success attempt.
 //        /// </summary>
 //        [Test]
 //		public async Task GetAllTodoListsWithDetailsShouldSucceed()
@@ -157,10 +157,10 @@ namespace Project_UnitTests
 //			using AutoMock mock = RegisterContextInstance();
 //			await SetupMockGetAllTodoListsWithDetails();
 //			var mockContext = mock.Create<IContextOperations>();
-//			var expected = this.TodoLists;
+//			var expected = this.TodoListsCollection;
 //			var actual = await mockContext.GetAllTodoListsWithDetailsAsync(AdminId);
 
-//			this.AppDbContextMock.Verify(x => x.GetAllTodoListsWithDetailsAsync(It.IsAny<string>()), Times.Once);
+//			this.MainDbContextMock.Verify(x => x.GetAllTodoListsWithDetailsAsync(It.IsAny<string>()), Times.Once);
 
 //			Assert.That(actual, Is.Not.EqualTo(null));
 
@@ -178,7 +178,7 @@ namespace Project_UnitTests
 //		[Test]
 //		public async Task UpdateTodoListTasksShouldSucceed()
 //		{
-//			int todoListToUpdateId = this.TodoLists.First().Id;
+//			int todoListToUpdateId = this.TodoListsCollection.First().Id;
 //			var newTasks = this.TasksBackend;
 //			using AutoMock mock = RegisterContextInstance();
 //			await SetupMockGetTodoListWithDetails(todoListToUpdateId);
@@ -220,8 +220,8 @@ namespace Project_UnitTests
 //		[TestCase(4)]
 //		public async Task DeleteTodoListShouldSucceed(int assertTodoListID)
 //		{
-//			var itemsNumberInListBeforeDelete = this.TodoLists.Count;
-//			var itemsNumberInTasksBeforeDelete = this.AllTasks.Count;
+//			var itemsNumberInListBeforeDelete = this.TodoListsCollection.Count;
+//			var itemsNumberInTasksBeforeDelete = this.TasksCollection.Count;
 //			using AutoMock mock = RegisterContextInstance();
 //			await SetupMockGetTodoListWithDetails(assertTodoListID);
 //			await SetupMockDeleteTodoList();
@@ -229,11 +229,11 @@ namespace Project_UnitTests
 
 //			await mockContext.DeleteTodoListAsync(assertTodoListID, AdminId);
 
-//			var itemsNumberInListAfterDelete = this.TodoLists.Count;
-//			var itemsNumberInTasksAfterDelete = this.AllTasks.Count;
+//			var itemsNumberInListAfterDelete = this.TodoListsCollection.Count;
+//			var itemsNumberInTasksAfterDelete = this.TasksCollection.Count;
 
-//			this.AppDbContextMock.Verify(x => x.GetTodoListWithDetailsAsync(It.IsAny<int>(), It.IsAny<string>()), Times.Once);
-//			this.AppDbContextMock.Verify(x => x.DeleteTodoListAsync(It.IsAny<TodoListModel>()), Times.Once);
+//			this.MainDbContextMock.Verify(x => x.GetTodoListWithDetailsAsync(It.IsAny<int>(), It.IsAny<string>()), Times.Once);
+//			this.MainDbContextMock.Verify(x => x.DeleteTodoListAsync(It.IsAny<TodoListModel>()), Times.Once);
 //			Assert.Multiple(() =>
 //			{
 //				Assert.That(itemsNumberInListAfterDelete, Is.Not.EqualTo(itemsNumberInListBeforeDelete));
@@ -288,15 +288,15 @@ namespace Project_UnitTests
 //            await SetupMockDeleteTask();
 //			var mockContext = mock.Create<IContextOperations>();
 			
-//			var assertTaskToDelete = this.AllTasks.Single(x => (x.Id == taskId));
-//			var numberOfTasksBeforeDelete = this.AllTasks.Count;
+//			var assertTaskToDelete = this.TasksCollection.Single(x => (x.Id == taskId));
+//			var numberOfTasksBeforeDelete = this.TasksCollection.Count;
 
 //            await SetupMockReadTask(taskId);
 
 //            await mockContext.DeleteTaskAsync(assertTaskToDelete.Id, AdminId);
-//			var numberOfTasksAfterDelete = this.AllTasks.Count;
+//			var numberOfTasksAfterDelete = this.TasksCollection.Count;
 
-//			this.AppDbContextMock.Verify(x => x.DeleteTaskAsync(It.IsAny<TaskModel>()), Times.Once);
+//			this.MainDbContextMock.Verify(x => x.DeleteTaskAsync(It.IsAny<TaskModel>()), Times.Once);
 //			Assert.That(numberOfTasksAfterDelete, Is.Not.EqualTo(numberOfTasksBeforeDelete));
 //		}
 
@@ -305,7 +305,7 @@ namespace Project_UnitTests
 //			await Task.Run(() =>
 //			{
 //#pragma warning disable CS8604 // Possible null reference argument.
-//				this.AppDbContextMock.Setup(x => x.AddTodoListAsync(It.IsAny<TodoListModel>())).Callback(() => this.TodoLists.Add(assertTodoList)).Returns(Task.FromResult(1));
+//				this.MainDbContextMock.Setup(x => x.AddTodoListAsync(It.IsAny<TodoListModel>())).Callback(() => this.TodoListsCollection.Add(assertTodoList)).Returns(Task.FromResult(1));
 //#pragma warning restore CS8604 // Possible null reference argument.
 //			});
 //		}
@@ -314,7 +314,7 @@ namespace Project_UnitTests
 //		{
 //			await Task.Run(() =>
 //			{
-//				this.AppDbContextMock.Setup(x => x.GetTodoListWithDetailsAsync(It.IsAny<int>(), It.IsAny<string>())).ReturnsAsync(this.TodoLists.Single(l => l.Id == assertTodoListID));
+//				this.MainDbContextMock.Setup(x => x.GetTodoListWithDetailsAsync(It.IsAny<int>(), It.IsAny<string>())).ReturnsAsync(this.TodoListsCollection.Single(l => l.Id == assertTodoListID));
 //			});
 //		}
 
@@ -322,7 +322,7 @@ namespace Project_UnitTests
 //        {
 //            await Task.Run(() =>
 //            {
-//                this.AppDbContextMock.Setup(x => x.GetTodoListWithDetailsAsync(It.IsAny<int>(), It.IsAny<string>()));
+//                this.MainDbContextMock.Setup(x => x.GetTodoListWithDetailsAsync(It.IsAny<int>(), It.IsAny<string>()));
 //            });
 //        }
 
@@ -330,7 +330,7 @@ namespace Project_UnitTests
 //        {
 //            await Task.Run(() =>
 //            {
-//                this.AppDbContextMock.Setup(x => x.GetTodoListAsync(It.IsAny<int>(), It.IsAny<string>()));
+//                this.MainDbContextMock.Setup(x => x.GetTodoListAsync(It.IsAny<int>(), It.IsAny<string>()));
 //            });
 //        }
 
@@ -338,7 +338,7 @@ namespace Project_UnitTests
 //		{
 //			await Task.Run(() =>
 //			{
-//				this.AppDbContextMock.Setup(x => x.GetTodoListWithDetailsAsync(It.IsAny<int>(), It.IsAny<string>())).ReturnsAsync(() => NullTodoList);
+//				this.MainDbContextMock.Setup(x => x.GetTodoListWithDetailsAsync(It.IsAny<int>(), It.IsAny<string>())).ReturnsAsync(() => NullTodoList);
 //			});
 //		}
 
@@ -346,7 +346,7 @@ namespace Project_UnitTests
 //		{
 //			await Task.Run(() =>
 //			{
-//				this.AppDbContextMock.Setup(x => x.GetTodoListAsync(It.IsAny<int>(), It.IsAny<string>())).ReturnsAsync(this.TodoLists.Single(l => l.Id == listId));
+//				this.MainDbContextMock.Setup(x => x.GetTodoListAsync(It.IsAny<int>(), It.IsAny<string>())).ReturnsAsync(this.TodoListsCollection.Single(l => l.Id == listId));
 //			});
 //		}
 
@@ -354,7 +354,7 @@ namespace Project_UnitTests
 //		{
 //			await Task.Run(() =>
 //			{
-//				this.AppDbContextMock.Setup(x => x.GetAllTodoListsAsync(AdminId)).ReturnsAsync(this.TodoLists);
+//				this.MainDbContextMock.Setup(x => x.GetAllTodoListsAsync(AdminId)).ReturnsAsync(this.TodoListsCollection);
 //			});
 //		}
 
@@ -362,7 +362,7 @@ namespace Project_UnitTests
 //		{
 //			await Task.Run(() =>
 //			{
-//				this.AppDbContextMock.Setup(x => x.GetAllTodoListsWithDetailsAsync(AdminId)).ReturnsAsync(this.TodoLists);
+//				this.MainDbContextMock.Setup(x => x.GetAllTodoListsWithDetailsAsync(AdminId)).ReturnsAsync(this.TodoListsCollection);
 //			});
 //		}
 
@@ -370,10 +370,10 @@ namespace Project_UnitTests
 //		{
 //			await Task.Run(() =>
 //			{
-//				this.AppDbContextMock.Setup(x => x.UpdateTodoListAsync(It.IsAny<TodoListModel>()))
+//				this.MainDbContextMock.Setup(x => x.UpdateTodoListAsync(It.IsAny<TodoListModel>()))
 //				.Callback<TodoListModel>((todoList) =>
 //				{
-//					var listToUpdate = this.TodoLists.Find(todoList => todoList.Id == todoListToUpdate.Id) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
+//					var listToUpdate = this.TodoListsCollection.Find(todoList => todoList.Id == todoListToUpdate.Id) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
 //                    listToUpdate.Name = todoListToUpdate.Name;
 //					listToUpdate.Tasks = todoListToUpdate.Tasks;
 //				}).Returns(Task.FromResult(1));
@@ -384,22 +384,22 @@ namespace Project_UnitTests
 //		{
 //			await Task.Run(() =>
 //			{
-//				this.AppDbContextMock.Setup(x => x.DeleteTodoListAsync(It.IsAny<TodoListModel>())).Callback<TodoListModel>((todoListToDelete) =>
+//				this.MainDbContextMock.Setup(x => x.DeleteTodoListAsync(It.IsAny<TodoListModel>())).Callback<TodoListModel>((todoListToDelete) =>
 //				{
-//					this.TodoLists.Remove(todoListToDelete);
-//					this.AllTasks = this.AllTasks.Where(t => t.TodoListId != todoListToDelete.Id).ToList();
+//					this.TodoListsCollection.Remove(todoListToDelete);
+//					this.TasksCollection = this.TasksCollection.Where(t => t.TodoListId != todoListToDelete.Id).ToList();
 //				}).Returns(Task.FromResult(1));
 //			});
 //		}
 
 //		private async Task SetupMockDeleteTask()
 //		{
-//			await Task.Run(() => this.AppDbContextMock.Setup(x => x.DeleteTaskAsync(It.IsAny<TaskModel>())).Callback<TaskModel>((taskToDelete) => this.AllTasks.Remove(taskToDelete)).Returns(Task.FromResult(1)));
+//			await Task.Run(() => this.MainDbContextMock.Setup(x => x.DeleteTaskAsync(It.IsAny<TaskModel>())).Callback<TaskModel>((taskToDelete) => this.TasksCollection.Remove(taskToDelete)).Returns(Task.FromResult(1)));
 //		}
 
 //        private async Task SetupMockReadTask(int taskId)
 //        {
-//            await Task.Run(() => this.AppDbContextMock.Setup(x => x.ReadTaskAsync(It.IsAny<int>(), It.IsAny<string>())).ReturnsAsync(this.AllTasks.Single(x => x.Id == taskId)));
+//            await Task.Run(() => this.MainDbContextMock.Setup(x => x.ReadTaskAsync(It.IsAny<int>(), It.IsAny<string>())).ReturnsAsync(this.TasksCollection.Single(x => x.Id == taskId)));
 //        }
     }
 }

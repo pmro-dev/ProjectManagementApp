@@ -23,7 +23,7 @@ namespace Project_UnitTests.Helpers
 		{
 			await Task.Run(() =>
 			{
-				Action action = () => AllTasks.Add(assertTask);
+				void action() => AllTasks.Add(assertTask);
 
 				DbSetTaskMock.Setup(x => x.AddAsync(It.IsAny<TaskModel>(), default))
 					.Callback(() =>
@@ -37,7 +37,7 @@ namespace Project_UnitTests.Helpers
 		{
 			await Task.Run(() =>
 			{
-				Action action = () => AllTasks.AddRange(range);
+				void action() => AllTasks.AddRange(range);
 
 				DbSetTaskMock.Setup(x => x.AddRangeAsync(It.IsAny<IEnumerable<TaskModel>>(), default))
 					.Callback(() =>
@@ -59,11 +59,11 @@ namespace Project_UnitTests.Helpers
 		{
 			await Task.Run(() =>
 			{
-				Action action = () =>
+				void action()
 				{
 					var tempTask = AllTasks.Find(task => task.Id == taskToUpdate.Id) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
 					tempTask.Title = taskToUpdate.Title;
-				};
+				}
 
 				DbSetTaskMock.Setup(x => x.Update(It.IsAny<TaskModel>()))
 					.Callback(() =>
@@ -77,10 +77,10 @@ namespace Project_UnitTests.Helpers
 		{
 			await Task.Run(() =>
 			{
-				Action action = () =>
+				void action()
 				{
 					AllTasks.Remove(taskToRemove);
-				};
+				}
 
 				DbSetTaskMock.Setup(x => x.Remove(It.IsAny<TaskModel>()))
 					.Callback(() =>
