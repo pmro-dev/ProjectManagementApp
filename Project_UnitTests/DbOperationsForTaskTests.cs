@@ -95,7 +95,12 @@ namespace Project_UnitTests
 			var taskRepo = dataUnitOfWork.TaskRepository;
 
 			var resultTask = await taskRepo.GetAsync(assertTask.Id) ?? throw new AssertionException("Cannot find targeted Task in seeded data for unit tests.");
-			Assert.That(resultTask, Is.EqualTo(assertTask));
+
+			Assert.Multiple(() =>
+			{
+				this.DbSetTaskMock.Verify(x => x.FindAsync(It.IsAny<object>()), Times.Once);
+				Assert.That(resultTask, Is.EqualTo(assertTask));
+			});
 		}
 
 		[Test]
@@ -134,8 +139,8 @@ namespace Project_UnitTests
 			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
 			var taskRepo = dataUnitOfWork.TaskRepository;
 
-			IEnumerable<TaskModel> assertTasks = AllTasks.FindAll(t => t.Status.ToString() == taskStatus.ToString());
-			IEnumerable<TaskModel> tasksFromDb = await taskRepo.GetAllByFilterAsync(t => t.Status.ToString() == taskStatus.ToString());
+			var assertTasks = AllTasks.FindAll(t => t.Status.ToString() == taskStatus.ToString());
+			var tasksFromDb = await taskRepo.GetAllByFilterAsync(t => t.Status.ToString() == taskStatus.ToString());
 
 			CollectionAssert.AreEqual(assertTasks, tasksFromDb);
 		}
@@ -155,17 +160,17 @@ namespace Project_UnitTests
 
 			await MockHelper.SetupGetTask(taskIdForMockSetup, DbSetTaskMock, AllTasks);
 
-			if (Equals(exceptionType, typeof(ArgumentNullException)))
+			switch (exceptionType)
 			{
-				Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.GetAsync(id!));
-			}
-			else if (Equals(exceptionType, typeof(ArgumentOutOfRangeException)))
-			{
-				Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await taskRepo.GetAsync(id!));
-			}
-			else
-			{
-				Assert.ThrowsAsync<ArgumentException>(async () => await taskRepo.GetAsync(id!));
+				case Type argExNull when argExNull == typeof(ArgumentNullException):
+					Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.GetAsync(id!));
+					break;
+				case Type argExOutOfRange when argExOutOfRange == typeof(ArgumentOutOfRangeException):
+					Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await taskRepo.GetAsync(id!));
+					break;
+				case Type argEx when argEx == typeof(ArgumentException):
+					Assert.ThrowsAsync<ArgumentException>(async () => await taskRepo.GetAsync(id!));
+					break;
 			}
 		}
 
@@ -237,7 +242,7 @@ namespace Project_UnitTests
 
 			var itemsNumberAfterDelete = this.AllTasks.Count;
 
-			// I don't now why but I have to "refresh" this.AllTasks because somehow it can get "deleted" task from memory.
+			// I don't know why but I have to "refresh" this.AllTasks because somehow it can get "deleted" task from memory.
 			await MockHelper.SetupGetTask(assertTaskId, DbSetTaskMock, AllTasks);
 			TaskModel? resultOfGetRemovedTask = await TaskRepo.GetAsync(assertTaskId);
 
@@ -311,12 +316,12 @@ namespace Project_UnitTests
 
 			List<TaskModel>? nullRange = null;
 			await MockHelper.SetupAddTasksRange(nullRange!, AllTasks, DbSetTaskMock, ActionsOnDbToSave);
-			
+
 			Assert.ThrowsAsync<ArgumentNullException>(async () => await taskRepo.AddRangeAsync(nullRange!));
 		}
 
 		[Test]
-		public async Task ContainsAnyShouldSucced()
+		public async Task ContainsAnyShouldSucceed()
 		{
 			using AutoMock mock = RegisterContextInstance();
 			var dataUnitOfWork = mock.Create<IDataUnitOfWork>();
