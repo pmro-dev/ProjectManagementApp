@@ -8,6 +8,8 @@ Below is my coding history of preperation to training and selecting process (3 w
 
 ![image](https://user-images.githubusercontent.com/34062651/227588476-2e8c3db3-e4ff-498a-bbb7-7a6358d2e68e.png)
 
+Update: Project development and commits history slowed down because of preparation to Summer Internship opportunities ;)
+
 For the training purpose it supposed to be a simple To Do List app that could allow to become familiar with the ASP.NET Core MVC:
 
 ![ToDoListAppAnimationShort](https://user-images.githubusercontent.com/34062651/227597191-2b70d5e4-b014-4f59-ae02-2a7728c498fa.gif)
