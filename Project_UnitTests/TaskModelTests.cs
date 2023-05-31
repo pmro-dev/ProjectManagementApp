@@ -1,5 +1,4 @@
-﻿
-using Project_UnitTests.Helpers;
+﻿using Project_UnitTests.Helpers;
 using Project_DomainEntities;
 using Project_DomainEntities.Helpers;
 

@@ -45,10 +45,7 @@ namespace Project_IdentityDomainEntities
 
 		public override bool Equals(object? obj)
 		{
-			if (obj == null || !GetType().Equals(obj.GetType()))
-			{
-				return false;
-			}
+			if (obj == null || !GetType().Equals(obj.GetType())) { return false; }
 			else
 			{
 				var user = (UserModel)obj;

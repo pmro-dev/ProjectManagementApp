@@ -11,7 +11,6 @@ namespace Project_UnitTests
 	/// </summary>
 	public class DatabaseOperationsTests : BaseOperationsSetup
 	{
-		private static readonly string MessageInvalidResult = "Repository returned null value!";
 
 		private static readonly object[] ValidTasksExamples = TasksData.ValidTasksExamples;
 
@@ -26,7 +25,7 @@ namespace Project_UnitTests
 			await DataUnitOfWork.SaveChangesAsync();
 			await MockHelper.SetupGetTask(assertTask.Id, DbSetTaskMock, TasksCollection);
 			
-			TaskModel resultTask = await TaskRepo.GetAsync(assertTask.Id) ?? throw new AssertionException(MessageInvalidResult);
+			TaskModel resultTask = await TaskRepo.GetAsync(assertTask.Id) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
 			Assert.Multiple(() =>
 			{
@@ -56,7 +55,7 @@ namespace Project_UnitTests
 
 			await MockHelper.SetupGetTask(assertTask.Id, DbSetTaskMock, TasksCollection);
 
-			var resultTask = await TaskRepo.GetAsync(assertTask.Id) ?? throw new AssertionException(MessageInvalidResult);
+			var resultTask = await TaskRepo.GetAsync(assertTask.Id) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
 			Assert.Multiple(() =>
 			{
@@ -126,18 +125,17 @@ namespace Project_UnitTests
 		[Test]
 		public async Task UpdateTaskShouldSucceed()
 		{
-			int taskToUpdateId = TodoListsCollection.First().Id;
-
+			int taskToUpdateId = TasksCollection.First().Id;
 			await MockHelper.SetupGetTask(taskToUpdateId, DbSetTaskMock, TasksCollection);
+			TaskModel taskToUpdate = await TaskRepo.GetAsync(taskToUpdateId) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
-			TaskModel taskToUpdate = await TaskRepo.GetAsync(taskToUpdateId) ?? throw new AssertionException(MessageInvalidResult);
-			TasksData.PrepareUpdatedTask(taskToUpdate);
-
+			TasksData.ModifyTaskData(taskToUpdate);
 			await MockHelper.SetupUpdateTask(taskToUpdate, DbSetTaskMock, TasksCollection, UnitOfWorkActionsForSaveChanges);
+
 			await TaskRepo.Update(taskToUpdate);
 			await DataUnitOfWork.SaveChangesAsync();
 
-			TaskModel updatedTask = await TaskRepo.GetAsync(taskToUpdateId) ?? throw new AssertionException(MessageInvalidResult);
+			TaskModel updatedTask = await TaskRepo.GetAsync(taskToUpdateId) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 			Assert.Multiple(() =>
 			{
 				Assert.That(updatedTask.Title, Is.EqualTo(taskToUpdate.Title));
@@ -164,8 +162,7 @@ namespace Project_UnitTests
 		{
 			var itemsNumberBeforeDelete = TasksCollection.Count;
 			await MockHelper.SetupGetTask(assertTaskId, DbSetTaskMock, TasksCollection);
-
-			TaskModel taskToRemove = await TaskRepo.GetAsync(assertTaskId) ?? throw new AssertionException(MessageInvalidResult);
+			TaskModel taskToRemove = await TaskRepo.GetAsync(assertTaskId) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
 			await MockHelper.SetupDeleteTask(taskToRemove, DbSetTaskMock, TasksCollection, UnitOfWorkActionsForSaveChanges);
 			await TaskRepo.Remove(taskToRemove);

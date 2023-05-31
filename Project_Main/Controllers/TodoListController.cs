@@ -48,13 +48,7 @@ namespace Project_Main.Controllers
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Briefly), controllerName);
 
-			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-			if (signedInUserId is null)
-			{
-				throw new InvalidOperationException("Error with signed In User");
-			}
-
+			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("Error with signed In User");
 			var todoListRepo = _dataUnitOfWork.TodoListRepository;
 			List<TodoListModel> todoLists = await todoListRepo.GetAllWithDetailsAsync(signedInUserId);
 

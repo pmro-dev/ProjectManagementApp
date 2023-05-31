@@ -177,7 +177,7 @@ namespace Project_UnitTests.Helpers
 
 		public static readonly string RangeSuffix = "Range Test";
 
-		public static TaskModel PrepareUpdatedTask(TaskModel taskToUpdate)
+		public static TaskModel ModifyTaskData(TaskModel taskToUpdate)
 		{
 			taskToUpdate.Title = "New Title Set";
 			taskToUpdate.Description = "Lorem Ipsum lorem lorem ipsum Lorem Ipsum lorem lorem ipsum";

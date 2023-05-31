@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-
-namespace Project_Main.Infrastructure.Helpers
+﻿namespace Project_Main.Infrastructure.Helpers
 {
     public static class HelperOther
     {
