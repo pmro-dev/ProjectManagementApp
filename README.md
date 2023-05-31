@@ -26,8 +26,6 @@ MONDAY.COM:
 
 ![image](https://user-images.githubusercontent.com/34062651/227597593-b4a8dbc6-0fa7-45e5-aa13-ecec40c883c0.png)
 
-I'm not a frontend developer but we will see what I can achieve ;)
-
 I designed a few visualizations of app (by using GIMP).
 
 ![PM DASHBOARDS](https://user-images.githubusercontent.com/34062651/228310052-f25319eb-1db3-4f94-8d80-f32f99688405.gif)
