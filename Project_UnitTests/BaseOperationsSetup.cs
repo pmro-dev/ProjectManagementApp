@@ -111,7 +111,9 @@ namespace Project_UnitTests
 			dbContextMock.Setup(context => context.Set<TaskModel>())
 				.Returns(DbSetTaskMock.Object);
 
-			MockHelper.SetupDbContextSaveChangesAsync(dbContextMock, UnitOfWorkActionsForSaveChanges);
+			dbContextMock.Setup(context => context.Set<TodoListModel>())
+				.Returns(DbSetTodoListMock.Object);
+
 			GenericMockSetup<TaskModel>.SetupDbContextSaveChangesAsync(dbContextMock, UnitOfWorkOperations);
 			var tempTodoListRepo = new TodoListRepository(dbContextMock.Object, TodoListRepoLoggerMock.Object);
 			var tempTaskRepo = new TaskRepository(dbContextMock.Object, TaskRepoLoggerMock.Object);
