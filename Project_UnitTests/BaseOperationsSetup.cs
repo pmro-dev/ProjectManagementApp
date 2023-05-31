@@ -31,7 +31,7 @@ namespace Project_UnitTests
 		protected DataUnitOfWork DataUnitOfWork { get; set; }
 		protected ITodoListRepository TodoListRepo { get; set; }
 		protected ITaskRepository TaskRepo { get; set; }
-		protected List<Action> UnitOfWorkActionsForSaveChanges { get; set; } = new();
+		protected List<Action> UnitOfWorkOperations { get; set; } = new();
 
 		#endregion
 
@@ -74,7 +74,7 @@ namespace Project_UnitTests
         [Order(2)]
         public void SetupOnEachTest()
         {
-			ClearUnitOfWorkActionsCache();
+			ClearUnitOfWorkOperationsCache();
 			SetupDefaultDataForTasksCollection();
 			SetupUnitOfWorkMocks();
 
@@ -92,9 +92,9 @@ namespace Project_UnitTests
 			});
 		}
 
-		private void ClearUnitOfWorkActionsCache()
+		private void ClearUnitOfWorkOperationsCache()
 		{
-			UnitOfWorkActionsForSaveChanges = new();
+			UnitOfWorkOperations = new();
 		}
 
 		private void SetupDefaultDataForTasksCollection()
@@ -112,9 +112,10 @@ namespace Project_UnitTests
 				.Returns(DbSetTaskMock.Object);
 
 			MockHelper.SetupDbContextSaveChangesAsync(dbContextMock, UnitOfWorkActionsForSaveChanges);
+			GenericMockSetup<TaskModel>.SetupDbContextSaveChangesAsync(dbContextMock, UnitOfWorkOperations);
 			var tempTodoListRepo = new TodoListRepository(dbContextMock.Object, TodoListRepoLoggerMock.Object);
 			var tempTaskRepo = new TaskRepository(dbContextMock.Object, TaskRepoLoggerMock.Object);
-			DataUnitOfWork = new(dbContextMock.Object, tempTodoListRepo, tempTaskRepo);
+			DataUnitOfWork = new DataUnitOfWork(dbContextMock.Object, tempTodoListRepo, tempTaskRepo);
 		}
 	}
 }
