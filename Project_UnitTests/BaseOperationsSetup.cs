@@ -44,12 +44,12 @@ namespace Project_UnitTests
 		[Order(1)]
 		public void SetupOnce()
         {
-			TasksData.PrepareData();
-			AssignDataToCollections();
+			DataService.PrepareAllData();
+			SetDefaultDataCollection();
 			InitUnitOfWorkMocks();
 		}
 
-		private void AssignDataToCollections()
+		private void SetDefaultDataCollection()
 		{
 			DefaultTodoListsCollection = TasksData.TodoListsCollection;
 			DefaultTasksCollection = TasksData.TasksCollection;
