@@ -1,7 +1,6 @@
 ﻿using Moq;
 using Project_DomainEntities;
 using Project_Main.Models.DataBases.AppData;
-using Project_Main.Models.DataBases.General;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Project_UnitTests.Helpers;
@@ -25,14 +24,11 @@ namespace Project_UnitTests
 		protected Mock<DbSet<TaskModel>> DbSetTaskMock { get; set; }
         protected Mock<DbSet<TodoListModel>> DbSetTodoListMock { get; set; }
 		protected Mock<ILogger<TodoListRepository>> TodoListRepoLoggerMock { get; set; }
-		protected Mock<ILogger<GenericRepository<TodoListModel>>> GenericTodoListRepoLoggerMock { get; set; }
 		protected Mock<ILogger<TaskRepository>> TaskRepoLoggerMock { get; set; }
-		protected Mock<ILogger<GenericRepository<TaskModel>>> GenericTaskRepoLoggerMock { get; set; }
-		protected Mock<ILogger<CustomAppDbContext>> AppDbContextLoggerMock { get; set; }
 		protected DataUnitOfWork DataUnitOfWork { get; set; }
 		protected ITodoListRepository TodoListRepo { get; set; }
 		protected ITaskRepository TaskRepo { get; set; }
-		protected List<Action> UnitOfWorkOperations { get; set; } = new();
+		protected List<Action> DbOperationsToExecute { get; set; } = new();
 
 		#endregion
 
@@ -55,7 +51,7 @@ namespace Project_UnitTests
 
 		private void AssignDataToCollections()
 		{
-			TodoListsCollection = TasksData.TodoListsCollection;
+			DefaultTodoListsCollection = TasksData.TodoListsCollection;
 			DefaultTasksCollection = TasksData.TasksCollection;
 		}
 
@@ -63,14 +59,8 @@ namespace Project_UnitTests
 		{
 			TodoListRepoLoggerMock = new();
 			TaskRepoLoggerMock = new();
-			AppDbContextLoggerMock = new();
-			GenericTodoListRepoLoggerMock = new();
-			GenericTaskRepoLoggerMock = new();
 		}
 
-		/// <summary>
-		/// SetupOnEachTest mock appContext, TODOLists DbSet and Tasks DbSet for contextOperations.
-		/// </summary>
 		[SetUp]
         [Order(2)]
         public void SetupOnEachTest()
@@ -95,7 +85,7 @@ namespace Project_UnitTests
 
 		private void ClearUnitOfWorkOperationsCache()
 		{
-			UnitOfWorkOperations = new();
+			DbOperationsToExecute = new();
 		}
 
 		private void SetupDefaultDataForCollections()
@@ -116,7 +106,7 @@ namespace Project_UnitTests
 			dbContextMock.Setup(context => context.Set<TodoListModel>())
 				.Returns(DbSetTodoListMock.Object);
 
-			GenericMockSetup<TaskModel>.SetupDbContextSaveChangesAsync(dbContextMock, UnitOfWorkOperations);
+			GenericMockSetup<TaskModel>.SetupDbContextSaveChangesAsync(dbContextMock, DbOperationsToExecute);
 			var tempTodoListRepo = new TodoListRepository(dbContextMock.Object, TodoListRepoLoggerMock.Object);
 			var tempTaskRepo = new TaskRepository(dbContextMock.Object, TaskRepoLoggerMock.Object);
 			DataUnitOfWork = new DataUnitOfWork(dbContextMock.Object, tempTodoListRepo, tempTaskRepo);
