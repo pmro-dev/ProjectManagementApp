@@ -21,6 +21,7 @@ namespace Project_UnitTests
 		protected List<TaskModel> TasksCollection { get; set; }
 		protected List<TaskModel> DefaultTasksCollection { get; set; }
 		protected List<TodoListModel> TodoListsCollection { get; set; }
+		protected List<TodoListModel> DefaultTodoListsCollection { get; set; }
 		protected Mock<DbSet<TaskModel>> DbSetTaskMock { get; set; }
         protected Mock<DbSet<TodoListModel>> DbSetTodoListMock { get; set; }
 		protected Mock<ILogger<TodoListRepository>> TodoListRepoLoggerMock { get; set; }
@@ -75,7 +76,7 @@ namespace Project_UnitTests
         public void SetupOnEachTest()
         {
 			ClearUnitOfWorkOperationsCache();
-			SetupDefaultDataForTasksCollection();
+			SetupDefaultDataForCollections();
 			SetupUnitOfWorkMocks();
 
 			using AutoMock mock = RegisterMockInstance();
@@ -97,9 +98,10 @@ namespace Project_UnitTests
 			UnitOfWorkOperations = new();
 		}
 
-		private void SetupDefaultDataForTasksCollection()
+		private void SetupDefaultDataForCollections()
 		{
 			TasksCollection = new(DefaultTasksCollection);
+			TodoListsCollection = new(DefaultTodoListsCollection);
 		}
 
 		private void SetupUnitOfWorkMocks()
