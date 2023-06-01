@@ -115,7 +115,7 @@ namespace Project_Main.Controllers
 
 				var taskViewModel = new TaskViewModel()
 				{
-					TodoListName = targetTodoList.Name,
+					TodoListName = targetTodoList.Title,
 					TodoListId = targetTodoList.Id,
 					UserId = targetTodoList.UserId,
 					ReminderDate = null
@@ -207,7 +207,7 @@ namespace Project_Main.Controllers
 			string dataValueField = "Value";
 			string dataTextField = "Text";
 
-			var todoListsSelectorData = new SelectList(tempTodoLists, nameof(TodoListModel.Id), nameof(TodoListModel.Name), todoListId);
+			var todoListsSelectorData = new SelectList(tempTodoLists, nameof(TodoListModel.Id), nameof(TodoListModel.Title), todoListId);
 			var statusesSelectorData = new SelectList(Enum.GetValues(typeof(TaskStatusType)).Cast<TaskStatusType>().Select(v => new SelectListItem
 			{
 				Text = v.ToString(),
@@ -226,7 +226,7 @@ namespace Project_Main.Controllers
 				Status = taskModel.Status,
 				StatusSelector = statusesSelectorData,
 				TodoListId = taskModel.TodoListId,
-				TodoListName = targetTodoList.Name,
+				TodoListName = targetTodoList.Title,
 				UserId = taskModel.UserId,
 				TodoListsSelector = todoListsSelectorData
 			};

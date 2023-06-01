@@ -16,7 +16,7 @@
 
 @foreach (var item in Model)
 {
-	ViewData["TableTitle"] = item.Name;
+	ViewData["TableTitle"] = item.Title;
 	sortedTasks = item.Tasks.ToList();
 	sortedTasks.Sort(new TasksComparer());
 	<partial name="_TodoListTableDetails" model="@sortedTasks" view-data="ViewData" />

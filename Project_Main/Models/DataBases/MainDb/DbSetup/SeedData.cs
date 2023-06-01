@@ -178,22 +178,22 @@ namespace Project_Main.Models.DataBases.AppData.DbSetup
             TodoLists = new List<TodoListModel>()
             {
                 new TodoListModel{
-                    Name = "App UX",
+                    Title = "App UX",
                     Tasks = TasksUX,
                     UserId = AdminId
                 },
                 new TodoListModel{
-                    Name = "App Backend",
+                    Title = "App Backend",
                     Tasks = TasksBackend,
                     UserId = AdminId
                 },
                 new TodoListModel{
-                    Name = "App Testing",
+                    Title = "App Testing",
                     Tasks = TasksTesting,
                     UserId = AdminId
                 },
                 new TodoListModel{
-                    Name = "Project Management",
+                    Title = "Project Management",
                     Tasks = TasksProjectManagement,
                     UserId = AdminId
                 },

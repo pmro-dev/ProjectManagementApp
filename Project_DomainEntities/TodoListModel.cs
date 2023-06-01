@@ -21,7 +21,7 @@ namespace Project_DomainEntities
 		[Required]
 		[MaxLength(AttributesHelper.NameMaxLength)]
 		[MinLength(AttributesHelper.NameMinLength)]
-		public string Name { get; set; } = string.Empty;
+		public override string Title { get; set; } = string.Empty;
 
 		/// <summary>
 		/// Owner id.
@@ -49,7 +49,7 @@ namespace Project_DomainEntities
 			{
 				var todoList = (TodoListModel)obj;
 
-				if (Name == todoList.Name)
+				if (Title == todoList.Title)
 				{
 					if (Tasks is null && todoList.Tasks is null)
 					{
@@ -87,7 +87,7 @@ namespace Project_DomainEntities
 			}
 			else
 			{
-				if (Name == obj.Name)
+				if (Title == obj.Title)
 				{
 					if (Tasks is null && obj.Tasks is null)
 					{
@@ -118,7 +118,7 @@ namespace Project_DomainEntities
 		/// <returns></returns>
 		public override int GetHashCode()
 		{
-			return HashCode.Combine(Name, Id);
+			return HashCode.Combine(Title, Id);
 		}
 	}
 }

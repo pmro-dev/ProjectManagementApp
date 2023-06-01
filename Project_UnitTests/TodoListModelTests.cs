@@ -34,7 +34,7 @@ namespace Project_UnitTests
 		{
 			TodoListModel newValidTodoList = new()
 			{
-				Name = name,
+				Title = name,
 				UserId = AdminId
 			};
 
@@ -57,7 +57,7 @@ namespace Project_UnitTests
 		{
 			TodoListModel newInvalidTodoList = new()
 			{
-				Name = name,
+				Title = name,
 				UserId = AdminId
 			};
 

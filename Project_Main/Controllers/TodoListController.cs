@@ -122,7 +122,7 @@ namespace Project_Main.Controllers
 			TodoListViewModel todoListViewModel = new()
 			{
 				Id = todoListFromDb.Id,
-				Name = todoListFromDb.Name,
+				Name = todoListFromDb.Title,
 				TasksForToday = allTodoListTasks.Where(t => t.DueDate.ToShortDateString() == todayDate.ToShortDateString() && t.Status != TaskStatusHelper.TaskStatusType.Completed).ToList(),
 				TasksCompleted = allTodoListTasks.Where(t => t.Status == TaskStatusHelper.TaskStatusType.Completed && t.DueDate.CompareTo(todayDate) > DateCompareValueEarlier).ToList(),
 				TasksNotCompleted = allTodoListTasks.Where(t =>
@@ -173,7 +173,7 @@ namespace Project_Main.Controllers
 			{
 				var todoListRepository = _dataUnitOfWork.TodoListRepository;
 
-				if (await todoListRepository.DoesAnyExistWithSameNameAsync(todoListModel.Name))
+				if (await todoListRepository.DoesAnyExistWithSameNameAsync(todoListModel.Title))
 				{
 					ModelState.AddModelError(string.Empty, Messages.NameTaken);
 

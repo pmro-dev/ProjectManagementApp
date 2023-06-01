@@ -20,7 +20,7 @@ namespace Project_Main.Models.DataBases.AppData
         public async Task<bool> DoesAnyExistWithSameNameAsync(string name)
         {
             return await _dbContext.Set<TodoListModel>()
-                .AnyAsync(todoList => todoList.Name == name);
+                .AnyAsync(todoList => todoList.Title == name);
         }
 
         public async Task DuplicateWithDetailsAsync(int id)
@@ -43,7 +43,7 @@ namespace Project_Main.Models.DataBases.AppData
             TodoListModel newTodoList = new()
             {
                 Id = 0,
-                Name = todoListWithDetails.Name,
+                Title = todoListWithDetails.Title,
                 Tasks = todoListWithDetails.Tasks.Select(t => new TaskModel()
                 {
                     Id = 0,
