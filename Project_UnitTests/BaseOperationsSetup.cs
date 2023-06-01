@@ -17,7 +17,7 @@ namespace Project_UnitTests
     {
 		#region PROPERTIES
 
-		protected List<TaskModel> TasksCollection { get; set; }
+		protected static List<TaskModel> TasksCollection { get; set; }
 		protected List<TaskModel> DefaultTasksCollection { get; set; }
 		protected List<TodoListModel> TodoListsCollection { get; set; }
 		protected List<TodoListModel> DefaultTodoListsCollection { get; set; }

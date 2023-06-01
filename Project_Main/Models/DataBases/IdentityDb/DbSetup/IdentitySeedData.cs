@@ -133,7 +133,7 @@ namespace Project_Main.Models.DataBases.Identity.DbSetup
 
             if (adminUser != null && !adminUser.UserRoles.Any() && roleForAdmin != null)
             {
-                UserRoleModel roleModel = new UserRoleModel()
+                UserRoleModel roleModel = new()
                 {
                     UserId = adminUser.UserId,
                     User = adminUser,

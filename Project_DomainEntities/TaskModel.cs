@@ -20,7 +20,7 @@ namespace Project_DomainEntities
         [Required]
         [MaxLength(AttributesHelper.TitleMaxLength)]
         [MinLength(AttributesHelper.TitleMinLength)]
-        public string Title { get; set; } = string.Empty;
+        public override string Title { get; set; } = string.Empty;
 
         [Required]
 		[DataType(DataType.MultilineText)]

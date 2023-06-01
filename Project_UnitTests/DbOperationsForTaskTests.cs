@@ -11,12 +11,42 @@ namespace Project_UnitTests
 	/// </summary>
 	public class DatabaseOperationsTests : BaseOperationsSetup
 	{
-		private static readonly object[] ValidTasksExamples = TasksData.ValidTasksExamples;
+		private static void ModifyTaskData(TaskModel taskToUpdate)
+		{
+			taskToUpdate.Title = "New Title Set";
+			taskToUpdate.Description = "Lorem Ipsum lorem lorem ipsum Lorem Ipsum lorem lorem ipsum";
+			taskToUpdate.DueDate = DateTime.Now;
+		}
+
+		private static TaskModel PrepareTask(string taskTitle, string taskDescription, DateTime taskDueDate)
+		{
+			int IndexValueOne = 1;
+			string TitleSuffix = "NEW";
+
+			return new TaskModel()
+			{
+				Id = TasksCollection.Last().Id + IndexValueOne,
+				Title = taskTitle + TitleSuffix,
+				Description = taskDescription,
+				DueDate = taskDueDate,
+				TodoListId = 0
+			};
+		}
+
+		private static readonly object[] ValidTasksExamples = TasksData.ValidTasks;
+
+		[Test]
+		public async Task ContainsAnyShouldSucceed()
+		{
+			var result = await TaskRepo.ContainsAny();
+
+			Assert.That(result, Is.True);
+		}
 
 		[TestCaseSource(nameof(ValidTasksExamples))]
 		public async Task AddTaskShouldSucceed(string taskTitle, string taskDescription, DateTime taskDueDate)
 		{
-			var assertTask = TasksData.PrepareTask(taskTitle, taskDescription, taskDueDate);
+			var assertTask = PrepareTask(taskTitle, taskDescription, taskDueDate);
 
 			await GenericMockSetup<TaskModel>.SetupAddEntity(assertTask, TasksCollection, DbSetTaskMock, DbOperationsToExecute);
 			await TaskRepo.AddAsync(assertTask);
@@ -128,7 +158,7 @@ namespace Project_UnitTests
 			await GenericMockSetup<TaskModel>.SetupGetEntity(taskToUpdateId, DbSetTaskMock, TasksCollection);
 			TaskModel taskToUpdate = await TaskRepo.GetAsync(taskToUpdateId) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
-			TasksData.ModifyTaskData(taskToUpdate);
+			ModifyTaskData(taskToUpdate);
 			await GenericMockSetup<TaskModel>.SetupUpdateEntity(taskToUpdate, DbSetTaskMock, TasksCollection, DbOperationsToExecute);
 
 			await TaskRepo.Update(taskToUpdate);
@@ -207,13 +237,13 @@ namespace Project_UnitTests
 		[Test]
 		public async Task AddTasksAsRangeShouldSucceed()
 		{
-			var tasksRange = TasksData.PrepareTasksRange();
+			var tasksRange = TasksData.PrepareRange();
 
 			await GenericMockSetup<TaskModel>.SetupAddEntitiesRange(tasksRange, TasksCollection, DbSetTaskMock, DbOperationsToExecute);
 			await TaskRepo.AddRangeAsync(tasksRange);
 			await DataUnitOfWork.SaveChangesAsync();
 
-			var tasksFromDb = await TaskRepo.GetAllByFilterAsync(t => t.Title.Contains(TasksData.RangeSuffix));
+			var tasksFromDb = await TaskRepo.GetAllByFilterAsync(t => t.Title.Contains(TasksData.TaskRangeSuffix));
 
 			Assert.That(tasksFromDb.Count(), Is.EqualTo(tasksRange.Count));
 		}
@@ -226,14 +256,6 @@ namespace Project_UnitTests
 			await GenericMockSetup<TaskModel>.SetupAddEntitiesRange(nullRange!, TasksCollection, DbSetTaskMock, DbOperationsToExecute);
 
 			Assert.ThrowsAsync<ArgumentNullException>(async () => await TaskRepo.AddRangeAsync(nullRange!));
-		}
-
-		[Test]
-		public async Task ContainsAnyShouldSucceed()
-		{
-			var result = await TaskRepo.ContainsAny();
-
-			Assert.That(result, Is.True);
 		}
 	}
 }
