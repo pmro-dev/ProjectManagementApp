@@ -19,7 +19,7 @@ namespace Project_UnitTests
 
 		protected static List<TaskModel> TasksCollection { get; set; }
 		protected List<TaskModel> DefaultTasksCollection { get; set; }
-		protected List<TodoListModel> TodoListsCollection { get; set; }
+		protected static List<TodoListModel> TodoListsCollection { get; set; }
 		protected List<TodoListModel> DefaultTodoListsCollection { get; set; }
 		protected Mock<DbSet<TaskModel>> DbSetTaskMock { get; set; }
         protected Mock<DbSet<TodoListModel>> DbSetTodoListMock { get; set; }
@@ -51,7 +51,7 @@ namespace Project_UnitTests
 
 		private void SetDefaultDataCollection()
 		{
-			DefaultTodoListsCollection = TasksData.TodoListsCollection;
+			DefaultTodoListsCollection = TodoListsData.TodoListsCollection;
 			DefaultTasksCollection = TasksData.TasksCollection;
 		}
 
