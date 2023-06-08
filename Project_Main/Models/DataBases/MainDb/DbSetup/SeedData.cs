@@ -9,7 +9,7 @@ namespace Project_Main.Models.DataBases.AppData.DbSetup
     public class SeedData
     {
         protected const string DueDateFormat = "yyyy MM dd HH':'mm";
-        private const string AdminId = "adminId";
+        public string AdminId { get; } = "adminId";
 
         /// <summary>
         /// All Tasks for Database Set.

@@ -13,6 +13,7 @@ namespace Project_UnitTests.Helpers
 
 		private static int AllTasksCount;
 		private const string DueDateFormat = "yyyy MM dd HH':'mm";
+		private static string adminId = string.Empty;
 
 		public static readonly object[] ValidTasks = new object[]
 		{
@@ -43,6 +44,9 @@ namespace Project_UnitTests.Helpers
 
 		public static void PrepareData(SeedData seedBaseData)
 		{
+			ArgumentNullException.ThrowIfNull(seedBaseData);
+
+			adminId = seedBaseData.AdminId;
 			SetIdsForTasks(seedBaseData);
 			SetTodoListIdsForTasks();
 			SeedAllTasks();
@@ -128,23 +132,19 @@ namespace Project_UnitTests.Helpers
 					TasksProjectManagement[i].TodoListId = 4;
 				}
 			}
-			else
-			{
-				throw new InvalidOperationException("Number of elements in tasks lists have to be the same to execute this part of code!");
-			}
+			else { throw new InvalidOperationException("Number of elements in tasks lists have to be the same to execute this part of code!"); }
 		}
 
 		public static readonly string TaskRangeSuffix = "Task Range Test";
 
-		public static List<TaskModel> PrepareRange()
+		public static List<TaskModel> PrepareRange() 
 		{
-			return new List<TaskModel>()
-			{
-				new TaskModel(){ Title = "First " + TaskRangeSuffix, Description = "First Description", DueDate = DateTime.ParseExact("2023 10 27 10:30", DueDateFormat, null)},
-				new TaskModel(){ Title = "Second " + TaskRangeSuffix, Description = "Second Description", DueDate = DateTime.ParseExact("2023 08 22 09:00", DueDateFormat, null)},
-				new TaskModel(){ Title = "Third " + TaskRangeSuffix, Description = "Third Description", DueDate = DateTime.ParseExact("2023 09 12 09:30", DueDateFormat, null)},
-				new TaskModel(){ Title = "Fourth " + TaskRangeSuffix, Description = "Fourth Description", DueDate = DateTime.ParseExact("2023 11 07 12:30", DueDateFormat, null)},
-				new TaskModel(){ Title = "Fifth " + TaskRangeSuffix, Description = "Fifth Description", DueDate = DateTime.ParseExact("2023 06 30 11:00", DueDateFormat, null)}
+			return new List<TaskModel>() {
+				new TaskModel(){ Title = "First " + TaskRangeSuffix, Description = "First Description", UserId = adminId, DueDate = DateTime.ParseExact("2023 10 27 10:30", DueDateFormat, null)},
+				new TaskModel(){ Title = "Second " + TaskRangeSuffix, Description = "Second Description", UserId = adminId, DueDate = DateTime.ParseExact("2023 08 22 09:00", DueDateFormat, null)},
+				new TaskModel(){ Title = "Third " + TaskRangeSuffix, Description = "Third Description", UserId = adminId, DueDate = DateTime.ParseExact("2023 09 12 09:30", DueDateFormat, null)},
+				new TaskModel(){ Title = "Fourth " + TaskRangeSuffix, Description = "Fourth Description", UserId = adminId, DueDate = DateTime.ParseExact("2023 11 07 12:30", DueDateFormat, null)},
+				new TaskModel(){ Title = "Fifth " + TaskRangeSuffix, Description = "Fifth Description", UserId = adminId, DueDate = DateTime.ParseExact("2023 06 30 11:00", DueDateFormat, null)}
 			};
 		}
 	}
