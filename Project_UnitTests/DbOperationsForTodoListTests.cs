@@ -4,10 +4,10 @@ using Project_UnitTests.Helpers;
 
 namespace Project_UnitTests
 {
-    /// <summary>
-    /// Unit Test Class for Database tests with Mocking (DbContext) approach.
-    /// </summary>
-    public class DbOperationsForTodoListTests : BaseOperationsSetup
+	/// <summary>
+	/// Unit Test Class for Database tests with Mocking (DbContext) approach.
+	/// </summary>
+	public class DbOperationsForTodoListTests : BaseOperationsSetup
 	{
 		private static void ModifyTodoListData(TodoListModel todoListToUpdate)
 		{
@@ -73,6 +73,47 @@ namespace Project_UnitTests
 			{
 				DbSetTodoListMock.Verify(x => x.FindAsync(It.IsAny<object>()), Times.Once);
 				Assert.That(resultTodoList, Is.EqualTo(assertTodoList));
+			});
+		}
+
+		[TestCase(1)]
+		[TestCase(2)]
+		[TestCase(3)]
+		[TestCase(4)]
+		public async Task GetTodoListWithDetailsShouldSucceed(int todoListId)
+		{
+			var assertTodoList = TodoListsCollection.Single(t => t.Id == todoListId);
+
+			await GenericMockSetup<TodoListModel>.SetupGetEntity(assertTodoList.Id, DbSetTodoListMock, TodoListsCollection);
+
+			var resultTodoList = await TodoListRepo.GetWithDetailsAsync(assertTodoList.Id) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
+
+			Assert.Multiple(() =>
+			{
+				CollectionAssert.AreEqual(resultTodoList.Tasks, assertTodoList.Tasks);
+				Assert.That(resultTodoList, Is.EqualTo(assertTodoList));
+			});
+		}
+
+		[TestCase(-1)]
+		[TestCase(-10)]
+		public Task AttemptToGetTodoListWithDetailsByInvalidIdShouldThrowException(int invalidTodoListId)
+		{
+			return Task.Run(() =>
+				Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await TodoListRepo.GetWithDetailsAsync(invalidTodoListId))
+			);
+		}
+
+		[Test]
+		public async Task GetAllTodoListsWithDetailsShouldSucceed()
+		{
+			var expected = TodoListsCollection;
+			var actual = await TodoListRepo.GetAllWithDetailsAsync(AdminId);
+
+			Assert.Multiple(() =>
+			{
+				Assert.That(actual, Is.Not.EqualTo(null));
+				Assert.That(expected.SequenceEqual(actual), Is.True);
 			});
 		}
 
@@ -174,6 +215,22 @@ namespace Project_UnitTests
 			Assert.ThrowsAsync<ArgumentNullException>(async () => await TodoListRepo.Update(NullTodoList!));
 		}
 
+		[Test]
+		public async Task UpdateTodoListTasksShouldSucceed()
+		{
+			int todoListToUpdateId = TodoListsCollection.First().Id;
+			var newTasks = TasksData.PrepareRange();
+
+			TodoListModel? todoListToUpdate = await TodoListRepo.GetWithDetailsAsync(todoListToUpdateId) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
+			todoListToUpdate.Tasks = newTasks;
+			await TodoListRepo.Update(todoListToUpdate);
+			await DataUnitOfWork.SaveChangesAsync();
+
+			TodoListModel? updatedTodoList = await TodoListRepo.GetWithDetailsAsync(todoListToUpdateId) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
+
+			CollectionAssert.AreEqual(updatedTodoList.Tasks, newTasks);
+		}
+
 		[TestCase(1)]
 		[TestCase(2)]
 		[TestCase(3)]
@@ -248,183 +305,5 @@ namespace Project_UnitTests
 
 			Assert.ThrowsAsync<ArgumentNullException>(async () => await TodoListRepo.AddRangeAsync(nullRange!));
 		}
-
-		//        [TestCase(1)]
-		//		[TestCase(2)]
-		//		[TestCase(3)]
-		//		[TestCase(4)]
-		//		public async Task GetTodoListWithDetailsShouldSucceed(int listId)
-		//		{
-		//			var assertTodoList = this.TodoListsCollection.Single(l => l.Id == listId);
-		//			using AutoMock mock = RegisterContextInstance();
-		//			await SetupMockGetTodoListWithDetails(assertTodoList.Id);
-		//			var mockContext = mock.Create<IContextOperations>();
-
-		//			var expected = assertTodoList;
-		//			var result = await mockContext.GetTodoListWithDetailsAsync(assertTodoList.Id, AdminId) ?? throw new AssertionException("Cannot find targeted result in seeded data for unit tests.");
-		//            this.MainDbContextMock.Verify(x => x.GetTodoListWithDetailsAsync(assertTodoList.Id, AdminId), Times.Once);
-		//			Assert.That(expected.IsTheSame(result), Is.True);
-		//		}
-
-		//        /// <summary>
-		//        /// Tests <see cref="ContextOperations"/> - Get TodoList with details - operation that should failed and throw exception.
-		//        /// </summary>
-		//        /// <param name="listId">Invalid TodoList id.</param>
-		//        [TestCase(-1)]
-		//        [TestCase(-10)]
-		//        public async Task AttemptToGetTodoListWithDetailsWithInvalidIdShouldThrowException(int invalidListId)
-		//		{
-		//            using AutoMock mock = RegisterContextInstance();
-		//            await SetupMockGetTodoListWithDetailsForException();
-		//            var mockContext = mock.Create<IContextOperations>();
-
-		//			Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await mockContext.GetTodoListWithDetailsAsync(invalidListId, AdminId));
-		//        }
-
-		//        /// <summary>
-		//        /// Tests <see cref="ContextOperations.GetAllTodoListsWithDetailsAsync"/> - Get All TodoListsCollection with details - operation as success attempt.
-		//        /// </summary>
-		//        [Test]
-		//		public async Task GetAllTodoListsWithDetailsShouldSucceed()
-		//		{
-		//			using AutoMock mock = RegisterContextInstance();
-		//			await SetupMockGetAllTodoListsWithDetails();
-		//			var mockContext = mock.Create<IContextOperations>();
-		//			var expected = this.TodoListsCollection;
-		//			var actual = await mockContext.GetAllTodoListsWithDetailsAsync(AdminId);
-
-		//			this.MainDbContextMock.Verify(x => x.GetAllTodoListsWithDetailsAsync(It.IsAny<string>()), Times.Once);
-
-		//			Assert.That(actual, Is.Not.EqualTo(null));
-
-		//			if (actual is null)
-		//			{
-		//				throw new AssertionException("Cannot find actual in seeded data for unit tests.");
-		//			}
-
-		//			Assert.That(expected.SequenceEqual(actual), Is.True);
-		//		}
-
-		//		/// <summary>
-		//		/// Tests <see cref="ContextOperations.UpdateTodoListAsync(TodoListModel)"/> - Update TodoList - operation as success attempt.
-		//		/// </summary>
-		//		[Test]
-		//		public async Task UpdateTodoListTasksShouldSucceed()
-		//		{
-		//			int todoListToUpdateId = this.TodoListsCollection.First().Id;
-		//			var newTasks = this.TasksBackend;
-		//			using AutoMock mock = RegisterContextInstance();
-		//			await SetupMockGetTodoListWithDetails(todoListToUpdateId);
-		//			var mockContext = mock.Create<IContextOperations>();
-		//			TodoListModel? todoListToUpdate = await mockContext.GetTodoListWithDetailsAsync(todoListToUpdateId, AdminId) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
-		//            todoListToUpdate.Tasks = newTasks;
-		//			await SetupMockUpdateTodoList(todoListToUpdate);
-
-		//			await mockContext.UpdateTodoListAsync(todoListToUpdate);
-		//			TodoListModel? updatedTodoList = await mockContext.GetTodoListWithDetailsAsync(todoListToUpdateId, AdminId) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
-		//            Assert.Multiple(() =>
-		//			{
-		//				Assert.That(updatedTodoList.Tasks, Is.EqualTo(newTasks));
-		//				Assert.That(updatedTodoList.Tasks.SequenceEqual(newTasks), Is.True);
-		//			});
-		//		}
-
-		//		/// <summary>
-		//		/// Tests <see cref="ContextOperations.DeleteTodoListAsync(int)"/> - Delete TodoList - operation with Id Out Of Range to throw exception.
-		//		/// </summary>
-		//		/// <param name="id">Id value out for range.</param>
-		//		[TestCase(-2)]
-		//		[TestCase(-1)]
-		//		public async Task DeleteTodoListByIdOutOfRangeShouldThrowException(int id)
-		//		{
-		//			int assertTodoListID = IdOfFirstTodoList;
-		//			using AutoMock mock = RegisterContextInstance();
-		//			await SetupMockGetTodoListWithDetails(assertTodoListID);
-		//			var mockContext = mock.Create<IContextOperations>();
-
-		//			Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => mockContext.DeleteTodoListAsync(id, AdminId));
-		//		}
-
-		//		/// <summary>
-		//		/// Tests <see cref="ContextOperations.DeleteTodoListAsync(int)"/> - Delete TodoList - operation with Invalid Id to throw exception.
-		//		/// </summary>
-		//		/// <param name="id">Nonexisted TodoList Id.</param>
-		//		[TestCase(1)]
-		//		[TestCase(20)]
-		//		[TestCase(100)]
-		//		public async Task DeleteTodoListByInvalidIdShouldThrowException(int id)
-		//		{
-		//			using AutoMock mock = RegisterContextInstance();
-		//			await SetupMockGetTodoListWithDetailsReturnNull();
-		//			var mockContext = mock.Create<IContextOperations>();
-
-		//			Assert.ThrowsAsync<InvalidOperationException>(() => mockContext.DeleteTodoListAsync(id, AdminId));
-		//		}
-
-		//		/// <summary>
-		//		/// Tests <see cref="ContextOperations.DeleteTaskAsync(TaskModel)"/> - Delete Task - operation as success attempt.
-		//		/// </summary>
-		//		/// <param name="listId">Target TodoList Id.</param>
-		//		/// <param name="taskId">Target Task Id.</param>
-		//		[TestCase(1)]
-		//		[TestCase(2)]
-		//		[TestCase(3)]
-		//		public async Task DeleteTaskFromSpecificTodoListShouldSucceed(int taskId)
-		//		{
-		//			using AutoMock mock = RegisterContextInstance();
-		//            await SetupMockDeleteTask();
-		//			var mockContext = mock.Create<IContextOperations>();
-
-		//			var assertTaskToDelete = this.TasksCollection.Single(x => (x.Id == taskId));
-		//			var numberOfTasksBeforeDelete = this.TasksCollection.Count;
-
-		//            await SetupMockReadTask(taskId);
-
-		//            await mockContext.DeleteTaskAsync(assertTaskToDelete.Id, AdminId);
-		//			var numberOfTasksAfterDelete = this.TasksCollection.Count;
-
-		//			this.MainDbContextMock.Verify(x => x.DeleteTaskAsync(It.IsAny<TaskModel>()), Times.Once);
-		//			Assert.That(numberOfTasksAfterDelete, Is.Not.EqualTo(numberOfTasksBeforeDelete));
-		//		}
-
-		//		private async Task SetupMockGetTodoListWithDetails(int assertTodoListID)
-		//		{
-		//			await Task.Run(() =>
-		//			{
-		//				this.MainDbContextMock.Setup(x => x.GetTodoListWithDetailsAsync(It.IsAny<int>(), It.IsAny<string>())).ReturnsAsync(this.TodoListsCollection.Single(l => l.Id == assertTodoListID));
-		//			});
-		//		}
-
-		//        private async Task SetupMockGetTodoListWithDetailsForException()
-		//        {
-		//            await Task.Run(() =>
-		//            {
-		//                this.MainDbContextMock.Setup(x => x.GetTodoListWithDetailsAsync(It.IsAny<int>(), It.IsAny<string>()));
-		//            });
-		//        }
-
-		//        private async Task SetupMockGetTodoListForException()
-		//        {
-		//            await Task.Run(() =>
-		//            {
-		//                this.MainDbContextMock.Setup(x => x.GetTodoListAsync(It.IsAny<int>(), It.IsAny<string>()));
-		//            });
-		//        }
-
-		//        private async Task SetupMockGetTodoListWithDetailsReturnNull()
-		//		{
-		//			await Task.Run(() =>
-		//			{
-		//				this.MainDbContextMock.Setup(x => x.GetTodoListWithDetailsAsync(It.IsAny<int>(), It.IsAny<string>())).ReturnsAsync(() => NullTodoList);
-		//			});
-		//		}
-
-		//		private async Task SetupMockGetAllTodoListsWithDetails()
-		//		{
-		//			await Task.Run(() =>
-		//			{
-		//				this.MainDbContextMock.Setup(x => x.GetAllTodoListsWithDetailsAsync(AdminId)).ReturnsAsync(this.TodoListsCollection);
-		//			});
-		//		}
-			}
+	}
 }
