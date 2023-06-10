@@ -36,4 +36,5 @@ For management purpose I use Jira, to keep on track, be more familiare with Jira
 
 Shorter / Smaller ideas I put to Trello table -> https://trello.com/b/bxvtZ0xg/project-management-app
 
-
+[![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=pmro-dev&hide=prs,issues,contribs&show_icons=true&theme=tokyonight)](https://github.com/anuraghazra/github-readme-stats)
+[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=pmro-dev)](https://github.com/anuraghazra/github-readme-stats)
