@@ -1,5 +1,6 @@
 ﻿using Project_UnitTests.Helpers;
 using Project_DomainEntities;
+using Project_UnitTests.Services;
 
 namespace Project_UnitTests
 {
@@ -11,18 +12,9 @@ namespace Project_UnitTests
 		private const int numberOfFails = 1;
 		protected const string AdminId = "adminId";
 
-		private static readonly object[] ValidTodoListsExamples = new object[]
-		{
-			new object[] { "App UX" },
-			new object[] { "App Backend" },
-			new object[] { "App Testing" }
-		};
+		private static readonly object[] ValidTodoListsExamples = TodoListsDataService.ValidSimpleTodoLists;
 
-		private static readonly object[] InvalidTodoListsExamples = new object[]
-		{
-			new object[] { "Ap" },
-			new object[] { "This is too long Name This is too long Name This is too long Name This is too long Name This is too long Name" },
-		};
+		private static readonly object[] InvalidTodoListsExamples = TodoListsDataService.InvalidTodoLists;
 
 		/// <summary>
 		/// Checks that is possible to create To Do List object with Valid data. 

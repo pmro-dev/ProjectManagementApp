@@ -7,6 +7,9 @@ using Project_UnitTests.Helpers;
 using MockQueryable.Moq;
 using Autofac.Extras.Moq;
 using Autofac;
+using Project_UnitTests.Services;
+using Project_Main.Models.DataBases.AppData.DbSetup;
+using Project_UnitTests.Data;
 
 namespace Project_UnitTests
 {
@@ -30,12 +33,13 @@ namespace Project_UnitTests
 		protected ITaskRepository TaskRepo { get; set; }
 		protected List<Action> DbOperationsToExecute { get; set; } = new();
 
+		protected SeedData seedBaseData;
 		#endregion
 
 
 		#region FIELDS
-        protected const string DueDateFormat = "yyyy MM dd HH':'mm";
-		protected const string AdminId = "adminId";
+		
+		protected readonly string AdminId = TodoListsData.AdminId;
 
 		#endregion
 
@@ -44,15 +48,15 @@ namespace Project_UnitTests
 		[Order(1)]
 		public void SetupOnce()
         {
-			DataService.PrepareAllData();
-			SetDefaultDataCollection();
+			seedBaseData = new SeedData();
+			SetDefaultDataCollection(seedBaseData);
 			InitUnitOfWorkMocks();
 		}
 
-		private void SetDefaultDataCollection()
+		private void SetDefaultDataCollection(SeedData seedBaseData)
 		{
-			DefaultTodoListsCollection = TodoListsData.TodoListsCollection;
-			DefaultTasksCollection = TasksData.TasksCollection;
+			DefaultTodoListsCollection = TodoListsDataService.GetCollection(seedBaseData);
+			DefaultTasksCollection = TasksDataService.GetCollection(seedBaseData);
 		}
 
 		private void InitUnitOfWorkMocks()
@@ -61,9 +65,10 @@ namespace Project_UnitTests
 			TaskRepoLoggerMock = new();
 		}
 
+
 		[SetUp]
         [Order(2)]
-        public void SetupOnEachTest()
+        public void SetupBeforeEachTest()
         {
 			ClearUnitOfWorkOperationsCache();
 			SetupDefaultDataForCollections();

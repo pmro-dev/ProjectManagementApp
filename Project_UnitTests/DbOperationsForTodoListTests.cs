@@ -1,13 +1,15 @@
 using Moq;
 using Project_DomainEntities;
+using Project_UnitTests.Data;
 using Project_UnitTests.Helpers;
+using Project_UnitTests.Services;
 
 namespace Project_UnitTests
 {
-	/// <summary>
-	/// Unit Test Class for Database tests with Mocking (DbContext) approach.
-	/// </summary>
-	public class DbOperationsForTodoListTests : BaseOperationsSetup
+    /// <summary>
+    /// Unit Test Class for Database tests with Mocking (DbContext) approach.
+    /// </summary>
+    public class DbOperationsForTodoListTests : BaseOperationsSetup
 	{
 		private static void ModifyTodoListData(TodoListModel todoListToUpdate)
 		{
@@ -26,7 +28,7 @@ namespace Project_UnitTests
 			};
 		}
 
-		private static readonly object[] ValidTodoLists = TodoListsData.ValidTodoLists;
+		private static readonly object[] ValidTodoLists = TodoListsDataService.ValidSimpleTodoLists;
 
 		[Test]
 		public async Task ContainsAnyShouldSucceed()
@@ -219,7 +221,7 @@ namespace Project_UnitTests
 		public async Task UpdateTodoListTasksShouldSucceed()
 		{
 			int todoListToUpdateId = TodoListsCollection.First().Id;
-			var newTasks = TasksData.PrepareRange();
+			var newTasks = TasksData.NewTasksRange;
 
 			TodoListModel? todoListToUpdate = await TodoListRepo.GetWithDetailsAsync(todoListToUpdateId) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
 			todoListToUpdate.Tasks = newTasks;
@@ -285,13 +287,13 @@ namespace Project_UnitTests
 		[Test]
 		public async Task AddTodoListsAsRangeShouldSucceed()
 		{
-			var todoListsRange = TodoListsData.PrepareRange();
+			var todoListsRange = TodoListsDataService.NewTodoListsRange;
 
 			await GenericMockSetup<TodoListModel>.SetupAddEntitiesRange(todoListsRange, TodoListsCollection, DbSetTodoListMock, DbOperationsToExecute);
 			await TodoListRepo.AddRangeAsync(todoListsRange);
 			await DataUnitOfWork.SaveChangesAsync();
 
-			var todoListsFromDb = await TodoListRepo.GetAllByFilterAsync(t => t.Title.Contains(TodoListsData.ListRangeSuffix));
+			var todoListsFromDb = await TodoListRepo.GetAllByFilterAsync(t => t.Title.Contains(TodoListsDataService.ListRangeSuffix));
 
 			Assert.That(todoListsFromDb.Count(), Is.EqualTo(todoListsRange.Count));
 		}

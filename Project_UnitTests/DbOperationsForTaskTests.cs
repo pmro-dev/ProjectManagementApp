@@ -3,13 +3,15 @@ using Project_UnitTests.Helpers;
 using Project_DomainEntities;
 using Project_Main.Models.DataBases.AppData;
 using Project_DomainEntities.Helpers;
+using Project_UnitTests.Services;
+using Project_UnitTests.Data;
 
 namespace Project_UnitTests
 {
-	/// <summary>
-	/// Unit Test Class for Database tests with Mocking (DbContext) approach.
-	/// </summary>
-	public class DatabaseOperationsTests : BaseOperationsSetup
+    /// <summary>
+    /// Unit Test Class for Database tests with Mocking (DbContext) approach.
+    /// </summary>
+    public class DatabaseOperationsTests : BaseOperationsSetup
 	{
 		private static void ModifyTaskData(TaskModel taskToUpdate)
 		{
@@ -33,7 +35,7 @@ namespace Project_UnitTests
 			};
 		}
 
-		private static readonly object[] ValidTasksExamples = TasksData.ValidTasks;
+		private static readonly object[] ValidTasksExamples = TasksDataService.ValidTasksForCreateOperation;
 
 		[Test]
 		public async Task ContainsAnyShouldSucceed()
@@ -237,13 +239,13 @@ namespace Project_UnitTests
 		[Test]
 		public async Task AddTasksAsRangeShouldSucceed()
 		{
-			var tasksRange = TasksData.PrepareRange();
+			var tasksRange = TasksDataService.NewTasksRange;
 
 			await GenericMockSetup<TaskModel>.SetupAddEntitiesRange(tasksRange, TasksCollection, DbSetTaskMock, DbOperationsToExecute);
 			await TaskRepo.AddRangeAsync(tasksRange);
 			await DataUnitOfWork.SaveChangesAsync();
 
-			var tasksFromDb = await TaskRepo.GetAllByFilterAsync(t => t.Title.Contains(TasksData.TaskRangeSuffix));
+			var tasksFromDb = await TaskRepo.GetAllByFilterAsync(t => t.Title.Contains(TasksDataService.TaskRangeSuffix));
 
 			Assert.That(tasksFromDb.Count(), Is.EqualTo(tasksRange.Count));
 		}

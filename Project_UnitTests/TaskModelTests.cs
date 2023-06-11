@@ -1,18 +1,19 @@
 ﻿using Project_UnitTests.Helpers;
 using Project_DomainEntities;
 using Project_DomainEntities.Helpers;
+using Project_UnitTests.Services;
 
 namespace Project_UnitTests
 {
-	/// <summary>
-	/// Tests class for Task Model.
-	/// </summary>
-	public class TaskModelTests
+    /// <summary>
+    /// Tests class for Task Model.
+    /// </summary>
+    public class TaskModelTests
 	{
+		private static readonly object[] ValidTasksExamples = TasksDataService.ValidTasksForCreateOperation;
+		private static readonly object[] InvalidTasksExamples = TasksDataService.InvalidTasksForCreateOperation;
+		protected readonly string AdminId = TasksDataService.AdminId;
 		private const int numberOfFails = 1;
-		private static readonly object[] ValidTasksExamples = TasksData.ValidTasks;
-		private static readonly object[] InvalidTasksExamples = TasksData.InvalidTasks;
-		protected const string AdminId = "adminId";
 
 		/// <summary>
 		/// Checks that is possible to create Task object with Valid data. 
