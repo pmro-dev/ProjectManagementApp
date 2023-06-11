@@ -68,7 +68,7 @@ namespace Project_Main
 			builder.Services.AddScoped<ITodoListRepository, TodoListRepository>();
 			builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 
-			builder.Services.AddScoped<SeedData>();
+			builder.Services.AddScoped<ISeedData, SeedData>();
 
 			#endregion
 

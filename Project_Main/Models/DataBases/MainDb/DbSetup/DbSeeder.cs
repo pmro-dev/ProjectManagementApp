@@ -1,4 +1,5 @@
 ﻿using ClassLibrary_SeedData;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Project_Main.Models.DataBases.AppData.DbSetup
 {
@@ -16,8 +17,8 @@ namespace Project_Main.Models.DataBases.AppData.DbSetup
             IDataUnitOfWork _unitOfWork = app.ApplicationServices
                         .CreateScope().ServiceProvider.GetRequiredService<IDataUnitOfWork>();
 
-            SeedData seedContainer = app.ApplicationServices
-                        .CreateScope().ServiceProvider.GetRequiredService<SeedData>();
+            ISeedData seedContainer = app.ApplicationServices
+                        .CreateScope().ServiceProvider.GetRequiredService<ISeedData>();
 
             using var transaction = await _unitOfWork.BeginTransactionAsync();
 
