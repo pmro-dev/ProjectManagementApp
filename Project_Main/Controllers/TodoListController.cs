@@ -22,7 +22,7 @@ namespace Project_Main.Controllers
 		private readonly string controllerName = nameof(TodoListController);
 		private string operationName = string.Empty;
 		private const int DateCompareValueEarlier = 0;
-		private const string todoListDataToBind = "Name, UserId";
+		private const string todoListDataToBind = "Title, UserId";
 
 		public static string ShortName { get; } = nameof(TodoListController).Replace("Controller", string.Empty);
 
