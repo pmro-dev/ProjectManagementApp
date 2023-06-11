@@ -1,4 +1,6 @@
-﻿namespace Project_Main.Models.DataBases.AppData.DbSetup
+﻿using ClassLibrary_SeedData;
+
+namespace Project_Main.Models.DataBases.AppData.DbSetup
 {
     /// <summary>
     /// Class that manage seeding data to database.

@@ -8,8 +8,8 @@ using MockQueryable.Moq;
 using Autofac.Extras.Moq;
 using Autofac;
 using Project_UnitTests.Services;
-using Project_Main.Models.DataBases.AppData.DbSetup;
 using Project_UnitTests.Data;
+using ClassLibrary_SeedData;
 
 namespace Project_UnitTests
 {

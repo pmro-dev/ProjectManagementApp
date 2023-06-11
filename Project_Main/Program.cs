@@ -11,6 +11,7 @@ using Project_Main.Models.DataBases.AppData;
 using Project_Main.Models.DataBases.Identity.DbSetup;
 using Project_Main.Models.DataBases.Identity;
 using Project_Main.Controllers.Helpers;
+using ClassLibrary_SeedData;
 
 namespace Project_Main
 {

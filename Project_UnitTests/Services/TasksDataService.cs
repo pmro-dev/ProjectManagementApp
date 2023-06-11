@@ -1,6 +1,6 @@
 ﻿using Castle.Core.Internal;
+using ClassLibrary_SeedData;
 using Project_DomainEntities;
-using Project_Main.Models.DataBases.AppData.DbSetup;
 using Project_UnitTests.Data;
 
 namespace Project_UnitTests.Services

@@ -1,12 +1,11 @@
-﻿
-using Project_DomainEntities;
+﻿using Project_DomainEntities;
 
-namespace Project_Main.Models.DataBases.AppData.DbSetup
+namespace ClassLibrary_SeedData
 {
     /// <summary>
     /// Class with properties that contains data.
     /// </summary>
-    public class SeedData
+    public class SeedData : ISeedData
     {
         protected const string DueDateFormat = "yyyy MM dd HH':'mm";
         public string AdminId { get; } = "adminId";
@@ -55,7 +54,7 @@ namespace Project_Main.Models.DataBases.AppData.DbSetup
 
             if (AllTasks is null || TodoLists is null || TasksUX is null || TasksBackend is null || TasksTesting is null || TasksProjectManagement is null)
             {
-                throw new InvalidOperationException("Critical error! One of the properties isn't set with data!");
+                throw new InvalidOperationException("Critical error! Some property is not set with data!");
             }
         }
 
@@ -208,7 +207,6 @@ namespace Project_Main.Models.DataBases.AppData.DbSetup
             AllTasks.AddRange(TasksBackend);
             AllTasks.AddRange(TasksTesting);
             AllTasks.AddRange(TasksProjectManagement);
-
 		}
     }
 }
