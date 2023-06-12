@@ -5,7 +5,8 @@ using Project_Main.Models.DataBases.General;
 
 namespace Project_Main.Models.DataBases.Identity
 {
-    public class UserRepository : GenericRepository<UserModel>, IUserRepository
+	///<inheritdoc />
+	public class UserRepository : GenericRepository<UserModel>, IUserRepository
     {
         private readonly CustomIdentityDbContext _identityContext;
         private readonly ILogger<UserRepository> _logger;
@@ -18,7 +19,8 @@ namespace Project_Main.Models.DataBases.Identity
             _logger = logger;
         }
 
-        public async Task<UserModel?> GetWithDetailsAsync(string userId)
+		///<inheritdoc />
+		public async Task<UserModel?> GetWithDetailsAsync(string userId)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetWithDetailsAsync), repoName);
             HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref userId, nameof(userId), _logger);
@@ -29,7 +31,8 @@ namespace Project_Main.Models.DataBases.Identity
             return userWithDetailsFromDb;
         }
 
-        public async Task<UserModel?> GetByNameAndPasswordAsync(string userLogin, string userPassword)
+		///<inheritdoc />
+		public async Task<UserModel?> GetByNameAndPasswordAsync(string userLogin, string userPassword)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetByNameAndPasswordAsync), nameof(UserRepository));
             HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref userLogin, nameof(userLogin), _logger);
@@ -38,7 +41,8 @@ namespace Project_Main.Models.DataBases.Identity
             return await _identityContext.Set<UserModel>().SingleOrDefaultAsync(user => user.Username == userLogin && user.Password == userPassword);
         }
 
-        public async Task<bool> IsNameTakenAsync(string userName)
+		///<inheritdoc />
+		public async Task<bool> IsNameTakenAsync(string userName)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(IsNameTakenAsync), repoName);
             bool result = false;
@@ -49,7 +53,8 @@ namespace Project_Main.Models.DataBases.Identity
             return result;
         }
 
-        public async Task<IEnumerable<RoleModel>> GetRolesAsync(string userId)
+		///<inheritdoc />
+		public async Task<IEnumerable<RoleModel>> GetRolesAsync(string userId)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetRolesAsync), repoName);
             List<RoleModel> userRoles = await _identityContext.Set<UserRoleModel>()
@@ -60,6 +65,8 @@ namespace Project_Main.Models.DataBases.Identity
             return userRoles;
         }
 
+
+        //TODO implement Update feature
         //public async Task<bool> UpdateUserAsync(UserModel userToUpdate)
         //{
         //	operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(UpdateUserAsync), repoName);
@@ -89,7 +96,5 @@ namespace Project_Main.Models.DataBases.Identity
         //	await ExecuteInTryCatchBlockToCatchEFCoreAndSQLExceptionsAsync(operationsForDbTryCatchBlockAsync);
         //	return true;
         //}
-
-
     }
 }

@@ -4,6 +4,9 @@ using Project_Main.Infrastructure.Helpers;
 
 namespace Project_Main.Models.DataBases.Identity
 {
+    /// <summary>
+    /// Custom Db Context for Identities.
+    /// </summary>
     public class CustomIdentityDbContext : DbContext
     {
         private readonly ILogger<CustomIdentityDbContext>? _logger;
@@ -26,7 +29,7 @@ namespace Project_Main.Models.DataBases.Identity
 
             modelBuilder.Entity<UserRoleModel>().HasKey(ur => new { ur.UserId, ur.RoleId });
 
-            _logger?.LogInformation(Messages.BuildingSucceedLogger, nameof(OnModelCreating), nameof(CustomIdentityDbContext));
+            _logger?.LogInformation(Messages.LogBuildingSucceed, nameof(OnModelCreating), nameof(CustomIdentityDbContext));
         }
     }
 }

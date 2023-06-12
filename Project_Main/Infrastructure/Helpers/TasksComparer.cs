@@ -1,8 +1,10 @@
-﻿
-using Project_DomainEntities;
+﻿using Project_DomainEntities;
 
 namespace Project_Main.Infrastructure.Helpers
 {
+	/// <summary>
+	/// Class allows to compare object based on the same Task Model type.
+	/// </summary>
 	public class TasksComparer : IComparer<TaskModel>
 	{
 		public int Compare(TaskModel? x, TaskModel? y)

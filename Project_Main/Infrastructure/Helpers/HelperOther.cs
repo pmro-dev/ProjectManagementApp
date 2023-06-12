@@ -6,7 +6,7 @@
         public const int ZeroValueToIndicatesEmptyArray = 0;
 
 		/// <summary>
-		/// Create action or operation name base on given parameters.
+		/// Create action's or operation's name based on provided parameters.
 		/// </summary>
 		/// <param name="actionFullName"></param>
 		/// <param name="prefix"></param>

@@ -2,10 +2,14 @@
 
 namespace Project_Main.Models.DataBases.Identity
 {
-    public class IdentityUnitOfWork : UnitOfWork<CustomIdentityDbContext>, IIdentityUnitOfWork
+	///<inheritdoc />
+	public class IdentityUnitOfWork : UnitOfWork<CustomIdentityDbContext>, IIdentityUnitOfWork
     {
-        public IUserRepository UserRepository { get; }
-        public IRoleRepository RoleRepository { get; }
+		///<inheritdoc />
+		public IUserRepository UserRepository { get; }
+
+		///<inheritdoc />
+		public IRoleRepository RoleRepository { get; }
 
         public IdentityUnitOfWork(CustomIdentityDbContext identityContext, IUserRepository userRepository, IRoleRepository roleRepository)
             : base(identityContext)

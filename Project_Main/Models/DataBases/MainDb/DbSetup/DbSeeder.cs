@@ -1,15 +1,14 @@
 ﻿using ClassLibrary_SeedData;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Project_Main.Models.DataBases.AppData.DbSetup
 {
     /// <summary>
-    /// Class that manage seeding data to database.
+    /// Class manages seeding main data to database.
     /// </summary>
     public static class DbSeeder
     {
         /// <summary>
-        /// Checks that Database is set and populated, if not, try to create database, applies migrations and seed data to it.
+        /// Checks that Database is set and populated, if not -> try to create database, applies migrations and seed data to it.
         /// </summary>
         /// <param name="app">Application builder.</param>
         public static async Task EnsurePopulated(IApplicationBuilder app, ILogger logger)

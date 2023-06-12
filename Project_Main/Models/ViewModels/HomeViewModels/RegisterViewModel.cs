@@ -2,6 +2,9 @@
 
 namespace Project_Main.Models.ViewModels.HomeViewModels
 {
+    /// <summary>
+    /// Model for Registration View.
+    /// </summary>
     public class RegisterViewModel
     {
         [Required]

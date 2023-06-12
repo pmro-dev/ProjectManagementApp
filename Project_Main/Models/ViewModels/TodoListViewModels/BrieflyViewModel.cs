@@ -3,23 +3,41 @@ using Project_DomainEntities.Helpers;
 
 namespace Project_Main.Models.ViewModels.TodoListViewModels
 {
-    public class BrieflyViewModel
+	/// <summary>
+	/// View shows short version of ToDoLists informations.
+	/// </summary>
+	public class BrieflyViewModel
     {
         private readonly int ValueIndicatesEquality = 0;
 
         public List<TodoListModel> TodoLists { get; set; } = new List<TodoListModel>();
 
+        /// <summary>
+        /// Get completed tasks count.
+        /// </summary>
+        /// <param name="todoList">Targeted ToDoList oobject.</param>
+        /// <returns>Completed Tasks number.</returns>
         public int GetNumberOfCompletedTasks(TodoListModel todoList)
         {
             return todoList.Tasks.Count(t => t.Status == TaskStatusHelper.TaskStatusType.Completed);
         }
 
-        public int GetNumberOfAllTasks(TodoListModel todoList)
+		/// <summary>
+		/// Get number of all tasks in a specific ToDoList.
+		/// </summary>
+		/// <param name="todoList">Targeted ToDoList oobject.</param>
+		/// <returns>All Tasks count in a specific ToDoList.</returns>
+		public int GetNumberOfAllTasks(TodoListModel todoList)
         {
             return todoList.Tasks.Count;
         }
 
-        public bool IsReminderForToday(TodoListModel todoList)
+		/// <summary>
+		/// Check that a specific ToDoList has any Task's reminder set for a present day.
+		/// </summary>
+		/// <param name="todoList">Targeted ToDoList object.</param>
+		/// <returns>True when ToDoList has any Task's reminder, otherwise false.</returns>
+		public bool IsReminderForToday(TodoListModel todoList)
         {
             return todoList.Tasks.Any(t =>
             {

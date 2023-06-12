@@ -6,7 +6,10 @@ using static Project_DomainEntities.Helpers.TaskStatusHelper;
 
 namespace Project_Main.Models.DataBases.AppData
 {
-    public class CustomAppDbContext : DbContext
+	/// <summary>
+	/// Custom Db Context for main app data.
+	/// </summary>
+	public class CustomAppDbContext : DbContext
     {
         private readonly ILogger<CustomAppDbContext>? _logger;
 
@@ -41,7 +44,7 @@ namespace Project_Main.Models.DataBases.AppData
 
             modelBuilder.Entity<TaskTagModel>().HasKey(tt => new { tt.TaskId, tt.TagId });
 
-            _logger?.LogInformation(Messages.BuildingSucceedLogger, nameof(OnModelCreating), nameof(CustomAppDbContext));
+            _logger?.LogInformation(Messages.LogBuildingSucceed, nameof(OnModelCreating), nameof(CustomAppDbContext));
         }
     }
 }

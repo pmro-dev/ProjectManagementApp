@@ -6,7 +6,7 @@ using Project_Main.Infrastructure.Helpers;
 namespace Project_Main.Models.DataBases.Identity.DbSetup
 {
     /// <summary>
-    /// Class that manage seeding Identity data to database.
+    /// Class manages seeding Identity data to database.
     /// </summary>
     public static class IdentitySeedData
     {
@@ -17,7 +17,7 @@ namespace Project_Main.Models.DataBases.Identity.DbSetup
         private const string AdminId = "adminId";
         private const string AdminPassword = "Secret123$";
         private const string AdminEmail = "admin@gmail.com";
-        private const string ProviderName = HelperProgramAndAuth.DefaultScheme;
+        private const string ProviderName = ConfigConstants.DefaultScheme;
 
         private static readonly UserModel AdminInitModel = new()
         {
@@ -44,7 +44,7 @@ namespace Project_Main.Models.DataBases.Identity.DbSetup
         };
 
         /// <summary>
-        /// Checks that Identity Database is set and populated, if not, try to create database, applies migrations and seed data to it.
+        /// Checks that Identity Database is set and populated, if not -> try to create database, applies migrations and seed data to it.
         /// </summary>
         /// <param name="app">Application builder.</param>
         public static async Task EnsurePopulated(IApplicationBuilder app, ILogger logger)

@@ -3,8 +3,10 @@ using Project_Main.Models.DataBases.General;
 
 namespace Project_Main.Models.DataBases.Identity
 {
-    public class RoleRepository : GenericRepository<RoleModel>, IRoleRepository
+	///<inheritdoc />
+	public class RoleRepository : GenericRepository<RoleModel>, IRoleRepository
     {
-        public RoleRepository(CustomIdentityDbContext identityContext, ILogger<RoleRepository> logger) : base(identityContext, logger) { }
+		///<inheritdoc />
+		public RoleRepository(CustomIdentityDbContext identityContext, ILogger<RoleRepository> logger) : base(identityContext, logger) { }
     }
 }

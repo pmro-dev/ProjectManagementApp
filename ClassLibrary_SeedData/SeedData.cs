@@ -2,45 +2,30 @@
 
 namespace ClassLibrary_SeedData
 {
-    /// <summary>
-    /// Class with properties that contains data.
-    /// </summary>
-    public class SeedData : ISeedData
+	///<inheritdoc />
+	public class SeedData : ISeedData
     {
         protected const string DueDateFormat = "yyyy MM dd HH':'mm";
+
         public string AdminId { get; } = "adminId";
 
-        /// <summary>
-        /// All Tasks for Database Set.
-        /// </summary>
-        public List<TaskModel> AllTasks { get; set; }
+		///<inheritdoc />
+		public List<TaskModel> AllTasks { get; set; }
 
-        /// <summary>
-        /// All Todolists for Database Set.
-        /// </summary>
-        public List<TodoListModel> TodoLists { get; set; }
+		///<inheritdoc />
+		public List<TodoListModel> TodoLists { get; set; }
 
-        /// <summary>
-        /// Specific 'UX' Tasks for a list.
-        /// </summary>
-        public List<TaskModel> TasksUX { get; set; }
+		///<inheritdoc />
+		public List<TaskModel> TasksUX { get; set; }
 
-        /// <summary>
-        /// Specific 'Backend' Tasks for a list.
-        /// </summary>
-        public List<TaskModel> TasksBackend { get; set; }
+		///<inheritdoc />
+		public List<TaskModel> TasksBackend { get; set; }
 
-        /// <summary>
-        /// Specific 'Testing' Tasks for a list.
-        /// 
-        /// </summary>
-        public List<TaskModel> TasksTesting { get; set; }
+		///<inheritdoc />
+		public List<TaskModel> TasksTesting { get; set; }
 
-        /// <summary>
-        /// Specific 'Project Management' Tasks for a list.
-        /// 
-        /// </summary>
-        public List<TaskModel> TasksProjectManagement { get; set; }
+		///<inheritdoc />
+		public List<TaskModel> TasksProjectManagement { get; set; }
 
         /// <summary>
         /// Seeds the data to properties.

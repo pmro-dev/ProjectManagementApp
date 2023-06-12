@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Project_DomainEntities;
-
-namespace Project_Main.Infrastructure.Helpers
+﻿namespace Project_Main.Infrastructure.Helpers
 {
 	/// <summary>
 	/// Helper to check for exceptions to throw.
@@ -9,7 +6,7 @@ namespace Project_Main.Infrastructure.Helpers
 	public static class HelperCheck
 	{
 		/// <summary>
-		/// Throws and Logs exception when method's argument is null.
+		/// Throws and Logs exception when model object is null.
 		/// </summary>
 		/// <typeparam name="T">Model data type.</typeparam>
 		/// <param name="operationName">Name of operation during exception could occured.</param>
@@ -21,57 +18,49 @@ namespace Project_Main.Infrastructure.Helpers
 		{
 			if (model == null)
 			{
-				logger.LogError(Messages.ParamNullOrEmptyLogger, operationName, modelName);
-				throw new ArgumentNullException(modelName, Messages.ProvidedObjectNullEx);
+				logger.LogError(Messages.LogParamNullOrEmpty, operationName, modelName);
+				throw new ArgumentNullException(modelName, Messages.ProvidedObjectIsNull);
 			}
 		}
 
+		/// <summary>
+		/// Throws and Logs exception when method's argument is null.
+		/// </summary>
+		/// <param name="operationName"></param>
+		/// <param name="argument"></param>
+		/// <param name="argumentName"></param>
+		/// <param name="logger"></param>
+		/// <exception cref="ArgumentNullException"></exception>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		/// <exception cref="ArgumentException"></exception>
 		public static void IfArgumentIsNullOrEmptyThrowException(string operationName, object argument, string argumentName, ILogger logger)
 		{
 			if (argument is null)
 			{
-				logger.LogError(Messages.ParamNullOrEmptyLogger, operationName, argumentName);
-				throw new ArgumentNullException(argumentName, Messages.ProvidedObjectNullEx);
+				logger.LogError(Messages.LogParamNullOrEmpty, operationName, argumentName);
+				throw new ArgumentNullException(argumentName, Messages.ProvidedObjectIsNull);
 			}
 
 			if (argument is string idString)
 			{
 				if (string.IsNullOrEmpty(idString))
 				{
-					logger.LogError(Messages.ParamNullOrEmptyLogger, operationName, argumentName);
-					throw new ArgumentNullException(argumentName, Messages.ProvidedArgumentNullOrEmpty);
+					logger.LogError(Messages.LogParamNullOrEmpty, operationName, argumentName);
+					throw new ArgumentNullException(argumentName, Messages.ProvidedArgumentIsNullOrEmpty);
 				}
 			}
 			else if (argument is int idInt)
 			{
 				if (idInt < 0)
 				{
-					logger.LogError(Messages.OutOfRangeLogger, operationName, argumentName, argument);
-					throw new ArgumentOutOfRangeException(argumentName, Messages.ProvidedArgumentOutOfRange);
+					logger.LogError(Messages.LogOutOfRange, operationName, argumentName, argument);
+					throw new ArgumentOutOfRangeException(argumentName, Messages.ProvidedArgumentIsOutOfRange);
 				}
 			}
 			else
 			{
-				logger.LogError(Messages.InvalidArgumentTypeLogger, operationName, argumentName);
-				throw new ArgumentException(Messages.ProvidedArgumentWithInvalidType, argumentName);
-			}
-		}
-
-		/// <summary>
-		/// Throws and Logs exception when model instance is null.
-		/// </summary>
-		/// <typeparam name="T">Model data type.</typeparam>
-		/// <param name="operationName">Name of operation during exception could occured.</param>
-		/// <param name="model">Object of model data.</param>
-		/// <param name="modelName">Model name.</param>
-		/// <param name="logger">Logger from class that invokes method.</param>
-		/// <exception cref="InvalidOperationException">Occurs when model is null.</exception>
-		public static void IfInstanceNullThrowException<T>(string operationName, T? model, string modelName, ILogger logger) where T : BasicModelAbstract
-		{
-			if (model == null)
-			{
-				logger.LogError(Messages.EntityNotFoundInDbLogger, operationName, modelName);
-				throw new InvalidOperationException(Messages.ExceptionNullObjectOnAction(operationName, modelName));
+				logger.LogError(Messages.LogInvalidArgumentType, operationName, argumentName);
+				throw new ArgumentException(Messages.ProvidedArgumentIsWithInvalidType, argumentName);
 			}
 		}
 
@@ -86,7 +75,7 @@ namespace Project_Main.Infrastructure.Helpers
 		{
 			if (string.IsNullOrEmpty(param))
 			{
-				logger.LogError(Messages.ParamNullOrEmptyLogger, operationName, paramName);
+				logger.LogError(Messages.LogParamNullOrEmpty, operationName, paramName);
 				throw new ArgumentOutOfRangeException(Messages.ExceptionNullObjectOnAction(operationName, paramName));
 			}
 		}
@@ -104,7 +93,7 @@ namespace Project_Main.Infrastructure.Helpers
 		{
 			if (id < bottomBoundry)
 			{
-				logger.LogInformation(Messages.OutOfRangeLogger, operationName, paramName, id);
+				logger.LogInformation(Messages.LogOutOfRange, operationName, paramName, id);
 				throw new ArgumentOutOfRangeException(paramName, id, Messages.OutOfRange(operationName, nameof(id), id));
 			}
 		}

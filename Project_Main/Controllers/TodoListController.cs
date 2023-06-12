@@ -11,7 +11,7 @@ using Project_Main.Controllers.Helpers;
 namespace Project_Main.Controllers
 {
     /// <summary>
-    /// Controller to manage To Do List actions based on certain routes.
+    /// Controller to manage To Do List actions based on specific routes.
     /// </summary>
     [Authorize]
 	[Route(CustomRoutes.TodoListControllerRoute)]
@@ -54,7 +54,7 @@ namespace Project_Main.Controllers
 
 			if (todoLists == null)
 			{
-				_logger.LogError(Messages.EntityNotFoundInDbLogger, operationName, nameof(todoLists));
+				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(todoLists));
 				return NotFound();
 			}
 
@@ -87,7 +87,7 @@ namespace Project_Main.Controllers
 
 			if (allTodoLists == null)
 			{
-				_logger.LogError(Messages.EntityNotFoundInDbLogger, operationName, nameof(allTodoLists));
+				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(allTodoLists));
 				return NotFound();
 			}
 
@@ -112,7 +112,7 @@ namespace Project_Main.Controllers
 
 			if (todoListFromDb == null)
 			{
-				_logger.LogError(Messages.EntityNotFoundInDbLogger, operationName, nameof(todoListFromDb));
+				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(todoListFromDb));
 				return NotFound();
 			}
 
@@ -208,7 +208,7 @@ namespace Project_Main.Controllers
 
 			if (todoListModel == null)
 			{
-				_logger.LogError(Messages.EntityNotFoundInDbLogger, operationName, nameof(todoListModel));
+				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(todoListModel));
 				return NotFound();
 			}
 
@@ -234,7 +234,7 @@ namespace Project_Main.Controllers
 
 			if (id != todoListModel.Id)
 			{
-				_logger.LogError(Messages.ConflictBetweenTodoListIdsAsParamAndFromModelObjectLogger, operationName, id, todoListModel.Id);
+				_logger.LogError(Messages.LogConflictBetweenTodoListIdsAsParamAndFromModelObject, operationName, id, todoListModel.Id);
 				return Conflict();
 			}
 
@@ -271,7 +271,7 @@ namespace Project_Main.Controllers
 
 			if (todoListModel == null)
 			{
-				_logger.LogError(Messages.EntityNotFoundInDbLogger, operationName, nameof(todoListModel));
+				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(todoListModel));
 				return NotFound();
 			}
 
@@ -309,7 +309,7 @@ namespace Project_Main.Controllers
 				{
 					if (todoListModel.Id != id)
 					{
-						_logger.LogError(Messages.ConflictBetweenTodoListIdsAsParamAndFromModelObjectLogger, operationName, id, todoListModel.Id);
+						_logger.LogError(Messages.LogConflictBetweenTodoListIdsAsParamAndFromModelObject, operationName, id, todoListModel.Id);
 						return Conflict();
 					}
 

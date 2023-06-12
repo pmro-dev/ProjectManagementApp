@@ -12,7 +12,7 @@ using Project_Main.Controllers.Helpers;
 namespace Project_Main.Controllers
 {
     /// <summary>
-    /// Controller to manage Task actions based on certain routes.
+    /// Controller to manage Task actions based on specific routes.
     /// </summary>
     [Authorize]
 	public class TaskController : Controller
@@ -35,7 +35,7 @@ namespace Project_Main.Controllers
 		}
 
 		/// <summary>
-		/// Action GET with custom route to show specific To Do List with details.
+		/// Action GET with custom route to show specific To Do List with details ex. Tasks.
 		/// </summary>
 		/// <param name="todoListId">Target To Do List id.</param>
 		/// <param name="taskId">Target Task id.</param>
@@ -57,13 +57,13 @@ namespace Project_Main.Controllers
 
 			if (taskModel == null)
 			{
-				_logger.LogError(Messages.EntityNotFoundInDbLogger, operationName, nameof(taskModel));
+				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(taskModel));
 				return NotFound();
 			}
 
 			if (todoListId != taskModel.TodoListId)
 			{
-				_logger.LogError(Messages.ConflictBetweenTodoListIdsAsParamAndFromModelObjectLogger, operationName, todoListId, taskModel.TodoListId);
+				_logger.LogError(Messages.LogConflictBetweenTodoListIdsAsParamAndFromModelObject, operationName, todoListId, taskModel.TodoListId);
 				return Conflict();
 			}
 
@@ -73,13 +73,13 @@ namespace Project_Main.Controllers
 
 			if (todoList == null)
 			{
-				_logger.LogError(Messages.EntityNotFoundInDbLogger, operationName, nameof(todoList));
+				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(todoList));
 				return NotFound();
 			}
 
 			if (taskModel.TodoListId != todoList.Id)
 			{
-				_logger.LogError(Messages.ConflictBetweenTodoListIdsFromTodoListModelAndTaskModelLogger, operationName, taskModel.TodoListId, todoList.Id);
+				_logger.LogError(Messages.LogConflictBetweenTodoListIdsFromTodoListModelAndTaskModel, operationName, taskModel.TodoListId, todoList.Id);
 				return Conflict();
 			}
 
@@ -92,7 +92,7 @@ namespace Project_Main.Controllers
 		/// <param name="id">Target To Do List id for which Task would be created.</param>
 		/// <returns>
 		/// Return different view based on the final result.
-		/// Return: BadRequest when id is invalid, Not Found when there isn't To Do List with given id in Db or View Create.
+		/// Return: BadRequest when id is invalid, Not Found when there isn't To Do List with given id in Db or return View Create.
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
 		[HttpGet]
@@ -109,7 +109,7 @@ namespace Project_Main.Controllers
 
 				if (targetTodoList is null)
 				{
-					_logger.LogError(Messages.EntityNotFoundInDbLogger, operationName, nameof(targetTodoList));
+					_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(targetTodoList));
 					return NotFound();
 				}
 
@@ -130,8 +130,8 @@ namespace Project_Main.Controllers
 		/// <summary>
 		/// Action POST to create Task.
 		/// </summary>
-		/// <param name="todoListId">Target To Do List for which Task would be created.</param>
-		/// <param name="taskModel">Model with form's data.</param>
+		/// <param name="todoListId">Targeted To Do List for which Task would be created.</param>
+		/// <param name="formDataTaskModel">Task Model with data that comes from form.</param>
 		/// <returns>
 		/// Return different view based on the final result.
 		/// Return: BadRequest when id is invalid or redirect to view with target To Do List SingleDetails.
@@ -140,21 +140,21 @@ namespace Project_Main.Controllers
 		[HttpPost]
 		[Route(CustomRoutes.CreateTaskPostRoute)]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(int todoListId, [Bind(taskDataToBind)] TaskModel taskModel)
+		public async Task<IActionResult> Create(int todoListId, [Bind(taskDataToBind)] TaskModel formDataTaskModel)
 		{
 			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
 
 			if (ModelState.IsValid)
 			{
-				taskModel.TodoListId = todoListId;
+				formDataTaskModel.TodoListId = todoListId;
 				ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
-				await taskRepository.AddAsync(taskModel);
+				await taskRepository.AddAsync(formDataTaskModel);
 				await _dataUnitOfWork.SaveChangesAsync();
 				
 				return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
 			}
 
-			return View(taskModel);
+			return View(formDataTaskModel);
 		}
 
 		/// <summary>
@@ -182,25 +182,25 @@ namespace Project_Main.Controllers
 
 			if (taskModel == null)
 			{
-				_logger.LogError(Messages.EntityNotFoundInDbLogger, operationName, nameof(taskModel));
+				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(taskModel));
 				return NotFound();
 			}
 
 			if (!tempTodoLists.Any())
 			{
-				_logger.LogInformation(Messages.NotAnyTodoListInDb, operationName);
+				_logger.LogInformation(Messages.LogNotAnyTodoListInDb, operationName);
 				return NotFound();
 			}
 
 			if (targetTodoList == null)
 			{
-				_logger.LogError(Messages.EntityNotFoundInDbLogger, operationName, nameof(targetTodoList));
+				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(targetTodoList));
 				return NotFound();
 			}
 
 			if (taskModel.TodoListId != targetTodoList.Id)
 			{
-				_logger.LogError(Messages.ConflictBetweenTodoListIdsFromTodoListModelAndTaskModelLogger, operationName, taskModel.TodoListId, targetTodoList.Id);
+				_logger.LogError(Messages.LogConflictBetweenTodoListIdsFromTodoListModelAndTaskModel, operationName, taskModel.TodoListId, targetTodoList.Id);
 				return Conflict();
 			}
 
@@ -252,7 +252,7 @@ namespace Project_Main.Controllers
 
 			if (id != taskModel.Id)
 			{
-				_logger.LogError(Messages.ConflictBetweenTodoListIdsAsParamAndFromModelObjectLogger, operationName, id, taskModel.Id);
+				_logger.LogError(Messages.LogConflictBetweenTodoListIdsAsParamAndFromModelObject, operationName, id, taskModel.Id);
 				return Conflict();
 			}
 
@@ -291,13 +291,13 @@ namespace Project_Main.Controllers
 
 			if (taskToDelete == null)
 			{
-				_logger.LogError(Messages.EntityNotFoundInDbLogger, operationName, nameof(taskToDelete));
+				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(taskToDelete));
 				return NotFound();
 			}
 
 			if (taskToDelete.TodoListId != todoListId)
 			{
-				_logger.LogError(Messages.ConflictBetweenTodoListIdsAsParamAndFromModelObjectLogger, operationName, todoListId, taskToDelete.TodoListId);
+				_logger.LogError(Messages.LogConflictBetweenTodoListIdsAsParamAndFromModelObject, operationName, todoListId, taskToDelete.TodoListId);
 				return Conflict();
 			}
 
@@ -332,7 +332,7 @@ namespace Project_Main.Controllers
 				{
 					if (taskToDelete.TodoListId != todoListId)
 					{
-						_logger.LogError(Messages.ConflictBetweenTodoListIdsAsParamAndFromModelObjectLogger, operationName, todoListId, taskToDelete.TodoListId);
+						_logger.LogError(Messages.LogConflictBetweenTodoListIdsAsParamAndFromModelObject, operationName, todoListId, taskToDelete.TodoListId);
 						return Conflict();
 					}
 
@@ -342,7 +342,7 @@ namespace Project_Main.Controllers
 					return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
 				}
 
-				_logger.LogError(Messages.EntityNotFoundInDbLogger, operationName, nameof(taskToDelete));
+				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(taskToDelete));
 				return NotFound();
 			}
 

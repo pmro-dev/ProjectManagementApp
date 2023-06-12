@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Project_Main.Models.DataBases.General
 {
-    public abstract class UnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
+	///<inheritdoc />
+	public abstract class UnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
     {
         protected readonly TContext _context;
         private bool _disposed = false;
@@ -11,7 +12,7 @@ namespace Project_Main.Models.DataBases.General
         protected UnitOfWork(TContext context)
         {
             _context = context;
-        }
+		}
 
         public virtual async Task SaveChangesAsync()
         {

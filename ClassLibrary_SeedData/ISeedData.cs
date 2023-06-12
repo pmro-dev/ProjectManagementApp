@@ -2,6 +2,9 @@
 
 namespace ClassLibrary_SeedData
 {
+	/// <summary>
+	/// Class provides sets with data to seed main Db.
+	/// </summary>
 	public interface ISeedData
 	{
 		public List<TaskModel> AllTasks { get; set; }

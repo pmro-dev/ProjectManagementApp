@@ -3,14 +3,35 @@ using Project_Main.Models.DataBases.General;
 
 namespace Project_Main.Models.DataBases.AppData
 {
-    public interface ITodoListRepository : IGenericRepository<TodoListModel>
+	///<inheritdoc />
+	public interface ITodoListRepository : IGenericRepository<TodoListModel>
     {
-        Task<TodoListModel> GetWithDetailsAsync(int id);
+		/// <summary>
+		/// Get a specific ToDoList with details (where details are related data in other tables).
+		/// </summary>
+		/// <param name="id">Targeted list id.</param>
+		/// <returns>ToDoList with details from Db.</returns>
+		Task<TodoListModel> GetWithDetailsAsync(int id);
 
-        Task<List<TodoListModel>> GetAllWithDetailsAsync(string userId);
+		/// <summary>
+		/// Get All ToDoLists with details (where details are related data in other tables).
+		/// </summary>
+		/// <param name="userId"></param>
+		/// <returns>All ToDoLists wiith details from Db.</returns>
+		Task<List<TodoListModel>> GetAllWithDetailsAsync(string userId);
 
-        Task DuplicateWithDetailsAsync(int id);
+		/// <summary>
+		/// Duplicate a whole, specifc ToDoList with details in Db (where details are related data in other tables).
+		/// </summary>
+		/// <param name="id">Targeted list id.</param>
+		/// <returns></returns>
+		Task DuplicateWithDetailsAsync(int id);
 
-        Task<bool> DoesAnyExistWithSameNameAsync(string name);
+		/// <summary>
+		/// Check that any ToDoList with the same name already exists.
+		/// </summary>
+		/// <param name="name">Targeted name to check.</param>
+		/// <returns>True when ToDoList with specified name already exists, otherwise false.</returns>
+		Task<bool> DoesAnyExistWithSameNameAsync(string name);
     }
 }

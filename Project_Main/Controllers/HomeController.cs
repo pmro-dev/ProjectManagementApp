@@ -84,7 +84,7 @@ namespace Project_Main.Controllers
 
 					Dictionary<string, string?> itemsForAuthProperties = new()
 					{
-						{ HelperProgramAndAuth.AuthSchemeClaimKey, CookieAuthenticationDefaults.AuthenticationScheme }
+						{ ConfigConstants.AuthSchemeClaimKey, CookieAuthenticationDefaults.AuthenticationScheme }
 					};
 
 					AuthenticationProperties authProperties = new(itemsForAuthProperties);
@@ -127,13 +127,13 @@ namespace Project_Main.Controllers
 		/// <returns>Return Login View.</returns>
 		public async Task<IActionResult> LogOut()
 		{
-			string userAuthScheme = User.Claims.First(c => c.Type == HelperProgramAndAuth.AuthSchemeClaimKey).Value;
+			string userAuthScheme = User.Claims.First(c => c.Type == ConfigConstants.AuthSchemeClaimKey).Value;
 
 			switch (userAuthScheme)
 			{
-				case HelperProgramAndAuth.GoogleOpenIDScheme:
+				case ConfigConstants.GoogleOpenIDScheme:
 					await HttpContext.SignOutAsync();
-					return Redirect(HelperProgramAndAuth.GoogleUrlToLogout);
+					return Redirect(ConfigConstants.GoogleUrlToLogout);
 				case CookieAuthenticationDefaults.AuthenticationScheme:
 					await HttpContext.SignOutAsync();
 					return RedirectToAction(nameof(Login));
@@ -181,7 +181,7 @@ namespace Project_Main.Controllers
 							FirstName = registerViewModel.Name,
 							Lastname = registerViewModel.Name,
 							Password = registerViewModel.Password,
-							Provider = HelperProgramAndAuth.DefaultScheme,
+							Provider = ConfigConstants.DefaultScheme,
 							Username = registerViewModel.Name,
 						};
 
@@ -217,7 +217,7 @@ namespace Project_Main.Controllers
 				}
 				catch (Exception ex)
 				{
-					_logger.LogCritical(ex, Messages.CreatingUserIdentityFailed, operationName);
+					_logger.LogCritical(ex, Messages.LogCreatingUserIdentityFailed, operationName);
 					throw;
 				}
 			}

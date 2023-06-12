@@ -9,15 +9,24 @@ using Project_Main.Models.DataBases.Identity.DbSetup;
 
 namespace Project_Main
 {
+	/// <summary>
+	/// Web Builder extensions that allows to setup authentication services. 
+	/// </summary>
 	public static class AuthenticationWebBuilderExtensions
 	{
+		/// <summary>
+		/// Setup basic authentication based on Cookie.
+		/// </summary>
+		/// <param name="builder">App builder.</param>
+		/// <exception cref="InvalidOperationException">Occurs when Unit Of Work, Gotten User from Db or Roles is null.</exception>
+		/// <exception cref="ArgumentException">Occurs when Principle object of CookieContext is null.</exception>
 		public static void SetupBasicAuthenticationWithCookie(this WebApplicationBuilder builder)
 		{
 			builder.Services
 			.AddAuthentication(options =>
 			{
-				options.DefaultScheme = HelperProgramAndAuth.DefaultScheme;
-				options.DefaultChallengeScheme = HelperProgramAndAuth.DefaultChallengeScheme;
+				options.DefaultScheme = ConfigConstants.DefaultScheme;
+				options.DefaultChallengeScheme = ConfigConstants.DefaultChallengeScheme;
 			})
 			.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
 			{
@@ -25,15 +34,15 @@ namespace Project_Main
 				options.LoginPath = CustomRoutes.LoginPath;
 				options.ExpireTimeSpan = TimeSpan.FromDays(30);
 				options.Cookie.HttpOnly = true;
-				options.Cookie.Name = HelperProgramAndAuth.CustomCookieName;
+				options.Cookie.Name = ConfigConstants.CustomCookieName;
 				options.Events = new CookieAuthenticationEvents()
 				{
 					OnSigningIn = async cookieSigningInContext =>
 					{
 						SetupIdentityUnitOfWork(cookieSigningInContext, out IIdentityUnitOfWork _identityUnitOfWork, out IUserRepository userRepository, out IRoleRepository roleRepository);
 
-						var authScheme = cookieSigningInContext.Properties.Items.SingleOrDefault(i => i.Key == HelperProgramAndAuth.AuthSchemeClaimKey);
-						Claim authSchemeClaimWithProviderName = new Claim(authScheme.Key, authScheme.Value ?? HelperProgramAndAuth.AuthSchemeClaimValue);
+						var authScheme = cookieSigningInContext.Properties.Items.SingleOrDefault(i => i.Key == ConfigConstants.AuthSchemeClaimKey);
+						Claim authSchemeClaimWithProviderName = new Claim(authScheme.Key, authScheme.Value ?? ConfigConstants.AuthSchemeClaimValue);
 
 						CreateUserBasedOnProviderData(cookieSigningInContext, authSchemeClaimWithProviderName, out ClaimsIdentity principle, out UserModel userBasedOnProviderClaims);
 
@@ -61,7 +70,7 @@ namespace Project_Main
 				IIdentityUnitOfWork LoggAndThrowExceptionOnNullUnitOfWork()
 				{
 					// TODO write new message for Unit Of Work null object
-					_logger?.LogCritical(Messages.ErrorDbContextIsNull, nameof(_identityUnitOfWork));
+					_logger?.LogCritical(Messages.LogErrorDbContextIsNull, nameof(_identityUnitOfWork));
 					throw new InvalidOperationException(Messages.DbContextIsNull(nameof(_identityUnitOfWork)));
 				}
 
@@ -155,24 +164,28 @@ namespace Project_Main
 			#endregion
 		}
 
-		public static void SetupOpenIDConnectAuthentication(this WebApplicationBuilder builder)
+		/// <summary>
+		/// Setup Google Authentication based on OpenIDConnect.
+		/// </summary>
+		/// <param name="builder">App builder.</param>
+		public static void SetupGoogleAuthentication(this WebApplicationBuilder builder)
 		{
-			string AuthGoogleClientId = builder.Configuration[HelperProgramAndAuth.AuthGoogleClientId];
-			string AuthGoogleClientSecret = builder.Configuration[HelperProgramAndAuth.AuthGoogleClientSecret];
+			string AuthGoogleClientId = builder.Configuration[ConfigConstants.AuthGoogleClientId];
+			string AuthGoogleClientSecret = builder.Configuration[ConfigConstants.AuthGoogleClientSecret];
 
 			builder.Services.AddAuthentication(options =>
 			{
-				options.DefaultScheme = HelperProgramAndAuth.DefaultScheme;
-				options.DefaultChallengeScheme = HelperProgramAndAuth.DefaultChallengeScheme;
+				options.DefaultScheme = ConfigConstants.DefaultScheme;
+				options.DefaultChallengeScheme = ConfigConstants.DefaultChallengeScheme;
 			})
-				.AddOpenIdConnect(HelperProgramAndAuth.GoogleOpenIDScheme, options =>
+				.AddOpenIdConnect(ConfigConstants.GoogleOpenIDScheme, options =>
 				{
-					options.Authority = HelperProgramAndAuth.GoogleAuthority;
+					options.Authority = ConfigConstants.GoogleAuthority;
 					options.ClientId = AuthGoogleClientId;
 					options.ClientSecret = AuthGoogleClientSecret;
-					options.CallbackPath = HelperProgramAndAuth.GoogleOpenIdCallBackPath;
+					options.CallbackPath = ConfigConstants.GoogleOpenIdCallBackPath;
 					options.SaveTokens = true;
-					options.Scope.Add(HelperProgramAndAuth.GoogleEmailScope);
+					options.Scope.Add(ConfigConstants.GoogleEmailScope);
 				});
 		}
 	}

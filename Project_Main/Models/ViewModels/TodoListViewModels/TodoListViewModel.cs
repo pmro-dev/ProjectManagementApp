@@ -3,6 +3,9 @@ using Project_DomainEntities;
 
 namespace Project_Main.Models.ViewModels.TodoListViewModels
 {
+    /// <summary>
+    /// Model for showing ToDoList.
+    /// </summary>
     public class TodoListViewModel
     {
         public int Id { get; set; }

@@ -5,7 +5,8 @@ using Project_Main.Models.DataBases.General;
 
 namespace Project_Main.Models.DataBases.AppData
 {
-    public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRepository
+	///<inheritdoc />
+	public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRepository
     {
         private readonly CustomAppDbContext _dbContext;
         private readonly ILogger<TodoListRepository> _logger;
@@ -17,13 +18,15 @@ namespace Project_Main.Models.DataBases.AppData
             _logger = logger;
         }
 
-        public async Task<bool> DoesAnyExistWithSameNameAsync(string name)
+		///<inheritdoc />
+		public async Task<bool> DoesAnyExistWithSameNameAsync(string name)
         {
             return await _dbContext.Set<TodoListModel>()
                 .AnyAsync(todoList => todoList.Title == name);
         }
 
-        public async Task DuplicateWithDetailsAsync(int id)
+		///<inheritdoc />
+		public async Task DuplicateWithDetailsAsync(int id)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(DuplicateWithDetailsAsync), nameof(TodoListRepository));
             HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
@@ -36,7 +39,7 @@ namespace Project_Main.Models.DataBases.AppData
 
             if (todoListWithDetails is null)
             {
-                _logger.LogError(Messages.EntityNotFoundInDbLogger, operationName, nameof(todoListWithDetails));
+                _logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(todoListWithDetails));
                 throw new InvalidOperationException(Messages.ExceptionNullObjectOnAction(operationName, nameof(todoListWithDetails)));
             }
 
@@ -63,7 +66,8 @@ namespace Project_Main.Models.DataBases.AppData
             await AddAsync(newTodoList);
         }
 
-        public async Task<List<TodoListModel>> GetAllWithDetailsAsync(string userId)
+		///<inheritdoc />
+		public async Task<List<TodoListModel>> GetAllWithDetailsAsync(string userId)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetAllWithDetailsAsync), nameof(TodoListRepository));
             HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref userId, nameof(userId), _logger);
@@ -77,7 +81,8 @@ namespace Project_Main.Models.DataBases.AppData
             return allTodoListsWithDetails;
         }
 
-        public async Task<TodoListModel> GetWithDetailsAsync(int id)
+		///<inheritdoc />
+		public async Task<TodoListModel> GetWithDetailsAsync(int id)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetWithDetailsAsync), nameof(TodoListRepository));
             HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);

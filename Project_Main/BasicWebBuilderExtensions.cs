@@ -12,14 +12,21 @@ using Project_Main.Models.DataBases.Identity;
 
 namespace Project_Main
 {
+	/// <summary>
+	/// Web Builder extensions that allows to setup basic services such as Databases, Unit Of Work's elements, Data Seeding and pipeline. 
+	/// </summary>
 	public static class BasicWebBuilderExtensions
 	{
+		/// <summary>
+		/// Add Custom Databases context's services for Main Db and Identity Db.
+		/// </summary>
+		/// <param name="builder">App builder.</param>
 		public static void AddCustomDbContexts(this WebApplicationBuilder builder)
 		{
 			builder.Services.AddDbContext<CustomAppDbContext>(
 			options =>
 			{
-				options.UseSqlServer(builder.Configuration[HelperProgramAndAuth.ConnectionStringMainDb]);
+				options.UseSqlServer(builder.Configuration[ConfigConstants.ConnectionStringMainDb]);
 				options.UseExceptionProcessor();
 			},
 				ServiceLifetime.Scoped);
@@ -27,12 +34,16 @@ namespace Project_Main
 			builder.Services.AddDbContext<CustomIdentityDbContext>(
 			options =>
 			{
-				options.UseSqlServer(builder.Configuration[HelperProgramAndAuth.ConnectionStringIdentityDb]);
+				options.UseSqlServer(builder.Configuration[ConfigConstants.ConnectionStringIdentityDb]);
 				options.UseExceptionProcessor();
 			},
 				ServiceLifetime.Scoped);
 		}
 
+		/// <summary>
+		/// Add Unit Of Work's services such as Data UOF and Identity UOW.
+		/// </summary>
+		/// <param name="builder">App builder.</param>
 		public static void SetupUnitOfWorkServices(this WebApplicationBuilder builder)
 		{
 			builder.Services.AddScoped<IIdentityUnitOfWork, IdentityUnitOfWork>();
@@ -43,11 +54,19 @@ namespace Project_Main
 			builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 		}
 
+		/// <summary>
+		/// Add Data seeding service for main Db.
+		/// </summary>
+		/// <param name="builder">App builder.</param>
 		public static void SetupSeedDataServices(this WebApplicationBuilder builder)
 		{
 			builder.Services.AddScoped<ISeedData, SeedData>();
 		}
 
+		/// <summary>
+		/// Setup basic environment settings such as development environment.
+		/// </summary>
+		/// <param name="builder">App builder.</param>
 		public static void SetupEnvironmentSettings(this WebApplicationBuilder builder)
 		{
 			if (builder.Environment.IsDevelopment())
@@ -60,6 +79,10 @@ namespace Project_Main
 			}
 		}
 
+		/// <summary>
+		/// Setup a whole app pipeline.
+		/// </summary>
+		/// <param name="app">App.</param>
 		public static void SetupPipeline(this WebApplication app)
 		{
 			if (app.Environment.IsDevelopment())

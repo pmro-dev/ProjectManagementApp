@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 
 namespace Project_Main.Models.DataBases.General
 {
+	///<inheritdoc />
 	public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
 	{
 		protected readonly DbContext Context;
@@ -17,6 +18,7 @@ namespace Project_Main.Models.DataBases.General
 			_logger = logger;
 		}
 
+		///<inheritdoc />
 		public async Task AddAsync(TEntity entity)
 		{
 			string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
@@ -25,12 +27,14 @@ namespace Project_Main.Models.DataBases.General
 
 			await _dbSet.AddAsync(entity);
 		}
-		
+
+		///<inheritdoc />
 		public async Task<IEnumerable<TEntity>> GetAllAsync()
 		{
 			return await _dbSet.ToListAsync();
 		}
 
+		///<inheritdoc />
 		public async Task<TEntity?> GetAsync(object id)
 		{
 			string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
@@ -40,6 +44,7 @@ namespace Project_Main.Models.DataBases.General
 			return await _dbSet.FindAsync(id);
 		}
 
+		///<inheritdoc />
 		public async Task<IEnumerable<TEntity>> GetAllByFilterAsync(Expression<Func<TEntity, bool>>? filter = null)
 		{
 			IQueryable<TEntity> entities = _dbSet;
@@ -52,6 +57,7 @@ namespace Project_Main.Models.DataBases.General
 			return await entities.ToListAsync();
 		}
 
+		///<inheritdoc />
 		public async Task<TEntity?> GetSingleByFilterAsync(Expression<Func<TEntity, bool>>? filter)
 		{
 			if (filter != null)
@@ -62,6 +68,7 @@ namespace Project_Main.Models.DataBases.General
 			return null;
 		}
 
+		///<inheritdoc />
 		public Task Remove(TEntity entity)
 		{
 			return Task.Run(() =>
@@ -74,6 +81,7 @@ namespace Project_Main.Models.DataBases.General
 			});
 		}
 
+		///<inheritdoc />
 		public Task Update(TEntity entity)
 		{
 			return Task.Run(() =>
@@ -86,6 +94,7 @@ namespace Project_Main.Models.DataBases.General
 			});
 		}
 
+		///<inheritdoc />
 		public async Task AddRangeAsync(IEnumerable<TEntity> range)
 		{
 			string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
@@ -95,6 +104,7 @@ namespace Project_Main.Models.DataBases.General
 			await _dbSet.AddRangeAsync(range, default);
 		}
 
+		///<inheritdoc />
 		public async Task<bool> ContainsAny()
 		{
 			return await _dbSet.AnyAsync();

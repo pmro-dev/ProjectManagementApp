@@ -2,9 +2,13 @@
 
 namespace Project_Main.Models.DataBases.AppData
 {
-    public interface IDataUnitOfWork : IUnitOfWork
+	///<inheritdoc />
+	public interface IDataUnitOfWork : IUnitOfWork
     {
-        ITodoListRepository TodoListRepository { get; }
-        ITaskRepository TaskRepository { get; }
+		///<inheritdoc />
+		ITodoListRepository TodoListRepository { get; }
+
+		///<inheritdoc />
+		ITaskRepository TaskRepository { get; }
     }
 }

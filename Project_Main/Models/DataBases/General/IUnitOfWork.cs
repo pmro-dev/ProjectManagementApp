@@ -2,18 +2,45 @@
 
 namespace Project_Main.Models.DataBases.General
 {
+    /// <summary>
+    /// Unit Of Work class allows to manage group of Db operations at once ex. as transaction, also it's possible to get migrations and rollback transaction.
+    /// </summary>
     public interface IUnitOfWork : IDisposable
     {
-        Task SaveChangesAsync();
+		/// <summary>
+		/// Save changes in Database made by repositories.
+		/// </summary>
+		/// <returns>Async Task operation.</returns>
+		Task SaveChangesAsync();
 
-        public Task<IDbContextTransaction> BeginTransactionAsync();
+		/// <summary>
+		/// Begin transaction to make in Database.
+		/// </summary>
+		/// <returns>Database context transaction.</returns>
+		public Task<IDbContextTransaction> BeginTransactionAsync();
 
-        public Task CommitTransactionAsync();
+		/// <summary>
+		/// Execute transaction in Database.
+		/// </summary>
+		/// <returns>Async Task operation.</returns>
+		public Task CommitTransactionAsync();
 
-        public Task RollbackTransactionAsync();
+		/// <summary>
+		/// Get back to a state before transaction began.
+		/// </summary>
+		/// <returns>Async Task operation.</returns>
+		public Task RollbackTransactionAsync();
 
-        public Task<IEnumerable<string>> GetPendingMigrationsAsync();
+		/// <summary>
+		/// Get any pending migration on Database.
+		/// </summary>
+		/// <returns>IEnumerable set of pending migrations.</returns>
+		public Task<IEnumerable<string>> GetPendingMigrationsAsync();
 
-        public Task MigrateAsync();
+		/// <summary>
+		/// Execute migration on Database.
+		/// </summary>
+		/// <returns>Async Task operation.</returns>
+		public Task MigrateAsync();
     }
 }

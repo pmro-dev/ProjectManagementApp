@@ -3,7 +3,8 @@ using Project_Main.Models.DataBases.General;
 
 namespace Project_Main.Models.DataBases.AppData
 {
-    public interface ITaskRepository : IGenericRepository<TaskModel>
+	///<inheritdoc />
+	public interface ITaskRepository : IGenericRepository<TaskModel>
     {
     }
 }

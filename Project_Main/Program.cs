@@ -33,7 +33,7 @@ namespace Project_Main
 			#region SETUP AUTHENNTICATION
 
 			builder.SetupBasicAuthenticationWithCookie();
-			builder.SetupOpenIDConnectAuthentication();
+			builder.SetupGoogleAuthentication();
 
 			#endregion
 
