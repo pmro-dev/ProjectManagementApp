@@ -1,0 +1,179 @@
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Project_IdentityDomainEntities.Helpers;
+using Project_IdentityDomainEntities;
+using Project_Main.Controllers.Helpers;
+using Project_Main.Infrastructure.Helpers;
+using Project_Main.Models.DataBases.Identity;
+using System.Security.Claims;
+using Project_Main.Models.DataBases.Identity.DbSetup;
+
+namespace Project_Main
+{
+	public static class AuthenticationWebBuilderExtensions
+	{
+		public static void SetupBasicAuthenticationWithCookie(this WebApplicationBuilder builder)
+		{
+			builder.Services
+			.AddAuthentication(options =>
+			{
+				options.DefaultScheme = HelperProgramAndAuth.DefaultScheme;
+				options.DefaultChallengeScheme = HelperProgramAndAuth.DefaultChallengeScheme;
+			})
+			.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+			{
+				options.AccessDeniedPath = CustomRoutes.AccessDeniedPath;
+				options.LoginPath = CustomRoutes.LoginPath;
+				options.ExpireTimeSpan = TimeSpan.FromDays(30);
+				options.Cookie.HttpOnly = true;
+				options.Cookie.Name = HelperProgramAndAuth.CustomCookieName;
+				options.Events = new CookieAuthenticationEvents()
+				{
+					OnSigningIn = async cookieSigningInContext =>
+					{
+						SetupIdentityUnitOfWork(cookieSigningInContext, out IIdentityUnitOfWork _identityUnitOfWork, out IUserRepository userRepository, out IRoleRepository roleRepository);
+
+						var authScheme = cookieSigningInContext.Properties.Items.SingleOrDefault(i => i.Key == HelperProgramAndAuth.AuthSchemeClaimKey);
+						Claim authSchemeClaimWithProviderName = new Claim(authScheme.Key, authScheme.Value ?? HelperProgramAndAuth.AuthSchemeClaimValue);
+
+						CreateUserBasedOnProviderData(cookieSigningInContext, authSchemeClaimWithProviderName, out ClaimsIdentity principle, out UserModel userBasedOnProviderClaims);
+
+						if (await userRepository.IsNameTakenAsync(userBasedOnProviderClaims.Username))
+						{
+							await UpdateUserWhenDataOnProviderSideChangedAsync(userRepository, userBasedOnProviderClaims, authSchemeClaimWithProviderName);
+						}
+						else
+						{
+							await AddUserWhenNotExistsAsync(userRepository, userBasedOnProviderClaims, roleRepository);
+						}
+
+						await _identityUnitOfWork.SaveChangesAsync();
+						await SetRolesForUserPrincipleAsync(userRepository, userBasedOnProviderClaims.UserId, principle);
+					}
+				};
+			});
+
+			#region LOCAL FUNCTIONS
+
+			static void SetupIdentityUnitOfWork(CookieSigningInContext cookieSigningInContext, out IIdentityUnitOfWork _identityUnitOfWork, out IUserRepository userRepository, out IRoleRepository roleRepository)
+			{
+				ILogger? _logger = cookieSigningInContext.HttpContext.RequestServices.GetService<ILogger>();
+
+				IIdentityUnitOfWork LoggAndThrowExceptionOnNullUnitOfWork()
+				{
+					// TODO write new message for Unit Of Work null object
+					_logger?.LogCritical(Messages.ErrorDbContextIsNull, nameof(_identityUnitOfWork));
+					throw new InvalidOperationException(Messages.DbContextIsNull(nameof(_identityUnitOfWork)));
+				}
+
+				_identityUnitOfWork = cookieSigningInContext.HttpContext.RequestServices.GetService<IIdentityUnitOfWork>() ?? LoggAndThrowExceptionOnNullUnitOfWork();
+
+				userRepository = _identityUnitOfWork.UserRepository;
+				roleRepository = _identityUnitOfWork.RoleRepository;
+			}
+
+
+			static void CreateUserBasedOnProviderData(CookieSigningInContext cookieSigningInContext, Claim authSchemeClaimWithProviderName, out ClaimsIdentity principle, out UserModel userBasedOnProviderClaims)
+			{
+				principle = cookieSigningInContext.Principal?.Identity as ClaimsIdentity ?? 
+					throw new ArgumentException(Messages.ParamObjectNull(nameof(CreateUserBasedOnProviderData), nameof(cookieSigningInContext.Principal)));
+				
+				principle?.AddClaim(authSchemeClaimWithProviderName);
+
+				List<Claim> claims = cookieSigningInContext.Principal?.Claims.ToList() ?? new();
+
+				UserModel userBasedOnClaims = new()
+				{
+					NameIdentifier = claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value,
+					UserId = claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value,
+					Username = claims.Single(c => c.Type == ClaimTypes.Name).Value,
+					Provider = authSchemeClaimWithProviderName.Value,
+					Email = claims.Single(c => c.Type == ClaimTypes.Email).Value
+				};
+
+				userBasedOnProviderClaims = userBasedOnClaims;
+			}
+
+
+			static async Task UpdateUserWhenDataOnProviderSideChangedAsync(IUserRepository userRepository, UserModel userBasedOnProviderClaims, Claim authSchemeClaimWithProviderName)
+			{
+				UserModel? userFromDb = await userRepository.GetAsync(userBasedOnProviderClaims.NameIdentifier);
+
+				if (userFromDb is null)
+				{
+					// TODO logger
+					//_logger?.LogCritical(Messages.EntityNotFoundInDbLogger, );
+					throw new InvalidOperationException(Messages.EntityNotFoundInDb(nameof(UpdateUserWhenDataOnProviderSideChangedAsync), "Identity", -2));
+				}
+
+				bool doesUserUseOtherProvider = userBasedOnProviderClaims.Provider != CookieAuthenticationDefaults.AuthenticationScheme;
+
+				if (doesUserUseOtherProvider && ModelsHelper.IsUserDataFromProviderDifferentToUserDataInDb(ref userBasedOnProviderClaims, ref userFromDb))
+				{
+					userFromDb.FirstName = userBasedOnProviderClaims.FirstName;
+					userFromDb.Lastname = userBasedOnProviderClaims.Lastname;
+					userFromDb.Username = userBasedOnProviderClaims.Username;
+					userFromDb.Provider = authSchemeClaimWithProviderName.Value;
+					userFromDb.Email = userBasedOnProviderClaims.Email;
+
+					await userRepository.Update(userFromDb);
+				}
+			}
+
+
+			static async Task AddUserWhenNotExistsAsync(IUserRepository userRepository, UserModel userBasedOnProviderClaims, IRoleRepository roleRepository)
+			{
+				RoleModel? roleForNewUser = await roleRepository.GetSingleByFilterAsync(r => r.Name == IdentitySeedData.DefaultRole);
+
+				if (roleForNewUser is null)
+				{
+					throw new InvalidOperationException("message");
+				}
+
+				userBasedOnProviderClaims.UserRoles.Add(new UserRoleModel()
+				{
+					User = userBasedOnProviderClaims,
+					UserId = userBasedOnProviderClaims.UserId,
+					Role = roleForNewUser,
+					RoleId = roleForNewUser.Id
+				});
+
+				await userRepository.AddAsync(userBasedOnProviderClaims);
+			}
+
+
+			static async Task SetRolesForUserPrincipleAsync(IUserRepository userRepository, string userId, ClaimsIdentity? principle)
+			{
+				IEnumerable<RoleModel> userRoles = await userRepository.GetRolesAsync(userId);
+				List<string> userRolesNames = userRoles.Select(userRole => userRole.Name).ToList();
+
+				foreach (string roleName in userRolesNames)
+				{
+					principle?.AddClaim(new Claim(ClaimTypes.Role, roleName));
+				}
+			}
+
+			#endregion
+		}
+
+		public static void SetupOpenIDConnectAuthentication(this WebApplicationBuilder builder)
+		{
+			string AuthGoogleClientId = builder.Configuration[HelperProgramAndAuth.AuthGoogleClientId];
+			string AuthGoogleClientSecret = builder.Configuration[HelperProgramAndAuth.AuthGoogleClientSecret];
+
+			builder.Services.AddAuthentication(options =>
+			{
+				options.DefaultScheme = HelperProgramAndAuth.DefaultScheme;
+				options.DefaultChallengeScheme = HelperProgramAndAuth.DefaultChallengeScheme;
+			})
+				.AddOpenIdConnect(HelperProgramAndAuth.GoogleOpenIDScheme, options =>
+				{
+					options.Authority = HelperProgramAndAuth.GoogleAuthority;
+					options.ClientId = AuthGoogleClientId;
+					options.ClientSecret = AuthGoogleClientSecret;
+					options.CallbackPath = HelperProgramAndAuth.GoogleOpenIdCallBackPath;
+					options.SaveTokens = true;
+					options.Scope.Add(HelperProgramAndAuth.GoogleEmailScope);
+				});
+		}
+	}
+}
