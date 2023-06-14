@@ -8,9 +8,9 @@ namespace Project_Main.Models.ViewModels.HomeViewModels
     public class LoginViewModel
     {
         [Required]
-        public string? Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-        [Required]
-        public string? Password { get; set; }
-    }
+		[Required]
+        public string Password { get; set; } = string.Empty;
+	}
 }

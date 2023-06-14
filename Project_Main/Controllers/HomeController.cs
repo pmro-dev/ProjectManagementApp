@@ -3,12 +3,10 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.ViewModels.HomeViewModels;
-using Project_IdentityDomainEntities;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Project_Main.Models.DataBases.Identity;
 using Project_Main.Controllers.Helpers;
-using Project_Main.Models.DataBases.Identity.DbSetup;
+using Project_Main.Services;
+using Castle.Core.Internal;
 
 namespace Project_Main.Controllers
 {
@@ -20,16 +18,16 @@ namespace Project_Main.Controllers
 	public class HomeController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;
-		private readonly IIdentityUnitOfWork _identityUnitOfWork;
+		private readonly ILoginService _loginService;
+		private readonly IRegisterService _registerService;
+
 		private string operationName = string.Empty;
 		private readonly string controllerName = nameof(HomeController);
 
-		/// <summary>
-		/// Initializes class.
-		/// </summary>
-		public HomeController(IIdentityUnitOfWork identityUnitOfWork, ILogger<HomeController> logger)
+		public HomeController(ILoginService loginService, IRegisterService registerService, ILogger<HomeController> logger)
 		{
-			_identityUnitOfWork = identityUnitOfWork;
+			_loginService = loginService;
+			_registerService = registerService;
 			_logger = logger;
 		}
 
@@ -54,46 +52,36 @@ namespace Project_Main.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				if (loginViewModel.Name == null || loginViewModel.Password == null)
+				if (loginViewModel.Name.IsNullOrEmpty() || loginViewModel.Password.IsNullOrEmpty())
 				{
-					throw new ArgumentNullException(nameof(loginViewModel));
+					return View(loginViewModel);
 				}
 
-				IUserRepository userRepository = _identityUnitOfWork.UserRepository;
+				string userName = loginViewModel.Name;
+				string userPassword = loginViewModel.Password;
 
-				UserModel? user = await userRepository.GetByNameAndPasswordAsync(loginViewModel.Name, loginViewModel.Password);
-
-				if (user != null)
+				try 
 				{
-					List<Claim> userClaims = new()
-					{
-						new Claim(ClaimTypes.Name, user.Username),
-						new Claim(ClaimTypes.Email, user.Email),
-						new Claim(ClaimTypes.NameIdentifier, user.NameIdentifier),
-						new Claim(ClaimTypes.Surname, user.Lastname),
-						new Claim(ClaimTypes.GivenName, user.FirstName),
-					};
+					bool isUserRegistered = await _loginService.IsUserRegisteredAsync(userName, userPassword);
 
-					foreach (var userRole in user.UserRoles)
+					if (isUserRegistered)
 					{
-						userClaims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
+						bool isLoggedInSuccessfully = await _loginService.LogInUserAsync();
+
+						if (isLoggedInSuccessfully)
+						{
+							return RedirectToRoute(CustomRoutes.MainBoardRouteName);
+						}
 					}
 
-					ClaimsIdentity userIdentity = new(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
-					ClaimsPrincipal userPrincipal = new(userIdentity);
-
-					Dictionary<string, string?> itemsForAuthProperties = new()
-					{
-						{ ConfigConstants.AuthSchemeClaimKey, CookieAuthenticationDefaults.AuthenticationScheme }
-					};
-
-					AuthenticationProperties authProperties = new(itemsForAuthProperties);
-					await HttpContext.SignInAsync(userPrincipal, authProperties);
-
-					return RedirectToRoute(CustomRoutes.MainBoardRouteName);
+					ModelState.AddModelError(string.Empty, Messages.InvalidLoginData);
 				}
-
-				ModelState.AddModelError(string.Empty, Messages.InvalidLoginData);
+				catch (Exception ex)
+				{
+					// TODO change message and operationName aslast param
+					_logger.LogCritical(ex, "SOME ERROR OCURRED WHILE LOGGING USER", nameof(Login));
+					throw;
+				}
 			}
 
 			return View(loginViewModel);
@@ -163,57 +151,29 @@ namespace Project_Main.Controllers
 			if (ModelState.IsValid)
 			{
 				operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Register), controllerName);
+				bool isDataInvalid = registerViewModel.Name.IsNullOrEmpty() || registerViewModel.Password.IsNullOrEmpty() || registerViewModel.Email.IsNullOrEmpty();
 
-				if (registerViewModel.Name == null || registerViewModel.Password == null)
-				{
-					throw new ArgumentNullException(nameof(registerViewModel));
-				}
+				if (isDataInvalid) return View();
 
-				IUserRepository userRepository = _identityUnitOfWork.UserRepository;
+				string userName = registerViewModel.Name;
+				string userPassword = registerViewModel.Password;
+				string userEmail = registerViewModel.Email;
 
 				try
 				{
-					if (await userRepository.IsNameTakenAsync(registerViewModel.Name) is false)
+					bool isPossibleToRegisterUser = await _registerService.IsPossibleToRegisterUserByProvidedData(userName);
+					
+					if (isPossibleToRegisterUser)
 					{
-						UserModel newUser = new()
-						{
-							Email = registerViewModel.Email,
-							FirstName = registerViewModel.Name,
-							Lastname = registerViewModel.Name,
-							Password = registerViewModel.Password,
-							Provider = ConfigConstants.DefaultScheme,
-							Username = registerViewModel.Name,
-						};
+						bool isUserRegisteredSuccessfully = await _registerService.RegisterUserAsync(userName, userPassword, userEmail);
 
-						IRoleRepository roleRepository = _identityUnitOfWork.RoleRepository;
-						RoleModel? roleForNewUser = await roleRepository.GetSingleByFilterAsync(role => role.Name == IdentitySeedData.DefaultRole);
-
-						if (roleForNewUser is null)
+						if (isUserRegisteredSuccessfully)
 						{
-							// TODO 
-							throw new InvalidOperationException("no role in db for new user!");
+							return View(nameof(Login));
 						}
-
-						newUser.NameIdentifier = newUser.UserId;
-						newUser.UserRoles.Add(new UserRoleModel()
-						{
-							User = newUser,
-							UserId = newUser.UserId,
-							Role = roleForNewUser,
-							RoleId = roleForNewUser.Id,
-						});
-
-						Task addUserTask = new(async () =>
-						{
-							await userRepository.AddAsync(newUser);
-							await _identityUnitOfWork.SaveChangesAsync();
-						});
-
-						addUserTask.Start();
-
-						Task.WaitAny(addUserTask);
-						return View(nameof(Login));
 					}
+
+					return View();
 				}
 				catch (Exception ex)
 				{
