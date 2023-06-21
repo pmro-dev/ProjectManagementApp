@@ -21,7 +21,7 @@
 		public const string TodoListDuplicateRoute = "{todoListId:int}/Duplicate";
 		public const string LoginByProviderRoute = "Login/{provider}";
 		
-		public const string TaskDetailsRoute = TodoListControllerRoute + "/{todoListId:int}/[controller]/{taskId:int}/Details";
+		public const string TaskDetailsRoute = TodoListControllerRoute + "/{routeTodoListId:int}/[controller]/{routeTaskId:int}/Details";
 		public const string CreateTaskRoute = TodoListControllerRoute + "/{id:int}/Create";
 		public const string CreateTaskPostRoute = TodoListControllerRoute + "/{todoListId:int}/Create";
 		public const string TaskEditRoute = TodoListControllerRoute + "/{todoListId:int}/[controller]/{taskId:int}/[action]";

@@ -67,7 +67,7 @@
 								<td class="col-1">@task.DueDate.ToString("HH:mm dddd dd MM")</td>
 								
 								<td class="col-2 btn-group-vertical" style="width: 100%;">
-									<form asp-action="Details" asp-controller="Task" asp-route-todoListId="@task.TodoListId" asp-route-taskId="@task.Id" method="get" style="width: 100%;">
+									<form asp-action="Details" asp-controller="Task" asp-route-routeTodoListId="@task.TodoListId" asp-route-routeTaskId="@task.Id" method="get" style="width: 100%;">
 										<button type="submit" class="btn btn-primary btn-block" style="width: 100%;">Details</button>
 									</form>
 									<form asp-action="Edit" asp-controller="Task" asp-route-todoListId="@task.TodoListId" asp-route-taskId="@task.Id" method="get" style="width: 100%;">

@@ -37,23 +37,23 @@ namespace Project_Main.Controllers
 		/// <summary>
 		/// Action GET with custom route to show specific To Do List with details ex. Tasks.
 		/// </summary>
-		/// <param name="todoListId">Target To Do List id.</param>
-		/// <param name="taskId">Target Task id.</param>
+		/// <param name="routeTodoListId">Target To Do List id.</param>
+		/// <param name="routeTaskId">Target Task id.</param>
 		/// <returns>
 		/// Return different view based on the final result.
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
 		[HttpGet]
 		[Route(CustomRoutes.TaskDetailsRoute)]
-		public async Task<ActionResult<TaskModel>> Details(int todoListId, int taskId)
+		public async Task<ActionResult<TaskModel>> Details(int routeTodoListId, int routeTaskId)
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Details), controllerName);
 
-			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
-			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, taskId, nameof(taskId), HelperOther.idBoundryBottom, _logger);
+			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, routeTodoListId, nameof(routeTodoListId), HelperOther.idBoundryBottom, _logger);
+			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, routeTaskId, nameof(routeTaskId), HelperOther.idBoundryBottom, _logger);
 			
 			ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
-			TaskModel? taskModel = await taskRepository.GetAsync(taskId);
+			TaskModel? taskModel = await taskRepository.GetAsync(routeTaskId);
 
 			if (taskModel == null)
 			{
@@ -61,9 +61,9 @@ namespace Project_Main.Controllers
 				return NotFound();
 			}
 
-			if (todoListId != taskModel.TodoListId)
+			if (routeTodoListId != taskModel.TodoListId)
 			{
-				_logger.LogError(Messages.LogConflictBetweenTodoListIdsAsParamAndFromModelObject, operationName, todoListId, taskModel.TodoListId);
+				_logger.LogError(Messages.LogConflictBetweenTodoListIdsAsParamAndFromModelObject, operationName, routeTodoListId, taskModel.TodoListId);
 				return Conflict();
 			}
 
