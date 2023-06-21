@@ -19,16 +19,18 @@ namespace Project_Main.Controllers
 		private readonly ILoginService _loginService;
 		private readonly IRegisterUserService _registerUserService;
 		private readonly IAuthenticationUserService _authenticationUserService;
+		private readonly ILogoutService _logoutService;
 
 		private string operationName = string.Empty;
 		private readonly string controllerName = nameof(HomeController);
 
-		public HomeController(ILoginService loginService, IRegisterUserService registerUserService, ILogger<HomeController> logger, IAuthenticationUserService authenticationUserService)
+		public HomeController(ILoginService loginService, IRegisterUserService registerUserService, ILogger<HomeController> logger, IAuthenticationUserService authenticationUserService, ILogoutService logoutService)
 		{
 			_loginService = loginService;
 			_registerUserService = registerUserService;
 			_logger = logger;
 			_authenticationUserService = authenticationUserService;
+			_logoutService = logoutService;
 		}
 
 		/// <summary>
@@ -111,19 +113,9 @@ namespace Project_Main.Controllers
 		/// <returns>Return Login View.</returns>
 		public async Task<IActionResult> LogOut()
 		{
-			string userAuthScheme = User.Claims.First(c => c.Type == ConfigConstants.AuthSchemeClaimKey).Value;
+			string userAuthenticationScheme = User.Claims.First(c => c.Type == ConfigConstants.AuthSchemeClaimKey).Value;
 
-			switch (userAuthScheme)
-			{
-				case ConfigConstants.GoogleOpenIDScheme:
-					await HttpContext.SignOutAsync();
-					return Redirect(ConfigConstants.GoogleUrlToLogout);
-				case CookieAuthenticationDefaults.AuthenticationScheme:
-					await HttpContext.SignOutAsync();
-					return RedirectToAction(nameof(Login));
-				default:
-					return new SignOutResult(new[] { CookieAuthenticationDefaults.AuthenticationScheme, userAuthScheme });
-			}
+			return await _logoutService.LogoutByProviderTypeAsync(this, userAuthenticationScheme);
 		}
 
 		/// <summary>
