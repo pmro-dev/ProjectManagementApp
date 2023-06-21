@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.ViewModels.HomeViewModels;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Project_Main.Controllers.Helpers;
 using Project_Main.Services;
 using Castle.Core.Internal;
@@ -19,15 +17,15 @@ namespace Project_Main.Controllers
 	{
 		private readonly ILogger<HomeController> _logger;
 		private readonly ILoginService _loginService;
-		private readonly IRegisterService _registerService;
+		private readonly IRegisterUserService _registerUserService;
 
 		private string operationName = string.Empty;
 		private readonly string controllerName = nameof(HomeController);
 
-		public HomeController(ILoginService loginService, IRegisterService registerService, ILogger<HomeController> logger)
+		public HomeController(IRegisterUserService registerUserService, ILogger<HomeController> logger)
 		{
 			_loginService = loginService;
-			_registerService = registerService;
+			_registerUserService = registerUserService;
 			_logger = logger;
 		}
 
@@ -134,10 +132,7 @@ namespace Project_Main.Controllers
 		/// Return Register view.
 		/// </summary>
 		/// <returns>Return user to Register Page.</returns>
-		public ViewResult Register()
-		{
-			return View();
-		}
+		public ViewResult Register() { return View(); }
 
 		/// <summary>
 		/// Method allows to register new user identity.
@@ -151,21 +146,22 @@ namespace Project_Main.Controllers
 			if (ModelState.IsValid)
 			{
 				operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Register), controllerName);
-				bool isDataInvalid = registerViewModel.Name.IsNullOrEmpty() || registerViewModel.Password.IsNullOrEmpty() || registerViewModel.Email.IsNullOrEmpty();
+
+				string? userName = registerViewModel.Name;
+				string? userPassword = registerViewModel.Password;
+				string? userEmail = registerViewModel.Email;
+
+				bool isDataInvalid = userName.IsNullOrEmpty() || userPassword.IsNullOrEmpty() || userEmail.IsNullOrEmpty();
 
 				if (isDataInvalid) return View();
 
-				string userName = registerViewModel.Name;
-				string userPassword = registerViewModel.Password;
-				string userEmail = registerViewModel.Email;
-
 				try
 				{
-					bool isPossibleToRegisterUser = await _registerService.IsPossibleToRegisterUserByProvidedData(userName);
+					bool isPossibleToRegisterUser = await _registerUserService.IsPossibleToRegisterUserByProvidedData(userName);
 					
 					if (isPossibleToRegisterUser)
 					{
-						bool isUserRegisteredSuccessfully = await _registerService.RegisterUserAsync(userName, userPassword, userEmail);
+						bool isUserRegisteredSuccessfully = await _registerUserService.RegisterUserAsync(userName, userPassword, userEmail);
 
 						if (isUserRegisteredSuccessfully)
 						{

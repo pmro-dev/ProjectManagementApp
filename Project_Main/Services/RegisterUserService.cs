@@ -5,12 +5,12 @@ using Project_Main.Models.DataBases.Identity.DbSetup;
 
 namespace Project_Main.Services
 {
-	public class RegisterService : IRegisterService
+	public class RegisterUserService : IRegisterUserService
 	{
 		private readonly IIdentityUnitOfWork _identityUnitOfWork;
 		private readonly IUserRepository _userRepository;
 
-		public RegisterService(IIdentityUnitOfWork identityUnitOfWork)
+		public RegisterUserService(IIdentityUnitOfWork identityUnitOfWork)
 		{
 			_identityUnitOfWork = identityUnitOfWork;
 			_userRepository = _identityUnitOfWork.UserRepository;

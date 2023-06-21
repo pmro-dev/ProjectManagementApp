@@ -30,7 +30,7 @@ namespace Project_Main
 			
 			builder.Services.AddHttpContextAccessor();
 			builder.Services.AddScoped<ILoginService, LoginService>();
-			builder.Services.AddScoped<IRegisterService, RegisterService>();
+			builder.Services.AddScoped<IRegisterUserService, RegisterUserService>();
 
 			builder.SetupSeedDataServices();
 
