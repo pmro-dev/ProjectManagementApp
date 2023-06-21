@@ -23,7 +23,7 @@ namespace Project_Main.Controllers
 		private string operationName = string.Empty;
 		private readonly string controllerName = nameof(HomeController);
 
-		public HomeController(IRegisterUserService registerUserService, ILogger<HomeController> logger, IAuthenticationUserService authenticationUserService)
+		public HomeController(ILoginService loginService, IRegisterUserService registerUserService, ILogger<HomeController> logger, IAuthenticationUserService authenticationUserService)
 		{
 			_loginService = loginService;
 			_registerUserService = registerUserService;
@@ -36,10 +36,7 @@ namespace Project_Main.Controllers
 		/// </summary>
 		/// <returns>Return user to Login Page.</returns>
 		[HttpGet]
-		public ViewResult Login()
-		{
-			return View();
-		}
+		public ViewResult Login() { return View(); }
 
 		/// <summary>
 		/// Method allows to login user with provided data by form.
