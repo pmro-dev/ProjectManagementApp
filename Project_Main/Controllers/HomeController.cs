@@ -18,15 +18,17 @@ namespace Project_Main.Controllers
 		private readonly ILogger<HomeController> _logger;
 		private readonly ILoginService _loginService;
 		private readonly IRegisterUserService _registerUserService;
+		private readonly IAuthenticationUserService _authenticationUserService;
 
 		private string operationName = string.Empty;
 		private readonly string controllerName = nameof(HomeController);
 
-		public HomeController(IRegisterUserService registerUserService, ILogger<HomeController> logger)
+		public HomeController(IRegisterUserService registerUserService, ILogger<HomeController> logger, IAuthenticationUserService authenticationUserService)
 		{
 			_loginService = loginService;
 			_registerUserService = registerUserService;
 			_logger = logger;
+			_authenticationUserService = authenticationUserService;
 		}
 
 		/// <summary>
@@ -94,17 +96,16 @@ namespace Project_Main.Controllers
 		[Route(CustomRoutes.LoginByProviderRoute)]
 		public IActionResult LoginByProvider([FromRoute] string provider)
 		{
-			if (User != null && User.Identities.Any(i => i.IsAuthenticated))
+			bool doesUserExistAndIsAuthenticated = User != null && User.Identities.Any(i => i.IsAuthenticated);
+
+			if (doesUserExistAndIsAuthenticated)
 			{
 				return RedirectToRoute(CustomRoutes.MainBoardRouteName);
 			}
-
-			AuthenticationProperties authProperties = new()
+			else
 			{
-				RedirectUri = CustomRoutes.MainBoardFullRoute
-			};
-
-			return new ChallengeResult(provider, authProperties);
+				return _authenticationUserService.ChallengeProviderToLogin(provider);
+			}
 		}
 
 		/// <summary>
