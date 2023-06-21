@@ -105,7 +105,7 @@ namespace Project_Main.Controllers
 		public async Task<IActionResult> SingleDetails(int id, DateTime? filterDueDate)
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(SingleDetails), controllerName);
-			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
 
 			var todoListRepo = _dataUnitOfWork.TodoListRepository;
 			var todoListFromDb = await todoListRepo.GetWithDetailsAsync(id);
@@ -201,7 +201,7 @@ namespace Project_Main.Controllers
 		public async Task<IActionResult> Edit(int id)
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Edit), controllerName);
-			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
 
 			var todoListRepository = _dataUnitOfWork.TodoListRepository;
 			var todoListModel = await todoListRepository.GetAsync(id);
@@ -230,7 +230,7 @@ namespace Project_Main.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(int id, TodoListModel todoListModel)
 		{
-			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
 
 			if (id != todoListModel.Id)
 			{
@@ -264,7 +264,7 @@ namespace Project_Main.Controllers
 		public async Task<IActionResult> Delete(int id)
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Delete), controllerName);
-			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
 
 			var todoListRepository = _dataUnitOfWork.TodoListRepository;
 			var todoListModel = await todoListRepository.GetAsync(id);
@@ -298,7 +298,7 @@ namespace Project_Main.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
-			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
 
 			if (ModelState.IsValid)
 			{
@@ -332,7 +332,7 @@ namespace Project_Main.Controllers
 		[Route(CustomRoutes.TodoListDuplicateRoute)]
 		public async Task<IActionResult> Duplicate(int todoListId)
 		{
-			HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
 
 			var todoListRepository = _dataUnitOfWork.TodoListRepository;
 			await todoListRepository.DuplicateWithDetailsAsync(todoListId);

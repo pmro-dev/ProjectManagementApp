@@ -176,9 +176,6 @@ namespace Project_Main.Controllers
 		/// </summary>
 		/// <returns>Return Error View.</returns>
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-		public IActionResult Error()
-		{
-			return View();
-		}
+		public IActionResult Error() { return View(); }
 	}
 }

@@ -29,7 +29,7 @@ namespace Project_Main.Models.DataBases.AppData
 		public async Task DuplicateWithDetailsAsync(int id)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(DuplicateWithDetailsAsync), nameof(TodoListRepository));
-            HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
+            HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
 
             TodoListModel? todoListWithDetails = await _dbContext
                 .Set<TodoListModel>()
@@ -70,7 +70,7 @@ namespace Project_Main.Models.DataBases.AppData
 		public async Task<List<TodoListModel>> GetAllWithDetailsAsync(string userId)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetAllWithDetailsAsync), nameof(TodoListRepository));
-            HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref userId, nameof(userId), _logger);
+            HelperCheck.ThrowExceptionWhenParamNullOrEmpty(operationName, ref userId, nameof(userId), _logger);
 
             List<TodoListModel> allTodoListsWithDetails = await _dbContext
                 .Set<TodoListModel>()
@@ -85,7 +85,7 @@ namespace Project_Main.Models.DataBases.AppData
 		public async Task<TodoListModel> GetWithDetailsAsync(int id)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetWithDetailsAsync), nameof(TodoListRepository));
-            HelperCheck.CheckIdWhenLowerThanBottomBoundryThrowException(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
+            HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
 
             TodoListModel todoListFromDb = await _dbContext
                 .Set<TodoListModel>()

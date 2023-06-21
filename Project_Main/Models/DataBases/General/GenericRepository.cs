@@ -23,7 +23,7 @@ namespace Project_Main.Models.DataBases.General
 		{
 			string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
 			string operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(AddAsync), classAndEntityInfo);
-			HelperCheck.IfModelNullThrowException(operationName, entity, nameof(entity), _logger);
+			HelperCheck.ThrowExceptionWhenModelNull(operationName, entity, nameof(entity), _logger);
 
 			await _dbSet.AddAsync(entity);
 		}
@@ -39,7 +39,7 @@ namespace Project_Main.Models.DataBases.General
 		{
 			string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
 			string operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetAsync), classAndEntityInfo);
-			HelperCheck.IfArgumentIsNullOrEmptyThrowException(operationName, id, nameof(id), _logger);
+			HelperCheck.ThrowExceptionWhenArgumentIsNullOrEmpty(operationName, id, nameof(id), _logger);
 
 			return await _dbSet.FindAsync(id);
 		}
@@ -75,7 +75,7 @@ namespace Project_Main.Models.DataBases.General
 			{
 				string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
 				string operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Remove), classAndEntityInfo);
-				HelperCheck.IfModelNullThrowException(operationName, entity, nameof(entity), _logger);
+				HelperCheck.ThrowExceptionWhenModelNull(operationName, entity, nameof(entity), _logger);
 
 				_dbSet.Remove(entity);
 			});
@@ -88,7 +88,7 @@ namespace Project_Main.Models.DataBases.General
 			{
 				string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
 				string operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Update), classAndEntityInfo);
-				HelperCheck.IfModelNullThrowException(operationName, entity, nameof(entity), _logger);
+				HelperCheck.ThrowExceptionWhenModelNull(operationName, entity, nameof(entity), _logger);
 
 				_dbSet.Update(entity);
 			});
@@ -99,7 +99,7 @@ namespace Project_Main.Models.DataBases.General
 		{
 			string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
 			string operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(AddRangeAsync), classAndEntityInfo);
-			HelperCheck.IfModelNullThrowException(operationName, range, nameof(range), _logger);
+			HelperCheck.ThrowExceptionWhenModelNull(operationName, range, nameof(range), _logger);
 
 			await _dbSet.AddRangeAsync(range, default);
 		}

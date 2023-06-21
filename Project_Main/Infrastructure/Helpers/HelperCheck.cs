@@ -14,7 +14,7 @@
 		/// <param name="modelName">Model name.</param>
 		/// <param name="logger">Logger from class that invokes method.</param>
 		/// <exception cref="ArgumentNullException">Occurs when model is null.</exception>
-		public static void IfModelNullThrowException<T>(string operationName, T model, string modelName, ILogger logger) where T : class
+		public static void ThrowExceptionWhenModelNull<T>(string operationName, T model, string modelName, ILogger logger) where T : class
 		{
 			if (model == null)
 			{
@@ -33,7 +33,7 @@
 		/// <exception cref="ArgumentNullException"></exception>
 		/// <exception cref="ArgumentOutOfRangeException"></exception>
 		/// <exception cref="ArgumentException"></exception>
-		public static void IfArgumentIsNullOrEmptyThrowException(string operationName, object argument, string argumentName, ILogger logger)
+		public static void ThrowExceptionWhenArgumentIsNullOrEmpty(string operationName, object argument, string argumentName, ILogger logger)
 		{
 			if (argument is null)
 			{
@@ -71,7 +71,7 @@
 		/// <param name="logger">Logger from class that invokes method.</param>
 		/// <param name="param">Some string param.</param>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when User Id is null.</exception>
-		public static void IFParamNullOrEmptyThrowException(string operationName, ref string param, string paramName, ILogger logger)
+		public static void ThrowExceptionWhenParamNullOrEmpty(string operationName, ref string param, string paramName, ILogger logger)
 		{
 			if (string.IsNullOrEmpty(param))
 			{
@@ -89,7 +89,7 @@
 		/// <param name="bottomBoundry">The Lower allowed value for id.</param>
 		/// <param name="logger">Logger from class that invokes method.</param>
 		/// <exception cref="ArgumentOutOfRangeException">Occured when id is lower than bottom boundry.</exception>
-		public static void CheckIdWhenLowerThanBottomBoundryThrowException(string operationName, int id, string paramName, int bottomBoundry, ILogger logger)
+		public static void ThrowExceptionWhenIdLowerThanBottomBoundry(string operationName, int id, string paramName, int bottomBoundry, ILogger logger)
 		{
 			if (id < bottomBoundry)
 			{

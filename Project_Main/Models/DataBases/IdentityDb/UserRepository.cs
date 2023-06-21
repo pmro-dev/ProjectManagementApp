@@ -23,7 +23,7 @@ namespace Project_Main.Models.DataBases.Identity
 		public async Task<UserModel?> GetWithDetailsAsync(string userId)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetWithDetailsAsync), repoName);
-            HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref userId, nameof(userId), _logger);
+            HelperCheck.ThrowExceptionWhenParamNullOrEmpty(operationName, ref userId, nameof(userId), _logger);
 
             UserModel? userWithDetailsFromDb = await _identityContext.Set<UserModel>().Where(user => user.UserId == userId).Include(user => user.UserRoles).SingleOrDefaultAsync();
             //HelperCheck.IfInstanceNullThrowException(operationName, userWithDetailsFromDb, nameof(userWithDetailsFromDb), _logger);
@@ -35,8 +35,8 @@ namespace Project_Main.Models.DataBases.Identity
 		public async Task<UserModel?> GetByNameAndPasswordAsync(string userLogin, string userPassword)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetByNameAndPasswordAsync), nameof(UserRepository));
-            HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref userLogin, nameof(userLogin), _logger);
-            HelperCheck.IFParamNullOrEmptyThrowException(operationName, ref userPassword, nameof(userPassword), _logger);
+            HelperCheck.ThrowExceptionWhenParamNullOrEmpty(operationName, ref userLogin, nameof(userLogin), _logger);
+            HelperCheck.ThrowExceptionWhenParamNullOrEmpty(operationName, ref userPassword, nameof(userPassword), _logger);
 
             return await _identityContext.Set<UserModel>().SingleOrDefaultAsync(user => user.Username == userLogin && user.Password == userPassword);
         }
