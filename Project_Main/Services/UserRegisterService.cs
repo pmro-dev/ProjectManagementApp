@@ -9,11 +9,16 @@ namespace Project_Main.Services
 	{
 		private readonly IIdentityUnitOfWork _identityUnitOfWork;
 		private readonly IUserRepository _userRepository;
+		private readonly IRoleRepository _roleRepository;
+		private readonly ILogger<UserRegisterService> _logger;
 
-		public UserRegisterService(IIdentityUnitOfWork identityUnitOfWork)
+
+		public UserRegisterService(IIdentityUnitOfWork identityUnitOfWork, ILogger<UserRegisterService> logger)
 		{
 			_identityUnitOfWork = identityUnitOfWork;
 			_userRepository = _identityUnitOfWork.UserRepository;
+			_roleRepository = _identityUnitOfWork.RoleRepository;
+			_logger = logger;
 		}
 
 		public async Task<bool> IsPossibleToRegisterUserByProvidedData(string userName)
@@ -37,11 +42,10 @@ namespace Project_Main.Services
 				Lastname = userName,
 				Password = userPassword,
 				Provider = ConfigConstants.DefaultScheme,
-				Username = userName,
+				Username = userName
 			};
 
-			IRoleRepository roleRepository = _identityUnitOfWork.RoleRepository;
-			RoleModel? roleForNewUser = await roleRepository.GetSingleByFilterAsync(role => role.Name == IdentitySeedData.DefaultRole);
+			RoleModel? roleForNewUser = await _roleRepository.GetSingleByFilterAsync(role => role.Name == IdentitySeedData.DefaultRole);
 
 			if (roleForNewUser is null)
 			{
@@ -55,7 +59,7 @@ namespace Project_Main.Services
 				User = newUser,
 				UserId = newUser.UserId,
 				Role = roleForNewUser,
-				RoleId = roleForNewUser.Id,
+				RoleId = roleForNewUser.Id
 			});
 
 			Task.WaitAny(Task.Run(async () =>

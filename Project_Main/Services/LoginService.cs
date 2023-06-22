@@ -10,20 +10,20 @@ namespace Project_Main.Services
 	public class LoginService : ILoginService
 	{
 		private readonly IIdentityUnitOfWork _identityUnitOfWork;
+		private readonly IUserRepository _userRepository;
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		private UserModel? _user;
 
 		public LoginService(IIdentityUnitOfWork identityUnitOfWork, IHttpContextAccessor httpContextAccessor)
 		{
 			_identityUnitOfWork = identityUnitOfWork;
+			_userRepository = _identityUnitOfWork.UserRepository;
 			_httpContextAccessor = httpContextAccessor;
 		}
 
 		public async Task<bool> CheckThatUserIsRegisteredAsync(string userName, string userPassword)
 		{
-			IUserRepository userRepository = _identityUnitOfWork.UserRepository;
-
-			_user = await userRepository.GetByNameAndPasswordAsync(userName, userPassword);
+			_user = await _userRepository.GetByNameAndPasswordAsync(userName, userPassword);
 
 			if (_user is null)
 			{

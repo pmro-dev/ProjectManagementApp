@@ -19,6 +19,8 @@ namespace Project_Main.Controllers
 	{
 		private readonly string controllerName = nameof(TaskController);
 		private readonly IDataUnitOfWork _dataUnitOfWork;
+		private readonly ITaskRepository _taskRepository;
+		private readonly ITodoListRepository _todoListRepository;
 		private readonly ILogger<TaskController> _logger;
 		private string operationName = string.Empty;
 		private const string taskDataToBind = "Title,Description,DueDate,ReminderDate,UserId";
@@ -31,6 +33,8 @@ namespace Project_Main.Controllers
 		public TaskController(IDataUnitOfWork dataUnitOfWork, ILogger<TaskController> logger)
 		{
 			_dataUnitOfWork = dataUnitOfWork;
+			_taskRepository = _dataUnitOfWork.TaskRepository;
+			_todoListRepository = _dataUnitOfWork.TodoListRepository;
 			_logger = logger;
 		}
 
@@ -52,8 +56,7 @@ namespace Project_Main.Controllers
 			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, routeTodoListId, nameof(routeTodoListId), HelperCheck.BottomBoundryOfId, _logger);
 			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, routeTaskId, nameof(routeTaskId), HelperCheck.BottomBoundryOfId, _logger);
 
-			ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
-			TaskModel? taskModel = await taskRepository.GetAsync(routeTaskId);
+			TaskModel? taskModel = await _taskRepository.GetAsync(routeTaskId);
 
 			if (taskModel is null)
 			{
@@ -88,8 +91,7 @@ namespace Project_Main.Controllers
 
 			if (ModelState.IsValid)
 			{
-				ITodoListRepository todoListRepository = _dataUnitOfWork.TodoListRepository;
-				var targetTodoList = await todoListRepository.GetAsync(id);
+				var targetTodoList = await _todoListRepository.GetAsync(id);
 
 				if (targetTodoList is null)
 				{
@@ -115,7 +117,7 @@ namespace Project_Main.Controllers
 		/// Action POST to create Task.
 		/// </summary>
 		/// <param name="todoListId">Targeted To Do List for which Task would be created.</param>
-		/// <param name="formDataTaskModel">Task Model with data that comes from form.</param>
+		/// <param name="TaskDataFromForm">Task Model with data that comes from form.</param>
 		/// <returns>
 		/// Return different view based on the final result.
 		/// Return: BadRequest when id is invalid or redirect to view with target To Do List SingleDetails.
@@ -124,21 +126,20 @@ namespace Project_Main.Controllers
 		[HttpPost]
 		[Route(CustomRoutes.CreateTaskPostRoute)]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(int todoListId, [Bind(taskDataToBind)] TaskModel formDataTaskModel)
+		public async Task<IActionResult> Create(int todoListId, [Bind(taskDataToBind)] TaskModel TaskDataFromForm)
 		{
 			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
 
 			if (ModelState.IsValid)
 			{
-				formDataTaskModel.TodoListId = todoListId;
-				ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
-				await taskRepository.AddAsync(formDataTaskModel);
+				TaskDataFromForm.TodoListId = todoListId;
+				await _taskRepository.AddAsync(TaskDataFromForm);
 				await _dataUnitOfWork.SaveChangesAsync();
 
 				return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
 			}
 
-			return View(formDataTaskModel);
+			return View(TaskDataFromForm);
 		}
 
 		/// <summary>
@@ -157,12 +158,9 @@ namespace Project_Main.Controllers
 			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskId, nameof(taskId), HelperCheck.BottomBoundryOfId, _logger);
 			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-			ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
-			var taskModel = await taskRepository.GetAsync(taskId);
-
-			ITodoListRepository todoListRepository = _dataUnitOfWork.TodoListRepository;
-			TodoListModel? targetTodoList = await todoListRepository.GetAsync(todoListId);
-			IEnumerable<TodoListModel> tempTodoLists = await todoListRepository.GetAllByFilterAsync(todoList => todoList.UserId == signedInUserId);
+			var taskModel = await _taskRepository.GetAsync(taskId);
+			TodoListModel? targetTodoList = await _todoListRepository.GetAsync(todoListId);
+			IEnumerable<TodoListModel> tempTodoLists = await _todoListRepository.GetAllByFilterAsync(todoList => todoList.UserId == signedInUserId);
 
 			if (taskModel == null)
 			{
@@ -242,8 +240,7 @@ namespace Project_Main.Controllers
 
 			if (ModelState.IsValid)
 			{
-				ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
-				await taskRepository.Update(taskModel);
+				await _taskRepository.Update(taskModel);
 				await _dataUnitOfWork.SaveChangesAsync();
 
 				return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
@@ -270,8 +267,7 @@ namespace Project_Main.Controllers
 			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.BottomBoundryOfId, _logger);
 			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskId, nameof(taskId), HelperCheck.BottomBoundryOfId, _logger);
 
-			ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
-			TaskModel? taskToDelete = await taskRepository.GetAsync(taskId);
+			TaskModel? taskToDelete = await _taskRepository.GetAsync(taskId);
 
 			if (taskToDelete == null)
 			{
@@ -309,8 +305,7 @@ namespace Project_Main.Controllers
 
 			if (ModelState.IsValid)
 			{
-				ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
-				TaskModel? taskToDelete = await taskRepository.GetAsync(taskId);
+				TaskModel? taskToDelete = await _taskRepository.GetAsync(taskId);
 
 				if (taskToDelete is null)
 				{
@@ -324,7 +319,7 @@ namespace Project_Main.Controllers
 						return Conflict();
 					}
 
-					await taskRepository.Remove(taskToDelete);
+				await _taskRepository.Remove(taskToDelete);
 					await _dataUnitOfWork.SaveChangesAsync();
 
 					return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
