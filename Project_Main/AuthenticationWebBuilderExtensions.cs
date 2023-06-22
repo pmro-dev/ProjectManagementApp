@@ -5,6 +5,7 @@ using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.DataBases.Identity;
 using System.Security.Claims;
 using Project_Main.Models.DataBases.Identity.DbSetup;
+using Project_Main.Models.DataBases.Helpers;
 
 namespace Project_Main
 {
@@ -38,7 +39,9 @@ namespace Project_Main
 				{
 					OnSigningIn = async cookieSigningInContext =>
 					{
-						SetupIdentityUnitOfWork(cookieSigningInContext, out IIdentityUnitOfWork _identityUnitOfWork, out IUserRepository userRepository, out IRoleRepository roleRepository);
+						ILogger? logger = cookieSigningInContext.HttpContext.RequestServices.GetService<ILogger>();
+
+						SetupIdentityUnitOfWork(cookieSigningInContext, logger, out IIdentityUnitOfWork _identityUnitOfWork, out IUserRepository userRepository, out IRoleRepository roleRepository);
 
 						var authScheme = cookieSigningInContext.Properties.Items.SingleOrDefault(i => i.Key == ConfigConstants.AuthSchemeClaimKey);
 						Claim authSchemeClaimWithProviderName = new Claim(authScheme.Key, authScheme.Value ?? ConfigConstants.AuthSchemeClaimValue);
@@ -47,7 +50,7 @@ namespace Project_Main
 
 						if (await userRepository.IsNameTakenAsync(userBasedOnProviderClaims.Username))
 						{
-							await UpdateUserWhenDataOnProviderSideChangedAsync(userRepository, userBasedOnProviderClaims, authSchemeClaimWithProviderName);
+							await UpdateUserWhenDataOnProviderSideChangedAsync(userRepository, userBasedOnProviderClaims, authSchemeClaimWithProviderName, logger);
 						}
 						else
 						{
@@ -62,14 +65,11 @@ namespace Project_Main
 
 			#region LOCAL FUNCTIONS
 
-			static void SetupIdentityUnitOfWork(CookieSigningInContext cookieSigningInContext, out IIdentityUnitOfWork _identityUnitOfWork, out IUserRepository userRepository, out IRoleRepository roleRepository)
+			static void SetupIdentityUnitOfWork(CookieSigningInContext cookieSigningInContext, ILogger? logger, out IIdentityUnitOfWork _identityUnitOfWork, out IUserRepository userRepository, out IRoleRepository roleRepository)
 			{
-				ILogger? _logger = cookieSigningInContext.HttpContext.RequestServices.GetService<ILogger>();
-
 				IIdentityUnitOfWork LoggAndThrowExceptionOnNullUnitOfWork()
 				{
-					// TODO write new message for Unit Of Work null object
-					_logger?.LogCritical(Messages.LogErrorDbContextIsNull, nameof(_identityUnitOfWork));
+					logger?.LogCritical(Messages.LogErrorDbContextIsNull, nameof(_identityUnitOfWork));
 					throw new InvalidOperationException(Messages.DbContextIsNull(nameof(_identityUnitOfWork)));
 				}
 
@@ -102,7 +102,7 @@ namespace Project_Main
 			}
 
 
-			static async Task UpdateUserWhenDataOnProviderSideChangedAsync(IUserRepository userRepository, UserModel userBasedOnProviderClaims, Claim authSchemeClaimWithProviderName)
+			static async Task UpdateUserWhenDataOnProviderSideChangedAsync(IUserRepository userRepository, UserModel userBasedOnProviderClaims, Claim authSchemeClaimWithProviderName, ILogger? logger)
 			{
 				UserModel? userFromDb = await userRepository.GetAsync(userBasedOnProviderClaims.NameIdentifier);
 
