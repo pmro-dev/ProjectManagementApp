@@ -49,20 +49,20 @@ namespace Project_Main.Models.ViewModels.TaskViewModels
         [Required]
         public TaskStatusType Status { get; set; } = TaskStatusType.NotStarted;
 
-        public List<TagModel> Tags { get; set; } = new List<TagModel>();
+        public List<TaskTagModel> TaskTags { get; set; } = new List<TaskTagModel>();
 
-        /// <summary>
-        /// Task's statuses to pick.
-        /// </summary>
-        public SelectList? StatusSelector { get; set; }
+		[Required]
+		public int TodoListId { get; set; } = -1;
 
-        public string TodoListName { get; set; } = string.Empty;
+		[Required]
+		public string UserId { get; set; } = string.Empty;
 
-        [Required]
-        public int TodoListId { get; set; } = -1;
+		public string TodoListName { get; set; } = string.Empty;
 
-        [Required]
-        public string UserId { get; set; } = string.Empty;
+		/// <summary>
+		/// Task's statuses to pick.
+		/// </summary>
+		public SelectList? StatusSelector { get; set; }
 
         /// <summary>
         /// ToDoLists to pick as owner.
