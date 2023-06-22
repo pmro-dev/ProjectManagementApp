@@ -128,7 +128,7 @@ namespace Project_Main.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create(int todoListId, [Bind(taskDataToBind)] TaskModel TaskDataFromForm)
 		{
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.BottomBoundryOfId, _logger);
 
 			if (ModelState.IsValid)
 			{
