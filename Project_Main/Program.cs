@@ -1,8 +1,8 @@
 using System.Reflection;
 using Project_Main.Models.DataBases.AppData.DbSetup;
 using Project_Main.Models.DataBases.Identity.DbSetup;
-using Project_Main.Controllers.Helpers;
 using Project_Main.Services;
+using Project_Main.Infrastructure.Helpers;
 
 namespace Project_Main
 {

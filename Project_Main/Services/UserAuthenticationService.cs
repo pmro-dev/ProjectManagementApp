@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Project_Main.Controllers.Helpers;
+using Project_Main.Infrastructure.Helpers;
 
 namespace Project_Main.Services
 {
