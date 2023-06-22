@@ -67,9 +67,7 @@ namespace Project_Main.Controllers
 						bool isLoggedInSuccessfully = await _loginService.LogInUserAsync();
 
 						if (isLoggedInSuccessfully)
-						{
 							return RedirectToRoute(CustomRoutes.MainBoardRouteName);
-						}
 					}
 
 					ModelState.AddModelError(string.Empty, Messages.InvalidLoginData);
@@ -93,11 +91,17 @@ namespace Project_Main.Controllers
 		[Route(CustomRoutes.LoginByProviderRoute)]
 		public IActionResult LoginByProvider([FromRoute] string provider)
 		{
+			if (provider.IsNullOrEmpty())
+			{
+				_logger.LogError(Messages.LogInvalidProviderName);
+				throw new ArgumentNullException(nameof(provider));
+			}
+
 			bool doesUserExistAndIsAuthenticated = User != null && User.Identities.Any(i => i.IsAuthenticated);
 
-			if (doesUserExistAndIsAuthenticated)
+			if (doesUserExistAndIsAuthenticated) 
 				return RedirectToRoute(CustomRoutes.MainBoardRouteName);
-			else
+			else 
 				return _userAuthenticationService.ChallengeProviderToLogin(provider);
 		}
 
@@ -150,7 +154,7 @@ namespace Project_Main.Controllers
 
 						if (isUserRegisteredSuccessfully)
 							return View(nameof(Login));
-						}
+					}
 
 					return View();
 				}

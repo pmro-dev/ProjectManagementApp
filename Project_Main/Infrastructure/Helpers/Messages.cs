@@ -56,7 +56,8 @@
 
 		#region MESSAGES FOR LOGGER
 
-		public const string LogExceptionOccured = "Error {exceptionType} occured on method: {methodName}";
+		public const string LogInvalidProviderName = "Invalid provider name from route!.";
+		public const string LogExceptionOccurredOnLogging = "Error occured on attempt to login user.";
 		public const string LogExceptionOccuredOnMethod = "Error {exceptionType} occured on method: {methodName}";
 		public const string LogConflictBetweenTodoListIdsAsParamAndFromModelObject = "{operationName} | Conflict occured! Given id ( {todoListId} ) for To Do List and To Do List id in Model object ( {taskTodoListId} ) are not equal!";
 		public const string LogConflictBetweenTodoListIdsFromTodoListModelAndTaskModel = "{operationName} | Conflict occured! To Do List id ( {taskModelTodoListId} ) from Task object and target To Do List id ( {todoListId} ) in To Do List object are not equal!";
