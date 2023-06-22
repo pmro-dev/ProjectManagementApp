@@ -5,6 +5,8 @@
 	/// </summary>
 	public static class HelperCheck
 	{
+		public const int BottomBoundryOfId = 0;
+
 		/// <summary>
 		/// Throws and Logs exception when model object is null.
 		/// </summary>

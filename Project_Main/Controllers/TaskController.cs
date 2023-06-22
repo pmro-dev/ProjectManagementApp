@@ -49,21 +49,21 @@ namespace Project_Main.Controllers
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Details), controllerName);
 
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, routeTodoListId, nameof(routeTodoListId), HelperOther.idBoundryBottom, _logger);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, routeTaskId, nameof(routeTaskId), HelperOther.idBoundryBottom, _logger);
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, routeTodoListId, nameof(routeTodoListId), HelperCheck.BottomBoundryOfId, _logger);
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, routeTaskId, nameof(routeTaskId), HelperCheck.BottomBoundryOfId, _logger);
 
 			ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
 			TaskModel? taskModel = await taskRepository.GetAsync(routeTaskId);
 
 			if (taskModel is null)
 			{
-				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, HelperDatabase.TasksDbSetName);
+				_logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, routeTaskId, HelperDatabase.TasksDbSetName);
 				return NotFound();
 			}
 
 			if (routeTodoListId != taskModel.TodoListId)
 			{
-				_logger.LogError(Messages.LogConflictBetweenTodoListIdsAsParamAndFromModelObject, operationName, routeTodoListId, taskModel.TodoListId);
+				_logger.LogError(Messages.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, routeTodoListId, taskModel.TodoListId);
 				return Conflict();
 			}
 
@@ -84,7 +84,7 @@ namespace Project_Main.Controllers
 		public async Task<IActionResult> Create(int id)
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Create), controllerName);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.BottomBoundryOfId, _logger);
 
 			if (ModelState.IsValid)
 			{
@@ -93,7 +93,7 @@ namespace Project_Main.Controllers
 
 				if (targetTodoList is null)
 				{
-					_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, HelperDatabase.TodoListsDbSetName);
+					_logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, id, HelperDatabase.TodoListsDbSetName);
 					return NotFound();
 				}
 
@@ -153,8 +153,8 @@ namespace Project_Main.Controllers
 		public async Task<IActionResult> Edit(int todoListId, int taskId)
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Edit), controllerName);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskId, nameof(taskId), HelperOther.idBoundryBottom, _logger);
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.BottomBoundryOfId, _logger);
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskId, nameof(taskId), HelperCheck.BottomBoundryOfId, _logger);
 			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
 			ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
@@ -166,19 +166,19 @@ namespace Project_Main.Controllers
 
 			if (taskModel == null)
 			{
-				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, HelperDatabase.TasksDbSetName);
+				_logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, taskId, HelperDatabase.TasksDbSetName);
 				return NotFound();
 			}
 
 			if (!tempTodoLists.Any())
 			{
-				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, HelperDatabase.TodoListsDbSetName);
+				_logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, todoListId, HelperDatabase.TodoListsDbSetName);
 				return NotFound();
 			}
 
-			if (targetTodoList == null)
+			if (tempTodoLists.Any() is false)
 			{
-				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(targetTodoList));
+				_logger.LogInformation(Messages.LogNotAnyTodoListInDb, operationName);
 				return NotFound();
 			}
 
@@ -231,12 +231,12 @@ namespace Project_Main.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(int todoListId, int id, TaskModel taskModel)
 		{
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.BottomBoundryOfId, _logger);
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.BottomBoundryOfId, _logger);
 
 			if (id != taskModel.Id)
 			{
-				_logger.LogError(Messages.LogConflictBetweenTodoListIdsAsParamAndFromModelObject, operationName, id, taskModel.Id);
+				_logger.LogCritical(Messages.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, id, taskModel.Id);
 				return Conflict();
 			}
 
@@ -267,21 +267,21 @@ namespace Project_Main.Controllers
 		public async Task<IActionResult> Delete(int todoListId, int taskId)
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Delete), controllerName);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskId, nameof(taskId), HelperOther.idBoundryBottom, _logger);
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.BottomBoundryOfId, _logger);
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskId, nameof(taskId), HelperCheck.BottomBoundryOfId, _logger);
 
 			ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
 			TaskModel? taskToDelete = await taskRepository.GetAsync(taskId);
 
 			if (taskToDelete == null)
 			{
-				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, HelperDatabase.TasksDbSetName);
+				_logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, taskId, HelperDatabase.TasksDbSetName);
 				return NotFound();
 			}
 
 			if (taskToDelete.TodoListId != todoListId)
 			{
-				_logger.LogError(Messages.LogConflictBetweenTodoListIdsAsParamAndFromModelObject, operationName, todoListId, taskToDelete.TodoListId);
+				_logger.LogCritical(Messages.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, todoListId, taskToDelete.TodoListId);
 				return Conflict();
 			}
 
@@ -304,20 +304,23 @@ namespace Project_Main.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int todoListId, int taskId)
 		{
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperOther.idBoundryBottom, _logger);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskId, nameof(taskId), HelperOther.idBoundryBottom, _logger);
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.BottomBoundryOfId, _logger);
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskId, nameof(taskId), HelperCheck.BottomBoundryOfId, _logger);
 
 			if (ModelState.IsValid)
 			{
 				ITaskRepository taskRepository = _dataUnitOfWork.TaskRepository;
 				TaskModel? taskToDelete = await taskRepository.GetAsync(taskId);
 
-				if (taskToDelete != null)
+				if (taskToDelete is null)
 				{
-					_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, HelperDatabase.TasksDbSetName);
+					_logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, taskId, HelperDatabase.TasksDbSetName);
+					return NotFound();
+				}
+
 					if (taskToDelete.TodoListId != todoListId)
 					{
-						_logger.LogError(Messages.LogConflictBetweenTodoListIdsAsParamAndFromModelObject, operationName, todoListId, taskToDelete.TodoListId);
+					_logger.LogError(Messages.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, todoListId, taskToDelete.TodoListId);
 						return Conflict();
 					}
 
@@ -326,10 +329,6 @@ namespace Project_Main.Controllers
 
 					return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
 				}
-
-				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(taskToDelete));
-				return NotFound();
-			}
 
 			return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
 		}

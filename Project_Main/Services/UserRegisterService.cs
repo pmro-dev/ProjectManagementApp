@@ -45,8 +45,8 @@ namespace Project_Main.Services
 
 			if (roleForNewUser is null)
 			{
-				// TODO logger
-				throw new InvalidOperationException("no role in db for new user!");
+				_logger.LogCritical(Messages.LogCriticalErrorRoleForNewUserNotFoundInDb, nameof(RegisterUserAsync), nameof(roleForNewUser), IdentitySeedData.DefaultRole);
+				throw new InvalidOperationException(Messages.RoleForNewUserNotFoundInDb(nameof(roleForNewUser), IdentitySeedData.DefaultRole));
 			}
 
 			newUser.NameIdentifier = newUser.UserId;

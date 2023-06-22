@@ -29,7 +29,7 @@ namespace Project_Main.Models.DataBases.AppData
 		public async Task DuplicateWithDetailsAsync(int id)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(DuplicateWithDetailsAsync), nameof(TodoListRepository));
-            HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
+            HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.BottomBoundryOfId, _logger);
 
             TodoListModel? todoListWithDetails = await _dbContext
                 .Set<TodoListModel>()
@@ -39,7 +39,7 @@ namespace Project_Main.Models.DataBases.AppData
 
             if (todoListWithDetails is null)
             {
-                _logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(todoListWithDetails));
+                _logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, id, "TodoLists");
                 throw new InvalidOperationException(Messages.ExceptionNullObjectOnAction(operationName, nameof(todoListWithDetails)));
             }
 
@@ -85,7 +85,7 @@ namespace Project_Main.Models.DataBases.AppData
 		public async Task<TodoListModel> GetWithDetailsAsync(int id)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetWithDetailsAsync), nameof(TodoListRepository));
-            HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperOther.idBoundryBottom, _logger);
+            HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.BottomBoundryOfId, _logger);
 
             TodoListModel todoListFromDb = await _dbContext
                 .Set<TodoListModel>()

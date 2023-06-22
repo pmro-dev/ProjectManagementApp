@@ -32,7 +32,7 @@
 			return $"{actionName} | Given param {paramName} with value ( {paramValue} ) is out of range!";
 		}
 
-		public static string EntityNotFoundInDb(string actionName, string dbSetName, int entityId)
+		public static string EntityNotFoundInDbById(string actionName, string dbSetName, int entityId)
 		{
 			return $"{actionName} | Entity with given id ( {entityId} ) not found in {dbSetName} DbSet.";
 		}
@@ -40,6 +40,11 @@
 		public static string DbContextIsNull(string dbContextName)
 		{
 			return $"Critical Error occured! DbContext object is null - {dbContextName}";
+		}
+
+		public static string RoleForNewUserNotFoundInDb(string roleObjectName, string roleName)
+		{
+			return $"Critical Error occured! Role for new user not found in Db! Object: {roleObjectName} Role: {roleName}";
 		}
 
 		public const string ProvidedObjectIsNull = "Critical error! Provided object cannot be null!";
@@ -59,11 +64,10 @@
 		public const string LogInvalidProviderName = "Invalid provider name from route!.";
 		public const string LogExceptionOccurredOnLogging = "Error occured on attempt to login user.";
 		public const string LogExceptionOccuredOnMethod = "Error {exceptionType} occured on method: {methodName}";
-		public const string LogConflictBetweenTodoListIdsAsParamAndFromModelObject = "{operationName} | Conflict occured! Given id ( {todoListId} ) for To Do List and To Do List id in Model object ( {taskTodoListId} ) are not equal!";
+		public const string LogConflictBetweenIdsOfTodoListAndModelObject = "{operationName} | Conflict occured! Given id ( {todoListId} ) for To Do List and To Do List id in Model object ( {taskTodoListId} ) are not equal!";
 		public const string LogConflictBetweenTodoListIdsFromTodoListModelAndTaskModel = "{operationName} | Conflict occured! To Do List id ( {taskModelTodoListId} ) from Task object and target To Do List id ( {todoListId} ) in To Do List object are not equal!";
 		public const string LogErrorOnMethod = "Error errors occured on method: {methodName}";
 		public const string LogTransactionFailed = "{operationName} | Transaction failed! - entity id {idValue}";
-		public const string LogEntityNotFoundInDb = "{operationName} | Context returned null for object {objectName}.";
 		public const string LogEntityNotFoundInDbSet = "{actionName} | Entity with given id ( {entityId} ) not found in {dbSetName} DbSet.";
 		public const string LogOutOfRange = "{actionName} | Given param {paramName} with value ( {paramValue} ) is out of range!";
 		public const string LogInvalidArgumentType = "{actionName} | Given param {paramName} has invalid type!";
@@ -73,6 +77,7 @@
 		public const string LogErrorDbContextIsNull = "Critical Error occured! DbContext object is null - {DbContextName}";
 		public const string LogNotAnyTodoListInDb = "{operationName} | There's not any To Do List in Database.";
 		public const string LogCreatingUserIdentityFailed = "{operationName} | Creating new User Identity failed!";
+		public const string LogCriticalErrorRoleForNewUserNotFoundInDb = "{operationName} | Object with role (from Db) for new user is null! Object: {roleObjectName} Role: {roleName}";
 
 		#endregion
 	}

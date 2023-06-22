@@ -2,9 +2,6 @@
 {
     public static class HelperOther
     {
-        public const int idBoundryBottom = 0;
-        public const int ZeroValueToIndicatesEmptyArray = 0;
-
 		/// <summary>
 		/// Create action's or operation's name based on provided parameters.
 		/// </summary>
