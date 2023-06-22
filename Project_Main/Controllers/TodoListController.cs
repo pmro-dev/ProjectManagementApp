@@ -124,9 +124,17 @@ namespace Project_Main.Controllers
 				TasksExpired = allTodoListTasks.Where(t => t.DueDate.CompareTo(todayDate) < DateCompareValueEarlier).ToList()
 			};
 
-			todoListViewModel.TasksNotCompleted.Sort(new TasksComparer());
-			todoListViewModel.TasksForToday.Sort(new TasksComparer());
-			todoListViewModel.TasksCompleted.Sort(new TasksComparer());
+			const int TasksToCompleteCount = 3;
+			var tasksComparer = new TasksComparer();
+
+			var tasks = new Task[TasksToCompleteCount]
+			{
+				Task.Run(() => todoListViewModel.TasksNotCompleted.Sort(tasksComparer)),
+				Task.Run(() => todoListViewModel.TasksForToday.Sort(tasksComparer)),
+				Task.Run(() => todoListViewModel.TasksCompleted.Sort(tasksComparer)),
+			};
+
+			Task.WaitAll(tasks);
 
 			return View(todoListViewModel);
 		}
