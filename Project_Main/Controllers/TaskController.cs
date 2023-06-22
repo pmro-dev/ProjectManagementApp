@@ -7,7 +7,7 @@ using Project_DomainEntities;
 using Project_Main.Models.ViewModels.TaskViewModels;
 using System.Security.Claims;
 using Project_Main.Models.DataBases.AppData;
-using Project_Main.Controllers.Helpers;
+using Project_Main.Models.DataBases.Helpers;
 
 namespace Project_Main.Controllers
 {
@@ -57,7 +57,7 @@ namespace Project_Main.Controllers
 
 			if (taskModel is null)
 			{
-				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(taskModel));
+				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, HelperDatabase.TasksDbSetName);
 				return NotFound();
 			}
 
@@ -93,7 +93,7 @@ namespace Project_Main.Controllers
 
 				if (targetTodoList is null)
 				{
-					_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(targetTodoList));
+					_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, HelperDatabase.TodoListsDbSetName);
 					return NotFound();
 				}
 
@@ -166,13 +166,13 @@ namespace Project_Main.Controllers
 
 			if (taskModel == null)
 			{
-				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(taskModel));
+				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, HelperDatabase.TasksDbSetName);
 				return NotFound();
 			}
 
 			if (!tempTodoLists.Any())
 			{
-				_logger.LogInformation(Messages.LogNotAnyTodoListInDb, operationName);
+				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, HelperDatabase.TodoListsDbSetName);
 				return NotFound();
 			}
 
@@ -275,7 +275,7 @@ namespace Project_Main.Controllers
 
 			if (taskToDelete == null)
 			{
-				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(taskToDelete));
+				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, HelperDatabase.TasksDbSetName);
 				return NotFound();
 			}
 
@@ -314,6 +314,7 @@ namespace Project_Main.Controllers
 
 				if (taskToDelete != null)
 				{
+					_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, HelperDatabase.TasksDbSetName);
 					if (taskToDelete.TodoListId != todoListId)
 					{
 						_logger.LogError(Messages.LogConflictBetweenTodoListIdsAsParamAndFromModelObject, operationName, todoListId, taskToDelete.TodoListId);

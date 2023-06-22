@@ -6,7 +6,7 @@ using Project_DomainEntities.Helpers;
 using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.ViewModels.TodoListViewModels;
 using Project_Main.Models.DataBases.AppData;
-using Project_Main.Controllers.Helpers;
+using Project_Main.Models.DataBases.Helpers;
 
 namespace Project_Main.Controllers
 {
@@ -112,7 +112,7 @@ namespace Project_Main.Controllers
 
 			if (todoListFromDb == null)
 			{
-				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(todoListFromDb));
+				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, HelperDatabase.TodoListsDbSetName);
 				return NotFound();
 			}
 
@@ -208,7 +208,7 @@ namespace Project_Main.Controllers
 
 			if (todoListModel == null)
 			{
-				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(todoListModel));
+				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, HelperDatabase.TodoListsDbSetName);
 				return NotFound();
 			}
 
@@ -271,7 +271,7 @@ namespace Project_Main.Controllers
 
 			if (todoListModel == null)
 			{
-				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, nameof(todoListModel));
+				_logger.LogError(Messages.LogEntityNotFoundInDb, operationName, HelperDatabase.TodoListsDbSetName);
 				return NotFound();
 			}
 
