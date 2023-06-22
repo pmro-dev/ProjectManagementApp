@@ -11,7 +11,7 @@ namespace Project_Main.Models.DataBases.AppData
 		/// </summary>
 		/// <param name="id">Targeted list id.</param>
 		/// <returns>ToDoList with details from Db.</returns>
-		Task<TodoListModel> GetWithDetailsAsync(int id);
+		Task<TodoListModel?> GetWithDetailsAsync(int id);
 
 		/// <summary>
 		/// Get All ToDoLists with details (where details are related data in other tables).

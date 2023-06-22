@@ -168,7 +168,7 @@ namespace Project_Main.Controllers
 				return NotFound();
 			}
 
-			if (!tempTodoLists.Any())
+			if (targetTodoList == null)
 			{
 				_logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, todoListId, HelperDatabase.TodoListsDbSetName);
 				return NotFound();

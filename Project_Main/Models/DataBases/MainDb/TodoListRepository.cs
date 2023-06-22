@@ -75,24 +75,22 @@ namespace Project_Main.Models.DataBases.AppData
             List<TodoListModel> allTodoListsWithDetails = await _dbContext
                 .Set<TodoListModel>()
                 .Where(todoList => todoList.UserId == userId)
-                .Include(todoList => todoList.Tasks).ToListAsync()
-                ?? new List<TodoListModel>();
+                .Include(todoList => todoList.Tasks).ToListAsync();
 
             return allTodoListsWithDetails;
         }
 
 		///<inheritdoc />
-		public async Task<TodoListModel> GetWithDetailsAsync(int id)
+		public async Task<TodoListModel?> GetWithDetailsAsync(int id)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetWithDetailsAsync), nameof(TodoListRepository));
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.BottomBoundryOfId, _logger);
 
-            TodoListModel todoListFromDb = await _dbContext
+            TodoListModel? todoListFromDb = await _dbContext
                 .Set<TodoListModel>()
                 .Where(todoList => todoList.Id == id)
                 .Include(todoList => todoList.Tasks)
-                .SingleOrDefaultAsync()
-                ?? new();
+                .SingleOrDefaultAsync();
 
             return todoListFromDb;
         }
