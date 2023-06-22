@@ -4,9 +4,9 @@ using Project_Main.Controllers.Helpers;
 
 namespace Project_Main.Services
 {
-	public class AuthenticationUserService : IAuthenticationUserService
+	public class UserAuthenticationService : IUserAuthenticationService
 	{
-		public AuthenticationUserService() { }
+		public UserAuthenticationService() { }
 
 		public ChallengeResult ChallengeProviderToLogin(string provider)
 		{

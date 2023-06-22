@@ -19,7 +19,7 @@ namespace Project_Main.Services
 			_httpContextAccessor = httpContextAccessor;
 		}
 
-		public async Task<bool> IsUserRegisteredAsync(string userName, string userPassword)
+		public async Task<bool> CheckThatUserIsRegisteredAsync(string userName, string userPassword)
 		{
 			IUserRepository userRepository = _identityUnitOfWork.UserRepository;
 

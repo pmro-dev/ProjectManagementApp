@@ -17,19 +17,20 @@ namespace Project_Main.Controllers
 	{
 		private readonly ILogger<HomeController> _logger;
 		private readonly ILoginService _loginService;
-		private readonly IRegisterUserService _registerUserService;
-		private readonly IAuthenticationUserService _authenticationUserService;
+		private readonly IUserRegisterService _userRegisterService;
+		private readonly IUserAuthenticationService _userAuthenticationService;
 		private readonly ILogoutService _logoutService;
 
 		private string operationName = string.Empty;
 		private readonly string controllerName = nameof(HomeController);
 
-		public HomeController(ILoginService loginService, IRegisterUserService registerUserService, ILogger<HomeController> logger, IAuthenticationUserService authenticationUserService, ILogoutService logoutService)
+		public HomeController(ILoginService loginService, IUserRegisterService userRegisterService, ILogger<HomeController> logger, 
+			IUserAuthenticationService userAuthenticationService, ILogoutService logoutService)
 		{
 			_loginService = loginService;
-			_registerUserService = registerUserService;
+			_userRegisterService = userRegisterService;
 			_logger = logger;
-			_authenticationUserService = authenticationUserService;
+			_userAuthenticationService = userAuthenticationService;
 			_logoutService = logoutService;
 		}
 
@@ -51,17 +52,15 @@ namespace Project_Main.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				if (loginViewModel.Name.IsNullOrEmpty() || loginViewModel.Password.IsNullOrEmpty())
-				{
-					return View(loginViewModel);
-				}
-
 				string userName = loginViewModel.Name;
 				string userPassword = loginViewModel.Password;
 
+				if (userName.IsNullOrEmpty() || userPassword.IsNullOrEmpty()) 
+					return View(loginViewModel);
+
 				try 
 				{
-					bool isUserRegistered = await _loginService.IsUserRegisteredAsync(userName, userPassword);
+					bool isUserRegistered = await _loginService.CheckThatUserIsRegisteredAsync(userName, userPassword);
 
 					if (isUserRegistered)
 					{
@@ -77,8 +76,7 @@ namespace Project_Main.Controllers
 				}
 				catch (Exception ex)
 				{
-					// TODO change message and operationName aslast param
-					_logger.LogCritical(ex, "SOME ERROR OCURRED WHILE LOGGING USER", nameof(Login));
+					_logger.LogCritical(ex, Messages.LogExceptionOccurredOnLogging);
 					throw;
 				}
 			}
@@ -98,13 +96,9 @@ namespace Project_Main.Controllers
 			bool doesUserExistAndIsAuthenticated = User != null && User.Identities.Any(i => i.IsAuthenticated);
 
 			if (doesUserExistAndIsAuthenticated)
-			{
 				return RedirectToRoute(CustomRoutes.MainBoardRouteName);
-			}
 			else
-			{
-				return _authenticationUserService.ChallengeProviderToLogin(provider);
-			}
+				return _userAuthenticationService.ChallengeProviderToLogin(provider);
 		}
 
 		/// <summary>
@@ -143,21 +137,20 @@ namespace Project_Main.Controllers
 
 				bool isDataInvalid = userName.IsNullOrEmpty() || userPassword.IsNullOrEmpty() || userEmail.IsNullOrEmpty();
 
-				if (isDataInvalid) return View();
+				if (isDataInvalid) 
+					return View();
 
 				try
 				{
-					bool isPossibleToRegisterUser = await _registerUserService.IsPossibleToRegisterUserByProvidedData(userName);
+					bool isPossibleToRegisterUser = await _userRegisterService.IsPossibleToRegisterUserByProvidedData(userName);
 					
 					if (isPossibleToRegisterUser)
 					{
-						bool isUserRegisteredSuccessfully = await _registerUserService.RegisterUserAsync(userName, userPassword, userEmail);
+						bool isUserRegisteredSuccessfully = await _userRegisterService.RegisterUserAsync(userName, userPassword, userEmail);
 
 						if (isUserRegisteredSuccessfully)
-						{
 							return View(nameof(Login));
 						}
-					}
 
 					return View();
 				}

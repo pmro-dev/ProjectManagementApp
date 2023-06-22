@@ -2,7 +2,7 @@
 {
 	public interface ILoginService
 	{
-		Task<bool> IsUserRegisteredAsync(string userName, string userPassword);
+		Task<bool> CheckThatUserIsRegisteredAsync(string userName, string userPassword);
 		Task<bool> LogInUserAsync();
 	}
 }

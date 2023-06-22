@@ -2,7 +2,7 @@
 
 namespace Project_Main.Services
 {
-	public interface IAuthenticationUserService
+	public interface IUserAuthenticationService
 	{
 		ChallengeResult ChallengeProviderToLogin(string provider);
 	}

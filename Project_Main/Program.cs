@@ -31,8 +31,8 @@ namespace Project_Main
 			builder.Services.AddHttpContextAccessor();
 			builder.Services.AddScoped<ILoginService, LoginService>();
 			builder.Services.AddScoped<ILogoutService, LogoutService>();
-			builder.Services.AddScoped<IRegisterUserService, RegisterUserService>();
-			builder.Services.AddScoped<IAuthenticationUserService, AuthenticationUserService>();
+			builder.Services.AddScoped<IUserRegisterService, UserRegisterService>();
+			builder.Services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
 
 			builder.SetupSeedDataServices();
 
