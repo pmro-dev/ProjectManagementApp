@@ -11,10 +11,10 @@ using Project_Main.Models.DataBases.Helpers;
 
 namespace Project_Main.Controllers
 {
-	/// <summary>
-	/// Controller to manage Task actions based on specific routes.
-	/// </summary>
-	[Authorize]
+    /// <summary>
+    /// Controller to manage Task actions based on specific routes.
+    /// </summary>
+    [Authorize]
 	public class TaskController : Controller
 	{
 		private readonly string controllerName = nameof(TaskController);
@@ -313,17 +313,17 @@ namespace Project_Main.Controllers
 					return NotFound();
 				}
 
-					if (taskToDelete.TodoListId != todoListId)
-					{
+				if (taskToDelete.TodoListId != todoListId)
+				{
 					_logger.LogError(Messages.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, todoListId, taskToDelete.TodoListId);
-						return Conflict();
-					}
+					return Conflict();
+				}
 
 				await _taskRepository.Remove(taskToDelete);
-					await _dataUnitOfWork.SaveChangesAsync();
+				await _dataUnitOfWork.SaveChangesAsync();
 
-					return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
-				}
+				return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
+			}
 
 			return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
 		}

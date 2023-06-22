@@ -7,10 +7,10 @@ using Castle.Core.Internal;
 
 namespace Project_Main.Controllers
 {
-	/// <summary>
-	/// Controller to manage availability of page's resources via Authentication.
-	/// </summary>
-	[Authorize]
+    /// <summary>
+    /// Controller to manage availability of page's resources via Authentication.
+    /// </summary>
+    [Authorize]
 	[AllowAnonymous]
 	public class HomeController : Controller
 	{

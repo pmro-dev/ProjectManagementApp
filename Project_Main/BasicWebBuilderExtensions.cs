@@ -11,10 +11,10 @@ using Project_Main.Models.DataBases.Identity;
 
 namespace Project_Main
 {
-	/// <summary>
-	/// Web Builder extensions that allows to setup basic services such as Databases, Unit Of Work's elements, Data Seeding and pipeline. 
-	/// </summary>
-	public static class BasicWebBuilderExtensions
+    /// <summary>
+    /// Web Builder extensions that allows to setup basic services such as Databases, Unit Of Work's elements, Data Seeding and pipeline. 
+    /// </summary>
+    public static class BasicWebBuilderExtensions
 	{
 		/// <summary>
 		/// Add Custom Databases context's services for Main Db and Identity Db.

@@ -4,7 +4,7 @@ using Project_Main.Infrastructure.Helpers;
 
 namespace Project_Main.Services
 {
-	public class UserAuthenticationService : IUserAuthenticationService
+    public class UserAuthenticationService : IUserAuthenticationService
 	{
 		public UserAuthenticationService() { }
 
