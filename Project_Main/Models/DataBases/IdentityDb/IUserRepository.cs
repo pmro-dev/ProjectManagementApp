@@ -13,14 +13,21 @@ namespace Project_Main.Models.DataBases.Identity
 		/// </summary>
 		/// <param name="id">Targeted User id.</param>
 		/// <returns>User with details from Db.</returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		/// <exception cref="ArgumentNullException"></exception>
+		/// <exception cref="InvalidOperationException"></exception>
+		/// <exception cref="OperationCanceledException"></exception>
 		Task<UserModel?> GetWithDetailsAsync(string userId);
 
-        /// <summary>
-        /// Get a specific User by User Login and Password from Db.
-        /// </summary>
-        /// <param name="userLogin">User Login.</param>
-        /// <param name="userPassword">User Password to account.</param>
-        /// <returns>User from Db.</returns>
+		/// <summary>
+		/// Get a specific User by User Login and Password from Db.
+		/// </summary>
+		/// <param name="userLogin">User Login.</param>
+		/// <param name="userPassword">User Password to account.</param>
+		/// <returns>User from Db.</returns>
+		/// <exception cref="ArgumentNullException"></exception>
+		/// <exception cref="InvalidOperationException"></exception>
+		/// <exception cref="OperationCanceledException"></exception>
 		Task<UserModel?> GetByNameAndPasswordAsync(string userLogin, string userPassword);
 
 		/// <summary>
