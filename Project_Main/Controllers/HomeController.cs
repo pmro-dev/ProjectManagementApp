@@ -160,7 +160,7 @@ namespace Project_Main.Controllers
 				catch (Exception ex)
 				{
 					_logger.LogCritical(ex, Messages.LogCreatingUserIdentityFailed, operationName);
-					throw;
+					return Error();
 				}
 			}
 
