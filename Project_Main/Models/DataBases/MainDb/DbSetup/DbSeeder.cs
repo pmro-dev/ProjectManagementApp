@@ -13,47 +13,60 @@ namespace Project_Main.Models.DataBases.AppData.DbSetup
         /// <param name="app">Application builder.</param>
         public static async Task EnsurePopulated(IApplicationBuilder app, ILogger logger)
         {
-            IDataUnitOfWork _unitOfWork = app.ApplicationServices
+            IDataUnitOfWork unitOfWork = app.ApplicationServices
                         .CreateScope().ServiceProvider.GetRequiredService<IDataUnitOfWork>();
 
             ISeedData seedContainer = app.ApplicationServices
                         .CreateScope().ServiceProvider.GetRequiredService<ISeedData>();
 
-            using var transaction = await _unitOfWork.BeginTransactionAsync();
+            using var transaction = await unitOfWork.BeginTransactionAsync();
 
             try
             {
-                var migrations = await _unitOfWork.GetPendingMigrationsAsync();
+                await EnsurePendingMigrationsAppliedAsync(unitOfWork);
+				await EnsureTodoListsPopulatedAsync(seedContainer, unitOfWork);
+                await EnsureTasksPopulatedAsync(seedContainer, unitOfWork);
 
-                if (migrations.Any())
-                {
-                    await _unitOfWork.MigrateAsync();
-                }
-
-                ITodoListRepository todoListRepository = _unitOfWork.TodoListRepository;
-
-                if (!await todoListRepository.ContainsAny())
-                {
-                    await todoListRepository.AddRangeAsync(seedContainer.TodoLists);
-                }
-
-                ITaskRepository taskRepository = _unitOfWork.TaskRepository;
-
-                if (!await taskRepository.ContainsAny())
-                {
-                    await taskRepository.AddRangeAsync(seedContainer.AllTasks);
-                }
-
-                await _unitOfWork.SaveChangesAsync();
-                await _unitOfWork.CommitTransactionAsync();
+				await unitOfWork.SaveChangesAsync();
+                await unitOfWork.CommitTransactionAsync();
             }
             catch (Exception ex)
             {
-                await _unitOfWork.RollbackTransactionAsync();
+                await unitOfWork.RollbackTransactionAsync();
                 logger.LogCritical(ex, "An error occurred while populating the database.");
                 throw;
             }
         }
+
+        private static async Task EnsurePendingMigrationsAppliedAsync(IDataUnitOfWork unitOfWork)
+        {
+			var migrations = await unitOfWork.GetPendingMigrationsAsync();
+
+			if (migrations.Any())
+			{
+				await unitOfWork.MigrateAsync();
+			}
+		}
+
+        private static async Task EnsureTodoListsPopulatedAsync(ISeedData seedContainer, IDataUnitOfWork unitOfWork)
+        {
+			ITodoListRepository todoListRepository = unitOfWork.TodoListRepository;
+
+			if (await todoListRepository.ContainsAny() is false)
+			{
+				await todoListRepository.AddRangeAsync(seedContainer.TodoLists);
+			}
+		}
+
+        private static async Task EnsureTasksPopulatedAsync(ISeedData seedContainer, IDataUnitOfWork unitOfWork)
+        {
+			ITaskRepository taskRepository = unitOfWork.TaskRepository;
+
+			if (await taskRepository.ContainsAny() is false)
+			{
+				await taskRepository.AddRangeAsync(seedContainer.AllTasks);
+			}
+		}
     }
 }
 
