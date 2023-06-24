@@ -78,7 +78,7 @@
 			if (string.IsNullOrEmpty(param))
 			{
 				logger.LogError(Messages.LogParamNullOrEmpty, operationName, paramName);
-				throw new ArgumentOutOfRangeException(Messages.ExceptionNullObjectOnAction(operationName, paramName));
+				throw new ArgumentNullException(Messages.ExceptionNullObjectOnAction(operationName, paramName));
 			}
 		}
 
@@ -95,7 +95,7 @@
 		{
 			if (id < bottomBoundry)
 			{
-				logger.LogInformation(Messages.LogOutOfRange, operationName, paramName, id);
+				logger.LogError(Messages.LogOutOfRange, operationName, paramName, id);
 				throw new ArgumentOutOfRangeException(paramName, id, Messages.OutOfRange(operationName, nameof(id), id));
 			}
 		}
