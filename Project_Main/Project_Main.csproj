@@ -34,6 +34,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ClassLibrary_SeedData\ClassLibrary_SeedData.csproj" />
     <ProjectReference Include="..\Project_DomainEntities\Project_DomainEntities.csproj" />
+    <ProjectReference Include="..\Project_IdentityDomainEntities\Project_IdentityDomainEntities.csproj" />
   </ItemGroup>
 
   <ItemGroup>
