@@ -5,62 +5,77 @@ namespace Project_Main.Models.DataBases.General
 {
 	///<inheritdoc />
 	public abstract class UnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
-    {
-        protected readonly TContext _context;
-        private bool _disposed = false;
+	{
+		protected readonly TContext _context;
+		private bool _disposed = false;
 
-        protected UnitOfWork(TContext context)
-        {
-            _context = context;
+		protected UnitOfWork(TContext context)
+		{
+			_context = context;
 		}
 
-        public virtual async Task SaveChangesAsync()
-        {
-            await _context.SaveChangesAsync();
-        }
+		public virtual async Task SaveChangesAsync()
+		{
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch
+			{
+				await _context.Database.RollbackTransactionAsync();
+			}
+		}
 
-        public async Task<IDbContextTransaction> BeginTransactionAsync()
-        {
-            return await _context.Database.BeginTransactionAsync();
-        }
+		public async Task<IDbContextTransaction> BeginTransactionAsync()
+		{
+			return await _context.Database.BeginTransactionAsync();
+		}
 
-        public async Task CommitTransactionAsync()
-        {
-            await _context.Database.CommitTransactionAsync();
-        }
+		public async Task CommitTransactionAsync()
+		{
+			try
+			{
+				await _context.Database.CommitTransactionAsync();
 
-        public async Task RollbackTransactionAsync()
-        {
-            await _context.Database.RollbackTransactionAsync();
-        }
+			}
+			catch
+			{
+				await _context.Database.RollbackTransactionAsync();
+			}
+		}
 
-        public async Task<IEnumerable<string>> GetPendingMigrationsAsync()
-        {
-            return await _context.Database.GetPendingMigrationsAsync();
-        }
+		public async Task RollbackTransactionAsync()
+		{
+			await _context.Database.RollbackTransactionAsync();
+		}
 
-        public async Task MigrateAsync()
-        {
-            await _context.Database.MigrateAsync();
-        }
+		public async Task<IEnumerable<string>> GetPendingMigrationsAsync()
+		{
+			return await _context.Database.GetPendingMigrationsAsync();
+		}
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+		public async Task MigrateAsync()
+		{
+			await _context.Database.MigrateAsync();
+		}
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_disposed)
-            {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
 
-                _disposed = true;
-            }
-        }
-    }
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!_disposed)
+			{
+				if (disposing)
+				{
+					_context.Dispose();
+				}
+
+				_disposed = true;
+			}
+		}
+	}
 }
