@@ -53,10 +53,27 @@ namespace Project_Main.Controllers
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Details), controllerName);
 
+			TaskModel? taskModel = null;
+
+			try
+			{
 			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, routeTodoListId, nameof(routeTodoListId), HelperCheck.BottomBoundryOfId, _logger);
 			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, routeTaskId, nameof(routeTaskId), HelperCheck.BottomBoundryOfId, _logger);
 
-			TaskModel? taskModel = await _taskRepository.GetAsync(routeTaskId);
+				taskModel = await _taskRepository.GetAsync(routeTaskId);
+			}
+			catch (ArgumentOutOfRangeException)
+			{
+				return NotFound();
+			}
+			catch (ArgumentNullException)
+			{
+				return RedirectToAction("Error", "Home");
+			}
+			catch (SqlException)
+			{
+				return RedirectToAction("Error", "Home");
+			}
 
 			if (taskModel is null)
 			{
@@ -89,8 +106,11 @@ namespace Project_Main.Controllers
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Create), controllerName);
 			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.BottomBoundryOfId, _logger);
 
-			if (ModelState.IsValid)
+			if (ModelState.IsValid is false)
 			{
+				return View();
+			}
+
 				var targetTodoList = await _todoListRepository.GetAsync(id);
 
 				if (targetTodoList is null)
@@ -109,9 +129,6 @@ namespace Project_Main.Controllers
 
 				return View(taskViewModel);
 			}
-
-			return View();
-		}
 
 		/// <summary>
 		/// Action POST to create Task.
