@@ -1,4 +1,4 @@
-﻿@model Project_Main.Models.ViewModels.HomeViewModels.LoginViewModel
+﻿@model RegisterInputVM
 
 @{
 	Layout = "_LoginLayout";
@@ -7,15 +7,24 @@
 <div class="card" style="width: 25rem;">
 	<img src="\earth-welcome.jpg" class="card-img-top" alt="...">
 	<div class="card-body">
-		<h5 class="card-title">Login Page</h5>
+		<h5 class="card-title">Register Page</h5>
 
-		<form asp-action="Login" asp-controller="Home" method="post">
+		<form asp-action="Register" asp-controller="Home" method="post">
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
 					<span class="input-group-text">@@</span>
 				</div>
 				<input asp-for="Name" type="text" class="form-control" placeholder="Username" aria-label="Username" />
 				<span asp-validation-for="Name" class="text-danger" style="width: 100%;"></span>
+			</div>
+
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<span class="input-group-text">@@</span>
+				</div>
+
+				<input asp-for="Email" type="email" class="form-control" placeholder="Email" aria-label="Email" />
+				<span asp-validation-for="Email" class="text-danger" style="width: 100%;"></span>
 			</div>
 
 			<div class="input-group mb-3">
@@ -27,11 +36,10 @@
 			</div>
 
 			<div class="card-body">
-				<button class="btn btn-primary" type="submit" style="font-weight: 500; color:white;">Log In</button>
-				<a asp-controller="Home" asp-action="LoginByProvider" asp-route-provider="google" class="btn btn-info" style="font-weight: 500; color:white;">by Google</a>
-				<a asp-controller="Home" asp-action="Register" class="btn btn-info" style="font-weight: 500; color:white;">Register</a>
+				<button class="btn btn-info" style="font-weight: 500; color: white;" type="submit">Register</button>
+				<a asp-controller="Home" asp-action="Login" class="btn btn-primary" style="font-weight: 500;">Back</a>
 			</div>
-			
+
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 		</form>
 	</div>
