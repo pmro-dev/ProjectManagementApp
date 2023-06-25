@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Project_IdentityDomainEntit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Project_UnitTests", "Project_UnitTests\Project_UnitTests.csproj", "{31D1E297-9C2D-425B-BEE9-113BFAA79681}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary_SeedData", "ClassLibrary_SeedData\ClassLibrary_SeedData.csproj", "{8BD78903-FF4D-46A8-9403-27B52AB6CE4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibrary_SeedData", "ClassLibrary_SeedData\ClassLibrary_SeedData.csproj", "{8BD78903-FF4D-46A8-9403-27B52AB6CE4E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

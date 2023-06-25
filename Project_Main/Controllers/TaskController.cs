@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Authorization;
 using Project_Main.Infrastructure.Helpers;
 using static Project_DomainEntities.Helpers.TaskStatusHelper;
 using Project_DomainEntities;
-using Project_Main.Models.ViewModels.TaskViewModels;
 using System.Security.Claims;
 using Project_Main.Models.DataBases.AppData;
 using Project_Main.Models.DataBases.Helpers;
+using Microsoft.Data.SqlClient;
 using Project_Main.Models.ViewModels.OutputModels;
+using Project_DTO;
 using Project_Main.Models.ViewModels.InputModels;
+using Project_Main.Services;
 
 namespace Project_Main.Controllers
 {
@@ -83,13 +85,16 @@ namespace Project_Main.Controllers
 				return NotFound();
 			}
 
-			if (routeTodoListId != taskModel.TodoListId)
+            TaskModelDto taskModelDto = TaskDtoService.TransferToDefaultDto(taskModel);
+            TaskDetailsVM taskDetailsVM = TaskDtoService.TransferToTaskDetailsVM(taskModelDto);
+
+            if (routeTodoListId != taskDetailsVM.TodoListId)
 			{
 				_logger.LogError(Messages.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, routeTodoListId, taskModel.TodoListId);
 				return Conflict();
 			}
 
-			return View(taskModel);
+            return View(taskDetailsVM);
 		}
 
 		/// <summary>
@@ -111,23 +116,19 @@ namespace Project_Main.Controllers
 			if (ModelState.IsValid is false)
 				return View();
 
-				var targetTodoList = await _todoListRepository.GetAsync(id);
+            // TODO implement new method that allow to get only concrete data that I would specify by Select expression
+            var targetTodoListModel = await _todoListRepository.GetAsync(id);
 
-				if (targetTodoList is null)
+            if (targetTodoListModel is null)
 				{
 					_logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, id, HelperDatabase.TodoListsDbSetName);
 					return NotFound();
 				}
 
-				var taskViewModel = new TaskViewModel()
-				{
-					TodoListName = targetTodoList.Title,
-					TodoListId = targetTodoList.Id,
-					UserId = targetTodoList.UserId,
-					ReminderDate = null
-				};
+            var todoListModelDto = TodoListDtoService.TransferToDto(targetTodoListModel);
+            var taskCreateOutputVM = TaskDtoService.CreateTaskCreateOutputVM(todoListModelDto.Id, todoListModelDto.UserId);
 
-				return View(taskViewModel);
+            return View(taskCreateOutputVM);
 			}
 
 		/// <summary>
@@ -151,8 +152,14 @@ namespace Project_Main.Controllers
 
             // TODO Check why are you assign todoList id from route to dto
             taskCreateInputVM.TodoListId = todoListId;
-				TaskDataFromForm.TodoListId = todoListId;
-				await _taskRepository.AddAsync(TaskDataFromForm);
+
+            var taskCreateInputVMDto = TaskDtoService.TransferToTaskCreateInputVMDto(taskCreateInputVM);
+
+            //// TODO Check why are you assign todoList id from route to dto
+            //taskCreateInputVM.TodoListId = todoListId;
+
+            var taskModel = TaskDtoService.TransferToTaskModel(taskCreateInputVMDto);
+
             await _taskRepository.AddAsync(taskModel);
             await _taskRepository.AddAsync(taskCreateInputVM);
 				await _dataUnitOfWork.SaveChangesAsync();
@@ -178,6 +185,8 @@ namespace Project_Main.Controllers
 
 			var taskModel = await _taskRepository.GetAsync(taskId);
 			TodoListModel? targetTodoList = await _todoListRepository.GetAsync(todoListId);
+
+            // TODO implement method that allow to get only concrete properties by Select expression, here I need only TodoLists Ids and Names
 			IEnumerable<TodoListModel> tempTodoLists = await _todoListRepository.GetAllByFilterAsync(todoList => todoList.UserId == signedInUserId);
 
 			if (taskModel == null)
