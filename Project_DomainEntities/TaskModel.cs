@@ -56,40 +56,5 @@ namespace Project_DomainEntities
 
 		[Required]
 		public string UserId { get; set; } = string.Empty;
-
-		/// <summary>
-		/// Compares properties of two Tasks and return result of that compare.
-		/// </summary>
-		/// <param name="obj">Second Task compare to.</param>
-		/// <returns>Result of compare -> true if certain properties (Title, Description) of objects are equal, otherwise false.</returns>
-		public override bool Equals(object? obj)
-		{
-			if (obj == null || !GetType().Equals(obj.GetType()))
-			{
-				return false;
-			}
-			else
-			{
-				var task = (TaskModel)obj;
-
-				if (Title == task.Title && Description == task.Description)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Create and sets Hash Code.
-		/// </summary>
-		/// <returns></returns>
-		public override int GetHashCode()
-		{
-			return HashCode.Combine(Title, Id);
-		}
 	}
 }
