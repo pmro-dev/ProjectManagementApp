@@ -8,6 +8,8 @@ using Project_Main.Models.ViewModels.TaskViewModels;
 using System.Security.Claims;
 using Project_Main.Models.DataBases.AppData;
 using Project_Main.Models.DataBases.Helpers;
+using Project_Main.Models.ViewModels.OutputModels;
+using Project_Main.Models.ViewModels.InputModels;
 
 namespace Project_Main.Controllers
 {
@@ -107,9 +109,7 @@ namespace Project_Main.Controllers
 			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.BottomBoundryOfId, _logger);
 
 			if (ModelState.IsValid is false)
-			{
 				return View();
-			}
 
 				var targetTodoList = await _todoListRepository.GetAsync(id);
 
@@ -134,7 +134,7 @@ namespace Project_Main.Controllers
 		/// Action POST to create Task.
 		/// </summary>
 		/// <param name="todoListId">Targeted To Do List for which Task would be created.</param>
-		/// <param name="TaskDataFromForm">Task Model with data that comes from form.</param>
+        /// <param name="taskCreateInputVM">Task Model with data that comes from form.</param>
 		/// <returns>
 		/// Return different view based on the final result.
 		/// Return: BadRequest when id is invalid or redirect to view with target To Do List SingleDetails.
@@ -143,20 +143,21 @@ namespace Project_Main.Controllers
 		[HttpPost]
 		[Route(CustomRoutes.CreateTaskPostRoute)]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(int todoListId, [Bind(taskDataToBind)] TaskModel TaskDataFromForm)
+        public async Task<IActionResult> Create(int todoListId, [Bind(taskDataToBind)] TaskCreateInputVM taskCreateInputVM)
 		{
 			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.BottomBoundryOfId, _logger);
+            if (ModelState.IsValid is false) 
+                return View(taskCreateInputVM);
 
-			if (ModelState.IsValid)
-			{
+            // TODO Check why are you assign todoList id from route to dto
+            taskCreateInputVM.TodoListId = todoListId;
 				TaskDataFromForm.TodoListId = todoListId;
 				await _taskRepository.AddAsync(TaskDataFromForm);
+            await _taskRepository.AddAsync(taskModel);
+            await _taskRepository.AddAsync(taskCreateInputVM);
 				await _dataUnitOfWork.SaveChangesAsync();
 
-				return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
-			}
-
-			return View(TaskDataFromForm);
+            return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = taskCreateInputVM.TodoListId });
 		}
 
 		/// <summary>
@@ -213,7 +214,7 @@ namespace Project_Main.Controllers
 				Value = ((int)v).ToString()
 			}).ToList(), dataValueField, dataTextField, taskModel.Status);
 
-			var taskViewModel = new TaskViewModel
+            var taskViewModel = new TaskCreateInputVM
 			{
 				Title = taskModel.Title,
 				Description = taskModel.Description,

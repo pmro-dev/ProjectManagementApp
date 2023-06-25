@@ -1,9 +1,9 @@
-namespace Project_Main.Models.ViewModels.HomeViewModels
+namespace Project_Main.Models.ViewModels.OutputModels
 {
     /// <summary>
     /// Model for Error View.
     /// </summary>
-    public class ErrorViewModel
+    public class ErrorOutputVM
     {
         public string? RequestId { get; set; }
 

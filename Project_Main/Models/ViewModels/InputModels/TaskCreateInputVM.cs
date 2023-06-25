@@ -4,12 +4,12 @@ using Project_DomainEntities;
 using Project_DomainEntities.Helpers;
 using static Project_DomainEntities.Helpers.TaskStatusHelper;
 
-namespace Project_Main.Models.ViewModels.TaskViewModels
+namespace Project_Main.Models.ViewModels.InputModels
 {
     /// <summary>
     /// Model for a Task creation and editing view.
     /// </summary>
-    public class TaskViewModel
+    public class TaskCreateInputVM
     {
         public int Id { get; set; }
 
@@ -51,18 +51,18 @@ namespace Project_Main.Models.ViewModels.TaskViewModels
 
         public List<TaskTagModel> TaskTags { get; set; } = new List<TaskTagModel>();
 
-		[Required]
-		public int TodoListId { get; set; } = -1;
+        [Required]
+        public int TodoListId { get; set; } = -1;
 
-		[Required]
-		public string UserId { get; set; } = string.Empty;
+        [Required]
+        public string UserId { get; set; } = string.Empty;
 
-		public string TodoListName { get; set; } = string.Empty;
+        public string TodoListName { get; set; } = string.Empty;
 
-		/// <summary>
-		/// Task's statuses to pick.
-		/// </summary>
-		public SelectList? StatusSelector { get; set; }
+        /// <summary>
+        /// Task's statuses to pick.
+        /// </summary>
+        public SelectList? StatusSelector { get; set; }
 
         /// <summary>
         /// ToDoLists to pick as owner.

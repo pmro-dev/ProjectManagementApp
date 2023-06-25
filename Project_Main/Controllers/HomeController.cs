@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Project_Main.Infrastructure.Helpers;
-using Project_Main.Models.ViewModels.HomeViewModels;
 using Project_Main.Services;
 using Castle.Core.Internal;
+using Project_Main.Models.ViewModels.InputModels;
 
 namespace Project_Main.Controllers
 {
@@ -43,19 +43,19 @@ namespace Project_Main.Controllers
 		/// <summary>
 		/// Method allows to login user with provided data by form.
 		/// </summary>
-		/// <param name="loginViewModel">Model with provided login data.</param>
+		/// <param name="loginInputVM">Model with provided login data.</param>
 		/// <returns>Redirect user to specific index view or to login view if authentication failed.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Login(LoginViewModel loginViewModel)
+		public async Task<IActionResult> Login(LoginInputVM loginInputVM)
 		{
 			if (ModelState.IsValid)
 			{
-				string userName = loginViewModel.Name;
-				string userPassword = loginViewModel.Password;
+				string userName = loginInputVM.Name;
+				string userPassword = loginInputVM.Password;
 
 				if (userName.IsNullOrEmpty() || userPassword.IsNullOrEmpty()) 
-					return View(loginViewModel);
+					return View(loginInputVM);
 
 				try 
 				{
@@ -78,7 +78,7 @@ namespace Project_Main.Controllers
 				}
 			}
 
-			return View(loginViewModel);
+			return View(loginInputVM);
 		}
 
 		/// <summary>
@@ -124,19 +124,19 @@ namespace Project_Main.Controllers
 		/// <summary>
 		/// Method allows to register new user identity.
 		/// </summary>
-		/// <param name="registerViewModel">Model with provided register data.</param>
+		/// <param name="registerInputVM">Model with provided register data.</param>
 		/// <returns>Redirect user to login page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
+		public async Task<IActionResult> Register(RegisterInputVM registerInputVM)
 		{
 			if (ModelState.IsValid)
 			{
 				operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Register), controllerName);
 
-				string? userName = registerViewModel.Name;
-				string? userPassword = registerViewModel.Password;
-				string? userEmail = registerViewModel.Email;
+				string? userName = registerInputVM.Name;
+				string? userPassword = registerInputVM.Password;
+				string? userEmail = registerInputVM.Email;
 
 				bool isDataInvalid = userName.IsNullOrEmpty() || userPassword.IsNullOrEmpty() || userEmail.IsNullOrEmpty();
 

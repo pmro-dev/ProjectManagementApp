@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Project_Main.Models.ViewModels.HomeViewModels
+namespace Project_Main.Models.ViewModels.InputModels
 {
     /// <summary>
     /// Model for Registration View.
     /// </summary>
-    public class RegisterViewModel
+    public class RegisterInputVM
     {
         [Required]
         public string Name { get; set; } = string.Empty;
@@ -14,8 +14,8 @@ namespace Project_Main.Models.ViewModels.HomeViewModels
         [DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
 
-		[Required]
+        [Required]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; } = string.Empty;
-	}
+    }
 }
