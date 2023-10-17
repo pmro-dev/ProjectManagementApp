@@ -23,7 +23,7 @@ namespace Project_UnitTests
 
 			return new TodoListModel()
 			{
-				Id = TodoListsCollection.Last().Id + IndexValueOne,
+				Id = TodoListsCollection[LastItemIndex].Id + IndexValueOne,
 				Title = todoListTitle + TitleSuffix,
 			};
 		}
@@ -169,7 +169,7 @@ namespace Project_UnitTests
 		[TestCase(-5, typeof(ArgumentOutOfRangeException))]
 		public async Task AttemptToGetTodoListByInvalidIdShouldThrowException(object id, Type exceptionType)
 		{
-			int todoListIdForMockSetup = TodoListsCollection.First().Id;
+			int todoListIdForMockSetup = TodoListsCollection[FirstItemIndex].Id;
 
 			await GenericMockSetup<TodoListModel>.SetupGetEntity(todoListIdForMockSetup, DbSetTodoListMock, TodoListsCollection);
 
@@ -190,7 +190,7 @@ namespace Project_UnitTests
 		[Test]
 		public async Task UpdateTodoListShouldSucceed()
 		{
-			int todoListToUpdateId = TodoListsCollection.First().Id;
+			int todoListToUpdateId = TodoListsCollection[FirstItemIndex].Id;
 			await GenericMockSetup<TodoListModel>.SetupGetEntity(todoListToUpdateId, DbSetTodoListMock, TodoListsCollection);
 			TodoListModel todoListToUpdate = await TodoListRepo.GetAsync(todoListToUpdateId) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
@@ -220,7 +220,7 @@ namespace Project_UnitTests
 		[Test]
 		public async Task UpdateTodoListTasksShouldSucceed()
 		{
-			int todoListToUpdateId = TodoListsCollection.First().Id;
+			int todoListToUpdateId = TodoListsCollection[FirstItemIndex].Id;
 			var newTasks = TasksData.NewTasksRange;
 
 			TodoListModel? todoListToUpdate = await TodoListRepo.GetWithDetailsAsync(todoListToUpdateId) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");

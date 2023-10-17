@@ -26,7 +26,7 @@ namespace Project_UnitTests
 
 			return new TaskModel()
 			{
-				Id = TasksCollection.Last().Id + IndexValueOne,
+				Id = TasksCollection[LastItemIndex].Id + IndexValueOne,
 				Title = taskTitle + TitleSuffix,
 				Description = taskDescription,
 				DueDate = taskDueDate,
@@ -134,7 +134,7 @@ namespace Project_UnitTests
 		[TestCase(-5, typeof(ArgumentOutOfRangeException))]
 		public async Task AttemptToGetTaskByInvalidIdShouldThrowException(object id, Type exceptionType)
 		{
-			int taskIdForMockSetup = TasksCollection.First().Id;
+			int taskIdForMockSetup = TasksCollection[FirstItemIndex].Id;
 
 			await GenericMockSetup<TaskModel>.SetupGetEntity(taskIdForMockSetup, DbSetTaskMock, TasksCollection);
 
@@ -155,7 +155,7 @@ namespace Project_UnitTests
 		[Test]
 		public async Task UpdateTaskShouldSucceed()
 		{
-			int taskToUpdateId = TasksCollection.First().Id;
+			int taskToUpdateId = TasksCollection[FirstItemIndex].Id;
 			await GenericMockSetup<TaskModel>.SetupGetEntity(taskToUpdateId, DbSetTaskMock, TasksCollection);
 			TaskModel taskToUpdate = await TaskRepo.GetAsync(taskToUpdateId) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 

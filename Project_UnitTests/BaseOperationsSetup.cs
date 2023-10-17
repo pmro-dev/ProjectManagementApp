@@ -38,8 +38,10 @@ namespace Project_UnitTests
 
 
 		#region FIELDS
-		
+
+		protected const int FirstItemIndex = 0;
 		protected readonly string AdminId = TodoListsData.AdminId;
+		protected static readonly Index LastItemIndex = ^1;
 
 		#endregion
 
