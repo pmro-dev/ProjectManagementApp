@@ -32,7 +32,7 @@
 			return $"{actionName} | Given param {paramName} with value ( {paramValue} ) is out of range!";
 		}
 
-		public static string EntityNotFoundInDbById(string actionName, string dbSetName, int entityId)
+		public static string EntityNotFoundByIdInDb(string actionName, string dbSetName, int entityId)
 		{
 			return $"{actionName} | Entity with given id ( {entityId} ) not found in {dbSetName} DbSet.";
 		}
@@ -52,7 +52,7 @@
 		public const string ProvidedArgumentIsOutOfRange = "Passed argument is out of range!";
 		public const string ProvidedArgumentIsWithInvalidType = "The id parameter is not a valid type.";
 		public const string DbSetIsNull = "Critical error! Dbset object cannot be null!";
-		public const string ItemNotFoundInDb = "There's not such item in Database with given id.";
+		public const string ItemNotFoundInDb = "There's not such item in Database.";
 		public const string InvalidLoginData = "Invalid name or password.";
 		public const string NameTaken = "Name already taken! Try again and get new one!";
 

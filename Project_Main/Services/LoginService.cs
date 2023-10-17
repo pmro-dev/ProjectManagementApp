@@ -45,7 +45,7 @@ namespace Project_Main.Services
 				return true;
 			}
 
-			throw new InvalidOperationException("You cannot to login user without checking his existence!");
+			throw new InvalidOperationException(Messages.ItemNotFoundInDb);
 		}
 	}
 }

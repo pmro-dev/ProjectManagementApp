@@ -109,7 +109,7 @@ namespace Project_Main
 				if (userFromDb is null)
 				{
 					logger?.LogCritical(Messages.LogEntityNotFoundInDbSet, nameof(UpdateUserWhenDataOnProviderSideChangedAsync), userBasedOnProviderClaims.NameIdentifier, HelperDatabase.UsersDbSetName);
-					throw new InvalidOperationException(Messages.EntityNotFoundInDbById(nameof(UpdateUserWhenDataOnProviderSideChangedAsync), "Identity", -2));
+					throw new InvalidOperationException(Messages.EntityNotFoundByIdInDb(nameof(UpdateUserWhenDataOnProviderSideChangedAsync), "Identity", -2));
 				}
 
 				bool doesUserUseOtherProvider = userBasedOnProviderClaims.Provider != CookieAuthenticationDefaults.AuthenticationScheme;
