@@ -114,7 +114,7 @@ namespace Project_Main
 
 				bool doesUserUseOtherProvider = userBasedOnProviderClaims.Provider != CookieAuthenticationDefaults.AuthenticationScheme;
 
-				if (doesUserUseOtherProvider && ModelsHelper.IsUserDataFromProviderDifferentToUserDataInDb(ref userBasedOnProviderClaims, ref userFromDb))
+				if (doesUserUseOtherProvider && !userBasedOnProviderClaims.Equals(userFromDb))
 				{
 					userFromDb.FirstName = userBasedOnProviderClaims.FirstName;
 					userFromDb.Lastname = userBasedOnProviderClaims.Lastname;

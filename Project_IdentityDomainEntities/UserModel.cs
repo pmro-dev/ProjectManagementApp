@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Project_IdentityDomainEntities
 {
-	public class UserModel
+	public sealed class UserModel : IEquatable<UserModel>
 	{
 		[Key]
 		[Required]
@@ -55,6 +55,20 @@ namespace Project_IdentityDomainEntities
 					FirstName == user.FirstName && 
 					Lastname == user.Lastname && 
 					Email == user.Email;
+			}
+		}
+
+		public bool Equals(UserModel? other)
+		{
+			if (other == null || !GetType().Equals(other.GetType())) { return false; }
+			else
+			{
+				return NameIdentifier == other.NameIdentifier &&
+					Provider == other.Provider &&
+					Username == other.Username &&
+					FirstName == other.FirstName &&
+					LastName == other.LastName &&
+					Email == other.Email;
 			}
 		}
 
