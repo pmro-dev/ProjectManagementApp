@@ -71,21 +71,21 @@ namespace Project_Main.Models.DataBases.General
 		///<inheritdoc />
 		public void Remove(TEntity entity)
 		{
-				string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
-				string operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Remove), classAndEntityInfo);
-				HelperCheck.ThrowExceptionWhenModelNull(operationName, entity, nameof(entity), _logger);
+			string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
+			string operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Remove), classAndEntityInfo);
+			HelperCheck.ThrowExceptionWhenModelNull(operationName, entity, nameof(entity), _logger);
 
-				_dbSet.Remove(entity);
+			_dbSet.Remove(entity);
 		}
 
 		///<inheritdoc />
 		public void Update(TEntity entity)
 		{
-				string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
-				string operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Update), classAndEntityInfo);
-				HelperCheck.ThrowExceptionWhenModelNull(operationName, entity, nameof(entity), _logger);
+			string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
+			string operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Update), classAndEntityInfo);
+			HelperCheck.ThrowExceptionWhenModelNull(operationName, entity, nameof(entity), _logger);
 
-				_dbSet.Update(entity);
+			_dbSet.Update(entity);
 		}
 
 		///<inheritdoc />
@@ -99,9 +99,14 @@ namespace Project_Main.Models.DataBases.General
 		}
 
 		///<inheritdoc />
-		public async Task<bool> ContainsAny()
+		public async Task<bool> ContainsAny(Expression<Func<TEntity, bool>>? predicate = null)
 		{
-			return await _dbSet.AnyAsync();
+			if (predicate is null)
+			{
+				return await _dbSet.AnyAsync();
+			}
+
+			return await _dbSet.AnyAsync(predicate);
 		}
 	}
 }

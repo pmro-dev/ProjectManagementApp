@@ -58,7 +58,7 @@ namespace Project_Main.Models.DataBases.General
 		/// Check that Db contains any entity.
 		/// </summary>
 		/// <returns>Return True when Db contains any entity, otherwise return false.</returns>
-		Task<bool> ContainsAny();
+		Task<bool> ContainsAny(Expression<Func<T, bool>>? predicate = null);
 
 		/// <summary>
 		/// Add range of entities to Db by repository.
