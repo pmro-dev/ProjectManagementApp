@@ -1,5 +1,5 @@
-﻿@using Project_DomainEntities
-@model Project_DomainEntities.TaskModel
+﻿@* @using Project_DomainEntities *@
+@model Project_Main.Models.ViewModels.OutputModels.TaskDetailsVM
 
 @{
 	ViewData["Title"] = "Details";
@@ -14,5 +14,5 @@
 	<input type="hidden" name="routeTodoListId" asp-for="@Model.TodoListId" />
 	<input type="hidden" name="routeTaskId" asp-for="@Model.Id" />
 	<input type="hidden" asp-for="@Model.UserId" />
-    <a asp-controller="TodoList" asp-action="SingleDetails" asp-route-id="@Model.TodoListId" class="btn btn-primary">Back</a>
+    <a asp-controller="Boards" asp-action="SingleDetails" asp-route-id="@Model.TodoListId" class="btn btn-primary">Back</a>
 </div>
