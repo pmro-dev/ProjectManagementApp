@@ -39,7 +39,7 @@ namespace Project_IdentityDomainEntities
 		[Required]
 		[MinLength(AttributesHelper.LastNameMinLength)]
 		[MaxLength(AttributesHelper.LastNameMaxLength)]
-		public string Lastname { get; set; } = string.Empty;
+		public string LastName { get; set; } = string.Empty;
 
 		public List<UserRoleModel> UserRoles { get; set; } = new();
 
@@ -49,11 +49,11 @@ namespace Project_IdentityDomainEntities
 			else
 			{
 				var user = (UserModel)obj;
-				return NameIdentifier == user.NameIdentifier && 
-					Provider == user.Provider && 
-					Username == user.Username && 
-					FirstName == user.FirstName && 
-					Lastname == user.Lastname && 
+				return NameIdentifier == user.NameIdentifier &&
+					Provider == user.Provider &&
+					Username == user.Username &&
+					FirstName == user.FirstName &&
+					LastName == user.LastName &&
 					Email == user.Email;
 			}
 		}

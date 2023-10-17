@@ -23,7 +23,7 @@ namespace Project_Main.Models.DataBases.Identity.DbSetup
 		{
 			UserId = AdminId,
 			FirstName = AdminUser,
-			Lastname = AdminUser,
+			LastName = AdminUser,
 			NameIdentifier = AdminId,
 			Password = AdminPassword,
 			Provider = ProviderName,

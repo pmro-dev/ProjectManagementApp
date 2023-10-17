@@ -116,7 +116,7 @@ namespace Project_Main
 				if (doesUserUseOtherProvider && !userBasedOnProviderClaims.Equals(userFromDb))
 				{
 					userFromDb.FirstName = userBasedOnProviderClaims.FirstName;
-					userFromDb.Lastname = userBasedOnProviderClaims.Lastname;
+					userFromDb.LastName = userBasedOnProviderClaims.LastName;
 					userFromDb.Username = userBasedOnProviderClaims.Username;
 					userFromDb.Provider = authSchemeClaimWithProviderName.Value;
 					userFromDb.Email = userBasedOnProviderClaims.Email;

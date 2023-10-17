@@ -39,7 +39,7 @@ namespace Project_Main.Services
 			{
 				Email = userEmail,
 				FirstName = userName,
-				Lastname = userName,
+				LastName = userName,
 				Password = userPassword,
 				Provider = ConfigConstants.DefaultScheme,
 				Username = userName
