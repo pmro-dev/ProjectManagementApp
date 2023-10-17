@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Project_Main.Infrastructure.Helpers;
 
@@ -16,6 +17,21 @@ namespace Project_Main.Services
 			};
 
 			return new ChallengeResult(provider, authProperties);
+		}
+
+		public AuthenticationProperties CreateDefaultAuthProperties()
+		{
+			Dictionary<string, string?> itemsForAuthProperties = new()
+					{
+						{
+							ConfigConstants.AuthSchemeClaimKey,
+							CookieAuthenticationDefaults.AuthenticationScheme
+						}
+					};
+
+			AuthenticationProperties authProperties = new(itemsForAuthProperties);
+
+			return authProperties;
 		}
 	}
 }

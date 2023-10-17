@@ -13,14 +13,16 @@ namespace Project_Main.Services
 		private readonly IUserRepository _userRepository;
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly IClaimsService _claimsService;
+		private readonly IUserAuthenticationService _userAuthenticationService;
 		private UserModel? _user;
 
-		public LoginService(IIdentityUnitOfWork identityUnitOfWork, IHttpContextAccessor httpContextAccessor, IClaimsService claimsService)
+		public LoginService(IIdentityUnitOfWork identityUnitOfWork, IHttpContextAccessor httpContextAccessor, IClaimsService claimsService, IUserAuthenticationService userAuthenticationService)
 		{
 			_identityUnitOfWork = identityUnitOfWork;
 			_userRepository = _identityUnitOfWork.UserRepository;
 			_httpContextAccessor = httpContextAccessor;
 			_claimsService = claimsService;
+			_userAuthenticationService = userAuthenticationService;
 		}
 
 		public async Task<bool> CheckThatUserIsRegisteredAsync(string userName, string userPassword)
@@ -50,7 +52,7 @@ namespace Project_Main.Services
 
 				ClaimsPrincipal userClaimsPrincipal = _claimsService.CreateUserClaimsPrincipal(_user);
 
-				AuthenticationProperties authProperties = new(itemsForAuthProperties);
+				AuthenticationProperties authProperties = _userAuthenticationService.CreateDefaultAuthProperties();
 				HttpContext httpContext = _httpContextAccessor.HttpContext ?? throw new ArgumentException("Unable to get current HttpContext - accessor returned null HttpContext object.");
 
 				await httpContext.SignInAsync(userClaimsPrincipal, authProperties);
