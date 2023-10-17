@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Project_IdentityDomainEntities.Helpers;
 using Project_IdentityDomainEntities;
 using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.DataBases.Identity;
@@ -85,7 +84,7 @@ namespace Project_Main
 				principle = cookieSigningInContext.Principal?.Identity as ClaimsIdentity ?? 
 					throw new ArgumentException(Messages.ParamObjectNull(nameof(CreateUserBasedOnProviderData), nameof(cookieSigningInContext.Principal)));
 				
-				principle?.AddClaim(authSchemeClaimWithProviderName);
+				principle.AddClaim(authSchemeClaimWithProviderName);
 
 				List<Claim> claims = cookieSigningInContext.Principal?.Claims.ToList() ?? new();
 
@@ -133,6 +132,7 @@ namespace Project_Main
 
 				if (roleForNewUser is null)
 				{
+					//TODO add logging
 					throw new InvalidOperationException("message");
 				}
 

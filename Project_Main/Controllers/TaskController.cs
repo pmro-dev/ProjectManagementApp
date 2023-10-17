@@ -113,7 +113,7 @@ namespace Project_Main.Controllers
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Create), controllerName);
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.IdBottomBoundry, _logger);
 
-            if (ModelState.IsValid is false)
+            if (!ModelState.IsValid)
                 return View();
 
             // TODO implement new method that allow to get only concrete data that I would specify by Select expression
@@ -148,7 +148,7 @@ namespace Project_Main.Controllers
         {
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.IdBottomBoundry, _logger);
 
-            if (ModelState.IsValid is false) 
+            if (!ModelState.IsValid) 
                 return View(taskCreateInputVM);
 
             // TODO Check why are you assign todoList id from route to dto
@@ -202,7 +202,7 @@ namespace Project_Main.Controllers
                 return NotFound();
             }
 
-            if (tempTodoLists.Any() is false)
+            if (!tempTodoLists.Any())
             {
                 _logger.LogInformation(Messages.LogNotAnyTodoListInDb, operationName);
                 return NotFound();

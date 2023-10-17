@@ -95,7 +95,7 @@ namespace Project_Main.Models.DataBases.Identity.DbSetup
 		{
 			IRoleRepository roleRepository = identityUnitOfWork.RoleRepository;
 
-			if (await roleRepository.ContainsAny() is false)
+			if (! await roleRepository.ContainsAny())
 			{
 				List<RoleModel> defaultRoles = new();
 				StringBuilder idBuilder = new();
@@ -123,7 +123,7 @@ namespace Project_Main.Models.DataBases.Identity.DbSetup
 		{
 			IUserRepository userRepository = identityUnitOfWork.UserRepository;
 
-			if (await userRepository.ContainsAny() is false)
+			if (! await userRepository.ContainsAny())
 			{
 				await userRepository.AddAsync(AdminInitModel);
 			}

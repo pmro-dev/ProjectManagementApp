@@ -3,7 +3,7 @@
 	public static class TaskModelExtension
 	{
         /// <summary>
-        /// Compares properties of two Tasks and return result of that compare.
+        /// Compares properties of two Tasks and return result of that comparison.
         /// </summary>
         /// <param name="obj">Second Task compare to.</param>
         /// <returns>Result of compare -> true if certain properties (Title, Description) of objects are equal, otherwise false.</returns>
