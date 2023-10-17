@@ -268,7 +268,7 @@ namespace Project_Main.Controllers
 
             if (ModelState.IsValid)
             {
-                await _taskRepository.Update(taskModel);
+                 _taskRepository.Update(taskModel);
                 await _dataUnitOfWork.SaveChangesAsync();
 
                 return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
@@ -347,7 +347,7 @@ namespace Project_Main.Controllers
                     return Conflict();
                 }
 
-                await _taskRepository.Remove(taskToDelete);
+                 _taskRepository.Remove(taskToDelete);
                 await _dataUnitOfWork.SaveChangesAsync();
 
                 return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });

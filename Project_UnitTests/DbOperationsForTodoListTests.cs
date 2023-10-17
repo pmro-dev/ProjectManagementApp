@@ -197,7 +197,7 @@ namespace Project_UnitTests
 			ModifyTodoListData(todoListToUpdate);
 			await GenericMockSetup<TodoListModel>.SetupUpdateEntity(todoListToUpdate, DbSetTodoListMock, TodoListsCollection, DbOperationsToExecute);
 
-			await TodoListRepo.Update(todoListToUpdate);
+			TodoListRepo.Update(todoListToUpdate);
 			await DataUnitOfWork.SaveChangesAsync();
 
 			TodoListModel updatedTask = await TodoListRepo.GetAsync(todoListToUpdateId) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
@@ -214,7 +214,7 @@ namespace Project_UnitTests
 
 			await GenericMockSetup<TodoListModel>.SetupUpdateEntity(NullTodoList!, DbSetTodoListMock, TodoListsCollection, DbOperationsToExecute);
 
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await TodoListRepo.Update(NullTodoList!));
+			Assert.Throws<ArgumentNullException>(() => TodoListRepo.Update(NullTodoList!));
 		}
 
 		[Test]
@@ -225,7 +225,7 @@ namespace Project_UnitTests
 
 			TodoListModel? todoListToUpdate = await TodoListRepo.GetWithDetailsAsync(todoListToUpdateId) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
 			todoListToUpdate.Tasks = newTasks;
-			await TodoListRepo.Update(todoListToUpdate);
+			TodoListRepo.Update(todoListToUpdate);
 			await DataUnitOfWork.SaveChangesAsync();
 
 			TodoListModel? updatedTodoList = await TodoListRepo.GetWithDetailsAsync(todoListToUpdateId) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
@@ -244,7 +244,7 @@ namespace Project_UnitTests
 			TodoListModel todoListToRemove = await TodoListRepo.GetAsync(assertTodoListId) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
 			await GenericMockSetup<TodoListModel>.SetupDeleteEntity(todoListToRemove, DbSetTodoListMock, TodoListsCollection, DbOperationsToExecute);
-			await TodoListRepo.Remove(todoListToRemove);
+			TodoListRepo.Remove(todoListToRemove);
 			await DataUnitOfWork.SaveChangesAsync();
 
 			var itemsNumberAfterDelete = TodoListsCollection.Count;
@@ -271,7 +271,7 @@ namespace Project_UnitTests
 
 			await GenericMockSetup<TodoListModel>.SetupDeleteEntity(NullTodoList!, DbSetTodoListMock, TodoListsCollection, DbOperationsToExecute);
 
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await TodoListRepo.Remove(NullTodoList!));
+			Assert.Throws<ArgumentNullException>(() => TodoListRepo.Remove(NullTodoList!));
 		}
 
 		[Test]

@@ -40,15 +40,13 @@ namespace Project_Main.Models.DataBases.General
 		/// Update entity in Db by repository.
 		/// </summary>
 		/// <param name="entity">Entity to update.</param>
-		/// <returns>Async Task operation.</returns>
-		Task Update(T entity);
+		void Update(T entity);
 
 		/// <summary>
 		/// Remove entity from Db by repository.
 		/// </summary>
 		/// <param name="entity">Entity to remove.</param>
-		/// <returns>Async Task operation.</returns>
-		Task Remove(T entity);
+		void Remove(T entity);
 
 		/// <summary>
 		/// Get all possible entities from Db by repository.

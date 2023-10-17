@@ -69,29 +69,23 @@ namespace Project_Main.Models.DataBases.General
 		}
 
 		///<inheritdoc />
-		public Task Remove(TEntity entity)
+		public void Remove(TEntity entity)
 		{
-			return Task.Run(() =>
-			{
 				string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
 				string operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Remove), classAndEntityInfo);
 				HelperCheck.ThrowExceptionWhenModelNull(operationName, entity, nameof(entity), _logger);
 
 				_dbSet.Remove(entity);
-			});
 		}
 
 		///<inheritdoc />
-		public Task Update(TEntity entity)
+		public void Update(TEntity entity)
 		{
-			return Task.Run(() =>
-			{
 				string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
 				string operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Update), classAndEntityInfo);
 				HelperCheck.ThrowExceptionWhenModelNull(operationName, entity, nameof(entity), _logger);
 
 				_dbSet.Update(entity);
-			});
 		}
 
 		///<inheritdoc />

@@ -162,7 +162,7 @@ namespace Project_UnitTests
 			ModifyTaskData(taskToUpdate);
 			await GenericMockSetup<TaskModel>.SetupUpdateEntity(taskToUpdate, DbSetTaskMock, TasksCollection, DbOperationsToExecute);
 
-			await TaskRepo.Update(taskToUpdate);
+			TaskRepo.Update(taskToUpdate);
 			await DataUnitOfWork.SaveChangesAsync();
 
 			TaskModel updatedTask = await TaskRepo.GetAsync(taskToUpdateId) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
@@ -181,7 +181,7 @@ namespace Project_UnitTests
 
 			await GenericMockSetup<TaskModel>.SetupUpdateEntity(NullTask!, DbSetTaskMock, TasksCollection, DbOperationsToExecute);
 
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await TaskRepo.Update(NullTask!));
+			Assert.Throws<ArgumentNullException>(() => TaskRepo.Update(NullTask!));
 		}
 
 		[TestCase(1)]
@@ -195,7 +195,7 @@ namespace Project_UnitTests
 			TaskModel taskToRemove = await TaskRepo.GetAsync(assertTaskId) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
 			await GenericMockSetup<TaskModel>.SetupDeleteEntity(taskToRemove, DbSetTaskMock, TasksCollection, DbOperationsToExecute);
-			await TaskRepo.Remove(taskToRemove);
+			TaskRepo.Remove(taskToRemove);
 			await DataUnitOfWork.SaveChangesAsync();
 
 			var itemsNumberAfterDelete = TasksCollection.Count;
@@ -222,7 +222,7 @@ namespace Project_UnitTests
 
 			await GenericMockSetup<TaskModel>.SetupDeleteEntity(NullTask!, DbSetTaskMock, TasksCollection, DbOperationsToExecute);
 
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await TaskRepo.Remove(NullTask!));
+			Assert.Throws<ArgumentNullException>(() => TaskRepo.Remove(NullTask!));
 		}
 
 		[Test]
