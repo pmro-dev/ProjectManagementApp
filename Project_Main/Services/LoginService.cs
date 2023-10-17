@@ -12,13 +12,15 @@ namespace Project_Main.Services
 		private readonly IIdentityUnitOfWork _identityUnitOfWork;
 		private readonly IUserRepository _userRepository;
 		private readonly IHttpContextAccessor _httpContextAccessor;
+		private readonly IClaimsService _claimsService;
 		private UserModel? _user;
 
-		public LoginService(IIdentityUnitOfWork identityUnitOfWork, IHttpContextAccessor httpContextAccessor)
+		public LoginService(IIdentityUnitOfWork identityUnitOfWork, IHttpContextAccessor httpContextAccessor, IClaimsService claimsService)
 		{
 			_identityUnitOfWork = identityUnitOfWork;
 			_userRepository = _identityUnitOfWork.UserRepository;
 			_httpContextAccessor = httpContextAccessor;
+			_claimsService = claimsService;
 		}
 
 		public async Task<bool> CheckThatUserIsRegisteredAsync(string userName, string userPassword)
@@ -37,35 +39,21 @@ namespace Project_Main.Services
 		{
 			if (_user is not null)
 			{
-				List<Claim> userClaims = new()
-					{
-						new Claim(ClaimTypes.Name, _user.Username),
-						new Claim(ClaimTypes.Email, _user.Email),
-						new Claim(ClaimTypes.NameIdentifier, _user.NameIdentifier),
-						new Claim(ClaimTypes.Surname, _user.Lastname),
-						new Claim(ClaimTypes.GivenName, _user.FirstName),
-					};
 
 				foreach (var userRole in _user.UserRoles)
 				{
 					userClaims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
 				}
 
-				ClaimsIdentity userIdentity = new(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
-				ClaimsPrincipal userPrincipal = new(userIdentity);
+				ClaimsPrincipal userClaimsPrincipal = _claimsService.CreateUserClaimsPrincipal(_user);
 
-				Dictionary<string, string?> itemsForAuthProperties = new()
-					{
-						{
-							ConfigConstants.AuthSchemeClaimKey,
-							CookieAuthenticationDefaults.AuthenticationScheme
-						}
-					};
+
+				ClaimsPrincipal userClaimsPrincipal = _claimsService.CreateUserClaimsPrincipal(_user);
 
 				AuthenticationProperties authProperties = new(itemsForAuthProperties);
 				HttpContext httpContext = _httpContextAccessor.HttpContext ?? throw new ArgumentException("Unable to get current HttpContext - accessor returned null HttpContext object.");
 
-				await httpContext.SignInAsync(userPrincipal, authProperties);
+				await httpContext.SignInAsync(userClaimsPrincipal, authProperties);
 
 				return true;
 			}

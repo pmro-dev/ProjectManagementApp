@@ -33,6 +33,7 @@ namespace Project_Main
 			builder.Services.AddScoped<ILogoutService, LogoutService>();
 			builder.Services.AddScoped<IUserRegisterService, UserRegisterService>();
 			builder.Services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
+			builder.Services.AddScoped<IClaimsService, ClaimsService>();
 
 			builder.SetupSeedDataServices();
 
