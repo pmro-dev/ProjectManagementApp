@@ -27,31 +27,16 @@ namespace Project_Main.Services
 
 		public async Task<bool> CheckThatUserIsRegisteredAsync(string userName, string userPassword)
 		{
-			_user = await _userRepository.GetByNameAndPasswordAsync(userName, userPassword);
-
-			if (_user is null)
-			{
-				return false;
+			return await _userRepository.ContainsAny(dbUser => dbUser.Username == userName && dbUser.Password == userPassword);
 			}
 
-			return true;
-		}
-
-		public async Task<bool> LogInUserAsync()
+		public async Task<bool> LogInUserAsync(string userName, string userPassword)
 		{
+			_user = await _userRepository.GetByNameAndPasswordAsync(userName, userPassword);
+
 			if (_user is not null)
 			{
-
-				foreach (var userRole in _user.UserRoles)
-				{
-					userClaims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
-				}
-
 				ClaimsPrincipal userClaimsPrincipal = _claimsService.CreateUserClaimsPrincipal(_user);
-
-
-				ClaimsPrincipal userClaimsPrincipal = _claimsService.CreateUserClaimsPrincipal(_user);
-
 				AuthenticationProperties authProperties = _userAuthenticationService.CreateDefaultAuthProperties();
 				HttpContext httpContext = _httpContextAccessor.HttpContext ?? throw new ArgumentException("Unable to get current HttpContext - accessor returned null HttpContext object.");
 
