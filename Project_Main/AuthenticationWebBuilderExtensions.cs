@@ -122,7 +122,7 @@ namespace Project_Main
 					userFromDb.Provider = authSchemeClaimWithProviderName.Value;
 					userFromDb.Email = userBasedOnProviderClaims.Email;
 
-					await userRepository.Update(userFromDb);
+					userRepository.Update(userFromDb);
 				}
 			}
 
