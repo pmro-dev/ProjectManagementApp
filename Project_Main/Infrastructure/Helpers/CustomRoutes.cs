@@ -2,17 +2,18 @@
 {
     public static class CustomRoutes
     {
-        public const string LoginPath = "/Home/Login";
-        public const string ErrorHandlingPath = "/Home/Error";
-        public const string AccessDeniedPath = "/Home/AccessDenied";
+        public const string LoginPath = "/Account/Login";
+        public const string ErrorHandlingPath = "/Shared/Error";
+        public const string AccessDeniedPath = "/Shared/AccessDenied";
         public const string DefaultRouteName = "default";
-        public const string DefaultRoutePattern = "{controller=Home}/{action=Login}/{id?}";
+        public const string DefaultRoutePattern = "{controller=Account}/{action=Login}/{id?}";
 
         public const string TodoListControllerRoute = "TodoList";
+        public const string AccountControllerRoute = "Account";
 
-        public const string MainBoardRouteName = "MainBoard";
+		public const string MainBoardRouteName = "MainBoard";
         public const string MainBoardRoute = "All/Briefly";
-        public const string MainBoardFullRoute = TodoListControllerRoute + "/" + MainBoardRoute;
+        public const string MainBoardFullRoute = AccountControllerRoute + "/" + MainBoardRoute;
 
         public const string AllDetailsRoute = "All/Details";
         public const string SingleTodoListDetailsRoute = "{id:int}/SingleDetails";
@@ -25,6 +26,7 @@
         public const string CreateTaskRoute = TodoListControllerRoute + "/{id:int}/Create";
         public const string CreateTaskPostRoute = TodoListControllerRoute + "/{todoListId:int}/Create";
         public const string TaskEditRoute = TodoListControllerRoute + "/{todoListId:int}/[controller]/{taskId:int}/[action]";
-        public const string TaskDeleteRoute = TodoListControllerRoute + "/{todoListId:int}/Task/{taskId:int}/[action]";
+        //public const string TaskDeleteRoute = TodoListControllerRoute + "/{todoListId:int}/Task/{taskId:int}/[action]";
+        public const string TaskDeleteRoute = "Task/[action]";
     }
 }
