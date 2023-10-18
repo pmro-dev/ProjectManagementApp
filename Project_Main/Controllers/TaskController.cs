@@ -53,7 +53,7 @@ namespace Project_Main.Controllers
         /// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
         [HttpGet]
         [Route(CustomRoutes.TaskDetailsRoute)]
-        public async Task<ActionResult<TaskModel>> Details(int routeTodoListId, int routeTaskId)
+        public async Task<ActionResult<TaskDetailsVM>> Details(int routeTodoListId, int routeTaskId)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Details), controllerName);
 
@@ -77,7 +77,7 @@ namespace Project_Main.Controllers
             catch (SqlException)
             {
                 return RedirectToAction(AccountCtrl.ErrorAction, AccountCtrl.Name);
-            }
+			}
 
             if (taskModel is null)
             {
@@ -307,7 +307,21 @@ namespace Project_Main.Controllers
                 return NotFound();
             }
 
-            if (taskToDelete.TodoListId != todoListId)
+			TaskDetailsVM taskDetailsVM = new()
+			{
+				Id = taskToDelete.Id,
+				TodoListId = taskToDelete.TodoListId,
+				UserId = taskToDelete.UserId,
+				Title = taskToDelete.Title,
+				Status = taskToDelete.Status,
+				CreationDate = taskToDelete.CreationDate,
+				Description = taskToDelete.Description,
+				DueDate = taskToDelete.DueDate,
+				LastModificationDate = taskToDelete.LastModificationDate,
+				ReminderDate = taskToDelete.ReminderDate
+			};
+
+			if (taskToDelete.TodoListId != todoListId)
             {
                 _logger.LogCritical(Messages.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, todoListId, taskToDelete.TodoListId);
                 return Conflict();
@@ -353,6 +367,10 @@ namespace Project_Main.Controllers
 
                  _taskRepository.Remove(taskToDelete);
                 await _dataUnitOfWork.SaveChangesAsync();
+
+    //            object routeValue = new { id = todoListId };
+
+				//return RedirectToAction(BoardsCtrl.SingleDetails, BoardsCtrl.Name, routeValue);
             }
 
 			object routeValue = new { id = todoListId };
