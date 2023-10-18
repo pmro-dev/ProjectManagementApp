@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Project_IdentityDomainEntities;
 using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.DataBases.Identity;
@@ -28,7 +27,7 @@ namespace Project_Main.Services
 		public async Task<bool> CheckThatUserIsRegisteredAsync(string userName, string userPassword)
 		{
 			return await _userRepository.ContainsAny(dbUser => dbUser.Username == userName && dbUser.Password == userPassword);
-			}
+		}
 
 		public async Task<bool> LogInUserAsync(string userName, string userPassword)
 		{

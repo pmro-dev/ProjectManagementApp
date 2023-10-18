@@ -8,10 +8,10 @@ using Project_Main.Models.DataBases.Helpers;
 
 namespace Project_Main
 {
-    /// <summary>
-    /// Web Builder extensions that allows to setup authentication services. 
-    /// </summary>
-    public static class AuthenticationWebBuilderExtensions
+	/// <summary>
+	/// Web Builder extensions that allows to setup authentication services. 
+	/// </summary>
+	public static class AuthenticationWebBuilderExtensions
 	{
 		/// <summary>
 		/// Setup basic authentication based on Cookie.
@@ -81,9 +81,9 @@ namespace Project_Main
 
 			static void CreateUserBasedOnProviderData(CookieSigningInContext cookieSigningInContext, Claim authSchemeClaimWithProviderName, out ClaimsIdentity principle, out UserModel userBasedOnProviderClaims)
 			{
-				principle = cookieSigningInContext.Principal?.Identity as ClaimsIdentity ?? 
+				principle = cookieSigningInContext.Principal?.Identity as ClaimsIdentity ??
 					throw new ArgumentException(Messages.ParamObjectNull(nameof(CreateUserBasedOnProviderData), nameof(cookieSigningInContext.Principal)));
-				
+
 				principle.AddClaim(authSchemeClaimWithProviderName);
 
 				List<Claim> claims = cookieSigningInContext.Principal?.Claims.ToList() ?? new();
