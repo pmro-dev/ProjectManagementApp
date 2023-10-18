@@ -1,5 +1,6 @@
 ﻿@using Project_DomainEntities
 @using Project_DomainEntities.Helpers;
+@using Project_Main.Infrastructure.Helpers
 @model List<TaskModel>
 
 @{
@@ -67,13 +68,13 @@
 								<td class="col-1">@task.DueDate.ToString("HH:mm dddd dd MM")</td>
 								
 								<td class="col-2 btn-group-vertical" style="width: 100%;">
-									<form asp-action="Details" asp-controller="Task" asp-route-routeTodoListId="@task.TodoListId" asp-route-routeTaskId="@task.Id" method="get" style="width: 100%;">
+									<form asp-action=@TaskCtrl.DetailsAction asp-controller=@TaskCtrl.Name asp-route-routeTodoListId="@task.TodoListId" asp-route-routeTaskId="@task.Id" method="get" style="width: 100%;">
 										<button type="submit" class="btn btn-primary btn-block" style="width: 100%;">Details</button>
 									</form>
-									<form asp-action="Edit" asp-controller="Task" asp-route-todoListId="@task.TodoListId" asp-route-taskId="@task.Id" method="get" style="width: 100%;">
+									<form asp-action=@TaskCtrl.EditAction asp-controller=@TaskCtrl.Name asp-route-todoListId="@task.TodoListId" asp-route-taskId="@task.Id" method="get" style="width: 100%;">
 										<button type="submit" class="btn btn-warning btn-block" style="width: 100%;">Edit</button>
 									</form>
-									<form asp-route="deletetask" asp-route-todoListId="@task.TodoListId" asp-route-taskId="@task.Id" method="get" style="width: 100%;">
+									<form asp-action=@TaskCtrl.DeleteAction asp-controller=@TaskCtrl.Name asp-route-todoListId="@task.TodoListId" asp-route-taskId="@task.Id" method="get" style="width: 100%;">
 										<button type="submit" class="btn btn-danger btn-block" style="width: 100%;">Delete</button>
 									</form>
 								</td> 

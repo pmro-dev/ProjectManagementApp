@@ -1,4 +1,5 @@
-﻿@model LoginInputVM
+﻿@using Project_Main.Infrastructure.Helpers
+@model Project_Main.Models.ViewModels.InputModels.LoginInputVM
 
 @{
 	Layout = "_LoginLayout";
@@ -9,7 +10,7 @@
 	<div class="card-body">
 		<h5 class="card-title">Login Page</h5>
 
-		<form asp-action="Login" asp-controller="Home" method="post">
+		<form asp-action=@AccountCtrl.LoginAction asp-controller=@AccountCtrl.Name method="post">
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
 					<span class="input-group-text">@@</span>
@@ -28,8 +29,8 @@
 
 			<div class="card-body">
 				<button class="btn btn-primary" type="submit" style="font-weight: 500; color:white;">Log In</button>
-				<a asp-controller="Home" asp-action="LoginByProvider" asp-route-provider="google" class="btn btn-info" style="font-weight: 500; color:white;">by Google</a>
-				<a asp-controller="Home" asp-action="Register" class="btn btn-info" style="font-weight: 500; color:white;">Register</a>
+				<a asp-controller=@AccountCtrl.Name asp-action=@AccountCtrl.LoginByProviderAction asp-route-provider=@AccountCtrl.GoogleProvider class="btn btn-info" style="font-weight: 500; color:white;">by Google</a>
+				<a asp-controller=@AccountCtrl.Name asp-action=@AccountCtrl.RegisterAction class="btn btn-info" style="font-weight: 500; color:white;">Register</a>
 			</div>
 			
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>

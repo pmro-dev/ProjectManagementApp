@@ -1,4 +1,5 @@
-﻿@model Project_Main.Models.ViewModels.TodoListViewModels.DeleteListViewModel
+﻿@using Project_Main.Infrastructure.Helpers
+@model Project_Main.Models.ViewModels.TodoListViewModels.DeleteListViewModel
 
 @{
     ViewData["Title"] = "Delete";
@@ -24,9 +25,9 @@
         </dd>
     </dl>
     
-    <form asp-action="Delete" method="post">
+    <form asp-action=@TodoListCtrl.DeleteConfirmedAction method="post">
         <input type="hidden" asp-for="ListModel.Id" />
         <input type="submit" value="Delete" class="btn btn-danger" />
-        <a asp-action="Briefly" class="btn btn-primary">Back</a>
+        <a asp-action=@BoardsCtrl.BrieflyAction asp-controller=@BoardsCtrl.Name class="btn btn-primary">Back</a>
     </form>
 </div>

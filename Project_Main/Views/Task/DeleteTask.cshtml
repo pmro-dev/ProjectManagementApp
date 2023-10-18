@@ -1,0 +1,24 @@
+﻿@using Project_DomainEntities
+@using Project_Main.Infrastructure.Helpers
+@model Project_Main.Models.ViewModels.OutputModels.TaskDetailsVM
+
+@{
+	ViewData["Title"] = "Delete";
+}
+
+<div>
+	<h4>Delete Task</h4>
+	<hr />
+	<h5>Are you sure you want to delete this?</h5>
+
+	<partial name="_TaskTableDetails" model="@Model" />
+
+	@* <form asp-action=@TaskCtrl.DeleteConfirmedAction asp-controller=@TaskCtrl.Name method="post"> *@
+	<form asp-action=@TaskCtrl.DeleteConfirmedAction method="post">
+		<input type="hidden" name="todoListId" asp-for="@Model.TodoListId" />
+		<input type="hidden" name="taskId" asp-for="@Model.Id" />
+@* 		<input type="hidden" asp-for="@Model.UserId" /> *@
+		<input type="submit" value="Delete" class="btn btn-danger" />
+		<a asp-controller=@BoardsCtrl.Name asp-action=@BoardsCtrl.SingleDetailsAction asp-route-id="@Model.TodoListId" class="btn btn-primary">Back</a>
+	</form>
+</div>

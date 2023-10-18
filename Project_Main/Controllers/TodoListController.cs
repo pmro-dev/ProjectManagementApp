@@ -45,11 +45,13 @@ namespace Project_Main.Controllers
 		public IActionResult Create()
 		{
 			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			
-			return View(new TodoListModel()
+
+			var viewModel = new TodoListModel()
 			{
 				UserId = signedInUserId
-			});
+			};
+
+			return View(TodoListViews.Create, viewModel);
 		}
 
 		/// <summary>
@@ -74,10 +76,10 @@ namespace Project_Main.Controllers
 				await _todoListRepository.AddAsync(todoListModel);
 				await _dataUnitOfWork.SaveChangesAsync();
 
-				return RedirectToAction(nameof(Briefly));
+				return RedirectToAction(BoardsCtrl.BrieflyAction);
 			}
 
-			return View(todoListModel);
+			return View(TodoListViews.Create, todoListModel);
 		}
 
 		/// <summary>
@@ -101,7 +103,7 @@ namespace Project_Main.Controllers
 				return NotFound();
 			}
 
-			return View(todoListModel);
+			return View(TodoListViews.Edit, todoListModel);
 		}
 
 		/// <summary>
@@ -132,10 +134,10 @@ namespace Project_Main.Controllers
 				_todoListRepository.Update(todoListModel);
 				await _dataUnitOfWork.SaveChangesAsync();
 
-				return RedirectToAction(nameof(Briefly));
+				return RedirectToAction(BoardsCtrl.BrieflyAction);
 			}
 
-			return View(todoListModel);
+			return View(TodoListViews.Edit, todoListModel);
 		}
 
 		/// <summary>
@@ -168,7 +170,7 @@ namespace Project_Main.Controllers
 				TasksCount = todoListModel.Tasks.Count
 			};
 
-			return View(deleteViewModel);
+			return View(TodoListViews.Delete, deleteViewModel);
 		}
 
 		/// <summary>
@@ -180,7 +182,7 @@ namespace Project_Main.Controllers
 		/// Return Conflict when given id and To Do List id of object from Database are not equal, 
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
-		[HttpPost, ActionName("Delete")]
+		[HttpPost]
 		[Route(CustomRoutes.TodoListDeleteRoute)]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int id)
@@ -202,11 +204,11 @@ namespace Project_Main.Controllers
 					_todoListRepository.Remove(todoListModel);
 					await _dataUnitOfWork.SaveChangesAsync();
 
-					return RedirectToAction(nameof(Briefly));
+					return RedirectToAction(BoardsCtrl.BrieflyAction);
 				}
 			}
 
-			return View(nameof(Delete));
+			return View(TodoListCtrl.DeleteAction);
 		}
 
 		/// <summary>
@@ -223,7 +225,7 @@ namespace Project_Main.Controllers
 			await _todoListRepository.DuplicateWithDetailsAsync(todoListId);
 			await _dataUnitOfWork.SaveChangesAsync();
 
-			return RedirectToAction(nameof(Briefly));
+			return RedirectToAction(BoardsCtrl.BrieflyAction);
 		}
 	}
 }

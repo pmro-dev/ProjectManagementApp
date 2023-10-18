@@ -1,17 +1,18 @@
 ﻿@using Project_DomainEntities
 @using Project_DomainEntities.Helpers;
 @using Project_Main.Models.ViewModels.TodoListViewModels;
+@using Project_Main.Infrastructure.Helpers;
 @model Project_Main.Models.ViewModels.TodoListViewModels.BrieflyViewModel
 
 @{
-	Layout = "_Layout";
+	Layout = SharedViews.DefaultLayout;
 }
 
 <h1>To Do Lists Briefly</h1>
 
 <p>
-	<a asp-action="Create" class="btn" style="background-color: #671dff; color: white; font-weight: 500;">Create Todo List</a>
-	<a asp-action="All" class="btn btn-dark" >Show All - Details</a>
+	<a asp-action=@TodoListCtrl.CreateAction asp-controller=@TodoListCtrl.Name class="btn" style="background-color: #671dff; color: white; font-weight: 500;">Create Todo List</a>
+	<a asp-action=@BoardsCtrl.AllAction class="btn btn-dark" >Show All - Details</a>
 </p>
 
 @foreach (var item in Model.TodoLists)
@@ -34,13 +35,13 @@
 
 		</div>
 		<div class="card-body">
-			<a asp-action="SingleDetails" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">Details</a>
-			<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm">Edit</a>
+			<a asp-action=@BoardsCtrl.SingleDetailsAction asp-controller=@BoardsCtrl.Name asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">Details</a>
+			<a asp-action=@TodoListCtrl.EditAction asp-controller=@TodoListCtrl.Name asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm">Edit</a>
 			<button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal+@item.Id">Delete</button>
-			<a asp-action="Duplicate" asp-route-todoListId="@item.Id" class="btn btn-outline-info btn-sm">Duplicate</a>
+			<a asp-action=@TodoListCtrl.DuplicateAction asp-controller=@TodoListCtrl.Name asp-route-todoListId="@item.Id" class="btn btn-outline-info btn-sm">Duplicate</a>
 		</div>
 	</div>
 
 	<!-- Delete Modal -->
-	<partial name="_DeleteModal" model="@item" />
+	<partial name=@BoardsViews.DeleteModal model="@item" />
 }

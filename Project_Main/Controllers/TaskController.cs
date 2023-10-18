@@ -72,11 +72,11 @@ namespace Project_Main.Controllers
             }
             catch (ArgumentNullException)
             {
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction(AccountCtrl.ErrorAction, AccountCtrl.Name);
             }
             catch (SqlException)
             {
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction(AccountCtrl.ErrorAction, AccountCtrl.Name);
             }
 
             if (taskModel is null)
@@ -94,7 +94,7 @@ namespace Project_Main.Controllers
                 return Conflict();
             }
 
-            return View(taskDetailsVM);
+            return View(TaskViews.Details, taskDetailsVM);
         }
 
         /// <summary>
@@ -164,7 +164,9 @@ namespace Project_Main.Controllers
             await _taskRepository.AddAsync(taskModel);
             await _dataUnitOfWork.SaveChangesAsync();
 
-            return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = taskCreateInputVM.TodoListId });
+            object routeValue = new { id = taskCreateInputVM.TodoListId };
+
+			return RedirectToAction(BoardsCtrl.SingleDetailsAction, BoardsCtrl.Name, routeValue);
         }
 
         /// <summary>
@@ -241,7 +243,7 @@ namespace Project_Main.Controllers
                 TodoListsSelector = todoListsSelectorData
             };
 
-            return View(taskViewModel);
+            return View(TaskViews.Edit, taskViewModel);
         }
 
         /// <summary>
@@ -271,7 +273,9 @@ namespace Project_Main.Controllers
                  _taskRepository.Update(taskModel);
                 await _dataUnitOfWork.SaveChangesAsync();
 
-                return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
+                object routeValue = new { id = todoListId };
+
+				return RedirectToAction(BoardsCtrl.SingleDetailsAction, BoardsCtrl.Name, routeValue);
             }
 
             return View(taskModel);
@@ -288,7 +292,7 @@ namespace Project_Main.Controllers
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
         [HttpGet]
-        [Route(CustomRoutes.TaskDeleteRoute, Name = "deletetask")]
+        [Route(CustomRoutes.TaskDeleteRoute)]
         public async Task<IActionResult> Delete(int todoListId, int taskId)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Delete), controllerName);
@@ -309,7 +313,7 @@ namespace Project_Main.Controllers
                 return Conflict();
             }
 
-            return View(taskToDelete);
+            return View(TaskViews.Delete, taskToDelete);
         }
 
         /// <summary>
@@ -323,8 +327,8 @@ namespace Project_Main.Controllers
         /// Not Found when there isn't such Task in Db or redirect to view with To Do List details.
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
-        [HttpPost, ActionName("Delete")]
-        [Route(CustomRoutes.TaskDeleteRoute, Name = "deleteTaskInvoke")]
+        [HttpPost]
+        [Route(CustomRoutes.TaskDeleteRoute)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int todoListId, int taskId)
         {
@@ -349,11 +353,11 @@ namespace Project_Main.Controllers
 
                  _taskRepository.Remove(taskToDelete);
                 await _dataUnitOfWork.SaveChangesAsync();
-
-                return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
             }
 
-            return RedirectToAction(nameof(TodoListController.SingleDetails), TodoListController.ShortName, new { id = todoListId });
+			object routeValue = new { id = todoListId };
+
+			return RedirectToAction(BoardsCtrl.SingleDetailsAction, BoardsCtrl.Name, routeValue);
         }
     }
 }
