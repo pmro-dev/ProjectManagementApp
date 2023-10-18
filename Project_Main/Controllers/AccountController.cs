@@ -12,18 +12,18 @@ namespace Project_Main.Controllers
     /// </summary>
     [Authorize]
 	[AllowAnonymous]
-	public class HomeController : Controller
+	public class AccountController : Controller
 	{
-		private readonly ILogger<HomeController> _logger;
+		private readonly ILogger<AccountController> _logger;
 		private readonly ILoginService _loginService;
 		private readonly IUserRegisterService _userRegisterService;
 		private readonly IUserAuthenticationService _userAuthenticationService;
 		private readonly ILogoutService _logoutService;
 
 		private string operationName = string.Empty;
-		private readonly string controllerName = nameof(HomeController);
+		private readonly string controllerName = nameof(AccountController);
 
-		public HomeController(ILoginService loginService, IUserRegisterService userRegisterService, ILogger<HomeController> logger, 
+		public AccountController(ILoginService loginService, IUserRegisterService userRegisterService, ILogger<AccountController> logger, 
 			IUserAuthenticationService userAuthenticationService, ILogoutService logoutService)
 		{
 			_loginService = loginService;
@@ -63,7 +63,7 @@ namespace Project_Main.Controllers
 
 					if (isUserRegistered)
 					{
-						bool isLoggedInSuccessfully = await _loginService.LogInUserAsync();
+						bool isLoggedInSuccessfully = await _loginService.LogInUserAsync(userName, userPassword);
 
 						if (isLoggedInSuccessfully)
 							return RedirectToRoute(CustomRoutes.MainBoardRouteName);
@@ -152,7 +152,7 @@ namespace Project_Main.Controllers
 						bool isUserRegisteredSuccessfully = await _userRegisterService.RegisterUserAsync(userName, userPassword, userEmail);
 
 						if (isUserRegisteredSuccessfully)
-							return View(nameof(Login));
+							return View(AccountCtrl.LoginAction);
 					}
 
 					return View();
