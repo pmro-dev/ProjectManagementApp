@@ -13,7 +13,7 @@ namespace Project_Main.Services
 		{
 			AuthenticationProperties authProperties = new()
 			{
-				RedirectUri = CustomRoutes.MainBoardFullRoute
+				RedirectUri = CustomRoutes.MainBoardRoute
 			};
 
 			return new ChallengeResult(provider, authProperties);
