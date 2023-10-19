@@ -1,7 +1,9 @@
-﻿namespace Project_DomainEntities
+﻿using Project_DomainEntities;
+
+namespace Project_Main.Infrastructure.Helpers
 {
-	public static class TaskModelExtension
-	{
+    public static class TaskModelExtension
+    {
         /// <summary>
         /// Compares properties of two Tasks and return result of that comparison.
         /// </summary>
