@@ -57,7 +57,7 @@ namespace Project_Main.Controllers
 		/// </returns>
 		[HttpGet]
 		[Route(CustomRoutes.AllDetailsRoute)]
-		public async Task<ActionResult<IEnumerable<TodoListModel>>> All()
+		public async Task<ActionResult<IEnumerable<BoardsAllOutputVM>>> All()
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(All), controllerName);
 
