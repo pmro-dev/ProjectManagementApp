@@ -185,7 +185,7 @@ namespace Project_Main.Controllers
 		[HttpPost]
 		[Route(CustomRoutes.TodoListDeletePostRoute)]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteConfirmed(int id)
+		public async Task<IActionResult> DeletePost(int id)
 		{
 			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.IdBottomBoundry, _logger);
 
