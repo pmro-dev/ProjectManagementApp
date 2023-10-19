@@ -92,7 +92,7 @@ namespace Project_Main
 				{
 					NameIdentifier = claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value,
 					UserId = claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value,
-					Username = claims.Single(c => c.Type == ClaimTypes.Name).Value,
+					Username = claims.Single(c => c.Type == ClaimTypes.GivenName).Value,
 					Provider = authSchemeClaimWithProviderName.Value,
 					Email = claims.Single(c => c.Type == ClaimTypes.Email).Value
 				};
