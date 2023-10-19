@@ -1,12 +1,12 @@
 ﻿
 using Project_DomainEntities;
 
-namespace Project_Main.Models.ViewModels.TodoListViewModels
+namespace Project_Main.Models.ViewModels.OutputModels
 {
     /// <summary>
     /// Model for showing ToDoList.
     /// </summary>
-    public class TodoListViewModel
+    public class BoardsSingleDetailsOutputVM
     {
         public int Id { get; set; }
 

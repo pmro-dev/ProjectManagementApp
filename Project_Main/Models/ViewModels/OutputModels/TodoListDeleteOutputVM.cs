@@ -1,11 +1,11 @@
 ﻿using Project_DomainEntities;
 
-namespace Project_Main.Models.ViewModels.TodoListViewModels
+namespace Project_Main.Models.ViewModels.OutputModels
 {
     /// <summary>
     /// Model for deletion ToDoList.
     /// </summary>
-    public class DeleteListViewModel
+    public class TodoListDeleteOutputVM
     {
         public TodoListModel ListModel { get; set; } = new TodoListModel();
 
