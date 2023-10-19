@@ -96,9 +96,10 @@ namespace Project_Main.Controllers
 				throw new ArgumentNullException(nameof(provider));
 			}
 
-			bool doesUserExistAndIsAuthenticated = User != null && User.Identities.Any(i => i.IsAuthenticated);
+			bool doesUserExist = User != null;
+			bool IsUserAuthenticated = User?.Identities.Any(i => i.IsAuthenticated) ?? false;
 
-			if (doesUserExistAndIsAuthenticated) 
+			if (doesUserExist && IsUserAuthenticated) 
 				return RedirectToRoute(CustomRoutes.MainBoardRouteName);
 			else 
 				return _userAuthenticationService.ChallengeProviderToLogin(provider);
@@ -140,8 +141,11 @@ namespace Project_Main.Controllers
 
 				bool isDataInvalid = userName.IsNullOrEmpty() || userPassword.IsNullOrEmpty() || userEmail.IsNullOrEmpty();
 
-				if (isDataInvalid) 
+				if (isDataInvalid)
+				{
+					ModelState.AddModelError(string.Empty, Messages.InvalidRegisterData);
 					return View();
+				}
 
 				try
 				{
