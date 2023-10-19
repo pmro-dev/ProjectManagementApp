@@ -11,12 +11,11 @@ using System.Security.Claims;
 
 namespace Project_Main.Controllers
 {
-	public class BoardsController : Controller
+    public class BoardsController : Controller
 	{
 		private readonly IDataUnitOfWork _dataUnitOfWork;
 		private readonly ITodoListRepository _todoListRepository;
 		private readonly ILogger<BoardsController> _logger;
-		private const int DateCompareValueEarlier = 0;
 		private string operationName = string.Empty;
 		private readonly string controllerName = nameof(BoardsController);
 		public static string ShortName { get; } = nameof(BoardsController).Replace("Controller", string.Empty);
@@ -92,41 +91,21 @@ namespace Project_Main.Controllers
 				return NotFound();
 			}
 
-			DateTime todayDate = DateTime.Today;
-			var allTodoListTasks = todoListFromDb.Tasks;
+			TodoListModelDto todoListModelDto = TodoListDtoService.TransferToDto(todoListFromDb);
+			BoardsSingleDetailsOutputVM singleDetailsVM = TodoListDtoService.TransferToSingleDetailsOutputVM(todoListModelDto, filterDueDate);
 
-			TodoListViewModel todoListViewModel = new()
-			{
-				Id = todoListFromDb.Id,
-				Name = todoListFromDb.Title,
-				TasksForToday = allTodoListTasks.Where(t => t.DueDate.ToShortDateString() == todayDate.ToShortDateString() && t.Status != TaskStatusHelper.TaskStatusType.Completed).ToList(),
-				TasksCompleted = allTodoListTasks.Where(t => t.Status == TaskStatusHelper.TaskStatusType.Completed && t.DueDate.CompareTo(todayDate) > DateCompareValueEarlier).ToList(),
-				TasksNotCompleted = allTodoListTasks.Where(t =>
-				{
-					if (filterDueDate is null)
-					{
-						return t.Status != TaskStatusHelper.TaskStatusType.Completed && t.DueDate.CompareTo(todayDate) > DateCompareValueEarlier;
-					}
-
-					return (t.Status != TaskStatusHelper.TaskStatusType.Completed) && (t.DueDate.CompareTo(filterDueDate) < DateCompareValueEarlier && t.DueDate.CompareTo(todayDate) > DateCompareValueEarlier);
-
-				}).ToList(),
-				TasksExpired = allTodoListTasks.Where(t => t.DueDate.CompareTo(todayDate) < DateCompareValueEarlier).ToList()
-			};
-
-			const int TasksToCompleteCount = 3;
 			var tasksComparer = new TasksComparer();
 
-			var tasks = new Task[TasksToCompleteCount]
+			var tasks = new Task[]
 			{
-				Task.Run(() => todoListViewModel.TasksNotCompleted.Sort(tasksComparer)),
-				Task.Run(() => todoListViewModel.TasksForToday.Sort(tasksComparer)),
-				Task.Run(() => todoListViewModel.TasksCompleted.Sort(tasksComparer)),
+				Task.Run(() => singleDetailsVM.TasksNotCompleted.Sort(tasksComparer)),
+				Task.Run(() => singleDetailsVM.TasksForToday.Sort(tasksComparer)),
+				Task.Run(() => singleDetailsVM.TasksCompleted.Sort(tasksComparer)),
 			};
 
 			Task.WaitAll(tasks);
 
-			return View(todoListViewModel);
+			return View(singleDetailsVM);
 		}
 	}
 }
