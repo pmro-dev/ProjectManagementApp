@@ -344,36 +344,32 @@ namespace Project_Main.Controllers
         [HttpPost]
         [Route(CustomRoutes.TaskDeletePostRoute)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int todoListId, int taskId)
+        public async Task<IActionResult> DeletePost([FromForm] TaskDeleteVM taskDeleteVM)
         {
-            HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.IdBottomBoundry, _logger);
-            HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskId, nameof(taskId), HelperCheck.IdBottomBoundry, _logger);
+            HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskDeleteVM.TodoListId, nameof(taskDeleteVM.TodoListId), HelperCheck.IdBottomBoundry, _logger);
+            HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskDeleteVM.Id, nameof(taskDeleteVM.Id), HelperCheck.IdBottomBoundry, _logger);
 
             if (ModelState.IsValid)
             {
-                TaskModel? taskToDelete = await _taskRepository.GetAsync(taskId);
+                TaskModel? taskToDelete = await _taskRepository.GetAsync(taskDeleteVM.Id);
 
                 if (taskToDelete is null)
                 {
-                    _logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, taskId, HelperDatabase.TasksDbSetName);
+                    _logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, taskDeleteVM.Id, HelperDatabase.TasksDbSetName);
                     return NotFound();
                 }
 
-                if (taskToDelete.TodoListId != todoListId)
+                if (taskToDelete.TodoListId != taskDeleteVM.TodoListId)
                 {
-                    _logger.LogError(Messages.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, todoListId, taskToDelete.TodoListId);
+                    _logger.LogError(Messages.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, taskDeleteVM.TodoListId, taskToDelete.TodoListId);
                     return Conflict();
                 }
 
                  _taskRepository.Remove(taskToDelete);
                 await _dataUnitOfWork.SaveChangesAsync();
-
-    //            object routeValue = new { id = todoListId };
-
-				//return RedirectToAction(BoardsCtrl.SingleDetails, BoardsCtrl.Name, routeValue);
             }
 
-			object routeValue = new { id = todoListId };
+			object routeValue = new { id = taskDeleteVM.TodoListId };
 
 			return RedirectToAction(BoardsCtrl.SingleDetailsAction, BoardsCtrl.Name, routeValue);
         }
