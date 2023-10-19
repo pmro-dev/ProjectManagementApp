@@ -5,6 +5,7 @@ using Project_DomainEntities.Helpers;
 using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.DataBases.AppData;
 using Project_Main.Models.DataBases.Helpers;
+using Project_Main.Models.ViewModels.TodoListModels;
 using Project_Main.Models.ViewModels.TodoListViewModels;
 using System.Security.Claims;
 
@@ -34,19 +35,16 @@ namespace Project_Main.Controllers
 		[HttpGet]
 		[Route(CustomRoutes.MainBoardRoute, Name = CustomRoutes.MainBoardRouteName)]
 		[Authorize]
-		public async Task<IActionResult> Briefly()
+		public async Task<ActionResult<BrieflyVM>> Briefly()
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Briefly), controllerName);
 
 			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("Error with signed In User");
 			List<TodoListModel> todoLists = await _todoListRepository.GetAllWithDetailsAsync(signedInUserId);
 
-			BrieflyViewModel brieflyViewModel = new()
-			{
-				TodoLists = todoLists
-			};
+			BrieflyVM brieflyVM = new() { TodoLists = todoLists };
 
-			return View(brieflyViewModel);
+			return View(brieflyVM);
 		}
 
 		/// <summary>
