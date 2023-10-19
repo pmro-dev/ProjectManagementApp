@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Project_DomainEntities;
-using Project_DomainEntities.Helpers;
+using Project_Main.Infrastructure.DTOs;
 using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.DataBases.AppData;
 using Project_Main.Models.DataBases.Helpers;
 using Project_Main.Models.ViewModels.OutputModels;
-using Project_Main.Models.ViewModels.TodoListViewModels;
+using Project_Main.Services;
 using System.Security.Claims;
 
 namespace Project_Main.Controllers
@@ -64,7 +64,11 @@ namespace Project_Main.Controllers
 			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			var allTodoLists = await _todoListRepository.GetAllWithDetailsAsync(signedInUserId);
 
-			return View(allTodoLists);
+			IEnumerable<TodoListModelDto> allTodoListsDto = allTodoLists.Select(todoList => TodoListDtoService.TransferToDto(todoList));
+
+			IEnumerable<BoardsAllOutputVM> todoListsAllVM = allTodoListsDto.Select(todoListDto => TodoListDtoService.TransferToBoardsAllOutputVM(todoListDto));
+
+			return View(todoListsAllVM);
 		}
 
 		/// <summary>
