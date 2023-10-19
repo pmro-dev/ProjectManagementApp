@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Project_DomainEntities;
 using Project_Main.Infrastructure.Helpers;
-using Project_Main.Models.ViewModels.TodoListViewModels;
 using Project_Main.Models.DataBases.AppData;
 using Project_Main.Models.DataBases.Helpers;
+using Project_Main.Models.ViewModels.OutputModels;
 
 namespace Project_Main.Controllers
 {
@@ -164,13 +164,13 @@ namespace Project_Main.Controllers
 				return NotFound();
 			}
 
-			DeleteListViewModel deleteViewModel = new()
+			TodoListDeleteOutputVM todoListDeleteOutputVM = new()
 			{
 				ListModel = todoListModel,
 				TasksCount = todoListModel.Tasks.Count
 			};
 
-			return View(TodoListViews.Delete, deleteViewModel);
+			return View(TodoListViews.Delete, todoListDeleteOutputVM);
 		}
 
 		/// <summary>
