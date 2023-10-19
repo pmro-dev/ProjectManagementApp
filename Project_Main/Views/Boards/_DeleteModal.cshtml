@@ -1,4 +1,5 @@
-﻿@model Project_DomainEntities.TodoListModel
+﻿@using Project_Main.Infrastructure.Helpers
+@model Project_DomainEntities.TodoListModel
 
 <div class="modal fade" id="deleteModal+@Model.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
@@ -11,8 +12,8 @@
 				@Model.Title
 			</div>
 			<div class="modal-footer">
-				<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
-					<input type="hidden" asp-for="@Model.Id" />
+				<form asp-action="@TodoListCtrl.DeletePostAction" asp-controller="@TodoListCtrl.Name" asp-route-id="@Model.Id" method="post">
+					<input type="hidden" asp-for="Id" value="@Model.Id"/>
 					<input type="submit" id="submitDeleteInModal" value="Delete" class="btn btn-danger" />
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 				</form>

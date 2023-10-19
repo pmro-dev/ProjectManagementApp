@@ -6,14 +6,14 @@
 
 @{
 	ViewData["Title"] = "Index";
-	Layout = "_Layout";
+	Layout = SharedViews.DefaultLayout;
 	List<TaskModel> sortedTasks = new();
 }
 
 <h1>All To Do Lists</h1>
 
 <p>
-	<a asp-action="Briefly" class="btn btn-primary">Back</a>
+	<a asp-action="@BoardsCtrl.BrieflyAction" asp-controller="@BoardsCtrl.Name" class="btn btn-primary">Back</a>
 </p>
 
 @foreach (var item in Model)
@@ -21,5 +21,5 @@
 	ViewData["TableTitle"] = item.Title;
 	sortedTasks = item.Tasks.ToList();
 	sortedTasks.Sort(new TasksComparer());
-	<partial name="_TodoListTableDetails" model="@sortedTasks" view-data="ViewData" />
+	<partial name="@SharedViews.TodoListTableDetails" model="@sortedTasks" view-data="ViewData" />
 }

@@ -1,4 +1,5 @@
-﻿@model Project_Main.Models.ViewModels.OutputModels.TaskCreateOutputVM
+﻿@using Project_Main.Infrastructure.Helpers
+@model Project_Main.Models.ViewModels.OutputModels.TaskCreateOutputVM
 
 @{
     ViewData["Title"] = "Create Task";
@@ -8,7 +9,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" asp-controller="Task" method="post">
+        <form asp-action="@TaskCtrl.CreateAction" asp-controller="@TaskCtrl.Name" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input asp-for="TodoListId" type="hidden" />
 			<input asp-for="UserId" type="hidden" value="@Model.UserId"/>
@@ -38,12 +39,12 @@
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn" style="background-color: #671dff; color: white; font-weight: 500;"  />
-                <a asp-controller="TodoList" asp-action="SingleDetails" asp-route-id="@Model.TodoListId" class="btn btn-primary">Back</a>
+                <a asp-controller="@BoardsCtrl.Name" asp-action="@BoardsCtrl.BrieflyAction" asp-route-id="@Model.TodoListId" class="btn btn-primary">Back</a>
             </div>
         </form>
     </div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync(SharedViews.Validation);}
 }

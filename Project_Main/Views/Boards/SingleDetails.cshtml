@@ -27,18 +27,15 @@
 		{
 			ViewData["SetClassReminder"] = null;
 			ViewData["TableTitle"] = "Tasks For Today";
-			<partial name="_TodoListTable" model="@Model?.TasksForToday" />
+			<partial name="@SharedViews.TodoListTable" model="@Model?.TasksForToday" />
 		}
 	}
 
 	<div class="row">
 		<div class="col-md-4">
 			<div class="card-group">
-				<form id="resetDate" asp-action=@BoardsCtrl.SingleDetailsAction asp-route-id="@Model?.Id" asp-route-filterDueDate="@null" method="get">
-					<input asp-for="UserId" type="hidden" value="@Model?.UserId" />
-				</form>
+				<form id="resetDate" asp-action=@BoardsCtrl.SingleDetailsAction asp-route-id="@Model?.Id" asp-route-filterDueDate="@null" method="get"></form>
 				<form id="filterDate" asp-action=@BoardsCtrl.SingleDetailsAction asp-route-id="@Model?.Id" asp-route-filterDueDate="@filterDueDate" method="get">
-					<input asp-for="UserId" type="hidden" value="@Model?.UserId" />
 					<input asp-for="@filterDueDate" asp-format="{0:dd'/'MM'/'yyyy}" class="form-control" />
 					<span asp-validation-for="@filterDueDate" class="text-danger"></span>
 				</form>

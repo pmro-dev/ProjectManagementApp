@@ -1,7 +1,8 @@
-﻿@model Project_Main.Models.ViewModels.InputModels.RegisterInputVM
+﻿@using Project_Main.Infrastructure.Helpers
+@model Project_Main.Models.ViewModels.InputModels.RegisterInputVM
 
 @{
-	Layout = "_LoginLayout";
+	Layout = AccountViews.DefaultLayout;
 }
 
 <div class="card" style="width: 25rem;">
@@ -9,7 +10,7 @@
 	<div class="card-body">
 		<h5 class="card-title">Register Page</h5>
 
-		<form asp-action="Register" asp-controller="Home" method="post">
+		<form asp-action="@AccountCtrl.RegisterAction" asp-controller="@AccountCtrl.Name" method="post">
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
 					<span class="input-group-text">@@</span>
@@ -37,7 +38,7 @@
 
 			<div class="card-body">
 				<button class="btn btn-info" style="font-weight: 500; color: white;" type="submit">Register</button>
-				<a asp-controller="Home" asp-action="Login" class="btn btn-primary" style="font-weight: 500;">Back</a>
+				<a asp-controller="@AccountCtrl.Name" asp-action="@AccountCtrl.LoginAction" class="btn btn-primary" style="font-weight: 500;">Back</a>
 			</div>
 
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -47,6 +48,6 @@
 
 @section Scripts {
 	@{
-		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+		await Html.RenderPartialAsync(SharedViews.Validation);
 	}
 }
