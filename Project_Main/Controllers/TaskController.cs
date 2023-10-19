@@ -292,7 +292,7 @@ namespace Project_Main.Controllers
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
         [HttpGet]
-        [Route(CustomRoutes.TaskDeleteRoute)]
+        [Route(CustomRoutes.TaskDeleteGetRoute)]
         public async Task<IActionResult> Delete(int todoListId, int taskId)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Delete), controllerName);
@@ -342,7 +342,7 @@ namespace Project_Main.Controllers
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
         [HttpPost]
-        [Route(CustomRoutes.TaskDeleteRoute)]
+        [Route(CustomRoutes.TaskDeletePostRoute)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int todoListId, int taskId)
         {

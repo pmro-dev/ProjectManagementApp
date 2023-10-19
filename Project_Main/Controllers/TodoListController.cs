@@ -134,7 +134,7 @@ namespace Project_Main.Controllers
 				_todoListRepository.Update(todoListModel);
 				await _dataUnitOfWork.SaveChangesAsync();
 
-				return RedirectToAction(BoardsCtrl.BrieflyAction);
+				return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
 			}
 
 			return View(TodoListViews.Edit, todoListModel);
@@ -183,7 +183,7 @@ namespace Project_Main.Controllers
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
 		[HttpPost]
-		[Route(CustomRoutes.TodoListDeleteRoute)]
+		[Route(CustomRoutes.TodoListDeletePostRoute)]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
@@ -204,7 +204,7 @@ namespace Project_Main.Controllers
 					_todoListRepository.Remove(todoListModel);
 					await _dataUnitOfWork.SaveChangesAsync();
 
-					return RedirectToAction(BoardsCtrl.BrieflyAction);
+					return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
 				}
 			}
 
@@ -225,7 +225,7 @@ namespace Project_Main.Controllers
 			await _todoListRepository.DuplicateWithDetailsAsync(todoListId);
 			await _dataUnitOfWork.SaveChangesAsync();
 
-			return RedirectToAction(BoardsCtrl.BrieflyAction);
+			return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
 		}
 	}
 }
