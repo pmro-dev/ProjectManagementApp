@@ -321,31 +321,31 @@ namespace Project_Main.Controllers
 				ReminderDate = taskToDelete.ReminderDate
 			};
 
-			if (taskToDelete.TodoListId != todoListId)
+			if (taskDetailsVM.TodoListId != todoListId)
             {
                 _logger.LogCritical(Messages.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, todoListId, taskToDelete.TodoListId);
                 return Conflict();
             }
 
-            return View(TaskViews.Delete, taskToDelete);
+            return View(TaskViews.Delete, taskDetailsVM);
         }
 
-        /// <summary>
-        /// Action POST to DELETE Task.
-        /// </summary>
-        /// <param name="todoListId">Target To Do List id for which Task was assigned.</param>
-        /// <param name="taskId">Target Task id.</param>
-        /// <returns>
-        /// Return different view based on the final result. 
-        /// Return Bad Request when one of the given id is out of range, 
-        /// Not Found when there isn't such Task in Db or redirect to view with To Do List details.
-        /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
-        [HttpPost]
+		/// <summary>
+		/// Action POST to DELETE Task.
+		/// </summary>
+		/// <param name="todoListId">Target To Do List id for which Task was assigned.</param>
+		/// <param name="taskId">Target Task id.</param>
+		/// <returns>
+		/// Return different view based on the final result. 
+		/// Return Bad Request when one of the given id is out of range, 
+		/// Not Found when there isn't such Task in Db or redirect to view with To Do List details.
+		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
+		[HttpPost]
         [Route(CustomRoutes.TaskDeletePostRoute)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePost([FromForm] TaskDeleteVM taskDeleteVM)
-        {
+		{
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskDeleteVM.TodoListId, nameof(taskDeleteVM.TodoListId), HelperCheck.IdBottomBoundry, _logger);
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskDeleteVM.Id, nameof(taskDeleteVM.Id), HelperCheck.IdBottomBoundry, _logger);
 
