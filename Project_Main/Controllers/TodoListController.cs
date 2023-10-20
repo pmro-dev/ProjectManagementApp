@@ -6,6 +6,8 @@ using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.DataBases.AppData;
 using Project_Main.Models.DataBases.Helpers;
 using Project_Main.Models.ViewModels.OutputModels;
+using Project_Main.Infrastructure.DTOs;
+using Project_Main.Services;
 
 namespace Project_Main.Controllers
 {
@@ -13,7 +15,6 @@ namespace Project_Main.Controllers
     /// Controller to manage To Do List actions based on specific routes.
     /// </summary>
     [Authorize]
-	[Route(CustomRoutes.TodoListControllerRoute)]
 	public class TodoListController : Controller
 	{
 		private readonly IDataUnitOfWork _dataUnitOfWork;
@@ -42,6 +43,7 @@ namespace Project_Main.Controllers
 		/// </summary>
 		/// <returns>Create view.</returns>
 		[HttpGet]
+		[Route(CustomRoutes.TodoListCreateRoute)]
 		public IActionResult Create()
 		{
 			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -226,6 +228,45 @@ namespace Project_Main.Controllers
 			await _dataUnitOfWork.SaveChangesAsync();
 
 			return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
+		}
+
+
+		/// <summary>
+		/// Action GET with custom route to show specific To Do List with details.
+		/// </summary>
+		/// <param name="id">Target To Do List id.</param>
+		/// <returns>Single To Do List with details.</returns>
+		/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
+		[HttpGet]
+		[Route(CustomRoutes.TodoListDetailsRoute)]
+		public async Task<IActionResult> TodoListDetails(int id, DateTime? filterDueDate)
+		{
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(TodoListDetails), controllerName);
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.IdBottomBoundry, _logger);
+
+			var todoListFromDb = await _todoListRepository.GetWithDetailsAsync(id);
+
+			if (todoListFromDb is null)
+			{
+				_logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, id, HelperDatabase.TodoListsDbSetName);
+				return NotFound();
+			}
+
+			TodoListModelDto todoListModelDto = TodoListDtoService.TransferToDto(todoListFromDb);
+			BoardsSingleDetailsOutputVM singleDetailsVM = TodoListDtoService.TransferToSingleDetailsOutputVM(todoListModelDto, filterDueDate);
+
+			var tasksComparer = new TasksComparer();
+
+			var tasks = new Task[]
+			{
+				Task.Run(() => singleDetailsVM.TasksNotCompleted.Sort(tasksComparer)),
+				Task.Run(() => singleDetailsVM.TasksForToday.Sort(tasksComparer)),
+				Task.Run(() => singleDetailsVM.TasksCompleted.Sort(tasksComparer)),
+			};
+
+			Task.WaitAll(tasks);
+
+			return View(TodoListViews.Details, singleDetailsVM);
 		}
 	}
 }

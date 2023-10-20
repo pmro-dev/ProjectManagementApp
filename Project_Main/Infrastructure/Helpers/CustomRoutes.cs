@@ -15,8 +15,8 @@
         public const string MainBoardRoute = "Boards/Briefly";
 
         public const string AllDetailsRoute = "All/Details";
-        public const string SingleTodoListDetailsRoute = "{id:int}/SingleDetails";
-        public const string TodoListEditRoute = TodoListControllerRoute + "/{id:int}/Edit";
+        public const string TodoListDetailsRoute = "Boards/Details/TodoList/{id:int}";
+        public const string TodoListCreateRoute = "[controller]/[action]";
         public const string TodoListDeleteRoute = TodoListControllerRoute + "/{id:int}/Delete";
         public const string TodoListDeletePostRoute = TodoListControllerRoute + "/{id:int}/DeletePost";
 		public const string TodoListDuplicateRoute = TodoListControllerRoute + "/{todoListId:int}/Duplicate";

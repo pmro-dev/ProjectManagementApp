@@ -69,43 +69,5 @@ namespace Project_Main.Controllers
 
 			return View(todoListsAllVM);
 		}
-
-		/// <summary>
-		/// Action GET with custom route to show specific To Do List with details.
-		/// </summary>
-		/// <param name="id">Target To Do List id.</param>
-		/// <returns>Single To Do List with details.</returns>
-		/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
-		[HttpGet]
-		[Route(CustomRoutes.SingleTodoListDetailsRoute)]
-		public async Task<IActionResult> SingleDetails(int id, DateTime? filterDueDate)
-		{
-			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(SingleDetails), controllerName);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.IdBottomBoundry, _logger);
-
-			var todoListFromDb = await _todoListRepository.GetWithDetailsAsync(id);
-
-			if (todoListFromDb is null)
-			{
-				_logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, id, HelperDatabase.TodoListsDbSetName);
-				return NotFound();
-			}
-
-			TodoListModelDto todoListModelDto = TodoListDtoService.TransferToDto(todoListFromDb);
-			BoardsSingleDetailsOutputVM singleDetailsVM = TodoListDtoService.TransferToSingleDetailsOutputVM(todoListModelDto, filterDueDate);
-
-			var tasksComparer = new TasksComparer();
-
-			var tasks = new Task[]
-			{
-				Task.Run(() => singleDetailsVM.TasksNotCompleted.Sort(tasksComparer)),
-				Task.Run(() => singleDetailsVM.TasksForToday.Sort(tasksComparer)),
-				Task.Run(() => singleDetailsVM.TasksCompleted.Sort(tasksComparer)),
-			};
-
-			Task.WaitAll(tasks);
-
-			return View(singleDetailsVM);
-		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿@* @using Project_DomainEntities *@
+﻿@using Project_Main.Infrastructure.Helpers
 @model Project_Main.Models.ViewModels.OutputModels.TaskDetailsVM
 
 @{
@@ -14,5 +14,5 @@
 	<input type="hidden" name="routeTodoListId" asp-for="@Model.TodoListId" />
 	<input type="hidden" name="routeTaskId" asp-for="@Model.Id" />
 	<input type="hidden" asp-for="@Model.UserId" />
-    <a asp-controller="Boards" asp-action="SingleDetails" asp-route-id="@Model.TodoListId" class="btn btn-primary">Back</a>
+    <a asp-controller="@TodoListCtrl.Name" asp-action="@TodoListCtrl.DetailsAction" asp-route-id="@Model.TodoListId" class="btn btn-primary">Back</a>
 </div>

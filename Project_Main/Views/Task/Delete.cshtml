@@ -18,5 +18,5 @@
 		<input type="hidden" asp-for="Id" value="@Model.Id" />
 		<input type="submit" value="Delete" class="btn btn-danger" />
 	</form>
-	<a asp-controller="@BoardsCtrl.Name" asp-action="@BoardsCtrl.SingleDetailsAction" asp-route-id="@Model.TodoListId" class="btn btn-primary">Back</a>
+	<a asp-controller="@TodoListCtrl.Name" asp-action="@TodoListCtrl.DetailsAction" asp-route-id="@Model.TodoListId" class="btn btn-primary">Back</a>
 </div>

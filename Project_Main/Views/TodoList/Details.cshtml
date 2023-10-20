@@ -17,9 +17,9 @@
 	</div>
 	<dl class="row">
 		<dd class="col-sm-5">
-			<a asp-controller=@TaskCtrl.Name asp-action =@TaskCtrl.CreateAction asp-route-id="@Model?.Id" method="get" class="btn" style="background-color: #671dff; color: white; font-weight: 500;">New Task</a>
-			<a asp-controller=@TodoListCtrl.Name asp-action=@TodoListCtrl.EditAction asp-route-id="@Model?.Id" class="btn btn-warning">Edit</a>
-			<a asp-action=@BoardsCtrl.BrieflyAction class="btn btn-primary">Back</a>
+			<a asp-action=@TaskCtrl.CreateAction asp-controller=@TaskCtrl.Name asp-route-id="@Model?.Id" method="get" class="btn" style="background-color: #671dff; color: white; font-weight: 500;">New Task</a>
+			<a asp-action=@TodoListCtrl.EditAction asp-controller=@TodoListCtrl.Name asp-route-id ="@Model?.Id" class="btn btn-warning">Edit</a>
+			<a asp-action=@BoardsCtrl.BrieflyAction asp-controller="@BoardsCtrl.Name" class="btn btn-primary">Back</a>
 		</dd>
 	</dl>
 
@@ -35,8 +35,8 @@
 	<div class="row">
 		<div class="col-md-4">
 			<div class="card-group">
-				<form id="resetDate" asp-action=@BoardsCtrl.SingleDetailsAction asp-route-id="@Model?.Id" asp-route-filterDueDate="@null" method="get"></form>
-				<form id="filterDate" asp-action=@BoardsCtrl.SingleDetailsAction asp-route-id="@Model?.Id" asp-route-filterDueDate="@filterDueDate" method="get">
+				<form id="resetDate" asp-action=@TodoListCtrl.DetailsAction asp-route-id="@Model?.Id" asp-route-filterDueDate="@null" method="get"></form>
+				<form id="filterDate" asp-action=@TodoListCtrl.DetailsAction asp-route-id="@Model?.Id" asp-route-filterDueDate="@filterDueDate" method="get">
 					<input asp-for="@filterDueDate" asp-format="{0:dd'/'MM'/'yyyy}" class="form-control" />
 					<span asp-validation-for="@filterDueDate" class="text-danger"></span>
 				</form>

@@ -166,7 +166,7 @@ namespace Project_Main.Controllers
 
             object routeValue = new { id = taskCreateInputVM.TodoListId };
 
-			return RedirectToAction(BoardsCtrl.SingleDetailsAction, BoardsCtrl.Name, routeValue);
+			return RedirectToAction(TodoListCtrl.DetailsAction, TodoListCtrl.Name, routeValue);
         }
 
         /// <summary>
@@ -275,7 +275,7 @@ namespace Project_Main.Controllers
 
                 object routeValue = new { id = todoListId };
 
-				return RedirectToAction(BoardsCtrl.SingleDetailsAction, BoardsCtrl.Name, routeValue);
+				return RedirectToAction(TodoListCtrl.DetailsAction, TodoListCtrl.Name, routeValue);
             }
 
             return View(taskModel);
@@ -371,7 +371,7 @@ namespace Project_Main.Controllers
 
 			object routeValue = new { id = taskDeleteVM.TodoListId };
 
-			return RedirectToAction(BoardsCtrl.SingleDetailsAction, BoardsCtrl.Name, routeValue);
+			return RedirectToAction(TodoListCtrl.DetailsAction, TodoListCtrl.Name, routeValue);
         }
     }
 }

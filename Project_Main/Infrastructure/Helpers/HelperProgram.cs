@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Project_Main.Controllers;
 
 namespace Project_Main.Infrastructure.Helpers
 {
@@ -57,7 +58,7 @@ namespace Project_Main.Infrastructure.Helpers
 		public const string CreateAction = "Create";
 		public const string EditAction = "Edit";
 		public const string DeleteAction = "Delete";
-		public const string DeleteConfirmedAction = "DeleteConfirmed";
+		public const string DeletePostAction = nameof(TaskController.DeletePost);
 	}
 
 	public readonly struct TodoListCtrl
@@ -68,6 +69,7 @@ namespace Project_Main.Infrastructure.Helpers
 		public const string DeleteAction = "Delete";
 		public const string DeleteConfirmedAction = "DeleteConfirmed";
 		public const string DuplicateAction = "Duplicate";
+		public const string DetailsAction = nameof(TodoListController.TodoListDetails);
 	}
 
 	#endregion
@@ -87,9 +89,10 @@ namespace Project_Main.Infrastructure.Helpers
 	public readonly struct TodoListViews
 	{
 		public const string FolderName = "TodoList";
-		public const string Create = "CreateTodoList";
-		public const string Delete = "DeleteTodoList";
-		public const string Edit = "EditTodoList";
+		public const string Create = "Create";
+		public const string Delete = "Delete";
+		public const string Edit = "Edit";
+		public const string Details = "Details";
 	}
 
 	public readonly struct BoardsViews
@@ -97,7 +100,6 @@ namespace Project_Main.Infrastructure.Helpers
 		public const string FolderName = "Boards";
 		public const string All = "All";
 		public const string Briefly = "Briefly";
-		public const string SingleDetails = "SingleDetails";
 		public const string DeleteModal = "_DeleteModal";
 	}
 
