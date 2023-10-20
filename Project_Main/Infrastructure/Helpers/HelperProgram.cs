@@ -36,39 +36,39 @@ namespace Project_Main.Infrastructure.Helpers
 	public readonly struct AccountCtrl
 	{
 		public const string Name = "Account";
-		public const string LoginByProviderAction = "LoginByProvider";
-		public const string RegisterAction = "Register";
-		public const string LoginAction = "Login";
-		public const string ErrorAction = "Error";
+		public const string LoginByProviderAction = nameof(AccountController.LoginByProvider);
+		public const string RegisterAction = nameof(AccountController.Register);
+		public const string LoginAction = nameof(AccountController.Login);
+		public const string LogoutAction = nameof(AccountController.LogOut);
+		public const string ErrorAction = nameof(AccountController.Error);
 		public const string GoogleProvider = "google";
 	}
 
 	public readonly struct BoardsCtrl
 	{
 		public const string Name = "Boards";
-		public const string BrieflyAction = "Briefly";
-		public const string AllAction = "All";
-		public const string SingleDetailsAction = "SingleDetails";
+		public const string BrieflyAction = nameof(BoardsController.Briefly);
+		public const string AllAction = nameof(BoardsController.All);
 	}
 
 	public readonly struct TaskCtrl
 	{
 		public const string Name = "Task";
-		public const string DetailsAction = "Details";
-		public const string CreateAction = "Create";
-		public const string EditAction = "Edit";
-		public const string DeleteAction = "Delete";
+		public const string DetailsAction = nameof(TaskController.Details);
+		public const string CreateAction = nameof(TaskController.Create);
+		public const string EditAction = nameof(TaskController.Edit);
+		public const string DeleteAction = nameof(TaskController.Delete);
 		public const string DeletePostAction = nameof(TaskController.DeletePost);
 	}
 
 	public readonly struct TodoListCtrl
 	{
 		public const string Name = "TodoList";
-		public const string CreateAction = "Create";
-		public const string EditAction = "Edit";
-		public const string DeleteAction = "Delete";
-		public const string DeleteConfirmedAction = "DeleteConfirmed";
-		public const string DuplicateAction = "Duplicate";
+		public const string CreateAction = nameof(TodoListController.Create);
+		public const string EditAction = nameof(TodoListController.Edit);
+		public const string DeleteAction = nameof(TodoListController.Delete);
+		public const string DeletePostAction = nameof(TodoListController.DeletePost);
+		public const string DuplicateAction = nameof(TodoListController.Duplicate);
 		public const string DetailsAction = nameof(TodoListController.TodoListDetails);
 	}
 
@@ -80,10 +80,10 @@ namespace Project_Main.Infrastructure.Helpers
 	public readonly struct TaskViews
 	{
 		public const string FolderName = "Task";
-		public const string Create = "CreateTask";
-		public const string Delete = "DeleteTask";
-		public const string Details = "DetailsTask";
-		public const string Edit = "EditTask";
+		public const string Create = "Create";
+		public const string Delete = "Delete";
+		public const string Details = "Details";
+		public const string Edit = "Edit";
 	}
 
 	public readonly struct TodoListViews
@@ -115,7 +115,7 @@ namespace Project_Main.Infrastructure.Helpers
 	{
 		public const string FolderName = "Shared";
 		public const string DefaultLayout = "_Layout";
-		public const string TaskTable = "_TaskTableDetails";
+		public const string TaskTableDetails = "_TaskTableDetails";
 		public const string TodoListTable = "_TodoListTable";
 		public const string TodoListTableDetails = "_TodoListTableDetails";
 		public const string Validation = "_ValidationScriptsPartial";
