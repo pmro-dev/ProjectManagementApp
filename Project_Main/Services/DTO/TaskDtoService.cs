@@ -4,7 +4,7 @@ using Project_Main.Infrastructure.DTOs;
 using Project_Main.Models.ViewModels.InputModels;
 using Project_Main.Models.ViewModels.OutputModels;
 
-namespace Project_Main.Services
+namespace Project_Main.Services.DTO
 {
     public static class TaskDtoService
     {
@@ -79,7 +79,7 @@ namespace Project_Main.Services
                 Title = taskCreateInputVM.Title,
                 Description = taskCreateInputVM.Description,
                 DueDate = taskCreateInputVM.DueDate,
-                ReminderDate= taskCreateInputVM.ReminderDate,
+                ReminderDate = taskCreateInputVM.ReminderDate,
                 UserId = taskCreateInputVM.UserId
             };
         }
