@@ -142,13 +142,11 @@ namespace Project_Main.Controllers
 		{
 			if (ModelState.IsValid)
 			{
+				UserDto userDto = AccountDtoService.TransferToUserDto(registerInputVM);
+
 				operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Register), controllerName);
 
-				string? userName = registerInputVM.Name;
-				string? userPassword = registerInputVM.Password;
-				string? userEmail = registerInputVM.Email;
-
-				bool isDataInvalid = userName.IsNullOrEmpty() || userPassword.IsNullOrEmpty() || userEmail.IsNullOrEmpty();
+				bool isDataInvalid = !UserDtoValidator.ValidData(userDto);
 
 				if (isDataInvalid)
 				{
@@ -158,16 +156,11 @@ namespace Project_Main.Controllers
 
 				try
 				{
-					bool isPossibleToRegisterUser = await _userRegisterService.IsPossibleToRegisterUserByProvidedData(userName);
+					bool isUserRegisteredSuccessfully = await _userRegisterService.RegisterUserAsync(userDto);
 					
-					if (isPossibleToRegisterUser)
-					{
-						bool isUserRegisteredSuccessfully = await _userRegisterService.RegisterUserAsync(userName, userPassword, userEmail);
-
 						if (isUserRegisteredSuccessfully)
 							return View(AccountCtrl.LoginAction);
-					}
-
+					else
 					return View();
 				}
 				catch (Exception ex)
