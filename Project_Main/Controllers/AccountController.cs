@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Project_Main.Infrastructure.Helpers;
-using Project_Main.Services;
-using Castle.Core.Internal;
 using Project_Main.Models.ViewModels.InputModels;
+using Project_Main.Services.Identity;
+using Project_Main.Infrastructure.DTOs;
+using Project_Main.Services.DTO;
 
 namespace Project_Main.Controllers
 {
@@ -51,25 +52,34 @@ namespace Project_Main.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				string userName = loginInputVM.Name;
-				string userPassword = loginInputVM.Password;
+				LoginInputDto loginInputDto = AccountDtoService.TransferToLoginInputDto(loginInputVM);
+				bool isLoginDataInvalid = LoginDataValidator.Valid(loginInputDto);
 
-				if (userName.IsNullOrEmpty() || userPassword.IsNullOrEmpty()) 
+				if (isLoginDataInvalid)
+				{
+					ModelState.AddModelError(string.Empty, Messages.InvalidLoginData);
 					return View(loginInputVM);
+				}
 
 				try 
 				{
-					bool isUserRegistered = await _loginService.CheckThatUserIsRegisteredAsync(userName, userPassword);
+					bool isNotUserRegisteredInDb = !await _loginService.CheckIsUserAlreadyRegisteredAsync(loginInputDto);
 
-					if (isUserRegistered)
+					if (isNotUserRegisteredInDb)
 					{
-						bool isLoggedInSuccessfully = await _loginService.LogInUserAsync(userName, userPassword);
-
-						if (isLoggedInSuccessfully)
-							return RedirectToRoute(CustomRoutes.MainBoardRouteName);
+						ModelState.AddModelError(string.Empty, Messages.InvalidLoginData);
+						return View();
 					}
 
-					ModelState.AddModelError(string.Empty, Messages.InvalidLoginData);
+					bool isLoggedInSuccessfully = await _loginService.LogInUserAsync(loginInputDto);
+
+					if (isLoggedInSuccessfully) { return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name); }
+					else
+					{
+						_logger.LogError(Messages.LoginFailedForRegisteredUser, nameof(Login), loginInputDto.Username);
+						ModelState.AddModelError(string.Empty, Messages.UnableToLogin);
+						return View();
+				}
 				}
 				catch (Exception ex)
 				{
@@ -78,7 +88,7 @@ namespace Project_Main.Controllers
 				}
 			}
 
-			return View(loginInputVM);
+			return View();
 		}
 
 		/// <summary>
