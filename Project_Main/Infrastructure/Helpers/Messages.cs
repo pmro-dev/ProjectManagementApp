@@ -54,7 +54,10 @@
 		public const string DbSetIsNull = "Critical error! Dbset object cannot be null!";
 		public const string ItemNotFoundInDb = "There's not such item in Database.";
 		public const string InvalidLoginData = "Invalid name or password.";
+		public const string UnableToLogin = "Unable to login, try again or contact support";
+		public const string InvalidRegisterData = "Invalid register data: login, password or email!";
 		public const string NameTaken = "Name already taken! Try again and get new one!";
+		public const string HttpContextNullOnLogout = "Critical error occured while logging out by 3rd party provider!";
 
 		#endregion
 
@@ -78,6 +81,9 @@
 		public const string LogNotAnyTodoListInDb = "{operationName} | There's not any To Do List in Database.";
 		public const string LogCreatingUserIdentityFailed = "{operationName} | Creating new User Identity failed!";
 		public const string LogCriticalErrorRoleForNewUserNotFoundInDb = "{operationName} | Object with role (from Db) for new user is null! Object: {roleObjectName} Role: {roleName}";
+		public const string LoginFailedForRegisteredUser = "{operationName} | Attempt to login registered user failed! User: {username}";
+		public const string UnableToAuthenticateUserPrincipal = "{operationName} | User Claims Principal is null when authenticating in {serviceName}!";
+		public const string LogHttpContextNullOnLogout = "{operationName} | HttpContext is null while logging out by 3rd party provider.";
 
 		#endregion
 	}
