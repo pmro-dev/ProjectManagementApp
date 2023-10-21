@@ -100,17 +100,16 @@ namespace Project_Main.Controllers
 		[Route(CustomRoutes.LoginByProviderRoute)]
 		public IActionResult LoginByProvider([FromRoute] string provider)
 		{
-			if (provider.IsNullOrEmpty())
+			if (string.IsNullOrEmpty(provider))
 			{
 				_logger.LogError(Messages.LogInvalidProviderName);
 				throw new ArgumentNullException(nameof(provider));
 			}
 
-			bool doesUserExist = User != null;
-			bool IsUserAuthenticated = User?.Identities.Any(i => i.IsAuthenticated) ?? false;
+			var isUserAuthenticated = _userAuthenticationService.AuthenticateUser(User);
 
-			if (doesUserExist && IsUserAuthenticated) 
-				return RedirectToRoute(CustomRoutes.MainBoardRouteName);
+			if (isUserAuthenticated)
+				return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
 			else 
 				return _userAuthenticationService.ChallengeProviderToLogin(provider);
 		}
