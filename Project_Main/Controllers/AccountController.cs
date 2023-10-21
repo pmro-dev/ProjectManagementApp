@@ -8,10 +8,10 @@ using Project_Main.Services.DTO;
 
 namespace Project_Main.Controllers
 {
-    /// <summary>
-    /// Controller to manage availability of page's resources via Authentication.
-    /// </summary>
-    [Authorize]
+	/// <summary>
+	/// Controller to manage availability of page's resources via Authentication.
+	/// </summary>
+	[Authorize]
 	[AllowAnonymous]
 	public class AccountController : Controller
 	{
@@ -24,7 +24,7 @@ namespace Project_Main.Controllers
 		private string operationName = string.Empty;
 		private readonly string controllerName = nameof(AccountController);
 
-		public AccountController(ILoginService loginService, IUserRegisterService userRegisterService, ILogger<AccountController> logger, 
+		public AccountController(ILoginService loginService, IUserRegisterService userRegisterService, ILogger<AccountController> logger,
 			IUserAuthenticationService userAuthenticationService, ILogoutService logoutService)
 		{
 			_loginService = loginService;
@@ -61,7 +61,7 @@ namespace Project_Main.Controllers
 					return View(loginInputVM);
 				}
 
-				try 
+				try
 				{
 					bool isNotUserRegisteredInDb = !await _loginService.CheckIsUserAlreadyRegisteredAsync(loginInputDto);
 
@@ -79,7 +79,7 @@ namespace Project_Main.Controllers
 						_logger.LogError(Messages.LoginFailedForRegisteredUser, nameof(Login), loginInputDto.Username);
 						ModelState.AddModelError(string.Empty, Messages.UnableToLogin);
 						return View();
-				}
+					}
 				}
 				catch (Exception ex)
 				{
@@ -110,7 +110,7 @@ namespace Project_Main.Controllers
 
 			if (isUserAuthenticated)
 				return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
-			else 
+			else
 				return _userAuthenticationService.ChallengeProviderToLogin(provider);
 		}
 
@@ -120,9 +120,9 @@ namespace Project_Main.Controllers
 		/// <returns>Return Login View.</returns>
 		public async Task<IActionResult> LogOut()
 		{
-			string userAuthenticationScheme = User.Claims.First(c => c.Type == ConfigConstants.AuthSchemeClaimKey).Value;
+			var actionResult = await _logoutService.LogoutByProviderAsync();
 
-			return await _logoutService.LogoutByProviderTypeAsync(this, userAuthenticationScheme);
+			return actionResult;
 		}
 
 		/// <summary>
@@ -157,11 +157,11 @@ namespace Project_Main.Controllers
 				try
 				{
 					bool isUserRegisteredSuccessfully = await _userRegisterService.RegisterUserAsync(userDto);
-					
-						if (isUserRegisteredSuccessfully)
-							return View(AccountCtrl.LoginAction);
+
+					if (isUserRegisteredSuccessfully)
+						return View(AccountCtrl.LoginAction);
 					else
-					return View();
+						return View();
 				}
 				catch (Exception ex)
 				{
