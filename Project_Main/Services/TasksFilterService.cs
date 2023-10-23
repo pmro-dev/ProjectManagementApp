@@ -1,5 +1,6 @@
 ﻿using Project_DomainEntities;
 using Project_DomainEntities.Helpers;
+using Project_DTO;
 
 namespace Project_Main.Services
 {
@@ -8,7 +9,7 @@ namespace Project_Main.Services
 		private const int DateCompareValueEarlier = 0;
 		private static DateTime todayDate = DateTime.Today;
 
-		private static readonly Func<TaskModel, TaskModel> createNewTaskModelSelector = task => new TaskModel
+		private static readonly Func<ITaskModel, ITaskModel> createNewTaskModelDtoSelector = task => new TaskModelDto
 		{
 			Id = task.Id,
 			Title = task.Title,
@@ -24,38 +25,38 @@ namespace Project_Main.Services
 			UserId = task.UserId,
 		};
 
-		private static List<TaskModel> ExecuteFilter(IEnumerable<TaskModel> source, Func<TaskModel, bool> predicate, Func<TaskModel, TaskModel> selector)
+		private static IEnumerable<ITaskModel> ExecuteFilter(IEnumerable<ITaskModel> source, Func<ITaskModel, bool> predicate, Func<ITaskModel, ITaskModel> selector)
 		{
-			return source.Where(predicate).Select(selector).ToList();
+			return source.AsParallel().Where(predicate).Select(selector).ToList();
 		}
 
-		public static List<TaskModel> FilterForTasksForToday(IEnumerable<TaskModel> tasks)
+		public static IEnumerable<ITaskModel> FilterForTasksForToday(IEnumerable<ITaskModel> tasks)
 		{
 			todayDate = DateTime.Today;
 
-			Func<TaskModel, bool> tasksForTodayPredicate = task =>
+			Func<ITaskModel, bool> tasksForTodayPredicate = task =>
 			task.DueDate.ToShortDateString() == todayDate.ToShortDateString() &&
 			task.Status != TaskStatusHelper.TaskStatusType.Completed;
 
-			return ExecuteFilter(tasks, tasksForTodayPredicate, createNewTaskModelSelector);
+			return ExecuteFilter(tasks, tasksForTodayPredicate, createNewTaskModelDtoSelector);
 		}
 
-		public static List<TaskModel> FilterForTasksCompleted(IEnumerable<TaskModel> tasks)
+		public static IEnumerable<ITaskModel> FilterForTasksCompleted(IEnumerable<ITaskModel> tasks)
 		{
 			todayDate = DateTime.Today;
 
-			Func<TaskModel, bool> tasksCompletedPredicate = task =>
+			Func<ITaskModel, bool> tasksCompletedPredicate = task =>
 			task.Status == TaskStatusHelper.TaskStatusType.Completed &&
 			task.DueDate.CompareTo(todayDate) > DateCompareValueEarlier;
 
-			return ExecuteFilter(tasks, tasksCompletedPredicate, createNewTaskModelSelector);
+			return ExecuteFilter(tasks, tasksCompletedPredicate, createNewTaskModelDtoSelector);
 		}
 
-		public static List<TaskModel> FilterForTasksNotCompleted(IEnumerable<TaskModel> tasks, DateTime? filterDueDate)
+		public static IEnumerable<ITaskModel> FilterForTasksNotCompleted(IEnumerable<ITaskModel> tasks, DateTime? filterDueDate)
 		{
 			todayDate = DateTime.Today;
 
-			Func<TaskModel, bool> tasksNotCompletedPredicate = task =>
+			Func<ITaskModel, bool> tasksNotCompletedPredicate = task =>
 			{
 				if (filterDueDate is null)
 				{
@@ -65,17 +66,17 @@ namespace Project_Main.Services
 				return (task.Status != TaskStatusHelper.TaskStatusType.Completed) && (task.DueDate.CompareTo(filterDueDate) < DateCompareValueEarlier && task.DueDate.CompareTo(todayDate) > DateCompareValueEarlier);
 			};
 
-			return ExecuteFilter(tasks, tasksNotCompletedPredicate, createNewTaskModelSelector);
+			return ExecuteFilter(tasks, tasksNotCompletedPredicate, createNewTaskModelDtoSelector);
 		}
 
-		public static List<TaskModel> FilterForTasksExpired(IEnumerable<TaskModel> tasks)
+		public static IEnumerable<ITaskModel> FilterForTasksExpired(IEnumerable<ITaskModel> tasks)
 		{
 			todayDate = DateTime.Today;
 
-			Func<TaskModel, bool> TasksExpiredPredicate = t =>
+			Func<ITaskModel, bool> TasksExpiredPredicate = t =>
 			t.DueDate.CompareTo(todayDate) < DateCompareValueEarlier;
 
-			return ExecuteFilter(tasks, TasksExpiredPredicate, createNewTaskModelSelector);
+			return ExecuteFilter(tasks, TasksExpiredPredicate, createNewTaskModelDtoSelector);
 		}
 	}
 }

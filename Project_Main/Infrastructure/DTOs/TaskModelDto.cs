@@ -1,9 +1,11 @@
 ﻿using static Project_DomainEntities.Helpers.TaskStatusHelper;
 using System.ComponentModel.DataAnnotations;
+using Project_Main.Infrastructure.DTOs;
+using Project_DomainEntities;
 
 namespace Project_DTO
 {
-	public class TaskModelDto
+	public class TaskModelDto : ITaskModel
 	{
 		private const string DataFormat = "{0:dd'/'MM'/'yyyy}";
 		private const int defaultId = 0;
@@ -27,7 +29,11 @@ namespace Project_DTO
 		public TaskStatusType Status { get; set; } = TaskStatusType.NotStarted;
 
 		public int TodoListId { get; set; } = defaultId;
+		
+		public ITodoListModel? TodoList { get; set; }
 
 		public string UserId { get; set; } = string.Empty;
+
+		public IEnumerable<ITaskTagModel> TaskTags { get; set; } = new List<TaskTagModelDto>();
 	}
 }

@@ -8,7 +8,7 @@ namespace Project_DomainEntities
 	/// <summary>
 	/// Model for Task.
 	/// </summary>
-	public class TaskModel : BasicModelAbstract
+	public class TaskModel : BasicModelAbstract, ITaskModel
 	{
 		private const string DataFormat = "{0:dd'/'MM'/'yyyy}";
 		private const int defaultId = 0;
@@ -46,13 +46,13 @@ namespace Project_DomainEntities
 		[Required]
         public TaskStatusType Status { get; set; } = TaskStatusType.NotStarted;
 
-        public List<TaskTagModel> TaskTags { get; set; } = new List<TaskTagModel>();
+        public IEnumerable<ITaskTagModel> TaskTags { get; set; } = new List<ITaskTagModel>();
 
         [Required]
         public int TodoListId { get; set; } = defaultId;
 
         [ForeignKey(nameof(TodoListId))]
-        public virtual TodoListModel? TodoList { get; set; }
+        public virtual ITodoListModel? TodoList { get; set; }
 
 		[Required]
 		public string UserId { get; set; } = string.Empty;

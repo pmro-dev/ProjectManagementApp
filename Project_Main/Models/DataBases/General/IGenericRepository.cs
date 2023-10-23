@@ -2,12 +2,12 @@
 
 namespace Project_Main.Models.DataBases.General
 {
-    /// <summary>
-    /// Generic class for T type repository.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IGenericRepository<T> where T : class
-    {
+	/// <summary>
+	/// Generic class for T type repository.
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	public interface IGenericRepository<T> where T : class
+	{
 		/// <summary>
 		/// Add entity to Db by repository.
 		/// </summary>

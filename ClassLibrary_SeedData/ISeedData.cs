@@ -7,33 +7,33 @@ namespace ClassLibrary_SeedData
 	/// </summary>
 	public interface ISeedData
 	{
-		public List<TaskModel> AllTasks { get; set; }
+		public List<ITaskModel> AllTasks { get; set; }
 
 		/// <summary>
 		/// All Todolists for Database Set.
 		/// </summary>
-		public List<TodoListModel> TodoLists { get; set; }
+		public List<ITodoListModel> TodoLists { get; set; }
 
 		/// <summary>
 		/// Specific 'UX' Tasks for a list.
 		/// </summary>
-		public List<TaskModel> TasksUX { get; set; }
+		public List<ITaskModel> TasksUX { get; set; }
 
 		/// <summary>
 		/// Specific 'Backend' Tasks for a list.
 		/// </summary>
-		public List<TaskModel> TasksBackend { get; set; }
+		public List<ITaskModel> TasksBackend { get; set; }
 
 		/// <summary>
 		/// Specific 'Testing' Tasks for a list.
 		/// 
 		/// </summary>
-		public List<TaskModel> TasksTesting { get; set; }
+		public List<ITaskModel> TasksTesting { get; set; }
 
 		/// <summary>
 		/// Specific 'Project Management' Tasks for a list.
 		/// 
 		/// </summary>
-		public List<TaskModel> TasksProjectManagement { get; set; }
+		public List<ITaskModel> TasksProjectManagement { get; set; }
 	}
 }

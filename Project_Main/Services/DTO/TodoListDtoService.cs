@@ -6,25 +6,35 @@ namespace Project_Main.Services.DTO
 {
     public static class TodoListDtoService
     {
-        public static TodoListModelDto TransferToDto(TodoListModel todoListModel)
+		public static TodoListModelDto TransferToDto(ITodoListModel todoListModel)
         {
             return new TodoListModelDto
             {
                 Id = todoListModel.Id,
                 Title = todoListModel.Title,
                 UserId = todoListModel.UserId,
-                Tasks = todoListModel.Tasks.Select(t => t).ToList()
+				Tasks = todoListModel.Tasks.Select(task => TaskDtoService.TransferToDefaultDto(task)).ToList()
             };
         }
 
-        public static BoardsAllOutputVM TransferToBoardsAllOutputVM(TodoListModelDto todoListDto)
+		public static IEnumerable<TodoListModelDto> TransferToDto(IEnumerable<ITodoListModel> todoLists)
         {
-            return new BoardsAllOutputVM
+			var todoListsDtos = todoLists.Select(list => TransferToDto(list)).ToList();
+
+			return todoListsDtos;
+		}
+
+		public static TodoListModel TransferToModel(TodoListModelDto todoListDto)
             {
+			return new TodoListModel
+			{
                 Id = todoListDto.Id,
                 Title = todoListDto.Title,
                 UserId = todoListDto.UserId,
-                Tasks = todoListDto.Tasks.Select(t => t).ToList()
+				Tasks = todoListDto.Tasks.Select(task => TaskDtoService.TransferToTaskModel(task)).ToList(),
+			};
+		}
+
 		public static BoardsAllOutputVM TransferToBoardsAllOutputVM(IEnumerable<TodoListModelDto> todoListDtos)
 		{
 			return new BoardsAllOutputVM

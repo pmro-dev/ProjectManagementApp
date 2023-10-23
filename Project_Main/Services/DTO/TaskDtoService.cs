@@ -8,7 +8,7 @@ namespace Project_Main.Services.DTO
 {
     public static class TaskDtoService
     {
-        public static TaskModelDto TransferToDefaultDto(TaskModel taskModel)
+        public static TaskModelDto TransferToDefaultDto(ITaskModel taskModel)
         {
             return new TaskModelDto
             {
@@ -25,7 +25,7 @@ namespace Project_Main.Services.DTO
             };
         }
 
-        public static TaskDetailsVM TransferToTaskDetailsVM(TaskModelDto taskModelDto)
+        public static TaskDetailsVM TransferToTaskDetailsVM(ITaskModel taskModelDto)
         {
             return new TaskDetailsVM
             {
@@ -42,7 +42,7 @@ namespace Project_Main.Services.DTO
             };
         }
 
-        public static TaskModel TransferToTaskModel(TaskModelDto taskModelDto)
+        public static ITaskModel TransferToTaskModel(ITaskModel taskModelDto)
         {
             return new TaskModel
             {

@@ -6,7 +6,7 @@ namespace Project_DomainEntities
 	/// <summary>
 	/// Model for To Do List.
 	/// </summary>
-	public class TodoListModel : BasicModelAbstract
+	public class TodoListModel : BasicModelAbstract, ITodoListModel
 	{
 		/// <summary>
 		/// Gets or Sets Key of the Model / Object.
@@ -32,7 +32,7 @@ namespace Project_DomainEntities
 		/// <summary>
 		/// Gets or Sets
 		/// </summary>
-		public List<TaskModel> Tasks { get; set; } = new();
+		public IEnumerable<ITaskModel> Tasks { get; set; } = new List<ITaskModel>();
 
 		/// <summary>
 		/// Compares properties of two To Do Lists and return result of that compare.
@@ -59,7 +59,7 @@ namespace Project_DomainEntities
 					{
 						if (Tasks is not null && todoList.Tasks is not null)
 						{
-							return Tasks.Count == todoList.Tasks.Count;
+							return Tasks.Count() == todoList.Tasks.Count();
 						}
 						else
 						{
@@ -79,7 +79,7 @@ namespace Project_DomainEntities
 		/// </summary>
 		/// <param name="obj">Second To Do List compare to.</param>
 		/// <returns>Result of compare -> true if Names of objects, tasks numbers and ids are equal, otherwise false.</returns>
-		public bool IsTheSame(TodoListModel obj)
+		public bool IsTheSame(ITodoListModel obj)
 		{
 			if (obj == null || !GetType().Equals(obj.GetType()))
 			{
@@ -97,7 +97,10 @@ namespace Project_DomainEntities
 					{
 						if (Tasks is not null && obj.Tasks is not null)
 						{
-							return Tasks.Count == obj.Tasks.Count && Id == obj.Id;
+							var tempTasks = (List<TaskModel>)Tasks;
+							var tempObjTasks = (List<TaskModel>)obj.Tasks;
+
+							return tempTasks.Count == tempObjTasks.Count && Id == obj.Id;
 						}
 						else
 						{

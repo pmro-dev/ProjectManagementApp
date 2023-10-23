@@ -10,22 +10,22 @@ namespace ClassLibrary_SeedData
         public string AdminId { get; } = "adminId";
 
 		///<inheritdoc />
-		public List<TaskModel> AllTasks { get; set; }
+		public List<ITaskModel> AllTasks { get; set; }
 
 		///<inheritdoc />
-		public List<TodoListModel> TodoLists { get; set; }
+		public List<ITodoListModel> TodoLists { get; set; }
 
 		///<inheritdoc />
-		public List<TaskModel> TasksUX { get; set; }
+		public List<ITaskModel> TasksUX { get; set; }
 
 		///<inheritdoc />
-		public List<TaskModel> TasksBackend { get; set; }
+		public List<ITaskModel> TasksBackend { get; set; }
 
 		///<inheritdoc />
-		public List<TaskModel> TasksTesting { get; set; }
+		public List<ITaskModel> TasksTesting { get; set; }
 
 		///<inheritdoc />
-		public List<TaskModel> TasksProjectManagement { get; set; }
+		public List<ITaskModel> TasksProjectManagement { get; set; }
 
         /// <summary>
         /// Seeds the data to properties.
@@ -45,7 +45,7 @@ namespace ClassLibrary_SeedData
 
         private void SeedTasks()
         {
-            TasksUX = new List<TaskModel>()
+            TasksUX = new List<ITaskModel>()
             {
                 new TaskModel{
                     Title = "New Top Bar",
@@ -73,7 +73,7 @@ namespace ClassLibrary_SeedData
                 },
             };
 
-            TasksBackend = new List<TaskModel>()
+            TasksBackend = new List<ITaskModel>()
             {
                 new TaskModel{
                     Title = "Add Authentication",
@@ -101,7 +101,7 @@ namespace ClassLibrary_SeedData
                 },
             };
 
-            TasksTesting = new List<TaskModel>()
+            TasksTesting = new List<ITaskModel>()
             {
                 new TaskModel{
                     Title = "Integration Tests",
@@ -128,7 +128,7 @@ namespace ClassLibrary_SeedData
                     UserId = AdminId
                 },
             };
-            TasksProjectManagement = new List<TaskModel>()
+            TasksProjectManagement = new List<ITaskModel>()
             {
                 new TaskModel{
                     Title = "Project Opportunities",
@@ -159,7 +159,7 @@ namespace ClassLibrary_SeedData
 
         private void SeedTodoLists()
         {
-            TodoLists = new List<TodoListModel>()
+            TodoLists = new List<ITodoListModel>()
             {
                 new TodoListModel{
                     Title = "App UX",
@@ -186,7 +186,7 @@ namespace ClassLibrary_SeedData
 
         private void SeedAllTasks()
         {
-            AllTasks = new List<TaskModel>();
+            AllTasks = new List<ITaskModel>();
 
             AllTasks.AddRange(TasksUX);
             AllTasks.AddRange(TasksBackend);

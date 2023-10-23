@@ -5,9 +5,9 @@ namespace Project_Main.Infrastructure.Helpers
 	/// <summary>
 	/// Class allows to compare object based on the same Task Model type.
 	/// </summary>
-	public class TasksComparer : IComparer<TaskModel>
+	public class TasksComparer : IComparer<ITaskModel>
 	{
-		public int Compare(TaskModel? x, TaskModel? y)
+		public int Compare(ITaskModel? x, ITaskModel? y)
 		{
 			if (x is null && y is null)
 			{
