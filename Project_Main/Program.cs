@@ -1,8 +1,9 @@
 using System.Reflection;
 using Project_Main.Models.DataBases.AppData.DbSetup;
 using Project_Main.Models.DataBases.Identity.DbSetup;
-using Project_Main.Services;
 using Project_Main.Infrastructure.Helpers;
+using Project_Main.Services.Identity;
+using Project_Main.Services.Data;
 
 namespace Project_Main
 {
@@ -34,6 +35,8 @@ namespace Project_Main
 			builder.Services.AddScoped<IUserRegisterService, UserRegisterService>();
 			builder.Services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
 			builder.Services.AddScoped<IClaimsService, ClaimsService>();
+			builder.Services.AddScoped<IBoardsDataService, BoardsDataService>();
+			builder.Services.AddScoped<IAccountService, AccountService>();
 
 			builder.SetupSeedDataServices();
 
