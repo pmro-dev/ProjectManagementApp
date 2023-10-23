@@ -18,7 +18,7 @@ namespace Project_Main.Models.DataBases.AppData
 		/// </summary>
 		/// <param name="userId"></param>
 		/// <returns>All ToDoLists wiith details from Db.</returns>
-		Task<List<TodoListModel>> GetAllWithDetailsAsync(string userId);
+		Task<IEnumerable<TodoListModel>> GetAllWithDetailsAsync(string userId);
 
 		/// <summary>
 		/// Duplicate a whole, specifc ToDoList with details in Db (where details are related data in other tables).

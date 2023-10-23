@@ -67,12 +67,12 @@ namespace Project_Main.Models.DataBases.AppData
         }
 
 		///<inheritdoc />
-		public async Task<List<TodoListModel>> GetAllWithDetailsAsync(string userId)
+		public async Task<IEnumerable<TodoListModel>> GetAllWithDetailsAsync(string userId)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetAllWithDetailsAsync), nameof(TodoListRepository));
             HelperCheck.ThrowExceptionWhenParamNullOrEmpty(operationName, ref userId, nameof(userId), _logger);
 
-            List<TodoListModel> allTodoListsWithDetails = await _dbContext
+			IEnumerable<TodoListModel> allTodoListsWithDetails = await _dbContext
                 .Set<TodoListModel>()
                 .Where(todoList => todoList.UserId == userId)
                 .Include(todoList => todoList.Tasks).ToListAsync();
