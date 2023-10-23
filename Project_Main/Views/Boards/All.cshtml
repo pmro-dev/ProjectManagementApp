@@ -1,7 +1,7 @@
 ﻿@using Project_DomainEntities;
 @using Project_Main.Infrastructure.Helpers;
 @using Project_Main.Models.ViewModels.OutputModels;
-@model IEnumerable<BoardsAllOutputVM>
+@model BoardsAllOutputVM
 
 @{
 	ViewData["Title"] = "Index";
@@ -15,7 +15,7 @@
 	<a asp-action="@BoardsCtrl.BrieflyAction" asp-controller="@BoardsCtrl.Name" class="btn btn-primary">Back</a>
 </p>
 
-@foreach (var item in Model)
+@foreach (var item in Model.TodoListDtos)
 {
 	ViewData["TableTitle"] = item.Title;
 	sortedTasks = item.Tasks.ToList();

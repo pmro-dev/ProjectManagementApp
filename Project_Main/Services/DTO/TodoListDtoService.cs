@@ -25,6 +25,20 @@ namespace Project_Main.Services.DTO
                 Title = todoListDto.Title,
                 UserId = todoListDto.UserId,
                 Tasks = todoListDto.Tasks.Select(t => t).ToList()
+		public static BoardsAllOutputVM TransferToBoardsAllOutputVM(IEnumerable<TodoListModelDto> todoListDtos)
+		{
+			return new BoardsAllOutputVM
+			{
+				TodoListDtos = todoListDtos.Select(todoList =>
+				new TodoListModelDto()
+				{
+					Id = todoList.Id,
+					Title = todoList.Title,
+					UserId = todoList.UserId,
+					Tasks = todoList.Tasks
+				})
+			};
+		}
             };
         }
 
