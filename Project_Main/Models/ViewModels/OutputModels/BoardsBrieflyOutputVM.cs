@@ -29,7 +29,7 @@ namespace Project_Main.Models.ViewModels.OutputModels
         /// <returns>All Tasks count in a specific ToDoList.</returns>
         public int GetNumberOfAllTasks(TodoListModel todoList)
         {
-            return todoList.Tasks.Count;
+            return todoList.Tasks.Count();
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Project_Main.Models.ViewModels.OutputModels
         /// <returns>True when ToDoList has any Task's reminder, otherwise false.</returns>
         public bool IsReminderForToday(TodoListModel todoList)
         {
-            return todoList.Tasks.Exists(t =>
+            return todoList.Tasks.Any(t =>
             {
                 if (t.ReminderDate != null)
                 {

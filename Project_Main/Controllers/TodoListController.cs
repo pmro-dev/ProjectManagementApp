@@ -7,7 +7,7 @@ using Project_Main.Models.DataBases.AppData;
 using Project_Main.Models.DataBases.Helpers;
 using Project_Main.Models.ViewModels.OutputModels;
 using Project_Main.Infrastructure.DTOs;
-using Project_Main.Services;
+using Project_Main.Services.DTO;
 
 namespace Project_Main.Controllers
 {
@@ -169,7 +169,7 @@ namespace Project_Main.Controllers
 			TodoListDeleteOutputVM todoListDeleteOutputVM = new()
 			{
 				ListModel = todoListModel,
-				TasksCount = todoListModel.Tasks.Count
+				TasksCount = todoListModel.Tasks.Count()
 			};
 
 			return View(TodoListViews.Delete, todoListDeleteOutputVM);
