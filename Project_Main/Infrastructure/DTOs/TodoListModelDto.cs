@@ -1,4 +1,4 @@
-﻿using Project_DomainEntities;
+﻿using Project_DTO;
 
 namespace Project_Main.Infrastructure.DTOs
 {
@@ -10,6 +10,6 @@ namespace Project_Main.Infrastructure.DTOs
 
 		public string UserId { get; set; } = string.Empty;
 
-		public List<TaskModel> Tasks { get; set; } = new();
+		public IEnumerable<TaskModelDto> Tasks { get; set; } = new List<TaskModelDto>();
 	}
 }
