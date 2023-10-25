@@ -2,7 +2,7 @@
 @model Project_Main.Models.ViewModels.InputModels.LoginInputVM
 
 @{
-	Layout = "_LoginLayout";
+	Layout = AccountViews.DefaultLayout;
 }
 
 <div class="card" style="width: 25rem;">
@@ -40,6 +40,6 @@
 
 @section Scripts {
 	@{
-		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+		await Html.RenderPartialAsync(SharedViews.Validation);
 	}
 }

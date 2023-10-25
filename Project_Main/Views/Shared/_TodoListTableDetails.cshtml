@@ -1,6 +1,7 @@
-﻿@using Project_DomainEntities
+﻿@using Project_DTO;
+@using Project_DomainEntities
 @using Project_DomainEntities.Helpers;
-@model List<TaskModel>
+@model IEnumerable<TaskModelDto>
 
 @{
 	int iterator = 1;

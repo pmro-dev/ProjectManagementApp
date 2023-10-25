@@ -1,4 +1,5 @@
-﻿@using Project_DomainEntities;
+﻿@using Project_DTO;
+@using Project_DomainEntities;
 @using Project_Main.Infrastructure.Helpers;
 @using Project_Main.Models.ViewModels.OutputModels;
 @model BoardsAllOutputVM
@@ -6,7 +7,7 @@
 @{
 	ViewData["Title"] = "Index";
 	Layout = SharedViews.DefaultLayout;
-	List<TaskModel> sortedTasks = new();
+	IEnumerable<TaskModelDto> sortedTasks = new List<TaskModelDto>();
 }
 
 <h1>All To Do Lists</h1>
@@ -18,7 +19,6 @@
 @foreach (var item in Model.TodoListDtos)
 {
 	ViewData["TableTitle"] = item.Title;
-	sortedTasks = item.Tasks.ToList();
-	sortedTasks.Sort(new TasksComparer());
+	sortedTasks = item.Tasks.OrderBy(t => t, new TasksComparer());
 	<partial name="@SharedViews.TodoListTableDetails" model="@sortedTasks" view-data="ViewData" />
 }
