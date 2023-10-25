@@ -6,7 +6,7 @@ namespace Project_Main.Infrastructure.Helpers
 	{
 		public static bool Valid(LoginInputDto loginInputDto)
 		{
-			return string.IsNullOrEmpty(loginInputDto.Username) || string.IsNullOrEmpty(loginInputDto.Password);
+			return !(string.IsNullOrEmpty(loginInputDto.Username) || string.IsNullOrEmpty(loginInputDto.Password));
 		}
 	}
 }

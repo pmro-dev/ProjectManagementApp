@@ -23,7 +23,7 @@ namespace Project_Main.Services.Identity
 			_logger = logger;
 		}
 
-		public async Task<bool> RegisterUserAsync(UserDto userDto)
+		public async Task<bool> RegisterAsync(UserDto userDto)
 		{
 			bool isNotUsernameAvailableToRegister = !await CheckIsUsernameAvailable(userDto.Username);
 

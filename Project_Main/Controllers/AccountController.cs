@@ -53,7 +53,7 @@ namespace Project_Main.Controllers
 			if (ModelState.IsValid)
 			{
 				LoginInputDto loginInputDto = AccountDtoService.TransferToLoginInputDto(loginInputVM);
-				bool isLoginDataInvalid = LoginDataValidator.Valid(loginInputDto);
+				bool isLoginDataInvalid = !LoginDataValidator.Valid(loginInputDto);
 
 				if (isLoginDataInvalid)
 				{
@@ -63,9 +63,9 @@ namespace Project_Main.Controllers
 
 				try
 				{
-					bool isNotUserRegisteredInDb = !await _loginService.CheckIsUserAlreadyRegisteredAsync(loginInputDto);
+					bool isNotUserRegistered = !await _loginService.CheckIsUserAlreadyRegisteredAsync(loginInputDto);
 
-					if (isNotUserRegisteredInDb)
+					if (isNotUserRegistered)
 					{
 						ModelState.AddModelError(string.Empty, Messages.InvalidLoginData);
 						return View();
@@ -156,12 +156,10 @@ namespace Project_Main.Controllers
 
 				try
 				{
-					bool isUserRegisteredSuccessfully = await _userRegisterService.RegisterUserAsync(userDto);
+					bool isUserRegisteredSuccessfully = await _userRegisterService.RegisterAsync(userDto);
 
 					if (isUserRegisteredSuccessfully)
 						return View(AccountCtrl.LoginAction);
-					else
-						return View();
 				}
 				catch (Exception ex)
 				{
