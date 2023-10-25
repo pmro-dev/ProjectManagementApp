@@ -1,4 +1,5 @@
 ﻿using ClassLibrary_SeedData;
+using Project_DomainEntities;
 
 namespace Project_Main.Models.DataBases.AppData.DbSetup
 {
@@ -52,9 +53,9 @@ namespace Project_Main.Models.DataBases.AppData.DbSetup
         {
 			ITodoListRepository todoListRepository = unitOfWork.TodoListRepository;
 
-			if (await todoListRepository.ContainsAny() is false)
+			if (!await todoListRepository.ContainsAny())
 			{
-				await todoListRepository.AddRangeAsync(seedContainer.TodoLists);
+				await todoListRepository.AddRangeAsync(seedContainer.TodoLists.Select(list => list as TodoListModel ?? new TodoListModel()).ToList());
 			}
 		}
 
@@ -62,9 +63,9 @@ namespace Project_Main.Models.DataBases.AppData.DbSetup
         {
 			ITaskRepository taskRepository = unitOfWork.TaskRepository;
 
-			if (await taskRepository.ContainsAny() is false)
+			if (!await taskRepository.ContainsAny())
 			{
-				await taskRepository.AddRangeAsync(seedContainer.AllTasks);
+				await taskRepository.AddRangeAsync(seedContainer.AllTasks.Select(task => task as TaskModel ?? new TaskModel()).ToList());
 			}
 		}
     }
