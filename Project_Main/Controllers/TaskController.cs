@@ -11,7 +11,8 @@ using Microsoft.Data.SqlClient;
 using Project_Main.Models.ViewModels.OutputModels;
 using Project_DTO;
 using Project_Main.Models.ViewModels.InputModels;
-using Project_Main.Services;
+using Project_Main.Services.DTO;
+using Project_Main.Models.ViewModels.WrapperModels;
 
 namespace Project_Main.Controllers
 {
@@ -27,7 +28,6 @@ namespace Project_Main.Controllers
         private readonly ITodoListRepository _todoListRepository;
         private readonly ILogger<TaskController> _logger;
         private string operationName = string.Empty;
-        private const string taskDataToBind = "Title,Description,DueDate,ReminderDate,UserId";
 
         /// <summary>
         /// Initializes controller with DbContext and Logger.
@@ -59,6 +59,7 @@ namespace Project_Main.Controllers
 
             TaskModel? taskModel = null;
 
+            //TODO find and implement the right approach of handling exceptions and params validations
             try
             {
                 HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, routeTodoListId, nameof(routeTodoListId), HelperCheck.IdBottomBoundry, _logger);
@@ -116,7 +117,7 @@ namespace Project_Main.Controllers
             if (!ModelState.IsValid)
                 return View();
 
-            // TODO implement new method that allow to get only concrete data that I would specify by Select expression
+            // TODO implement new method that allows to get only concrete data that I would specify by Select expression
             var targetTodoListModel = await _todoListRepository.GetAsync(id);
 
             if (targetTodoListModel is null)
@@ -126,9 +127,15 @@ namespace Project_Main.Controllers
             }
 
             var todoListModelDto = TodoListDtoService.TransferToDto(targetTodoListModel);
-            var taskCreateOutputVM = TaskDtoService.CreateTaskCreateOutputVM(todoListModelDto.Id, todoListModelDto.UserId);
+            var taskCreateOutputVM = TaskDtoService.TransferToTaskCreateOutputVM(todoListModelDto.Id, todoListModelDto.UserId, todoListModelDto.Title);
 
-            return View(taskCreateOutputVM);
+            var taskCreateWrapperVM = new TaskCreateWrapperVM()
+            {
+                InputVM = new(),
+                OutputVM = taskCreateOutputVM
+            };
+
+            return View(taskCreateWrapperVM);
         }
 
         /// <summary>
@@ -144,27 +151,21 @@ namespace Project_Main.Controllers
         [HttpPost]
         [Route(CustomRoutes.CreateTaskPostRoute)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int todoListId, [Bind(taskDataToBind)] TaskCreateInputVM taskCreateInputVM)
+        public async Task<IActionResult> Create(int todoListId, TaskCreateWrapperVM taskCreateWrapperVM)
         {
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.IdBottomBoundry, _logger);
 
             if (!ModelState.IsValid) 
-                return View(taskCreateInputVM);
+                return View(taskCreateWrapperVM);
 
-            // TODO Check why are you assign todoList id from route to dto
-            taskCreateInputVM.TodoListId = todoListId;
-
-            var taskCreateInputVMDto = TaskDtoService.TransferToTaskCreateInputVMDto(taskCreateInputVM);
-
-            //// TODO Check why are you assign todoList id from route to dto
-            //taskCreateInputVM.TodoListId = todoListId;
-
-            var taskModel = TaskDtoService.TransferToTaskModel(taskCreateInputVMDto);
+            var taskCreateInputVM = taskCreateWrapperVM.InputVM;
+            var taskCreateInputDto = TaskDtoService.TransferToTaskCreateInputDto(taskCreateInputVM);
+            var taskModel = TaskDtoService.TransferToTaskModel(taskCreateInputDto);
 
             await _taskRepository.AddAsync(taskModel);
             await _dataUnitOfWork.SaveChangesAsync();
 
-            object routeValue = new { id = taskCreateInputVM.TodoListId };
+            object routeValue = new { id = taskCreateInputDto.TodoListId };
 
 			return RedirectToAction(TodoListCtrl.DetailsAction, TodoListCtrl.Name, routeValue);
         }
@@ -226,24 +227,21 @@ namespace Project_Main.Controllers
                 Value = ((int)v).ToString()
             }).ToList(), dataValueField, dataTextField, taskModel.Status);
 
-            var taskViewModel = new TaskCreateInputVM
+            var taskEditOutputVM = new TaskEditOutputVM
             {
-                Title = taskModel.Title,
+				Id = taskModel.Id,
+				UserId = taskModel.UserId,
+				Title = taskModel.Title,
                 Description = taskModel.Description,
                 DueDate = taskModel.DueDate,
-                CreationDate = taskModel.CreationDate,
-                LastModificationDate = taskModel.LastModificationDate,
                 ReminderDate = taskModel.ReminderDate,
-                Id = taskModel.Id,
-                Status = taskModel.Status,
-                StatusSelector = statusesSelectorData,
-                TodoListId = taskModel.TodoListId,
-                TodoListName = targetTodoList.Title,
-                UserId = taskModel.UserId,
-                TodoListsSelector = todoListsSelectorData
+				Status = taskModel.Status,
+				TodoListId = taskModel.TodoListId,
+				StatusSelector = statusesSelectorData,
+                TodoListsSelector = todoListsSelectorData,
             };
 
-            return View(TaskViews.Edit, taskViewModel);
+            return View(TaskViews.Edit, taskEditOutputVM);
         }
 
         /// <summary>
@@ -333,8 +331,7 @@ namespace Project_Main.Controllers
 		/// <summary>
 		/// Action POST to DELETE Task.
 		/// </summary>
-		/// <param name="todoListId">Target To Do List id for which Task was assigned.</param>
-		/// <param name="taskId">Target Task id.</param>
+		/// <param name="taskDeleteVM">Targets ViewModel for TaskDelete.</param>
 		/// <returns>
 		/// Return different view based on the final result. 
 		/// Return Bad Request when one of the given id is out of range, 

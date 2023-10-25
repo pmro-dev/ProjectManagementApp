@@ -80,16 +80,18 @@ namespace Project_Main.Services.DTO
                 Description = taskCreateInputVM.Description,
                 DueDate = taskCreateInputVM.DueDate,
                 ReminderDate = taskCreateInputVM.ReminderDate,
-                UserId = taskCreateInputVM.UserId
+                UserId = taskCreateInputVM.UserId,
+                TodoListId = taskCreateInputVM.TodoListId,
             };
         }
 
-        public static TaskCreateOutputVM CreateTaskCreateOutputVM(int todoListId, string userId)
+        public static TaskCreateOutputVM TransferToTaskCreateOutputVM(int todoListId, string userId, string todoListTitle)
         {
             return new TaskCreateOutputVM
             {
                 TodoListId = todoListId,
-                UserId = userId
+                UserId = userId,
+                TodoListName = todoListTitle
             };
         }
     }
