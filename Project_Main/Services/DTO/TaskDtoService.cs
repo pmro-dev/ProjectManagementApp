@@ -59,22 +59,22 @@ namespace Project_Main.Services.DTO
             };
         }
 
-        public static TaskModel TransferToTaskModel(TaskCreateInputVMDto taskCreateInputVMDto)
+        public static TaskModel TransferToTaskModel(TaskCreateInputDto taskCreateInputDto)
         {
             return new TaskModel
             {
-                Title = taskCreateInputVMDto.Title,
-                Description = taskCreateInputVMDto.Description,
-                DueDate = taskCreateInputVMDto.DueDate,
-                ReminderDate = taskCreateInputVMDto.ReminderDate,
-                UserId = taskCreateInputVMDto.UserId,
-                TodoListId = taskCreateInputVMDto.TodoListId
+                Title = taskCreateInputDto.Title,
+                Description = taskCreateInputDto.Description,
+                DueDate = taskCreateInputDto.DueDate,
+                ReminderDate = taskCreateInputDto.ReminderDate,
+                UserId = taskCreateInputDto.UserId,
+                TodoListId = taskCreateInputDto.TodoListId
             };
         }
 
-        public static TaskCreateInputVMDto TransferToTaskCreateInputVMDto(TaskCreateInputVM taskCreateInputVM)
+        public static TaskCreateInputDto TransferToTaskCreateInputDto(TaskCreateInputVM taskCreateInputVM)
         {
-            return new TaskCreateInputVMDto
+            return new TaskCreateInputDto
             {
                 Title = taskCreateInputVM.Title,
                 Description = taskCreateInputVM.Description,
