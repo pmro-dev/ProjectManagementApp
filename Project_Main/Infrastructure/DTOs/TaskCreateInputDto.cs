@@ -1,6 +1,6 @@
 ﻿namespace Project_Main.Infrastructure.DTOs
 {
-    public class TaskCreateInputDto
+    public class TaskCreateInputDto : ITaskCreationInputDto
     {
         public int TodoListId { get; set; }
 

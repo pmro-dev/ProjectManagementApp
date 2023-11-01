@@ -3,10 +3,10 @@ using Project_Main.Models.ViewModels.OutputModels;
 
 namespace Project_Main.Models.ViewModels.WrapperModels
 {
-	public class TaskCreateWrapperVM
-	{
-		public TaskCreateInputVM InputVM { get; set; } = new();
+    public class TaskCreateWrapperVM : ITaskCreateWrapperVM
+    {
+        public ITaskCreationInputVM InputVM { get; set; } = new TaskCreationInputVM();
 
-		public TaskCreateOutputVM OutputVM { get; set; } = new();
-	}
+        public ITaskCreationOutputVM OutputVM { get; set; } = new TaskCreationOutputVM();
+    }
 }

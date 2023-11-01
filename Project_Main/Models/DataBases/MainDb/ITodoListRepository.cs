@@ -11,14 +11,14 @@ namespace Project_Main.Models.DataBases.AppData
 		/// </summary>
 		/// <param name="id">Targeted list id.</param>
 		/// <returns>ToDoList with details from Db.</returns>
-		Task<TodoListModel?> GetWithDetailsAsync(int id);
+		Task<ITodoListModel?> GetWithDetailsAsync(int id);
 
 		/// <summary>
 		/// Get All ToDoLists with details (where details are related data in other tables).
 		/// </summary>
 		/// <param name="userId"></param>
 		/// <returns>All ToDoLists wiith details from Db.</returns>
-		Task<IEnumerable<TodoListModel>> GetAllWithDetailsAsync(string userId);
+		Task<IEnumerable<ITodoListModel>> GetAllWithDetailsAsync(string userId);
 
 		/// <summary>
 		/// Duplicate a whole, specifc ToDoList with details in Db (where details are related data in other tables).

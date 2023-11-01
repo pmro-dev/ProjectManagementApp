@@ -31,7 +31,7 @@ namespace Project_Main.Models.DataBases.AppData
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(DuplicateWithDetailsAsync), nameof(TodoListRepository));
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.IdBottomBoundry, _logger);
 
-            TodoListModel? todoListWithDetails = await _dbContext
+            ITodoListModel? todoListWithDetails = await _dbContext
                 .Set<TodoListModel>()
                 .Where(todoList => todoList.Id == id)
                 .Include(todoList => todoList.Tasks)
@@ -67,12 +67,12 @@ namespace Project_Main.Models.DataBases.AppData
         }
 
 		///<inheritdoc />
-		public async Task<IEnumerable<TodoListModel>> GetAllWithDetailsAsync(string userId)
+		public async Task<IEnumerable<ITodoListModel>> GetAllWithDetailsAsync(string userId)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetAllWithDetailsAsync), nameof(TodoListRepository));
             HelperCheck.ThrowExceptionWhenParamNullOrEmpty(operationName, ref userId, nameof(userId), _logger);
 
-			IEnumerable<TodoListModel> allTodoListsWithDetails = await _dbContext
+			IEnumerable<ITodoListModel> allTodoListsWithDetails = await _dbContext
                 .Set<TodoListModel>()
                 .Where(todoList => todoList.UserId == userId)
                 .Include(todoList => todoList.Tasks).ToListAsync();

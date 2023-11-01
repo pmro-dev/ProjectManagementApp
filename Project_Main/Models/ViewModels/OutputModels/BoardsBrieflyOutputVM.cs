@@ -1,23 +1,24 @@
-﻿using Project_DomainEntities;
-using Project_DomainEntities.Helpers;
+﻿using Project_DomainEntities.Helpers;
+using Project_DTO;
+using Project_Main.Infrastructure.DTOs;
 
 namespace Project_Main.Models.ViewModels.OutputModels
 {
     /// <summary>
     /// View shows short version of ToDoLists informations.
     /// </summary>
-    public class BoardsBrieflyOutputVM
+    public class BoardsBrieflyOutputVM : IBoardViewModel, IBoardsBrieflyOutputVM
     {
         private readonly int ValueIndicatesEquality = 0;
 
-        public List<TodoListModel> TodoLists { get; set; } = new List<TodoListModel>();
+        public IEnumerable<ITodoListDto> TodoLists { get; set; } = new List<ITodoListDto>();
 
         /// <summary>
         /// Get completed tasks count.
         /// </summary>
         /// <param name="todoList">Targeted ToDoList oobject.</param>
         /// <returns>Completed Tasks number.</returns>
-        public int GetNumberOfCompletedTasks(TodoListModel todoList)
+        public int GetNumberOfCompletedTasks(ITodoListDto todoList)
         {
             return todoList.Tasks.Count(t => t.Status == TaskStatusHelper.TaskStatusType.Completed);
         }
@@ -27,7 +28,7 @@ namespace Project_Main.Models.ViewModels.OutputModels
         /// </summary>
         /// <param name="todoList">Targeted ToDoList oobject.</param>
         /// <returns>All Tasks count in a specific ToDoList.</returns>
-        public int GetNumberOfAllTasks(TodoListModel todoList)
+        public int GetNumberOfAllTasks(ITodoListDto todoList)
         {
             return todoList.Tasks.Count();
         }
@@ -37,7 +38,7 @@ namespace Project_Main.Models.ViewModels.OutputModels
         /// </summary>
         /// <param name="todoList">Targeted ToDoList object.</param>
         /// <returns>True when ToDoList has any Task's reminder, otherwise false.</returns>
-        public bool IsReminderForToday(TodoListModel todoList)
+        public bool IsReminderForToday(ITodoListDto todoList)
         {
             return todoList.Tasks.Any(t =>
             {
@@ -58,7 +59,7 @@ namespace Project_Main.Models.ViewModels.OutputModels
             return fistDate.CompareTo(secondDate) == ValueIndicatesEquality;
         }
 
-        private static bool IsTaskNotCompleted(TaskModel task)
+        private static bool IsTaskNotCompleted(ITaskDto task)
         {
             return task.Status != TaskStatusHelper.TaskStatusType.Completed;
         }

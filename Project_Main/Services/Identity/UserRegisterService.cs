@@ -23,7 +23,7 @@ namespace Project_Main.Services.Identity
 			_logger = logger;
 		}
 
-		public async Task<bool> RegisterAsync(UserDto userDto)
+        public async Task<bool> RegisterAsync(IUserDto userDto)
 		{
 			bool isNotUsernameAvailableToRegister = !await CheckIsUsernameAvailable(userDto.Username);
 
@@ -36,7 +36,7 @@ namespace Project_Main.Services.Identity
 
 			Task.WaitAny(Task.Run(async () =>
 			{
-				await _userRepository.AddAsync(userModel);
+				await _userRepository.AddAsync((UserModel)userModel);
 				await _identityUnitOfWork.SaveChangesAsync();
 			}));
 
@@ -57,7 +57,7 @@ namespace Project_Main.Services.Identity
 			return true;
 		}
 
-		private async Task SetRoles(UserDto userDto)
+		private async Task SetRoles(IUserDto userDto)
 		{
 			RoleModel? roleForNewUser = await _roleRepository.GetSingleByFilterAsync(role => role.Name == _defaultRole);
 

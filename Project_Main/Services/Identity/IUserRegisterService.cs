@@ -4,6 +4,6 @@ namespace Project_Main.Services.Identity
 {
     public interface IUserRegisterService
     {
-        Task<bool> RegisterAsync(UserDto userDto);
+        Task<bool> RegisterAsync(IUserDto userDto);
     }
 }

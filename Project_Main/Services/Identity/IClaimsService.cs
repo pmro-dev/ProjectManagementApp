@@ -5,6 +5,6 @@ namespace Project_Main.Services.Identity
 {
     public interface IClaimsService
     {
-        public ClaimsPrincipal CreateUserClaimsPrincipal(UserDto userDto);
+        public ClaimsPrincipal CreateUserClaimsPrincipal(IUserDto userDto);
     }
 }

@@ -1,5 +1,6 @@
 ﻿
 using Project_DomainEntities;
+using Project_DTO;
 
 namespace Project_Main.Models.ViewModels.OutputModels
 {
@@ -14,9 +15,9 @@ namespace Project_Main.Models.ViewModels.OutputModels
 
         public string UserId { get; set; } = string.Empty;
 
-        public List<TaskModel> TasksForToday { get; set; } = new();
-        public List<TaskModel> TasksCompleted { get; set; } = new();
-        public List<TaskModel> TasksNotCompleted { get; set; } = new();
-        public List<TaskModel> TasksExpired { get; set; } = new();
+        public List<ITaskDto> TasksForToday { get; set; } = new();
+        public List<ITaskDto> TasksCompleted { get; set; } = new();
+        public List<ITaskDto> TasksNotCompleted { get; set; } = new();
+        public List<ITaskDto> TasksExpired { get; set; } = new();
     }
 }

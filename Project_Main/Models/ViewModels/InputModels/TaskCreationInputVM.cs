@@ -3,7 +3,7 @@ using Project_DomainEntities.Helpers;
 
 namespace Project_Main.Models.ViewModels.InputModels
 {
-    public class TaskCreateInputVM
+    public class TaskCreationInputVM : ITaskCreationInputVM
     {
         [Required]
         public int TodoListId { get; set; } = -1;
@@ -24,7 +24,7 @@ namespace Project_Main.Models.ViewModels.InputModels
         [Required]
         [DataType(DataType.Date)]
         public DateTime DueDate { get; set; } = DateTime.Now;
-        
+
         [DataType(DataType.Date)]
         public DateTime? ReminderDate { get; set; } = null;
     }

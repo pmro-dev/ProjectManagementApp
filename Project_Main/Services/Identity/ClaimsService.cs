@@ -7,7 +7,7 @@ namespace Project_Main.Services.Identity
 {
     public class ClaimsService : IClaimsService
     {
-        public ClaimsPrincipal CreateUserClaimsPrincipal(UserDto userDto)
+        public ClaimsPrincipal CreateUserClaimsPrincipal(IUserDto userDto)
         {
             var userClaims = CreateUserClaims(userDto);
 
@@ -19,7 +19,7 @@ namespace Project_Main.Services.Identity
 
 		#region Local Methods
 
-		private static List<Claim> CreateUserClaims(UserDto userDto)
+		private static List<Claim> CreateUserClaims(IUserDto userDto)
         {
             var userClaims = new List<Claim>
                     {
