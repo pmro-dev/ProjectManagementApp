@@ -1,10 +1,11 @@
 ﻿using Project_IdentityDomainEntities;
-using Project_Main.Infrastructure.DTOs;
+using Project_Main.Infrastructure.DTOs.Entities;
+using Project_Main.Infrastructure.DTOs.Inputs;
 using Project_Main.Models.ViewModels.InputModels;
 
 namespace Project_Main.Services.DTO
 {
-    public interface IAccountDtoService
+    public interface IAccountMapper
     {
         ILoginInputDto TransferToDto(LoginInputVM loginInputVM);
         IUserDto TransferToUserDto(RegisterInputVM registerInputVM);

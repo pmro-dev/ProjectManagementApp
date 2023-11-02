@@ -3,7 +3,7 @@ using Project_DomainEntities.Helpers;
 
 namespace Project_Main.Models.ViewModels.InputModels
 {
-    public class TaskCreationInputVM : ITaskCreationInputVM
+    public class TaskCreateInputVM : ITaskCreateInputVM
     {
         [Required]
         public int TodoListId { get; set; } = -1;

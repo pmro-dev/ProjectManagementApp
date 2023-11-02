@@ -1,13 +1,12 @@
 ﻿using Project_DomainEntities.Helpers;
-using Project_DTO;
-using Project_Main.Infrastructure.DTOs;
+using Project_Main.Infrastructure.DTOs.Entities;
 
 namespace Project_Main.Models.ViewModels.OutputModels
 {
     /// <summary>
     /// View shows short version of ToDoLists informations.
     /// </summary>
-    public class BoardsBrieflyOutputVM : IBoardViewModel, IBoardsBrieflyOutputVM
+    public class BoardBrieflyOutputVM : IBoardBrieflyOutputVM
     {
         private readonly int ValueIndicatesEquality = 0;
 

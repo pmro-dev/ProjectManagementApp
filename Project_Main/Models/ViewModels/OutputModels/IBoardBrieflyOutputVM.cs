@@ -1,8 +1,8 @@
-﻿using Project_Main.Infrastructure.DTOs;
+﻿using Project_Main.Infrastructure.DTOs.Entities;
 
 namespace Project_Main.Models.ViewModels.OutputModels
 {
-    public interface IBoardsBrieflyOutputVM
+    public interface IBoardBrieflyOutputVM : IBoardViewModel
     {
         IEnumerable<ITodoListDto> TodoLists { get; set; }
 

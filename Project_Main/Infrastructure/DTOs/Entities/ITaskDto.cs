@@ -1,7 +1,6 @@
-﻿using Project_Main.Infrastructure.DTOs;
-using static Project_DomainEntities.Helpers.TaskStatusHelper;
+﻿using static Project_DomainEntities.Helpers.TaskStatusHelper;
 
-namespace Project_DTO
+namespace Project_Main.Infrastructure.DTOs.Entities
 {
     public interface ITaskDto
     {

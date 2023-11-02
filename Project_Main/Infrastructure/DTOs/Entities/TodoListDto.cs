@@ -1,6 +1,4 @@
-﻿using Project_DTO;
-
-namespace Project_Main.Infrastructure.DTOs
+﻿namespace Project_Main.Infrastructure.DTOs.Entities
 {
     public class TodoListDto : ITodoListDto
     {

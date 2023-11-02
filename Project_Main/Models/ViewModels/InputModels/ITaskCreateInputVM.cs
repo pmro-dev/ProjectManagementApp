@@ -1,6 +1,6 @@
 ﻿namespace Project_Main.Models.ViewModels.InputModels
 {
-    public interface ITaskCreationInputVM
+    public interface ITaskCreateInputVM
     {
         string Description { get; set; }
         DateTime DueDate { get; set; }

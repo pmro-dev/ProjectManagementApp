@@ -1,6 +1,6 @@
 ﻿using Project_IdentityDomainEntities;
 
-namespace Project_Main.Infrastructure.DTOs
+namespace Project_Main.Infrastructure.DTOs.Entities
 {
     public interface IUserDto
     {
