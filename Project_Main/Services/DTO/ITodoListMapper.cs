@@ -1,16 +1,17 @@
 ﻿using Project_DomainEntities;
-using Project_Main.Infrastructure.DTOs;
-using Project_Main.Models.ViewModels.OutputModels;
+using Project_Main.Infrastructure.DTOs.Entities;
+using Project_Main.Infrastructure.DTOs.Inputs;
+using Project_Main.Models.ViewModels.InputModels;
 
 namespace Project_Main.Services.DTO
 {
     public interface ITodoListMapper
     {
-        BoardsAllOutputVM TransferToBoardsAllOutputVM(IEnumerable<ITodoListDto> todoListDtos);
-        BoardsBrieflyOutputVM TransferToBoardsBrieflyOutputVM(IEnumerable<ITodoListDto> todoListsDtos);
-        IEnumerable<ITodoListDto> TransferToDto(IEnumerable<ITodoListModel> todoLists);
+		ICollection<ITodoListDto> TransferToDto(ICollection<ITodoListModel> todoLists);
         ITodoListDto TransferToDto(ITodoListModel todoListModel, Dictionary<object, object>? mappedObjects = null);
-        ITodoListModel TransferToModel(ITodoListDto todoListDto);
-        BoardsSingleDetailsOutputVM TransferToSingleDetailsOutputVM(ITodoListDto todoListDto, DateTime? filterDueDate = null);
+        ITodoListDto TransferToDto(ITodoListCreateInputVM createInputVM);
+        ITodoListEditInputDto TransferToDto(ITodoListEditInputVM editInputVM);
+        ITodoListModel TransferToModel(ITodoListDto todoListDto, Dictionary<object, object>? mappedObjects = null);
+        void UpdateModel(ITodoListModel todoListDbModel, ITodoListEditInputDto taskEditInputDto);
     }
 }
