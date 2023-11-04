@@ -1,10 +1,10 @@
-﻿using Project_Main.Infrastructure.DTOs;
+﻿using Project_Main.Infrastructure.DTOs.Entities;
 
 namespace Project_Main.Services.DTO
 {
     public static class UserDtoValidator
     {
-        public static bool ValidData(UserDto userDto)
+        public static bool ValidData(IUserDto userDto)
         {
             return !(string.IsNullOrEmpty(userDto.Username) ||
                 string.IsNullOrEmpty(userDto.FirstName) ||

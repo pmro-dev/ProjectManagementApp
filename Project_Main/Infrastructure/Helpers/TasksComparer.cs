@@ -1,12 +1,11 @@
-﻿using Project_DomainEntities;
-using Project_DTO;
+﻿using Project_Main.Infrastructure.DTOs.Entities;
 
 namespace Project_Main.Infrastructure.Helpers
 {
-	/// <summary>
-	/// Class allows to compare object based on the same Task Model type.
-	/// </summary>
-	public class TasksComparer : IComparer<ITaskDto>
+    /// <summary>
+    /// Class allows to compare object based on the same Task Model type.
+    /// </summary>
+    public class TasksComparer : IComparer<ITaskDto>
 	{
 		public int Compare(ITaskDto? x, ITaskDto? y)
 		{

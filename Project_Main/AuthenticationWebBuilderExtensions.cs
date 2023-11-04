@@ -128,7 +128,7 @@ namespace Project_Main
 
 			static async Task AddUserWhenNotExistsAsync(IUserRepository userRepository, UserModel userBasedOnProviderClaims, IRoleRepository roleRepository)
 			{
-				RoleModel? roleForNewUser = await roleRepository.GetSingleByFilterAsync(r => r.Name == IdentitySeedData.DefaultRole);
+				RoleModel? roleForNewUser = await roleRepository.GetByFilterAsync(r => r.Name == IdentitySeedData.DefaultRole);
 
 				if (roleForNewUser is null)
 				{

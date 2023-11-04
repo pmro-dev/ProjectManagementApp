@@ -7,21 +7,23 @@ using Project_Main.Services.DTO;
 
 namespace Project_Main.Services.Identity
 {
-	public class UserRegisterService : IUserRegisterService
+    public class UserRegisterService : IUserRegisterService
 	{
 		private readonly IIdentityUnitOfWork _identityUnitOfWork;
 		private readonly IUserRepository _userRepository;
 		private readonly IRoleRepository _roleRepository;
-		private readonly ILogger<UserRegisterService> _logger;
+		private readonly IAccountMapper _accountMapper;
+        private readonly ILogger<UserRegisterService> _logger;
 		private readonly string _defaultRole = IdentitySeedData.DefaultRole;
 
-		public UserRegisterService(IIdentityUnitOfWork identityUnitOfWork, ILogger<UserRegisterService> logger)
-		{
-			_identityUnitOfWork = identityUnitOfWork;
-			_userRepository = _identityUnitOfWork.UserRepository;
-			_roleRepository = _identityUnitOfWork.RoleRepository;
-			_logger = logger;
-		}
+        public UserRegisterService(IIdentityUnitOfWork identityUnitOfWork, ILogger<UserRegisterService> logger, IAccountMapper accountMapper)
+        {
+            _identityUnitOfWork = identityUnitOfWork;
+            _userRepository = _identityUnitOfWork.UserRepository;
+            _roleRepository = _identityUnitOfWork.RoleRepository;
+            _logger = logger;
+            _accountMapper = accountMapper;
+        }
 
         public async Task<bool> RegisterAsync(IUserDto userDto)
 		{
@@ -32,7 +34,7 @@ namespace Project_Main.Services.Identity
 			userDto.Provider = ConfigConstants.DefaultScheme;
 			await SetRoles(userDto);
 
-			UserModel userModel = AccountDtoService.TransferToUserModel(userDto);
+			IUserModel userModel = _accountMapper.TransferToModel(userDto);
 
 			Task.WaitAny(Task.Run(async () =>
 			{
