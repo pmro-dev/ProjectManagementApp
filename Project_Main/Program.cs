@@ -3,7 +3,12 @@ using Project_Main.Models.DataBases.AppData.DbSetup;
 using Project_Main.Models.DataBases.Identity.DbSetup;
 using Project_Main.Infrastructure.Helpers;
 using Project_Main.Services.Identity;
-using Project_Main.Services.Data;
+using Project_Main.Services.DTO;
+using Project_DomainEntities;
+using Project_Main.Services.DTO.ViewModelsFactories;
+using Project_Main.Infrastructure.DTOs.Inputs;
+using Project_Main.Infrastructure.DTOs.Outputs;
+using Project_Main.Infrastructure.DTOs.Entities;
 
 namespace Project_Main
 {
@@ -34,7 +39,7 @@ namespace Project_Main
 
             #region IDENTITY SERVICES
 
-			builder.Services.AddScoped<ILoginService, LoginService>();
+            builder.Services.AddScoped<ILoginService, LoginService>();
 			builder.Services.AddScoped<ILogoutService, LogoutService>();
 			builder.Services.AddScoped<IUserRegisterService, UserRegisterService>();
 			builder.Services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
@@ -42,6 +47,37 @@ namespace Project_Main
 			builder.Services.AddScoped<IAccountService, AccountService>();
 
             #endregion
+
+
+            #region DTO SERVICES
+
+			builder.Services.AddScoped<IAccountMapper, AccountMapper>();
+
+            builder.Services.AddTransient<ITaskDto, TaskDto>();
+            builder.Services.AddTransient<ITaskModel, TaskModel>();
+            builder.Services.AddScoped<ITaskCreateInputDto, TaskCreateInputDto>();
+            builder.Services.AddScoped<ITaskEntityMapper, TaskEntityMapper>();
+
+            builder.Services.AddTransient<ITodoListDto, TodoListDto>();
+            builder.Services.AddTransient<ITodoListModel, TodoListModel>();
+            builder.Services.AddScoped<ITodoListMapper, TodoListMapper>();
+
+            builder.Services.AddTransient<ITagDto, TagDto>();
+            builder.Services.AddTransient<ITagModel, TagModel>();
+
+            builder.Services.AddTransient<ITaskTagDto, TaskTagDto>();
+            builder.Services.AddTransient<ITaskTagModel, TaskTagModel>();
+
+            #endregion
+
+            #region FACTORIES
+
+            builder.Services.AddScoped<IBoardViewModelsFactory, BoardViewModelsFactory>();
+            builder.Services.AddScoped<ITodoListViewModelsFactory, TodoListViewModelsFactory>();
+            builder.Services.AddScoped<ITaskViewModelsFactory, TaskViewModelsFactory>();
+
+			#endregion
+
 			builder.SetupSeedDataServices();
 
 
