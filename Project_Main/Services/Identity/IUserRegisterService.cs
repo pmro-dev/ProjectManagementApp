@@ -1,4 +1,4 @@
-﻿using Project_Main.Infrastructure.DTOs;
+﻿using Project_Main.Infrastructure.DTOs.Entities;
 
 namespace Project_Main.Services.Identity
 {

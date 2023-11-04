@@ -3,7 +3,7 @@
     public interface ITagDto
     {
         int Id { get; set; }
-        IEnumerable<ITaskTagDto> TaskTags { get; set; }
+        ICollection<ITaskTagDto> TaskTags { get; set; }
         string Title { get; set; }
     }
 }

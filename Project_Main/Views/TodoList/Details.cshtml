@@ -1,9 +1,9 @@
 ﻿@using Project_Main.Infrastructure.Helpers;
 @using Project_Main.Models.ViewModels.OutputModels;
-@model BoardsSingleDetailsOutputVM
+@model TodoListDetailsOutputVM
 
 @{
-	ViewData["Title"] = "SingleDetails";
+	ViewData["Title"] = "TodoListDetails";
 	DateTime? filterDueDate = null;
 	Layout = SharedViews.DefaultLayout;
 }
@@ -24,7 +24,7 @@
 	</dl>
 
 	@{
-		if (Model != null && Model.TasksForToday.Count > 0)
+		if (Model != null && Model.TasksForToday.Count() > 0)
 		{
 			ViewData["SetClassReminder"] = null;
 			ViewData["TableTitle"] = "Tasks For Today";
@@ -54,7 +54,7 @@
 	<partial name="@SharedViews.TodoListTable" model="@Model?.TasksNotCompleted" view-data="ViewData" />
 
 	@{
-		if (Model != null && Model.TasksCompleted.Count > 0)
+		if (Model != null && Model.TasksCompleted.Count() > 0)
 		{
 			ViewData["SetClassReminder"] = null;
 			ViewData["TableTitle"] = "Tasks Completed";
@@ -63,7 +63,7 @@
 	}
 
 	@{
-		if (Model != null && Model.TasksExpired.Count > 0)
+		if (Model != null && Model.TasksExpired.Count() > 0)
 		{
 			ViewData["SetClassReminder"] = null;
 			ViewData["TableTitle"] = "Tasks Expired!";
@@ -75,6 +75,6 @@
 
 @section Scripts {
 	@{
-		await Html.RenderPartialAsync(SharedViews.Validation);
+		await Html.RenderPartialAsync(SharedViews.ValidationPartial);
 	}
 }

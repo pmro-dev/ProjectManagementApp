@@ -1,10 +1,11 @@
 ﻿@using Project_Main.Infrastructure.Helpers;
 @using Project_Main.Models.ViewModels.OutputModels;
+@using Project_Main.Services.DTO.ViewModelsFactories;
 @model TodoListDeleteOutputVM;
 
 @{
     ViewData["Title"] = "Delete";
-    Layout = "_Layout";
+    Layout = SharedViews.DefaultLayout;
 }
 
 <div>
@@ -13,10 +14,10 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ListModel.Title)
+            @Html.DisplayNameFor(model => model.Title)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ListModel.Title)
+            @Html.DisplayFor(model => model.Title)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayName("Tasks")
@@ -27,7 +28,7 @@
     </dl>
     
     <form asp-action=@TodoListCtrl.DeletePostAction method="post">
-        <input type="hidden" asp-for="ListModel.Id" />
+        <input type="hidden" asp-for="@Model.Id" />
         <input type="submit" value="Delete" class="btn btn-danger" />
         <a asp-action=@BoardsCtrl.BrieflyAction asp-controller=@BoardsCtrl.Name class="btn btn-primary">Back</a>
     </form>

@@ -26,6 +26,6 @@ namespace Project_Main.Infrastructure.DTOs.Entities
 
         public string UserId { get; set; }
 
-        public IEnumerable<ITaskTagDto> TaskTags { get; set; }
+        public ICollection<ITaskTagDto> TaskTags { get; set; }
     }
 }

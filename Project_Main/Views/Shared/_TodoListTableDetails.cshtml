@@ -1,7 +1,7 @@
-﻿@using Project_DTO;
-@using Project_DomainEntities
+﻿@using Project_DomainEntities
 @using Project_DomainEntities.Helpers;
-@model IEnumerable<TaskModelDto>
+@using Project_Main.Infrastructure.DTOs.Entities;
+@model ICollection<ITaskDto>
 
 @{
 	int iterator = 1;

@@ -19,7 +19,7 @@ namespace Project_Main.Models.DataBases.AppData
         }
 
 		///<inheritdoc />
-		public async Task<bool> DoesAnyExistWithSameNameAsync(string name)
+		public async Task<bool> CheckThatAnyWithSameNameExistAsync(string name)
         {
             return await _dbContext.Set<TodoListModel>()
                 .AnyAsync(todoList => todoList.Title == name);
@@ -43,13 +43,9 @@ namespace Project_Main.Models.DataBases.AppData
                 throw new InvalidOperationException(Messages.ExceptionNullObjectOnAction(operationName, nameof(todoListWithDetails)));
             }
 
-            TodoListModel newTodoList = new()
+			var tasksTemp = todoListWithDetails.Tasks.Select(t => new TaskModel()
             {
                 Id = 0,
-                Title = todoListWithDetails.Title,
-                Tasks = todoListWithDetails.Tasks.Select(t => new TaskModel()
-                {
-                    Id = 0,
                     CreationDate = DateTime.Now,
                     LastModificationDate = DateTime.Now,
                     UserId = t.UserId,
@@ -59,7 +55,13 @@ namespace Project_Main.Models.DataBases.AppData
                     Status = t.Status,
                     TaskTags = t.TaskTags,
                     Title = t.Title,
-                }).ToList(),
+            }).Cast<ITaskModel>().ToList();
+
+            TodoListModel newTodoList = new()
+            {
+                Id = 0,
+                Title = todoListWithDetails.Title,
+                Tasks = tasksTemp,
                 UserId = todoListWithDetails.UserId
             };
 
@@ -67,26 +69,28 @@ namespace Project_Main.Models.DataBases.AppData
         }
 
 		///<inheritdoc />
-		public async Task<IEnumerable<ITodoListModel>> GetAllWithDetailsAsync(string userId)
+		public async Task<ICollection<ITodoListModel>> GetAllWithDetailsAsync(string userId)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetAllWithDetailsAsync), nameof(TodoListRepository));
             HelperCheck.ThrowExceptionWhenParamNullOrEmpty(operationName, ref userId, nameof(userId), _logger);
 
-			IEnumerable<ITodoListModel> allTodoListsWithDetails = await _dbContext
+			ICollection<ITodoListModel> allTodoListsWithDetails = await _dbContext
                 .Set<TodoListModel>()
-                .Where(todoList => todoList.UserId == userId)
-                .Include(todoList => todoList.Tasks).ToListAsync();
+                .Where((ITodoListModel todoList) => todoList.UserId == userId)
+                .Include(todoList => todoList.Tasks)
+                .ToListAsync();
 
             return allTodoListsWithDetails;
         }
 
 		///<inheritdoc />
 		public async Task<TodoListModel?> GetWithDetailsAsync(int id)
+        public async Task<ITodoListModel?> GetWithDetailsAsync(int id)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetWithDetailsAsync), nameof(TodoListRepository));
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.IdBottomBoundry, _logger);
 
-            TodoListModel? todoListFromDb = await _dbContext
+            ITodoListModel? todoListFromDb = await _dbContext
                 .Set<TodoListModel>()
                 .Where(todoList => todoList.Id == id)
                 .Include(todoList => todoList.Tasks)

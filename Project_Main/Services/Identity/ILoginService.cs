@@ -1,4 +1,4 @@
-﻿using Project_Main.Infrastructure.DTOs;
+﻿using Project_Main.Infrastructure.DTOs.Inputs;
 
 namespace Project_Main.Services.Identity
 {

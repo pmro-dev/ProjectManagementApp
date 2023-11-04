@@ -27,20 +27,20 @@ namespace Project_Main.Models.DataBases.General
 		/// </summary>
 		/// <param name="filter">Filter expression to filter entities in Db.</param>
 		/// <returns>Async Task operation.</returns>
-		Task<IEnumerable<T>> GetAllByFilterAsync(Expression<Func<T, bool>>? filter = null);
+		Task<ICollection<T>> GetAllByFilterAsync(Expression<Func<T, bool>> filter);
 
-		/// <summary>
-		/// Get single entity that matches filter, default filter is null.
-		/// </summary>
-		/// <param name="filter">Filter expression to filter entities in Db.</param>
-		/// <returns>Async Task operation.</returns>
-		Task<T?> GetSingleByFilterAsync(Expression<Func<T, bool>>? filter);
+        /// <summary>
+        /// Get single entity that matches filter, default filter is null.
+        /// </summary>
+        /// <param name="filter">Filter expression to filter entities in Db.</param>
+        /// <returns>Async Task operation.</returns>
+        Task<T?> GetByFilterAsync(Expression<Func<T, bool>> filter);
 
-		/// <summary>
-		/// Update entity in Db by repository.
-		/// </summary>
-		/// <param name="entity">Entity to update.</param>
-		void Update(T entity);
+        /// <summary>
+        /// Update entity in Db by repository.
+        /// </summary>
+        /// <param name="entity">Entity to update.</param>
+        void Update(T entity);
 
 		/// <summary>
 		/// Remove entity from Db by repository.
@@ -52,7 +52,7 @@ namespace Project_Main.Models.DataBases.General
 		/// Get all possible entities from Db by repository.
 		/// </summary>
 		/// <returns>IEnumerable set of entities from Db.</returns>
-		Task<IEnumerable<T>> GetAllAsync();
+		Task<ICollection<T>> GetAllAsync();
 
 		/// <summary>
 		/// Check that Db contains any entity.
@@ -65,6 +65,6 @@ namespace Project_Main.Models.DataBases.General
 		/// </summary>
 		/// <param name="range">Range of entities.</param>
 		/// <returns>Async Task operation.</returns>
-		Task AddRangeAsync(IEnumerable<T> range);
+		Task AddRangeAsync(ICollection<T> range);
     }
 }

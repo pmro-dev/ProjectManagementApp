@@ -29,7 +29,7 @@ namespace Project_Main.Models.DataBases.General
 		}
 
 		///<inheritdoc />
-		public async Task<IEnumerable<TEntity>> GetAllAsync()
+		public async Task<ICollection<TEntity>> GetAllAsync()
 		{
 			return await _dbSet.ToListAsync();
 		}
@@ -45,8 +45,8 @@ namespace Project_Main.Models.DataBases.General
 		}
 
 		///<inheritdoc />
-		public async Task<IEnumerable<TEntity>> GetAllByFilterAsync(Expression<Func<TEntity, bool>>? filter = null)
-		{
+		public async Task<ICollection<TEntity>> GetAllByFilterAsync(Expression<Func<TEntity, bool>> filter)
+        {
 			IQueryable<TEntity> entities = _dbSet;
 
 			if (filter != null)
@@ -57,9 +57,9 @@ namespace Project_Main.Models.DataBases.General
 			return await entities.ToListAsync();
 		}
 
-		///<inheritdoc />
-		public async Task<TEntity?> GetSingleByFilterAsync(Expression<Func<TEntity, bool>>? filter)
-		{
+        ///<inheritdoc />
+        public async Task<TEntity?> GetByFilterAsync(Expression<Func<TEntity, bool>> filter)
+        {
 			if (filter != null)
 			{
 				return await _dbSet.SingleOrDefaultAsync(filter);
@@ -89,7 +89,7 @@ namespace Project_Main.Models.DataBases.General
 		}
 
 		///<inheritdoc />
-		public async Task AddRangeAsync(IEnumerable<TEntity> range)
+		public async Task AddRangeAsync(ICollection<TEntity> range)
 		{
 			string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
 			string operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(AddRangeAsync), classAndEntityInfo);

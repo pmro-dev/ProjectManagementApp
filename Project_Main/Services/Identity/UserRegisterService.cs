@@ -1,5 +1,5 @@
 ﻿using Project_IdentityDomainEntities;
-using Project_Main.Infrastructure.DTOs;
+using Project_Main.Infrastructure.DTOs.Entities;
 using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.DataBases.Identity;
 using Project_Main.Models.DataBases.Identity.DbSetup;
@@ -59,7 +59,7 @@ namespace Project_Main.Services.Identity
 
 		private async Task SetRoles(IUserDto userDto)
 		{
-			RoleModel? roleForNewUser = await _roleRepository.GetSingleByFilterAsync(role => role.Name == _defaultRole);
+			RoleModel? roleForNewUser = await _roleRepository.GetByFilterAsync(role => role.Name == _defaultRole);
 
 			if (roleForNewUser is null)
 			{

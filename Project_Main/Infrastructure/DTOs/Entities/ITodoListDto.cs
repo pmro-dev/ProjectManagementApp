@@ -3,7 +3,7 @@
     public interface ITodoListDto
     {
         int Id { get; set; }
-        IEnumerable<ITaskDto> Tasks { get; set; }
+		ICollection<ITaskDto> Tasks { get; set; }
         string Title { get; set; }
         string UserId { get; set; }
     }

@@ -30,7 +30,7 @@ namespace Project_Main.Models.DataBases.AppData
 			base.OnModelCreating(modelBuilder);
 
 			modelBuilder.Entity<TodoListModel>()
-			.HasMany(list => (IEnumerable<TaskModel>)list.Tasks)
+			.HasMany(list => (ICollection<TaskModel>)list.Tasks)
 			.WithOne()
 			.HasForeignKey(x => x.Id);
 
@@ -38,21 +38,21 @@ namespace Project_Main.Models.DataBases.AppData
 				.ToTable("TodoLists");
 
 			modelBuilder.Entity<TaskModel>()
-				.HasMany(task => (IEnumerable<TaskTagModel>)task.TaskTags)
+				.HasMany(task => (ICollection<TaskTagModel>) task.TaskTags)
 				.WithOne()
 				.HasForeignKey(x => x.TaskId)
 				.HasForeignKey(x => x.TagId);
 
 			modelBuilder.Entity<TaskModel>()
 				.HasOne(task => (TodoListModel?)task.TodoList)
-				.WithMany(x => (IEnumerable<TaskModel>)x.Tasks)
+				.WithMany(x => (ICollection<TaskModel>)x.Tasks)
 				.HasForeignKey(x => x.TodoListId);
 
 			modelBuilder.Entity<TaskModel>()
 				.ToTable("Tasks");
 
 			modelBuilder.Entity<TagModel>()
-				.HasMany(tag => (IEnumerable<TaskTagModel>)tag.TaskTags)
+				.HasMany(tag => (ICollection<TaskTagModel>)tag.TaskTags)
 				.WithOne(x => (TagModel)x.Tag)
 				.HasForeignKey(x => x.TagId)
 				.HasForeignKey(x => x.TaskId);
@@ -62,12 +62,12 @@ namespace Project_Main.Models.DataBases.AppData
 
 			modelBuilder.Entity<TaskTagModel>()
 				.HasOne(taskTag => (TaskModel)taskTag.Task)
-				.WithMany(x => (IEnumerable<TaskTagModel>)x.TaskTags)
+				.WithMany(x => (ICollection<TaskTagModel>)x.TaskTags)
 				.HasForeignKey(x => x.TaskId);
 
 			modelBuilder.Entity<TaskTagModel>()
 				.HasOne(taskTag => (TagModel)taskTag.Tag)
-				.WithMany(x => (IEnumerable<TaskTagModel>)x.TaskTags)
+				.WithMany(x => (ICollection<TaskTagModel>)x.TaskTags)
 				.HasForeignKey(x => x.TagId);
 
 			modelBuilder.Entity<TaskTagModel>()

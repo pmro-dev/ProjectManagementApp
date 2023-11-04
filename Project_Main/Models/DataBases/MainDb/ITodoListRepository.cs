@@ -18,7 +18,7 @@ namespace Project_Main.Models.DataBases.AppData
 		/// </summary>
 		/// <param name="userId"></param>
 		/// <returns>All ToDoLists wiith details from Db.</returns>
-		Task<IEnumerable<ITodoListModel>> GetAllWithDetailsAsync(string userId);
+		Task<ICollection<ITodoListModel>> GetAllWithDetailsAsync(string userId);
 
 		/// <summary>
 		/// Duplicate a whole, specifc ToDoList with details in Db (where details are related data in other tables).
@@ -32,6 +32,6 @@ namespace Project_Main.Models.DataBases.AppData
 		/// </summary>
 		/// <param name="name">Targeted name to check.</param>
 		/// <returns>True when ToDoList with specified name already exists, otherwise false.</returns>
-		Task<bool> DoesAnyExistWithSameNameAsync(string name);
+		Task<bool> CheckThatAnyWithSameNameExistAsync(string name);
     }
 }

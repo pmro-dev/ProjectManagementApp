@@ -3,7 +3,7 @@
 
 @{
 	ViewData["Title"] = "Create";
-	Layout = "_Layout";
+	Layout = SharedViews.DefaultLayout;
 }
 
 <h4>Create To Do List</h4>
@@ -28,6 +28,6 @@
 
 @section Scripts {
 	@{
-		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+		await Html.RenderPartialAsync(SharedViews.ValidationPartial);
 	}
 }

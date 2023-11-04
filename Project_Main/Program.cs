@@ -30,14 +30,18 @@ namespace Project_Main
 			builder.SetupUnitOfWorkServices();
 			
 			builder.Services.AddHttpContextAccessor();
+
+
+            #region IDENTITY SERVICES
+
 			builder.Services.AddScoped<ILoginService, LoginService>();
 			builder.Services.AddScoped<ILogoutService, LogoutService>();
 			builder.Services.AddScoped<IUserRegisterService, UserRegisterService>();
 			builder.Services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
 			builder.Services.AddScoped<IClaimsService, ClaimsService>();
-			builder.Services.AddScoped<IBoardsDataService, BoardsDataService>();
 			builder.Services.AddScoped<IAccountService, AccountService>();
 
+            #endregion
 			builder.SetupSeedDataServices();
 
 

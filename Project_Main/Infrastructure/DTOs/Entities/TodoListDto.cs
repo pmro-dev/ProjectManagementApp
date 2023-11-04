@@ -8,6 +8,6 @@
 
         public string UserId { get; set; } = string.Empty;
 
-        public IEnumerable<ITaskDto> Tasks { get; set; } = new List<ITaskDto>();
+        public ICollection<ITaskDto> Tasks { get; set; } = new List<ITaskDto>();
     }
 }
