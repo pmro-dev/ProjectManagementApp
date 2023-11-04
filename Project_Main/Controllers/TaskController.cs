@@ -7,12 +7,14 @@ using Project_DomainEntities;
 using System.Security.Claims;
 using Project_Main.Models.DataBases.AppData;
 using Project_Main.Models.DataBases.Helpers;
-using Microsoft.Data.SqlClient;
-using Project_Main.Models.ViewModels.OutputModels;
-using Project_DTO;
-using Project_Main.Models.ViewModels.InputModels;
 using Project_Main.Services.DTO;
+using Project_Main.Models.ViewModels.OutputModels;
+using Project_Main.Models.ViewModels.InputModels;
 using Project_Main.Models.ViewModels.WrapperModels;
+using Project_Main.Services.DTO.ViewModelsFactories;
+using Project_Main.Infrastructure.DTOs.Entities;
+using Project_Main.Infrastructure.DTOs.Inputs;
+using System.Collections.Generic;
 
 namespace Project_Main.Controllers
 {
@@ -27,6 +29,10 @@ namespace Project_Main.Controllers
         private readonly ITaskRepository _taskRepository;
         private readonly ITodoListRepository _todoListRepository;
         private readonly ILogger<TaskController> _logger;
+        private readonly ITaskEntityMapper _taskEntityMapper;
+        private readonly ITodoListMapper _todoListMapper;
+        private readonly ITaskViewModelsFactory _taskViewModelsFactory;
+
         private string operationName = string.Empty;
 
         /// <summary>
@@ -34,12 +40,15 @@ namespace Project_Main.Controllers
         /// </summary>
         /// <param name="context">Database context.</param>
         /// <param name="logger">Logger provider.</param>
-        public TaskController(IDataUnitOfWork dataUnitOfWork, ILogger<TaskController> logger)
+        public TaskController(IDataUnitOfWork dataUnitOfWork, ILogger<TaskController> logger, ITaskEntityMapper taskEntityMapper, ITodoListMapper todoListMapper, ITaskViewModelsFactory taskViewModelsFactory)
         {
             _dataUnitOfWork = dataUnitOfWork;
             _taskRepository = _dataUnitOfWork.TaskRepository;
             _todoListRepository = _dataUnitOfWork.TodoListRepository;
             _logger = logger;
+            _taskEntityMapper = taskEntityMapper;
+            _todoListMapper = todoListMapper;
+            _taskViewModelsFactory = taskViewModelsFactory;
         }
 
         /// <summary>
@@ -53,32 +62,15 @@ namespace Project_Main.Controllers
         /// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
         [HttpGet]
         [Route(CustomRoutes.TaskDetailsRoute)]
-        public async Task<ActionResult<TaskDetailsVM>> Details(int routeTodoListId, int routeTaskId)
+        public async Task<IActionResult> Details(int routeTodoListId, int routeTaskId)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Details), controllerName);
 
-            TaskModel? taskModel = null;
-
             //TODO find and implement the right approach of handling exceptions and params validations
-            try
-            {
-                HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, routeTodoListId, nameof(routeTodoListId), HelperCheck.IdBottomBoundry, _logger);
-                HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, routeTaskId, nameof(routeTaskId), HelperCheck.IdBottomBoundry, _logger);
+            HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, routeTodoListId, nameof(routeTodoListId), HelperCheck.IdBottomBoundry, _logger);
+            HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, routeTaskId, nameof(routeTaskId), HelperCheck.IdBottomBoundry, _logger);
 
-                taskModel = await _taskRepository.GetAsync(routeTaskId);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                return NotFound();
-            }
-            catch (ArgumentNullException)
-            {
-                return RedirectToAction(AccountCtrl.ErrorAction, AccountCtrl.Name);
-            }
-            catch (SqlException)
-            {
-                return RedirectToAction(AccountCtrl.ErrorAction, AccountCtrl.Name);
-			}
+            ITaskModel? taskModel = await _taskRepository.GetAsync(routeTaskId);
 
             if (taskModel is null)
             {
@@ -86,16 +78,18 @@ namespace Project_Main.Controllers
                 return NotFound();
             }
 
-            TaskModelDto taskModelDto = TaskDtoService.TransferToDefaultDto(taskModel);
-            TaskDetailsVM taskDetailsVM = TaskDtoService.TransferToTaskDetailsVM(taskModelDto);
-
-            if (routeTodoListId != taskDetailsVM.TodoListId)
+            if (routeTodoListId != taskModel.TodoListId)
             {
-                _logger.LogError(Messages.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, routeTodoListId, taskModel.TodoListId);
+                _logger.LogError(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, routeTodoListId, taskModel.TodoListId);
                 return Conflict();
             }
 
-            return View(TaskViews.Details, taskDetailsVM);
+            //TODO THOSE OPERATIONS MOVE TO TASKSERVICE
+            ITaskDto taskDto = _taskEntityMapper.TransferToDto(taskModel);
+            var detailsOutputVM = _taskViewModelsFactory.CreateDetailsOutputVM(taskDto);
+            //END TO DO
+
+            return View(TaskViews.Details, detailsOutputVM);
         }
 
         /// <summary>
@@ -117,23 +111,20 @@ namespace Project_Main.Controllers
             if (!ModelState.IsValid)
                 return View();
 
-            // TODO implement new method that allows to get only concrete data that I would specify by Select expression
-            var targetTodoListModel = await _todoListRepository.GetAsync(id);
+            ITodoListModel? todoListModel = await _todoListRepository.GetAsync(id);
 
-            if (targetTodoListModel is null)
+            if (todoListModel is null)
             {
                 _logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, id, HelperDatabase.TodoListsDbSetName);
                 return NotFound();
             }
 
-            var todoListModelDto = TodoListDtoService.TransferToDto(targetTodoListModel);
-            var taskCreateOutputVM = TaskDtoService.TransferToTaskCreateOutputVM(todoListModelDto.Id, todoListModelDto.UserId, todoListModelDto.Title);
-
-            var taskCreateWrapperVM = new TaskCreateWrapperVM()
-            {
-                InputVM = new(),
-                OutputVM = taskCreateOutputVM
-            };
+            //TODO MOVE THOSE OPERATIONS TO TASKSERVICE
+            ITodoListDto todoListDto = _todoListMapper.TransferToDto(todoListModel);
+            var taskCreateOutputVM = _taskViewModelsFactory.CreateCreateOutputVM(todoListDto);
+            var taskCreateWrapperVM = _taskViewModelsFactory.CreateWrapperCreateVM();
+            taskCreateWrapperVM.OutputVM = taskCreateOutputVM;
+            //END TO DO
 
             return View(taskCreateWrapperVM);
         }
@@ -151,23 +142,23 @@ namespace Project_Main.Controllers
         [HttpPost]
         [Route(CustomRoutes.CreateTaskPostRoute)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int todoListId, TaskCreateWrapperVM taskCreateWrapperVM)
+        public async Task<IActionResult> Create(int todoListId, WrapperViewModel<TaskCreateInputVM, TaskCreateOutputVM> taskCreateWrapperVM)
         {
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.IdBottomBoundry, _logger);
 
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
                 return View(taskCreateWrapperVM);
 
-            var taskCreateInputVM = taskCreateWrapperVM.InputVM;
-            var taskCreateInputDto = TaskDtoService.TransferToTaskCreateInputDto(taskCreateInputVM);
-            var taskModel = TaskDtoService.TransferToTaskModel(taskCreateInputDto);
+            ITaskCreateInputVM inputVM = taskCreateWrapperVM.InputVM;
+            ITaskDto taskDto = _taskEntityMapper.TransferToDto(inputVM);
+            ITaskModel taskModel = _taskEntityMapper.TransferToModel(taskDto);
 
-            await _taskRepository.AddAsync(taskModel);
+            await _taskRepository.AddAsync((TaskModel)taskModel);
             await _dataUnitOfWork.SaveChangesAsync();
 
-            object routeValue = new { id = taskCreateInputDto.TodoListId };
+            object routeValue = new { id = taskDto.TodoListId };
 
-			return RedirectToAction(TodoListCtrl.DetailsAction, TodoListCtrl.Name, routeValue);
+            return RedirectToAction(TodoListCtrl.DetailsAction, TodoListCtrl.Name, routeValue);
         }
 
         /// <summary>
@@ -184,14 +175,10 @@ namespace Project_Main.Controllers
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Edit), controllerName);
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.IdBottomBoundry, _logger);
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskId, nameof(taskId), HelperCheck.IdBottomBoundry, _logger);
-            
+
             var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var taskModel = await _taskRepository.GetAsync(taskId);
-            TodoListModel? targetTodoList = await _todoListRepository.GetAsync(todoListId);
-
-            // TODO implement method that allow to get only concrete properties by Select expression, here I need only TodoLists Ids and Names
-            IEnumerable<TodoListModel> tempTodoLists = await _todoListRepository.GetAllByFilterAsync(todoList => todoList.UserId == signedInUserId);
+            ITaskModel? taskModel = await _taskRepository.GetAsync(taskId);
 
             if (taskModel == null)
             {
@@ -199,49 +186,57 @@ namespace Project_Main.Controllers
                 return NotFound();
             }
 
-            if (targetTodoList == null)
+            ITodoListModel? targetTodoListModel = await _todoListRepository.GetAsync(todoListId);
+
+            if (targetTodoListModel == null)
             {
                 _logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, todoListId, HelperDatabase.TodoListsDbSetName);
                 return NotFound();
             }
 
-            if (!tempTodoLists.Any())
+            if (taskModel.TodoListId != targetTodoListModel.Id)
             {
-                _logger.LogInformation(Messages.LogNotAnyTodoListInDb, operationName);
+                _logger.LogError(MessagesPacket.LogConflictBetweenTodoListIdsFromTodoListModelAndTaskModel, operationName, taskModel.TodoListId, targetTodoListModel.Id);
+                return Conflict();
+            }
+
+            ITaskDto taskDto = _taskEntityMapper.TransferToDto(taskModel);
+
+			// TODO implement method that allow to get only concrete properties by Select expression, here I need only TodoLists Ids and Names
+			var userTodoListModels = await _todoListRepository.GetAllByFilterAsync(todoList => todoList.UserId == signedInUserId);
+
+			if (!userTodoListModels.Any())
+            {
+                _logger.LogInformation(MessagesPacket.LogNotAnyTodoListInDb, operationName);
                 return NotFound();
             }
 
-            if (taskModel.TodoListId != targetTodoList.Id)
-            {
-                _logger.LogError(Messages.LogConflictBetweenTodoListIdsFromTodoListModelAndTaskModel, operationName, taskModel.TodoListId, targetTodoList.Id);
-                return Conflict();
-            }
+            var castedListModels = userTodoListModels.Cast<ITodoListModel>().ToList();
+
+			ICollection<ITodoListDto> userTodoListDtos = _todoListMapper.TransferToDto(castedListModels);
+            // END OF TO DO
 
             string dataValueField = "Value";
             string dataTextField = "Text";
 
-            var todoListsSelectorData = new SelectList(tempTodoLists, nameof(TodoListModel.Id), nameof(TodoListModel.Title), todoListId);
-            var statusesSelectorData = new SelectList(Enum.GetValues(typeof(TaskStatusType)).Cast<TaskStatusType>().Select(v => new SelectListItem
-            {
-                Text = v.ToString(),
-                Value = ((int)v).ToString()
-            }).ToList(), dataValueField, dataTextField, taskModel.Status);
+            var todoListSelectorDto = new SelectList(userTodoListDtos, nameof(ITodoListDto.Id), nameof(ITodoListDto.Title), todoListId);
+            var taskStatusSelectorDto = new SelectList(Enum.GetValues(typeof(TaskStatusType))
+                .Cast<TaskStatusType>()
+                .Select(taskStatusType => new SelectListItem
+                {
+                    Text = taskStatusType.ToString(),
+                    Value = ((int)taskStatusType).ToString()
+                })
+                .ToList(),
+                dataValueField,
+                dataTextField,
+                taskDto.Status);
 
-            var taskEditOutputVM = new TaskEditOutputVM
-            {
-				Id = taskModel.Id,
-				UserId = taskModel.UserId,
-				Title = taskModel.Title,
-                Description = taskModel.Description,
-                DueDate = taskModel.DueDate,
-                ReminderDate = taskModel.ReminderDate,
-				Status = taskModel.Status,
-				TodoListId = taskModel.TodoListId,
-				StatusSelector = statusesSelectorData,
-                TodoListsSelector = todoListsSelectorData,
-            };
+            var editOutputVM = _taskViewModelsFactory.CreateEditOutputVM(taskDto, taskStatusSelectorDto, todoListSelectorDto);
+            var editWrapperVM = _taskViewModelsFactory.CreateWrapperEditVM();
+			editWrapperVM.OutputVM = editOutputVM;
 
-            return View(TaskViews.Edit, taskEditOutputVM);
+			return View(TaskViews.Edit, editWrapperVM);
         }
 
         /// <summary>
@@ -249,18 +244,18 @@ namespace Project_Main.Controllers
         /// </summary>
         /// <param name="todoListId">Target To Do List for which Task is assigned.</param>
         /// <param name="id">Target Task id.</param>
-        /// <param name="taskModel">Model with form's data.</param>
+        /// <param name="taskDto">Model with form's data.</param>
         /// <returns>Return different respond based on the final result.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
         [HttpPost]
         [Route(CustomRoutes.TaskEditRoute)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int todoListId, int id, TaskModel taskModel)
+        public async Task<IActionResult> Edit(int todoListId, int id, TaskEditInputVM taskEditInputVM)
         {
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.IdBottomBoundry, _logger);
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.IdBottomBoundry, _logger);
 
-            if (id != taskModel.Id)
+            if (id != taskEditInputVM.Id)
             {
                 _logger.LogCritical(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, id, taskEditInputVM.Id);
                 return Conflict();
@@ -268,15 +263,32 @@ namespace Project_Main.Controllers
 
             if (ModelState.IsValid)
             {
-                 _taskRepository.Update(taskModel);
+                ITaskEditInputDto taskEditInputDto = _taskEntityMapper.TransferToDto(taskEditInputVM);
+                ITaskModel? taskDbModel = await _taskRepository.GetAsync(id);
+
+                if (taskDbModel is null)
+                {
+                    _logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, taskEditInputDto.Id, HelperDatabase.TasksDbSetName);
+                    return NotFound();
+                }
+
+                if (taskDbModel.Id != id)
+                {//TODO WRITE NEW LOG MESSAGE FOR THIS SITUATION
+                    _logger.LogCritical(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, id, taskDbModel.Id);
+                    return Conflict();
+                }
+
+                _taskEntityMapper.UpdateModel(taskDbModel, taskEditInputDto);
+
+                _taskRepository.Update((TaskModel)taskDbModel);
                 await _dataUnitOfWork.SaveChangesAsync();
 
                 object routeValue = new { id = todoListId };
 
-				return RedirectToAction(TodoListCtrl.DetailsAction, TodoListCtrl.Name, routeValue);
+                return RedirectToAction(TodoListCtrl.DetailsAction, TodoListCtrl.Name, routeValue);
             }
 
-            return View(taskModel);
+            return View(taskEditInputVM);
         }
 
         /// <summary>
@@ -297,78 +309,74 @@ namespace Project_Main.Controllers
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.IdBottomBoundry, _logger);
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskId, nameof(taskId), HelperCheck.IdBottomBoundry, _logger);
 
-            TaskModel? taskToDelete = await _taskRepository.GetAsync(taskId);
+            ITaskModel? taskToDeleteModel = await _taskRepository.GetAsync(taskId);
 
-            if (taskToDelete == null)
+            if (taskToDeleteModel == null)
             {
                 _logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, taskId, HelperDatabase.TasksDbSetName);
                 return NotFound();
             }
 
-			TaskDetailsVM taskDetailsVM = new()
-			{
-				Id = taskToDelete.Id,
-				TodoListId = taskToDelete.TodoListId,
-				UserId = taskToDelete.UserId,
-				Title = taskToDelete.Title,
-				Status = taskToDelete.Status,
-				CreationDate = taskToDelete.CreationDate,
-				Description = taskToDelete.Description,
-				DueDate = taskToDelete.DueDate,
-				LastModificationDate = taskToDelete.LastModificationDate,
-				ReminderDate = taskToDelete.ReminderDate
-			};
+            ITaskDto taskToDeleteDto = _taskEntityMapper.TransferToDto(taskToDeleteModel);
 
-			if (taskDetailsVM.TodoListId != todoListId)
+            if (taskToDeleteDto.TodoListId != todoListId)
             {
                 _logger.LogCritical(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, todoListId, taskToDeleteDto.TodoListId);
                 return Conflict();
             }
 
-            return View(TaskViews.Delete, taskDetailsVM);
+            var deleteOutputVM = _taskViewModelsFactory.CreateDeleteOutputVM(taskToDeleteDto);
+            var deleteWrapperVM = _taskViewModelsFactory.CreateWrapperDeleteVM();
+            deleteWrapperVM.OutputVM = deleteOutputVM;
+
+			return View(TaskViews.Delete, deleteWrapperVM);
         }
 
-		/// <summary>
-		/// Action POST to DELETE Task.
-		/// </summary>
-		/// <param name="taskDeleteVM">Targets ViewModel for TaskDelete.</param>
-		/// <returns>
-		/// Return different view based on the final result. 
-		/// Return Bad Request when one of the given id is out of range, 
-		/// Not Found when there isn't such Task in Db or redirect to view with To Do List details.
-		/// </returns>
-		/// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
-		[HttpPost]
+        /// <summary>
+        /// Action POST to DELETE Task.
+        /// </summary>
+        /// <param name="deleteInputVM">Targets ViewModel for TaskDelete.</param>
+        /// <returns>
+        /// Return different view based on the final result. 
+        /// Return Bad Request when one of the given id is out of range, 
+        /// Not Found when there isn't such Task in Db or redirect to view with To Do List details.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
+        [HttpPost]
         [Route(CustomRoutes.TaskDeletePostRoute)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeletePost([FromForm] TaskDeleteVM taskDeleteVM)
-		{
-            HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskDeleteVM.TodoListId, nameof(taskDeleteVM.TodoListId), HelperCheck.IdBottomBoundry, _logger);
-            HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskDeleteVM.Id, nameof(taskDeleteVM.Id), HelperCheck.IdBottomBoundry, _logger);
+        public async Task<IActionResult> DeletePost([FromForm] WrapperViewModel<TaskDeleteInputVM, TaskDeleteOutputVM> deleteWrapperVM)
+        {
+            ITaskDeleteInputVM deleteInputVM = deleteWrapperVM.InputVM;
+
+			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, deleteInputVM.TodoListId, nameof(deleteInputVM.TodoListId), HelperCheck.IdBottomBoundry, _logger);
+            HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, deleteInputVM.Id, nameof(deleteInputVM.Id), HelperCheck.IdBottomBoundry, _logger);
+            
+            ITaskDeleteInputDto deleteInputDto = _taskEntityMapper.TransferToDto(deleteInputVM);
 
             if (ModelState.IsValid)
             {
-                TaskModel? taskToDelete = await _taskRepository.GetAsync(taskDeleteVM.Id);
+                ITaskModel? taskToDeleteModel = await _taskRepository.GetAsync(deleteInputDto.Id);
 
-                if (taskToDelete is null)
+                if (taskToDeleteModel is null)
                 {
                     _logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, deleteInputDto.Id, HelperDatabase.TasksDbSetName);
                     return NotFound();
                 }
 
-                if (taskToDelete.TodoListId != taskDeleteVM.TodoListId)
+                if (taskToDeleteModel.TodoListId != deleteInputDto.TodoListId)
                 {
                     _logger.LogError(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, deleteInputDto.TodoListId, taskToDeleteModel.TodoListId);
                     return Conflict();
                 }
 
-                 _taskRepository.Remove(taskToDelete);
+                _taskRepository.Remove((TaskModel)taskToDeleteModel);
                 await _dataUnitOfWork.SaveChangesAsync();
             }
 
-			object routeValue = new { id = taskDeleteVM.TodoListId };
+            object routeValue = new { id = deleteInputDto.TodoListId };
 
-			return RedirectToAction(TodoListCtrl.DetailsAction, TodoListCtrl.Name, routeValue);
+            return RedirectToAction(TodoListCtrl.DetailsAction, TodoListCtrl.Name, routeValue);
         }
     }
 }
