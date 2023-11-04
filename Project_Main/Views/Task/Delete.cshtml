@@ -1,9 +1,14 @@
 ﻿@using Project_DomainEntities
 @using Project_Main.Infrastructure.Helpers
-@model Project_Main.Models.ViewModels.OutputModels.TaskDetailsVM
+@using Project_Main.Models.ViewModels.InputModels;
+@using Project_Main.Models.ViewModels.OutputModels;
+@using Project_Main.Models.ViewModels.WrapperModels;
+@model WrapperViewModel<TaskDeleteInputVM, TaskDeleteOutputVM>
 
 @{
 	ViewData["Title"] = "Delete";
+	var inputVM = Model.InputVM;
+	var outputVM = Model.OutputVM;
 }
 
 <div>
@@ -14,9 +19,9 @@
 	<partial name="@SharedViews.TaskTableDetails" model="@Model" />
 
 	<form asp-action="@TaskCtrl.DeletePostAction" asp-controller="@TaskCtrl.Name" method="post">
-		<input type="hidden" asp-for="TodoListId" value="@Model.TodoListId" />
-		<input type="hidden" asp-for="Id" value="@Model.Id" />
+		<input type="hidden" asp-for="@inputVM.TodoListId" value="@outputVM.TodoListId" />
+		<input type="hidden" asp-for="@inputVM.Id" value="@outputVM.Id" />
 		<input type="submit" value="Delete" class="btn btn-danger" />
 	</form>
-	<a asp-controller="@TodoListCtrl.Name" asp-action="@TodoListCtrl.DetailsAction" asp-route-id="@Model.TodoListId" class="btn btn-primary">Back</a>
+	<a asp-controller="@TodoListCtrl.Name" asp-action="@TodoListCtrl.DetailsAction" asp-route-id="@outputVM.TodoListId" class="btn btn-primary">Back</a>
 </div>

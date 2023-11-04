@@ -1,9 +1,15 @@
-﻿@using Project_Main.Infrastructure.Helpers
-@model Project_DomainEntities.TodoListModel
+﻿@using Project_Main.Infrastructure.Helpers;
+@using Project_Main.Models.ViewModels.OutputModels;
+@using Project_Main.Models.ViewModels.WrapperModels;
+@using Project_Main.Services.DTO.ViewModelsFactories;
+@using Project_Main.Models.ViewModels.InputModels;
+@model WrapperViewModel<TodoListEditInputVM, TodoListEditOutputVM>
 
 @{
     ViewData["Title"] = "Edit";
-    Layout = "_Layout";
+    Layout = SharedViews.DefaultLayout;
+    TodoListEditInputVM inputVM = Model.InputVM;
+    TodoListEditOutputVM outputVM = Model.OutputVM;
 }
 
 <h4>Edit To Do List</h4>
@@ -12,21 +18,21 @@
     <div class="col-md-4">
         <form asp-action=@TodoListCtrl.EditAction method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-			<input asp-for="UserId" type="hidden" value="@Model.UserId"/>
+            <input type="hidden" asp-for="@outputVM.Id" />
+            <input asp-for="@outputVM.UserId" type="hidden" value="@outputVM.UserId" />
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <label asp-for="@inputVM.Title" class="control-label"></label>
+                <input asp-for="@inputVM.Title" class="form-control" value="@outputVM.Title" />
+                <span asp-validation-for="@inputVM.Title" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn" style="background-color: #671dff; color: white; font-weight: 500;" />
-                <a asp-controller=@TodoListCtrl.Name asp-action=@TodoListCtrl.DetailsAction asp-route-id="@Model.Id" class="btn btn-primary">Back</a>
+                <a asp-controller=@TodoListCtrl.Name asp-action=@TodoListCtrl.DetailsAction asp-route-id="@outputVM.Id" class="btn btn-primary">Back</a>
             </div>
         </form>
     </div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync(SharedViews.ValidationPartial);}
 }

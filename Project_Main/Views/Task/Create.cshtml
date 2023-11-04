@@ -1,11 +1,13 @@
 ﻿@using Project_Main.Infrastructure.Helpers;
 @using Project_Main.Models.ViewModels.InputModels;
 @using Project_Main.Models.ViewModels.OutputModels;
-@model Project_Main.Models.ViewModels.WrapperModels.TaskCreateWrapperVM
+@using Project_Main.Models.ViewModels.WrapperModels;
+@model WrapperViewModel<TaskCreateInputVM, TaskCreateOutputVM>
+
 @{
     ViewData["Title"] = "Create Task";
-    TaskCreateInputVM inputVM = Model.InputVM;
-    TaskCreateOutputVM outputVM = Model.OutputVM;
+    var inputVM = Model.InputVM;
+    var outputVM = Model.OutputVM;
 }
 
 <h4>Create Task</h4>
