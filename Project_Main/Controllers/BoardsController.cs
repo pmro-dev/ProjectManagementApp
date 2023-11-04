@@ -1,23 +1,28 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Project_DomainEntities;
 using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.DataBases.AppData;
 using Project_Main.Models.ViewModels.OutputModels;
-using Project_Main.Services.Data;
+using Project_Main.Services.DTO;
+using Project_Main.Services.DTO.ViewModelsFactories;
+using Project_Main.Services.Identity;
 
 namespace Project_Main.Controllers
 {
     public class BoardsController : Controller
 	{
-		private readonly IDataUnitOfWork _dataUnitOfWork;
+		private readonly IBoardViewModelsFactory _boardsVMFactory;
+        private readonly ITodoListMapper _todoListMapper;
 		private readonly ITodoListRepository _todoListRepository;
-		private readonly IBoardsDataService _boardsDataService;
+		private readonly string _signedInUserId;
 
-		public BoardsController(IDataUnitOfWork dataUnitOfWork, IBoardsDataService boardsDataService)
-		{
-			_dataUnitOfWork = dataUnitOfWork;
-			_todoListRepository = _dataUnitOfWork.TodoListRepository;
-			_boardsDataService = boardsDataService;
+		public BoardsController(IBoardViewModelsFactory boardsVMFactory, ITodoListMapper todoListMapper, ITodoListRepository todoListRepository, IAccountService accountService)
+        {
+            _boardsVMFactory = boardsVMFactory;
+            _todoListMapper = todoListMapper;
+            _todoListRepository = todoListRepository;
+			_signedInUserId = accountService.GetSignedInUserId();
 		}
 
 		/// <summary>
@@ -27,9 +32,11 @@ namespace Project_Main.Controllers
 		[HttpGet]
 		[Route(CustomRoutes.MainBoardRoute)]
 		[Authorize]
-		public async Task<ActionResult<BoardsBrieflyOutputVM>> Briefly()
+		public async Task<ActionResult<IBoardBrieflyOutputVM>> Briefly()
 		{
-			var brieflyOutputVM = await _boardsDataService.ImportDataForBrieflyBoardAsync();
+			ICollection<ITodoListModel> todoListModels = await _todoListRepository.GetAllWithDetailsByFilterAsync(todoList => todoList.UserId == _signedInUserId);
+			var todoListDtos = _todoListMapper.TransferToDto(todoListModels);
+            var brieflyOutputVM = _boardsVMFactory.CreateBrieflyOutputVM(todoListDtos);
 
 			return View(brieflyOutputVM);
 		}
@@ -44,11 +51,13 @@ namespace Project_Main.Controllers
 		/// </returns>
 		[HttpGet]
 		[Route(CustomRoutes.AllDetailsRoute)]
-		public async Task<ActionResult<BoardsAllOutputVM>> All()
+		public async Task<ActionResult<IBoardAllOutputVM>> All()
 		{
-			var boardsAllOutputVM = await _boardsDataService.ImportDataForAllBoardAsync();
+			var todoListModels = await _todoListRepository.GetAllWithDetailsAsync(_signedInUserId);
+			var todoListDtos = _todoListMapper.TransferToDto(todoListModels);
+			var allOutputVM = _boardsVMFactory.CreateAllOutputVM(todoListDtos);
 
-			return View(boardsAllOutputVM);
+			return View(allOutputVM);
 		}
 	}
 }
