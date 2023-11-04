@@ -44,7 +44,7 @@ namespace Project_Main.Services.Identity
 		{
 			if (userPrincipal is null)
 			{
-				_logger.LogError(Messages.UnableToAuthenticateUserPrincipal, nameof(AuthenticateUser), nameof(UserAuthenticationService));
+				_logger.LogError(MessagesPacket.UnableToAuthenticateUserPrincipal, nameof(AuthenticateUser), nameof(UserAuthenticationService));
 				return false;
 			}
 

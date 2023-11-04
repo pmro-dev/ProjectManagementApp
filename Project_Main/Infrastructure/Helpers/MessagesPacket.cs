@@ -3,7 +3,7 @@
     /// <summary>
     /// Helper class with const messages and methods that return formated string messages.
     /// </summary>
-    public static class Messages
+    public static class MessagesPacket
     {
 		#region MESSAGES FOR EXCEPTIONS
 

@@ -22,8 +22,8 @@ namespace Project_Main.Services.Identity
 
 			if (httpContext is null)
 			{
-				_logger.LogCritical(Messages.LogHttpContextNullOnLogout, nameof(LogoutByProviderAsync));
-				throw new InvalidOperationException(Messages.HttpContextNullOnLogout);
+				_logger.LogCritical(MessagesPacket.LogHttpContextNullOnLogout, nameof(LogoutByProviderAsync));
+				throw new InvalidOperationException(MessagesPacket.HttpContextNullOnLogout);
 			}
 
 			string userAuthenticationScheme = httpContext.User.Claims.First(c => c.Type == ConfigConstants.AuthSchemeClaimKey).Value;

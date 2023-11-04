@@ -118,7 +118,7 @@ namespace Project_Main.Infrastructure.Helpers
 		public const string TaskTableDetails = "_TaskTableDetails";
 		public const string TodoListTable = "_TodoListTable";
 		public const string TodoListTableDetails = "_TodoListTableDetails";
-		public const string Validation = "_ValidationScriptsPartial";
+		public const string ValidationPartial = "_ValidationScriptsPartial";
 		public const string AccessDenied = "AccessDenied";
 		public const string Error = "Error";
 	}

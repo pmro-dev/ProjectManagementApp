@@ -63,8 +63,8 @@ namespace Project_Main.Services.Identity
 
 			if (roleForNewUser is null)
 			{
-				_logger.LogCritical(Messages.LogCriticalErrorRoleForNewUserNotFoundInDb, nameof(SetRoles), nameof(roleForNewUser), _defaultRole);
-				throw new InvalidOperationException(Messages.RoleForNewUserNotFoundInDb(nameof(roleForNewUser), _defaultRole));
+				_logger.LogCritical(MessagesPacket.LogCriticalErrorRoleForNewUserNotFoundInDb, nameof(SetRoles), nameof(roleForNewUser), _defaultRole);
+				throw new InvalidOperationException(MessagesPacket.RoleForNewUserNotFoundInDb(nameof(roleForNewUser), _defaultRole));
 			}
 
 			userDto.UserRoles.Add(new UserRoleModel()

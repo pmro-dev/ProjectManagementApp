@@ -82,7 +82,7 @@ namespace Project_Main.Controllers
 
             if (taskModel is null)
             {
-                _logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, routeTaskId, HelperDatabase.TasksDbSetName);
+                _logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, routeTaskId, HelperDatabase.TasksDbSetName);
                 return NotFound();
             }
 
@@ -122,7 +122,7 @@ namespace Project_Main.Controllers
 
             if (targetTodoListModel is null)
             {
-                _logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, id, HelperDatabase.TodoListsDbSetName);
+                _logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, id, HelperDatabase.TodoListsDbSetName);
                 return NotFound();
             }
 
@@ -195,13 +195,13 @@ namespace Project_Main.Controllers
 
             if (taskModel == null)
             {
-                _logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, taskId, HelperDatabase.TasksDbSetName);
+                _logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, taskId, HelperDatabase.TasksDbSetName);
                 return NotFound();
             }
 
             if (targetTodoList == null)
             {
-                _logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, todoListId, HelperDatabase.TodoListsDbSetName);
+                _logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, todoListId, HelperDatabase.TodoListsDbSetName);
                 return NotFound();
             }
 
@@ -262,7 +262,7 @@ namespace Project_Main.Controllers
 
             if (id != taskModel.Id)
             {
-                _logger.LogCritical(Messages.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, id, taskModel.Id);
+                _logger.LogCritical(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, id, taskEditInputVM.Id);
                 return Conflict();
             }
 
@@ -301,7 +301,7 @@ namespace Project_Main.Controllers
 
             if (taskToDelete == null)
             {
-                _logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, taskId, HelperDatabase.TasksDbSetName);
+                _logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, taskId, HelperDatabase.TasksDbSetName);
                 return NotFound();
             }
 
@@ -321,7 +321,7 @@ namespace Project_Main.Controllers
 
 			if (taskDetailsVM.TodoListId != todoListId)
             {
-                _logger.LogCritical(Messages.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, todoListId, taskToDelete.TodoListId);
+                _logger.LogCritical(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, todoListId, taskToDeleteDto.TodoListId);
                 return Conflict();
             }
 
@@ -352,13 +352,13 @@ namespace Project_Main.Controllers
 
                 if (taskToDelete is null)
                 {
-                    _logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, taskDeleteVM.Id, HelperDatabase.TasksDbSetName);
+                    _logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, deleteInputDto.Id, HelperDatabase.TasksDbSetName);
                     return NotFound();
                 }
 
                 if (taskToDelete.TodoListId != taskDeleteVM.TodoListId)
                 {
-                    _logger.LogError(Messages.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, taskDeleteVM.TodoListId, taskToDelete.TodoListId);
+                    _logger.LogError(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, deleteInputDto.TodoListId, taskToDeleteModel.TodoListId);
                     return Conflict();
                 }
 

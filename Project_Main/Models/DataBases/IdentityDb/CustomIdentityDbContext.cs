@@ -29,7 +29,7 @@ namespace Project_Main.Models.DataBases.Identity
 
             modelBuilder.Entity<UserRoleModel>().HasKey(ur => new { ur.UserId, ur.RoleId });
 
-            _logger?.LogInformation(Messages.LogBuildingSucceed, nameof(OnModelCreating), nameof(CustomIdentityDbContext));
+            _logger?.LogInformation(MessagesPacket.LogBuildingSucceed, nameof(OnModelCreating), nameof(CustomIdentityDbContext));
         }
     }
 }

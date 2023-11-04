@@ -20,8 +20,8 @@
 		{
 			if (model == null)
 			{
-				logger.LogError(Messages.LogParamNullOrEmpty, operationName, modelName);
-				throw new ArgumentNullException(modelName, Messages.ProvidedObjectIsNull);
+				logger.LogError(MessagesPacket.LogParamNullOrEmpty, operationName, modelName);
+				throw new ArgumentNullException(modelName, MessagesPacket.ProvidedObjectIsNull);
 			}
 		}
 
@@ -39,30 +39,30 @@
 		{
 			if (argument is null)
 			{
-				logger.LogError(Messages.LogParamNullOrEmpty, operationName, argumentName);
-				throw new ArgumentNullException(argumentName, Messages.ProvidedObjectIsNull);
+				logger.LogError(MessagesPacket.LogParamNullOrEmpty, operationName, argumentName);
+				throw new ArgumentNullException(argumentName, MessagesPacket.ProvidedObjectIsNull);
 			}
 
 			if (argument is string idString)
 			{
 				if (string.IsNullOrEmpty(idString))
 				{
-					logger.LogError(Messages.LogParamNullOrEmpty, operationName, argumentName);
-					throw new ArgumentNullException(argumentName, Messages.ProvidedArgumentIsNullOrEmpty);
+					logger.LogError(MessagesPacket.LogParamNullOrEmpty, operationName, argumentName);
+					throw new ArgumentNullException(argumentName, MessagesPacket.ProvidedArgumentIsNullOrEmpty);
 				}
 			}
 			else if (argument is int idInt)
 			{
 				if (idInt < 0)
 				{
-					logger.LogError(Messages.LogOutOfRange, operationName, argumentName, argument);
-					throw new ArgumentOutOfRangeException(argumentName, Messages.ProvidedArgumentIsOutOfRange);
+					logger.LogError(MessagesPacket.LogOutOfRange, operationName, argumentName, argument);
+					throw new ArgumentOutOfRangeException(argumentName, MessagesPacket.ProvidedArgumentIsOutOfRange);
 				}
 			}
 			else
 			{
-				logger.LogError(Messages.LogInvalidArgumentType, operationName, argumentName);
-				throw new ArgumentException(Messages.ProvidedArgumentIsWithInvalidType, argumentName);
+				logger.LogError(MessagesPacket.LogInvalidArgumentType, operationName, argumentName);
+				throw new ArgumentException(MessagesPacket.ProvidedArgumentIsWithInvalidType, argumentName);
 			}
 		}
 
@@ -77,8 +77,8 @@
 		{
 			if (string.IsNullOrEmpty(param))
 			{
-				logger.LogError(Messages.LogParamNullOrEmpty, operationName, paramName);
-				throw new ArgumentNullException(Messages.ExceptionNullObjectOnAction(operationName, paramName));
+				logger.LogError(MessagesPacket.LogParamNullOrEmpty, operationName, paramName);
+				throw new ArgumentNullException(MessagesPacket.ExceptionNullObjectOnAction(operationName, paramName));
 			}
 		}
 
@@ -95,8 +95,8 @@
 		{
 			if (id < bottomBoundry)
 			{
-				logger.LogError(Messages.LogOutOfRange, operationName, paramName, id);
-				throw new ArgumentOutOfRangeException(paramName, id, Messages.OutOfRange(operationName, nameof(id), id));
+				logger.LogError(MessagesPacket.LogOutOfRange, operationName, paramName, id);
+				throw new ArgumentOutOfRangeException(paramName, id, MessagesPacket.OutOfRange(operationName, nameof(id), id));
 			}
 		}
 	}

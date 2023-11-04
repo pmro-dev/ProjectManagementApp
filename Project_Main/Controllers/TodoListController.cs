@@ -69,7 +69,7 @@ namespace Project_Main.Controllers
 			{
 				if (await _todoListRepository.DoesAnyExistWithSameNameAsync(todoListModel.Title))
 				{
-					ModelState.AddModelError(string.Empty, Messages.NameTaken);
+                    ModelState.AddModelError(string.Empty, MessagesPacket.NameTaken);
 
 					return View(todoListModel);
 				}
@@ -101,7 +101,7 @@ namespace Project_Main.Controllers
 
 			if (todoListModel == null)
 			{
-				_logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, id, HelperDatabase.TodoListsDbSetName);
+                _logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, id, HelperDatabase.TodoListsDbSetName);
 				return NotFound();
 			}
 
@@ -127,7 +127,7 @@ namespace Project_Main.Controllers
 
 			if (id != todoListModel.Id)
 			{
-				_logger.LogError(Messages.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, id, todoListModel.Id);
+                _logger.LogError(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, id, todoListId);
 				return Conflict();
 			}
 
@@ -162,7 +162,7 @@ namespace Project_Main.Controllers
 
 			if (todoListModel == null)
 			{
-				_logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, id, HelperDatabase.TodoListsDbSetName);
+                _logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, id, HelperDatabase.TodoListsDbSetName);
 				return NotFound();
 			}
 
@@ -199,7 +199,7 @@ namespace Project_Main.Controllers
 				{
 					if (todoListModel.Id != id)
 					{
-						_logger.LogError(Messages.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, id, todoListModel.Id);
+                        _logger.LogError(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, id, todoListDbModel.Id);
 						return Conflict();
 					}
 
@@ -248,7 +248,7 @@ namespace Project_Main.Controllers
 
 			if (todoListFromDb is null)
 			{
-				_logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, id, HelperDatabase.TodoListsDbSetName);
+                _logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, id, HelperDatabase.TodoListsDbSetName);
 				return NotFound();
 			}
 

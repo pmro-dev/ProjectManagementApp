@@ -57,7 +57,7 @@ namespace Project_Main.Controllers
 
 				if (isLoginDataInvalid)
 				{
-					ModelState.AddModelError(string.Empty, Messages.InvalidLoginData);
+					ModelState.AddModelError(string.Empty, MessagesPacket.InvalidLoginData);
 					return View(loginInputVM);
 				}
 
@@ -67,7 +67,7 @@ namespace Project_Main.Controllers
 
 					if (isNotUserRegistered)
 					{
-						ModelState.AddModelError(string.Empty, Messages.InvalidLoginData);
+						ModelState.AddModelError(string.Empty, MessagesPacket.InvalidLoginData);
 						return View();
 					}
 
@@ -76,14 +76,14 @@ namespace Project_Main.Controllers
 					if (isLoggedInSuccessfully) { return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name); }
 					else
 					{
-						_logger.LogError(Messages.LoginFailedForRegisteredUser, nameof(Login), loginInputDto.Username);
-						ModelState.AddModelError(string.Empty, Messages.UnableToLogin);
+						_logger.LogError(MessagesPacket.LoginFailedForRegisteredUser, nameof(Login), loginInputDto.Username);
+						ModelState.AddModelError(string.Empty, MessagesPacket.UnableToLogin);
 						return View();
 					}
 				}
 				catch (Exception ex)
 				{
-					_logger.LogCritical(ex, Messages.LogExceptionOccurredOnLogging);
+					_logger.LogCritical(ex, MessagesPacket.LogExceptionOccurredOnLogging);
 					throw;
 				}
 			}
@@ -102,7 +102,7 @@ namespace Project_Main.Controllers
 		{
 			if (string.IsNullOrEmpty(provider))
 			{
-				_logger.LogError(Messages.LogInvalidProviderName);
+				_logger.LogError(MessagesPacket.LogInvalidProviderName);
 				throw new ArgumentNullException(nameof(provider));
 			}
 
@@ -150,7 +150,7 @@ namespace Project_Main.Controllers
 
 				if (isDataInvalid)
 				{
-					ModelState.AddModelError(string.Empty, Messages.InvalidRegisterData);
+					ModelState.AddModelError(string.Empty, MessagesPacket.InvalidRegisterData);
 					return View();
 				}
 
@@ -163,7 +163,7 @@ namespace Project_Main.Controllers
 				}
 				catch (Exception ex)
 				{
-					_logger.LogCritical(ex, Messages.LogCreatingUserIdentityFailed, operationName);
+					_logger.LogCritical(ex, MessagesPacket.LogCreatingUserIdentityFailed, operationName);
 					return Error();
 				}
 			}

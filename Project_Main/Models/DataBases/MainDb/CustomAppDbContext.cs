@@ -79,7 +79,7 @@ namespace Project_Main.Models.DataBases.AppData
 
 			//modelBuilder.Entity<TaskTagModel>().HasKey(tt => new { tt.TaskId, tt.TagId });
 
-			_logger?.LogInformation(Messages.LogBuildingSucceed, nameof(OnModelCreating), nameof(CustomAppDbContext));
+			_logger?.LogInformation(MessagesPacket.LogBuildingSucceed, nameof(OnModelCreating), nameof(CustomAppDbContext));
 		}
 	}
 }

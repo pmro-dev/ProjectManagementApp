@@ -68,8 +68,8 @@ namespace Project_Main
 			{
 				IIdentityUnitOfWork LoggAndThrowExceptionOnNullUnitOfWork()
 				{
-					logger?.LogCritical(Messages.LogErrorDbContextIsNull, nameof(_identityUnitOfWork));
-					throw new InvalidOperationException(Messages.DbContextIsNull(nameof(_identityUnitOfWork)));
+					logger?.LogCritical(MessagesPacket.LogErrorDbContextIsNull, nameof(_identityUnitOfWork));
+					throw new InvalidOperationException(MessagesPacket.DbContextIsNull(nameof(_identityUnitOfWork)));
 				}
 
 				_identityUnitOfWork = cookieSigningInContext.HttpContext.RequestServices.GetService<IIdentityUnitOfWork>() ?? LoggAndThrowExceptionOnNullUnitOfWork();
@@ -82,7 +82,7 @@ namespace Project_Main
 			static void CreateUserBasedOnProviderData(CookieSigningInContext cookieSigningInContext, Claim authSchemeClaimWithProviderName, out ClaimsIdentity principle, out UserModel userBasedOnProviderClaims)
 			{
 				principle = cookieSigningInContext.Principal?.Identity as ClaimsIdentity ??
-					throw new ArgumentException(Messages.ParamObjectNull(nameof(CreateUserBasedOnProviderData), nameof(cookieSigningInContext.Principal)));
+					throw new ArgumentException(MessagesPacket.ParamObjectNull(nameof(CreateUserBasedOnProviderData), nameof(cookieSigningInContext.Principal)));
 
 				principle.AddClaim(authSchemeClaimWithProviderName);
 
@@ -107,8 +107,8 @@ namespace Project_Main
 
 				if (userFromDb is null)
 				{
-					logger?.LogCritical(Messages.LogEntityNotFoundInDbSet, nameof(UpdateUserWhenDataOnProviderSideChangedAsync), userBasedOnProviderClaims.NameIdentifier, HelperDatabase.UsersDbSetName);
-					throw new InvalidOperationException(Messages.EntityNotFoundByIdInDb(nameof(UpdateUserWhenDataOnProviderSideChangedAsync), "Identity", -2));
+					logger?.LogCritical(MessagesPacket.LogEntityNotFoundInDbSet, nameof(UpdateUserWhenDataOnProviderSideChangedAsync), userBasedOnProviderClaims.NameIdentifier, HelperDatabase.UsersDbSetName);
+					throw new InvalidOperationException(MessagesPacket.EntityNotFoundByIdInDb(nameof(UpdateUserWhenDataOnProviderSideChangedAsync), "Identity", -2));
 				}
 
 				bool doesUserUseOtherProvider = userBasedOnProviderClaims.Provider != CookieAuthenticationDefaults.AuthenticationScheme;
