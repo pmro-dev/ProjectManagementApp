@@ -2,6 +2,7 @@
 using Project_DomainEntities;
 using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.DataBases.General;
+using System.Linq.Expressions;
 
 namespace Project_Main.Models.DataBases.AppData
 {
@@ -39,22 +40,22 @@ namespace Project_Main.Models.DataBases.AppData
 
             if (todoListWithDetails is null)
             {
-                _logger.LogError(Messages.LogEntityNotFoundInDbSet, operationName, id, "TodoLists");
-                throw new InvalidOperationException(Messages.ExceptionNullObjectOnAction(operationName, nameof(todoListWithDetails)));
+                _logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, id, "TodoLists");
+                throw new InvalidOperationException(MessagesPacket.ExceptionNullObjectOnAction(operationName, nameof(todoListWithDetails)));
             }
 
 			var tasksTemp = todoListWithDetails.Tasks.Select(t => new TaskModel()
             {
                 Id = 0,
-                    CreationDate = DateTime.Now,
-                    LastModificationDate = DateTime.Now,
-                    UserId = t.UserId,
-                    Description = t.Description,
-                    DueDate = t.DueDate,
-                    ReminderDate = t.ReminderDate,
-                    Status = t.Status,
-                    TaskTags = t.TaskTags,
-                    Title = t.Title,
+                CreationDate = DateTime.Now,
+                LastModificationDate = DateTime.Now,
+                UserId = t.UserId,
+                Description = t.Description,
+                DueDate = t.DueDate,
+                ReminderDate = t.ReminderDate,
+                Status = t.Status,
+                TaskTags = t.TaskTags,
+                Title = t.Title,
             }).Cast<ITaskModel>().ToList();
 
             TodoListModel newTodoList = new()
@@ -83,8 +84,19 @@ namespace Project_Main.Models.DataBases.AppData
             return allTodoListsWithDetails;
         }
 
-		///<inheritdoc />
-		public async Task<TodoListModel?> GetWithDetailsAsync(int id)
+        ///<inheritdoc />
+        public async Task<ICollection<ITodoListModel>> GetAllWithDetailsByFilterAsync(Expression<Func<ITodoListModel, bool>> filter)
+        {
+			ICollection<ITodoListModel> entities = await _dbContext
+                .Set<TodoListModel>()
+                .Where(filter)
+                .Include(todoList => todoList.Tasks)
+                .ToListAsync();
+
+            return entities;
+        }
+
+        ///<inheritdoc />
         public async Task<ITodoListModel?> GetWithDetailsAsync(int id)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetWithDetailsAsync), nameof(TodoListRepository));

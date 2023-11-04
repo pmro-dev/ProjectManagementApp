@@ -1,5 +1,6 @@
 ﻿using Project_DomainEntities;
 using Project_Main.Models.DataBases.General;
+using System.Linq.Expressions;
 
 namespace Project_Main.Models.DataBases.AppData
 {
@@ -21,11 +22,18 @@ namespace Project_Main.Models.DataBases.AppData
 		Task<ICollection<ITodoListModel>> GetAllWithDetailsAsync(string userId);
 
 		/// <summary>
-		/// Duplicate a whole, specifc ToDoList with details in Db (where details are related data in other tables).
+		/// Get only those TodoLists with details (where details are related data in other tables) which follow predicate filter.
 		/// </summary>
-		/// <param name="id">Targeted list id.</param>
+		/// <param name="filter"></param>
 		/// <returns></returns>
-		Task DuplicateWithDetailsAsync(int id);
+		Task<ICollection<ITodoListModel>> GetAllWithDetailsByFilterAsync(Expression<Func<ITodoListModel, bool>> filter);
+
+        /// <summary>
+        /// Duplicate a whole, specifc ToDoList with details in Db (where details are related data in other tables).
+        /// </summary>
+        /// <param name="id">Targeted list id.</param>
+        /// <returns></returns>
+        Task DuplicateWithDetailsAsync(int id);
 
 		/// <summary>
 		/// Check that any ToDoList with the same name already exists.
