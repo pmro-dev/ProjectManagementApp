@@ -3,15 +3,16 @@ using Microsoft.AspNetCore.Authorization;
 using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.ViewModels.InputModels;
 using Project_Main.Services.Identity;
-using Project_Main.Infrastructure.DTOs;
 using Project_Main.Services.DTO;
+using Project_Main.Infrastructure.DTOs.Inputs;
+using Project_Main.Infrastructure.DTOs.Entities;
 
 namespace Project_Main.Controllers
 {
-	/// <summary>
-	/// Controller to manage availability of page's resources via Authentication.
-	/// </summary>
-	[Authorize]
+    /// <summary>
+    /// Controller to manage availability of page's resources via Authentication.
+    /// </summary>
+    [Authorize]
 	[AllowAnonymous]
 	public class AccountController : Controller
 	{
@@ -20,25 +21,27 @@ namespace Project_Main.Controllers
 		private readonly IUserRegisterService _userRegisterService;
 		private readonly IUserAuthenticationService _userAuthenticationService;
 		private readonly ILogoutService _logoutService;
+		private readonly IAccountMapper _accountMapper;
 
-		private string operationName = string.Empty;
+        private string operationName = string.Empty;
 		private readonly string controllerName = nameof(AccountController);
 
-		public AccountController(ILoginService loginService, IUserRegisterService userRegisterService, ILogger<AccountController> logger,
-			IUserAuthenticationService userAuthenticationService, ILogoutService logoutService)
-		{
-			_loginService = loginService;
-			_userRegisterService = userRegisterService;
-			_logger = logger;
-			_userAuthenticationService = userAuthenticationService;
-			_logoutService = logoutService;
-		}
+        public AccountController(ILoginService loginService, IUserRegisterService userRegisterService, ILogger<AccountController> logger,
+            IUserAuthenticationService userAuthenticationService, ILogoutService logoutService, IAccountMapper accountMapper)
+        {
+            _loginService = loginService;
+            _userRegisterService = userRegisterService;
+            _logger = logger;
+            _userAuthenticationService = userAuthenticationService;
+            _logoutService = logoutService;
+            _accountMapper = accountMapper;
+        }
 
-		/// <summary>
-		/// Return Index of the whole page that is Login Page.
-		/// </summary>
-		/// <returns>Return user to Login Page.</returns>
-		[HttpGet]
+        /// <summary>
+        /// Return Index of the whole page that is Login Page.
+        /// </summary>
+        /// <returns>Return user to Login Page.</returns>
+        [HttpGet]
 		public ViewResult Login() { return View(); }
 
 		/// <summary>
@@ -52,7 +55,7 @@ namespace Project_Main.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				LoginInputDto loginInputDto = AccountDtoService.TransferToLoginInputDto(loginInputVM);
+				ILoginInputDto loginInputDto = _accountMapper.TransferToDto(loginInputVM);
 				bool isLoginDataInvalid = !LoginDataValidator.Valid(loginInputDto);
 
 				if (isLoginDataInvalid)
@@ -142,7 +145,7 @@ namespace Project_Main.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				UserDto userDto = AccountDtoService.TransferToUserDto(registerInputVM);
+				IUserDto userDto = _accountMapper.TransferToUserDto(registerInputVM);
 
 				operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Register), controllerName);
 
