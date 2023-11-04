@@ -2,7 +2,7 @@
 
 namespace Project_Main.Models.ViewModels.OutputModels
 {
-    public interface IBoardAllOutputVM : IBoardViewModel
+    public interface IBoardAllOutputVM
     {
         IEnumerable<ITodoListDto> TodoLists { get; set; }
     }

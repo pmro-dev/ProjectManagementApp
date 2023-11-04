@@ -1,14 +1,12 @@
-﻿using Project_DomainEntities;
-
-namespace Project_Main.Models.ViewModels.OutputModels
+﻿namespace Project_Main.Models.ViewModels.OutputModels
 {
     /// <summary>
     /// Model for deletion ToDoList.
     /// </summary>
-    public class TodoListDeleteOutputVM
+    public class TodoListDeleteOutputVM : ITodoListDeleteOutputVM
     {
-        public TodoListModel ListModel { get; set; } = new TodoListModel();
-
         public int TasksCount { get; set; } = 0;
+        public int Id { get; set; } = 0;
+        public string Title { get; set; } = string.Empty;
     }
 }

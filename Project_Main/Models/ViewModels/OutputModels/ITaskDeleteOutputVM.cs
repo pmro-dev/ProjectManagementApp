@@ -2,7 +2,7 @@
 
 namespace Project_Main.Models.ViewModels.OutputModels
 {
-    public interface ITaskDetailsOutputVM
+    public interface ITaskDeleteOutputVM
     {
         int Id { get; set; }
         string Title { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace Project_Main.Models.ViewModels.OutputModels
 {
-    public interface ITaskCreateOutputVM : ITaskViewModel
+    public interface ITaskCreateOutputVM
     {
         int TodoListId { get; set; }
         string TodoListName { get; set; }
