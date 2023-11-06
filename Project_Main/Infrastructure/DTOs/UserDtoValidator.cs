@@ -1,6 +1,6 @@
 ﻿using Project_Main.Infrastructure.DTOs.Entities;
 
-namespace Project_Main.Services.DTO
+namespace Project_Main.Infrastructure.DTOs
 {
     public static class UserDtoValidator
     {
