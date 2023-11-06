@@ -4,6 +4,6 @@ namespace Project_Main.Models.ViewModels.OutputModels
 {
     public class BoardAllOutputVM : IBoardAllOutputVM
     {
-        public IEnumerable<ITodoListDto> TodoLists { get; set; } = new List<ITodoListDto>();
+        public ICollection<ITodoListDto> TodoLists { get; set; } = new List<ITodoListDto>();
     }
 }

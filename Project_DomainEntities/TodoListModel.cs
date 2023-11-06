@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.VisualBasic;
 using Project_DomainEntities.Helpers;
 
 namespace Project_DomainEntities
@@ -32,7 +33,7 @@ namespace Project_DomainEntities
 		/// <summary>
 		/// Gets or Sets
 		/// </summary>
-		public IEnumerable<ITaskModel> Tasks { get; set; } = new List<ITaskModel>();
+		public ICollection<ITaskModel> Tasks { get; set; } = new List<ITaskModel>();
 
 		/// <summary>
 		/// Compares properties of two To Do Lists and return result of that compare.
@@ -47,7 +48,7 @@ namespace Project_DomainEntities
 			}
 			else
 			{
-				var todoList = (TodoListModel)obj;
+				var todoList = (ITodoListModel)obj;
 
 				if (Title == todoList.Title)
 				{
@@ -59,7 +60,7 @@ namespace Project_DomainEntities
 					{
 						if (Tasks is not null && todoList.Tasks is not null)
 						{
-							return Tasks.Count() == todoList.Tasks.Count();
+							return Tasks.Count == todoList.Tasks.Count;
 						}
 						else
 						{
@@ -97,8 +98,8 @@ namespace Project_DomainEntities
 					{
 						if (Tasks is not null && obj.Tasks is not null)
 						{
-							var tempTasks = (List<TaskModel>)Tasks;
-							var tempObjTasks = (List<TaskModel>)obj.Tasks;
+							var tempTasks = Tasks;
+							var tempObjTasks = (ICollection<ITaskModel>)obj.Tasks;
 
 							return tempTasks.Count == tempObjTasks.Count && Id == obj.Id;
 						}

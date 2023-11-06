@@ -4,7 +4,7 @@ namespace Project_Main.Models.ViewModels.OutputModels
 {
     public interface IBoardBrieflyOutputVM
     {
-        IEnumerable<ITodoListDto> TodoLists { get; set; }
+		ICollection<ITodoListDto> TodoLists { get; set; }
 
         int GetNumberOfAllTasks(ITodoListDto todoList);
         int GetNumberOfCompletedTasks(ITodoListDto todoList);

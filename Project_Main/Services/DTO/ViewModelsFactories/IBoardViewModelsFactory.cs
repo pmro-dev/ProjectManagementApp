@@ -5,7 +5,7 @@ namespace Project_Main.Services.DTO.ViewModelsFactories
 {
     public interface IBoardViewModelsFactory
     {
-        public IBoardBrieflyOutputVM CreateBrieflyOutputVM(IEnumerable<ITodoListDto> todolistDto);
-        public IBoardAllOutputVM CreateAllOutputVM(IEnumerable<ITodoListDto> todolistDto);
+        public IBoardBrieflyOutputVM CreateBrieflyOutputVM(ICollection<ITodoListDto> todolistDto);
+        public IBoardAllOutputVM CreateAllOutputVM(ICollection<ITodoListDto> todolistDto);
     }
 }

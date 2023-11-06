@@ -46,7 +46,7 @@ namespace Project_DomainEntities
 		[Required]
         public TaskStatusType Status { get; set; } = TaskStatusType.NotStarted;
 
-        public IEnumerable<ITaskTagModel> TaskTags { get; set; } = new List<ITaskTagModel>();
+        public ICollection<ITaskTagModel> TaskTags { get; set; } = new List<ITaskTagModel>();
 
         [Required]
         public int TodoListId { get; set; } = defaultId;

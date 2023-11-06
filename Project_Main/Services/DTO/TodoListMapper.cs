@@ -17,12 +17,12 @@ namespace Project_Main.Services.DTO
 
         #region TRANSFER DTO TO MODEL
 
-        public ITodoListModel TransferToModel(ITodoListDto todoListDto, Dictionary<object, object>? mappedObjects = null)
+        public ITodoListModel TransferToModel(ITodoListDto todoListDto, IDictionary<object, object>? mappedObjects = null)
         {
             return MapTodoListToModel(todoListDto, mappedObjects ?? new Dictionary<object, object>());
         }
 
-        private ITodoListModel MapTodoListToModel(ITodoListDto todoListDto, Dictionary<object, object> mappedObjects)
+        private ITodoListModel MapTodoListToModel(ITodoListDto todoListDto, IDictionary<object, object> mappedObjects)
         {
             if (mappedObjects.TryGetValue(todoListDto, out var mappedObject))
                 return (ITodoListModel)mappedObject;
@@ -41,7 +41,7 @@ namespace Project_Main.Services.DTO
             return todoListModel;
         }
 
-        private ICollection<ITaskModel> MapMultipleTasksToModels(ICollection<ITaskDto> taskDtos, Dictionary<object, object> mappedObjects)
+        private ICollection<ITaskModel> MapMultipleTasksToModels(ICollection<ITaskDto> taskDtos, IDictionary<object, object> mappedObjects)
         {
             return taskDtos.Select(task => _taskEntityMapper.TransferToModel(task, mappedObjects)).ToList();
         }
@@ -69,7 +69,7 @@ namespace Project_Main.Services.DTO
 
         #region TRANSFER MODEL TO DTO
 
-        public ITodoListDto TransferToDto(ITodoListModel todoListModel, Dictionary<object, object>? mappedObjects = null)
+        public ITodoListDto TransferToDto(ITodoListModel todoListModel, IDictionary<object, object>? mappedObjects = null)
         {
             return MapTodoListToDto(todoListModel, mappedObjects ?? new Dictionary<object, object>());
         }
@@ -83,7 +83,7 @@ namespace Project_Main.Services.DTO
             return todoListDtos;
         }
 
-        private ITodoListDto MapTodoListToDto(ITodoListModel todoListModel, Dictionary<object, object> mappedObjects)
+        private ITodoListDto MapTodoListToDto(ITodoListModel todoListModel, IDictionary<object, object> mappedObjects)
         {
             if (mappedObjects.TryGetValue(todoListModel, out var mappedObject))
                 return (ITodoListDto)mappedObject;
@@ -102,7 +102,7 @@ namespace Project_Main.Services.DTO
             return todoListDto;
         }
 
-        private ICollection<ITaskDto> MapMultipleTasksToDtos(ICollection<ITaskModel> taskModels, Dictionary<object, object> mappedObjects)
+        private ICollection<ITaskDto> MapMultipleTasksToDtos(ICollection<ITaskModel> taskModels, IDictionary<object, object> mappedObjects)
         {
             return taskModels.Select(task => _taskEntityMapper.TransferToDto(task, mappedObjects)).ToList();
         }

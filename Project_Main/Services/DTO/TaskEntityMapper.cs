@@ -77,12 +77,12 @@ namespace Project_Main.Services.DTO
 
         #region Map TaskModel To TaskDto
 
-        public ITaskDto TransferToDto(ITaskModel taskModel, Dictionary<object, object>? mappedObjects = null)
+        public ITaskDto TransferToDto(ITaskModel taskModel, IDictionary<object, object>? mappedObjects = null)
         {
             return MapTaskToDto(taskModel, mappedObjects ?? new Dictionary<object, object>());
         }
 
-        private ITaskDto MapTaskToDto(ITaskModel taskModel, Dictionary<object, object> mappedObjects)
+        private ITaskDto MapTaskToDto(ITaskModel taskModel, IDictionary<object, object> mappedObjects)
         {
             if (mappedObjects.TryGetValue(taskModel, out var mappedObject))
                 return (ITaskDto)mappedObject;
@@ -107,8 +107,8 @@ namespace Project_Main.Services.DTO
 
             if (taskModel.TodoList is not null)
             {
-                ITodoListMapper todoListDtoService = GetTodoListDtoService();
-                taskDto.TodoList = todoListDtoService.TransferToDto(taskModel.TodoList, mappedObjects);
+                ITodoListMapper todoListMapper = GetTodoListDtoService();
+                taskDto.TodoList = todoListMapper.TransferToDto(taskModel.TodoList, mappedObjects);
             }
 
             return taskDto;
@@ -119,12 +119,12 @@ namespace Project_Main.Services.DTO
             return _serviceProvider.CreateScope().ServiceProvider.GetRequiredService<ITodoListMapper>();
         }
 
-        private ICollection<ITaskTagDto> MapMultipleTaskTagsToDtos(ICollection<ITaskTagModel> taskTagModels, Dictionary<object, object> mappedObjects)
+        private ICollection<ITaskTagDto> MapMultipleTaskTagsToDtos(ICollection<ITaskTagModel> taskTagModels, IDictionary<object, object> mappedObjects)
         {
             return taskTagModels.Select(taskTag => MapTaskTagToDto(taskTag, mappedObjects)).ToList();
         }
 
-        private ITagDto MapTagToDto(ITagModel tagModel, Dictionary<object, object> mappedObjects)
+        private ITagDto MapTagToDto(ITagModel tagModel, IDictionary<object, object> mappedObjects)
         {
             if (mappedObjects.TryGetValue(tagModel, out var mappedObject))
                 return (ITagDto)mappedObject;
@@ -142,7 +142,7 @@ namespace Project_Main.Services.DTO
             return tagDto;
         }
 
-        private ITaskTagDto MapTaskTagToDto(ITaskTagModel taskTagModel, Dictionary<object, object> mappedObjects)
+        private ITaskTagDto MapTaskTagToDto(ITaskTagModel taskTagModel, IDictionary<object, object> mappedObjects)
         {
             if (mappedObjects.TryGetValue(taskTagModel, out var mappedObject))
                 return (ITaskTagDto)mappedObject;
@@ -178,12 +178,12 @@ namespace Project_Main.Services.DTO
 
         #region Map TaskDto to TaskModel
 
-        public ITaskModel TransferToModel(ITaskDto taskDto, Dictionary<object, object>? mappedObjects = null)
+        public ITaskModel TransferToModel(ITaskDto taskDto, IDictionary<object, object>? mappedObjects = null)
         {
             return MapTaskToModel(taskDto, mappedObjects ?? new Dictionary<object, object>());
         }
 
-        private ITaskModel MapTaskToModel(ITaskDto taskDto, Dictionary<object, object> mappedObjects)
+        private ITaskModel MapTaskToModel(ITaskDto taskDto, IDictionary<object, object> mappedObjects)
         {
             if (mappedObjects.TryGetValue(taskDto, out var mappedObject))
                 return (ITaskModel)mappedObject;
@@ -215,12 +215,12 @@ namespace Project_Main.Services.DTO
             return taskModel;
         }
 
-        private ICollection<ITaskTagModel> MapMultipleTaskTagsToModels(ICollection<ITaskTagDto> taskTagDtos, Dictionary<object, object> mappedObjects)
+        private ICollection<ITaskTagModel> MapMultipleTaskTagsToModels(ICollection<ITaskTagDto> taskTagDtos, IDictionary<object, object> mappedObjects)
         {
             return taskTagDtos.Select(taskTag => MapTaskTagToModel(taskTag, mappedObjects)).ToList();
         }
 
-        private ITaskTagModel MapTaskTagToModel(ITaskTagDto taskTagDto, Dictionary<object, object> mappedObjects)
+        private ITaskTagModel MapTaskTagToModel(ITaskTagDto taskTagDto, IDictionary<object, object> mappedObjects)
         {
             if (mappedObjects.TryGetValue(taskTagDto, out var mappedObject))
                 return (ITaskTagModel)mappedObject;
@@ -239,7 +239,7 @@ namespace Project_Main.Services.DTO
             return taskTagModel;
         }
 
-        private ITagModel MapTagToModel(ITagDto tagDto, Dictionary<object, object> mappedObjects)
+        private ITagModel MapTagToModel(ITagDto tagDto, IDictionary<object, object> mappedObjects)
         {
             if (mappedObjects.TryGetValue(tagDto, out var mappedObject))
                 return (ITagModel)mappedObject;

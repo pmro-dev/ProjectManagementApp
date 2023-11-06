@@ -6,10 +6,10 @@ namespace Project_Main.Models.ViewModels.OutputModels
     {
         int Id { get; set; }
         string Name { get; set; }
-        IEnumerable<ITaskDto> TasksCompleted { get; set; }
-        IEnumerable<ITaskDto> TasksExpired { get; set; }
-        IEnumerable<ITaskDto> TasksForToday { get; set; }
-        IEnumerable<ITaskDto> TasksNotCompleted { get; set; }
+		ICollection<ITaskDto> TasksCompleted { get; set; }
+		ICollection<ITaskDto> TasksExpired { get; set; }
+		ICollection<ITaskDto> TasksForToday { get; set; }
+		ICollection<ITaskDto> TasksNotCompleted { get; set; }
         string UserId { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Project_IdentityDomainEntities
 {
-    public sealed class UserModel : IEquatable<UserModel>, IUserModel
+    public sealed class UserModel : IUserModel
     {
         [Key]
         [Required]
@@ -41,40 +41,40 @@ namespace Project_IdentityDomainEntities
         [MaxLength(AttributesHelper.LastNameMaxLength)]
         public string LastName { get; set; } = string.Empty;
 
-        public List<UserRoleModel> UserRoles { get; set; } = new();
+        public ICollection<IUserRoleModel> UserRoles { get; set; } = new List<IUserRoleModel>();
 
-        public override bool Equals(object? obj)
-        {
-            if (obj == null || !GetType().Equals(obj.GetType())) { return false; }
-            else
-            {
-                var user = (UserModel)obj;
-                return NameIdentifier == user.NameIdentifier &&
-                    Provider == user.Provider &&
-                    Username == user.Username &&
-                    FirstName == user.FirstName &&
-                    LastName == user.LastName &&
-                    Email == user.Email;
-            }
-        }
+		public override bool Equals(object? obj)
+		{
+			if (obj == null || !GetType().Equals(obj.GetType())) { return false; }
+			else
+			{
+				var user = (IUserModel)obj;
+				return NameIdentifier == user.NameIdentifier &&
+					Provider == user.Provider &&
+					Username == user.Username &&
+					FirstName == user.FirstName &&
+					LastName == user.LastName &&
+					Email == user.Email;
+			}
+		}
 
-        public bool Equals(UserModel? other)
-        {
-            if (other == null || !GetType().Equals(other.GetType())) { return false; }
-            else
-            {
-                return NameIdentifier == other.NameIdentifier &&
-                    Provider == other.Provider &&
-                    Username == other.Username &&
-                    FirstName == other.FirstName &&
-                    LastName == other.LastName &&
-                    Email == other.Email;
-            }
-        }
+		public bool Equals(IUserModel? other)
+		{
+			if (other == null || !GetType().Equals(other.GetType())) { return false; }
+			else
+			{
+				return NameIdentifier == other.NameIdentifier &&
+					Provider == other.Provider &&
+					Username == other.Username &&
+					FirstName == other.FirstName &&
+					LastName == other.LastName &&
+					Email == other.Email;
+			}
+		}
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(NameIdentifier);
-        }
-    }
+		public override int GetHashCode()
+		{
+			return HashCode.Combine(NameIdentifier);
+		}
+	}
 }

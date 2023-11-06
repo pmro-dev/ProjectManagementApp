@@ -1,12 +1,21 @@
 ﻿namespace Project_IdentityDomainEntities
 {
-	public class UserRoleModel
+	public class UserRoleModel : IUserRoleModel
 	{
-		public string UserId { get; set; } = string.Empty;
-		public UserModel User { get; set; } = new();
+        public UserRoleModel()
+        {
+			UserId = string.Empty;
+			User = new UserModel();
+			RoleId = string.Empty;
+			Role = new RoleModel();
 
-		public string RoleId { get; set; } = string.Empty;
-		public RoleModel Role { get; set; } = new();
+		}
+
+        public string UserId { get; set; }
+		public IUserModel User { get; set; }
+
+		public string RoleId { get; set; }
+		public IRoleModel Role { get; set; }
 
 	}
 }

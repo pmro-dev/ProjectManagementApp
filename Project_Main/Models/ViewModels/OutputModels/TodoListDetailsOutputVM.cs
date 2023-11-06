@@ -13,9 +13,9 @@ namespace Project_Main.Models.ViewModels.OutputModels
 
         public string UserId { get; set; } = string.Empty;
 
-        public IEnumerable<ITaskDto> TasksForToday { get; set; } = new List<ITaskDto>();
-        public IEnumerable<ITaskDto> TasksCompleted { get; set; } = new List<ITaskDto>();
-        public IEnumerable<ITaskDto> TasksNotCompleted { get; set; } = new List<ITaskDto>();
-        public IEnumerable<ITaskDto> TasksExpired { get; set; } = new List<ITaskDto>();
+        public ICollection<ITaskDto> TasksForToday { get; set; } = new List<ITaskDto>();
+        public ICollection<ITaskDto> TasksCompleted { get; set; } = new List<ITaskDto>();
+        public ICollection<ITaskDto> TasksNotCompleted { get; set; } = new List<ITaskDto>();
+        public ICollection<ITaskDto> TasksExpired { get; set; } = new List<ITaskDto>();
     }
 }

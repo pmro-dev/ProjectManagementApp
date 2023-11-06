@@ -30,6 +30,6 @@ namespace Project_DomainEntities
 
 		public string UserId { get; set; }
 
-		public IEnumerable<ITaskTagModel> TaskTags { get; set; }
+		public ICollection<ITaskTagModel> TaskTags { get; set; }
 	}
 }

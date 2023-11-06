@@ -8,10 +8,10 @@ namespace Project_Main.Services.DTO
     public interface ITodoListMapper
     {
 		ICollection<ITodoListDto> TransferToDto(ICollection<ITodoListModel> todoLists);
-        ITodoListDto TransferToDto(ITodoListModel todoListModel, Dictionary<object, object>? mappedObjects = null);
+        ITodoListDto TransferToDto(ITodoListModel todoListModel, IDictionary<object, object>? mappedObjects = null);
         ITodoListDto TransferToDto(ITodoListCreateInputVM createInputVM);
         ITodoListEditInputDto TransferToDto(ITodoListEditInputVM editInputVM);
-        ITodoListModel TransferToModel(ITodoListDto todoListDto, Dictionary<object, object>? mappedObjects = null);
+        ITodoListModel TransferToModel(ITodoListDto todoListDto, IDictionary<object, object>? mappedObjects = null);
         void UpdateModel(ITodoListModel todoListDbModel, ITodoListEditInputDto taskEditInputDto);
     }
 }

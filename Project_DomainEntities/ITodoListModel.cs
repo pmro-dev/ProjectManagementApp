@@ -3,7 +3,7 @@
 	public interface ITodoListModel
 	{
 		int Id { get; set; }
-		IEnumerable<ITaskModel> Tasks { get; set; }
+		ICollection<ITaskModel> Tasks { get; set; }
 		string Title { get; set; }
 		string UserId { get; set; }
 

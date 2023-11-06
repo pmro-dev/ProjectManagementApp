@@ -10,7 +10,7 @@ namespace Project_Main.Models.ViewModels.OutputModels
     {
         private readonly int ValueIndicatesEquality = 0;
 
-        public IEnumerable<ITodoListDto> TodoLists { get; set; } = new List<ITodoListDto>();
+        public ICollection<ITodoListDto> TodoLists { get; set; } = new List<ITodoListDto>();
 
         /// <summary>
         /// Get completed tasks count.
@@ -29,7 +29,7 @@ namespace Project_Main.Models.ViewModels.OutputModels
         /// <returns>All Tasks count in a specific ToDoList.</returns>
         public int GetNumberOfAllTasks(ITodoListDto todoList)
         {
-            return todoList.Tasks.Count();
+            return todoList.Tasks.Count;
         }
 
         /// <summary>

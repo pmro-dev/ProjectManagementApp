@@ -11,17 +11,22 @@ namespace Project_Main.Services.Identity
         {
             var userClaims = CreateUserClaims(userDto);
 
-            ClaimsIdentity userClaimsIdentity = new(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
-            ClaimsPrincipal userClaimsPrincipal = new(userClaimsIdentity);
+            ClaimsIdentity userIdentity = new(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
+            ClaimsPrincipal userPrincipal = new(userIdentity);
 
-            return userClaimsPrincipal;
+            return userPrincipal;
         }
 
-		#region Local Methods
 
-		private static List<Claim> CreateUserClaims(IUserDto userDto)
+		#region LOCAL METHODS
+
+		private static IEnumerable<Claim> CreateUserClaims(IUserDto userDto)
         {
-            var userClaims = new List<Claim>
+            var basicClaimsCount = 5;
+            var userRolesCount = userDto.UserRoles.Count;
+            var userClaimsCapacity = basicClaimsCount + userRolesCount;
+
+			var userClaims = new List<Claim>(userClaimsCapacity)
                     {
                         new Claim(ClaimTypes.Name, userDto.Username),
                         new Claim(ClaimTypes.Email, userDto.Email),
@@ -35,9 +40,9 @@ namespace Project_Main.Services.Identity
             return userClaims;
         }
 
-        private static void AddRolesToUserClaims(List<Claim> userClaims, List<UserRoleModel> newClaims)
+        private static void AddRolesToUserClaims(ICollection<Claim> userClaims, IEnumerable<IUserRoleModel> userRoles)
         {
-            foreach (var userRole in newClaims)
+            foreach (var userRole in userRoles)
             {
                 userClaims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
             }

@@ -11,6 +11,6 @@ namespace Project_DomainEntities
 		[Required]
 		public string Title { get; set; } = string.Empty;
 
-		public IEnumerable<ITaskTagModel> TaskTags { get; set; } = new List<ITaskTagModel>();
+		public ICollection<ITaskTagModel> TaskTags { get; set; } = new List<ITaskTagModel>();
 	}
 }

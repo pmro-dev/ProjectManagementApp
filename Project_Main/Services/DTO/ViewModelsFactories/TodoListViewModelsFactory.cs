@@ -56,10 +56,10 @@ namespace Project_Main.Services.DTO.ViewModelsFactories
 
             var sortingTasksTasks = new Task[]
             {
-                Task.Run(() => detailsOutputVM.TasksNotCompleted = detailsOutputVM.TasksNotCompleted.OrderBy(t => t, tasksComparer)),
-                Task.Run(() => detailsOutputVM.TasksForToday = detailsOutputVM.TasksForToday.OrderBy(t => t, tasksComparer)),
-                Task.Run(() => detailsOutputVM.TasksCompleted = detailsOutputVM.TasksCompleted.OrderBy(t => t, tasksComparer)),
-                Task.Run(() => detailsOutputVM.TasksExpired = detailsOutputVM.TasksExpired.OrderBy(t => t, tasksComparer))
+                Task.Run(() => detailsOutputVM.TasksNotCompleted = detailsOutputVM.TasksNotCompleted.OrderBy(t => t, tasksComparer).ToList()),
+                Task.Run(() => detailsOutputVM.TasksForToday = detailsOutputVM.TasksForToday.OrderBy(t => t, tasksComparer).ToList()),
+                Task.Run(() => detailsOutputVM.TasksCompleted = detailsOutputVM.TasksCompleted.OrderBy(t => t, tasksComparer).ToList()),
+                Task.Run(() => detailsOutputVM.TasksExpired = detailsOutputVM.TasksExpired.OrderBy(t => t, tasksComparer).ToList())
             };
 
             Task.WaitAll(sortingTasksTasks);

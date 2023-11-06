@@ -5,7 +5,7 @@ namespace Project_Main.Services.DTO.ViewModelsFactories
 {
     public class BoardViewModelsFactory : IBoardViewModelsFactory
     {
-        public IBoardAllOutputVM CreateAllOutputVM(IEnumerable<ITodoListDto> todolistDto)
+        public IBoardAllOutputVM CreateAllOutputVM(ICollection<ITodoListDto> todolistDto)
         {
             return new BoardAllOutputVM()
             {
@@ -13,7 +13,7 @@ namespace Project_Main.Services.DTO.ViewModelsFactories
             };
         }
 
-        public IBoardBrieflyOutputVM CreateBrieflyOutputVM(IEnumerable<ITodoListDto> todolistDto)
+        public IBoardBrieflyOutputVM CreateBrieflyOutputVM(ICollection<ITodoListDto> todolistDto)
         {
             return new BoardBrieflyOutputVM()
             {

@@ -1,6 +1,6 @@
 ﻿namespace Project_IdentityDomainEntities
 {
-    public interface IUserModel
+    public interface IUserModel : IEquatable<IUserModel>
     {
         string DataVersion { get; set; }
         string Email { get; set; }
@@ -11,10 +11,6 @@
         string Provider { get; set; }
         string UserId { get; set; }
         string Username { get; set; }
-        List<UserRoleModel> UserRoles { get; set; }
-
-        bool Equals(object? obj);
-        bool Equals(UserModel? other);
-        int GetHashCode();
-    }
+        ICollection<IUserRoleModel> UserRoles { get; set; }
+	}
 }

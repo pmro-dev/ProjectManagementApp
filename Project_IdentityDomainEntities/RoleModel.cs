@@ -3,23 +3,32 @@ using Project_IdentityDomainEntities.Helpers;
 
 namespace Project_IdentityDomainEntities
 {
-    public class RoleModel
+	public class RoleModel : IRoleModel
 	{
 		[Key]
 		[Required]
-		public string Id { get; set; } = Guid.NewGuid().ToString();
+		public string Id { get; set; }
 
 		[Required]
 		// ConcurrencyStamp
-		public string DataVersion { get; set; } = Guid.NewGuid().ToString();
+		public string DataVersion { get; set; }
 
 		[Required]
 		[MinLength(AttributesHelper.RoleNameMinLength)]
 		[MaxLength(AttributesHelper.RoleNameMaxLength)]
-		public string Name { get; set; } = string.Empty;
+		public string Name { get; set; }
 
-		public string Description { get; set; } = string.Empty;
+		public string Description { get; set; }
 
-		public List<UserRoleModel> UserRoles { get; set; } = new();
-	}
+		public ICollection<IUserRoleModel> UserRoles { get; set; }
+
+        public RoleModel()
+        {
+            Id = Guid.NewGuid().ToString();
+			DataVersion = Guid.NewGuid().ToString();
+			Name = string.Empty;
+			Description = string.Empty;
+			UserRoles = new List<IUserRoleModel>();
+        }
+    }
 }
