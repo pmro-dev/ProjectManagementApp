@@ -5,10 +5,10 @@ using Project_Main.Infrastructure.Helpers;
 using Project_Main.Services.Identity;
 using Project_Main.Services.DTO;
 using Project_DomainEntities;
-using Project_Main.Infrastructure.DTOs.Inputs;
-using Project_Main.Infrastructure.DTOs.Outputs;
-using Project_Main.Infrastructure.DTOs.Entities;
-using Project_Main.Models.ViewModels.ViewModelsFactories;
+using Project_Main.Models.Inputs.DTOs;
+using Project_Main.Models.DTOs;
+using Project_Main.Models.Factories.ViewModels;
+using Project_Main.Models.Factories.DTOs;
 
 namespace Project_Main
 {
@@ -55,7 +55,7 @@ namespace Project_Main
 
             builder.Services.AddTransient<ITaskDto, TaskDto>();
             builder.Services.AddTransient<ITaskModel, TaskModel>();
-            builder.Services.AddScoped<ITaskCreateInputDto, TaskCreateInputDto>();
+            //builder.Services.AddScoped<ITaskCreateInputDto, TaskCreateInputDto>();
             builder.Services.AddScoped<ITaskEntityMapper, TaskEntityMapper>();
 
             builder.Services.AddTransient<ITodoListDto, TodoListDto>();
@@ -75,6 +75,10 @@ namespace Project_Main
             builder.Services.AddScoped<IBoardViewModelsFactory, BoardViewModelsFactory>();
             builder.Services.AddScoped<ITodoListViewModelsFactory, TodoListViewModelsFactory>();
             builder.Services.AddScoped<ITaskViewModelsFactory, TaskViewModelsFactory>();
+
+			builder.Services.AddScoped<ITodoListFactory, TodoListFactory>();
+			builder.Services.AddScoped<ITaskEntityFactory, TaskEntityFactory>();
+			builder.Services.AddScoped<IIdentityFactory, IdentityFactory>();
 
 			#endregion
 
