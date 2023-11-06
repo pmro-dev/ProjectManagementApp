@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Project_DomainEntities;
 using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.DataBases.AppData;
-using Project_Main.Models.ViewModels.OutputModels;
-using Project_Main.Models.ViewModels.ViewModelsFactories;
+using Project_Main.Models.Factories.ViewModels;
+using Project_Main.Models.Outputs.ViewModels;
 using Project_Main.Services.DTO;
 using Project_Main.Services.Identity;
 

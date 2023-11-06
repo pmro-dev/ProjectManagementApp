@@ -1,7 +1,7 @@
 ﻿using Project_IdentityDomainEntities;
-using Project_Main.Infrastructure.DTOs.Entities;
-using Project_Main.Infrastructure.DTOs.Inputs;
-using Project_Main.Models.ViewModels.InputModels;
+using Project_Main.Models.DTOs;
+using Project_Main.Models.Inputs.DTOs;
+using Project_Main.Models.Inputs.ViewModels;
 
 namespace Project_Main.Services.DTO
 {

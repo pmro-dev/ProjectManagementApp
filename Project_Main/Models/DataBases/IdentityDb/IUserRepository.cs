@@ -17,7 +17,7 @@ namespace Project_Main.Models.DataBases.Identity
 		/// <exception cref="ArgumentNullException"></exception>
 		/// <exception cref="InvalidOperationException"></exception>
 		/// <exception cref="OperationCanceledException"></exception>
-		Task<UserModel?> GetWithDetailsAsync(string userId);
+		Task<IUserModel?> GetWithDetailsAsync(string userId);
 
 		/// <summary>
 		/// Get a specific User by User Login and Password from Db.
@@ -28,7 +28,7 @@ namespace Project_Main.Models.DataBases.Identity
 		/// <exception cref="ArgumentNullException"></exception>
 		/// <exception cref="InvalidOperationException"></exception>
 		/// <exception cref="OperationCanceledException"></exception>
-		Task<UserModel?> GetByNameAndPasswordAsync(string userLogin, string userPassword);
+		Task<IUserModel?> GetByNameAndPasswordAsync(string userLogin, string userPassword);
 
 		/// <summary>
 		/// Check that any UserLogin with the same name already exists.
@@ -42,6 +42,6 @@ namespace Project_Main.Models.DataBases.Identity
         /// </summary>
         /// <param name="userId">Targeted User id.</param>
         /// <returns>Set of roles of targeted User.</returns>
-		Task<IEnumerable<RoleModel>> GetRolesAsync(string userId);
+		Task<ICollection<IRoleModel>> GetRolesAsync(string userId);
     }
 }

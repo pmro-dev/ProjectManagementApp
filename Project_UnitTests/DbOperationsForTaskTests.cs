@@ -49,7 +49,7 @@ namespace Project_UnitTests
 		{
 			var assertTask = PrepareTask(taskTitle, taskDescription, taskDueDate);
 
-			await GenericMockSetup<TaskModel>.SetupAddEntity(assertTask, TasksCollection, DbSetTaskMock, DbOperationsToExecute);
+			await GenericMockSetup<TaskModel>.SetupAddEntity(assertTask, TasksCollection as List<TaskModel>, DbSetTaskMock, DbOperationsToExecute);
 			await TaskRepo.AddAsync(assertTask);
 
 			await DataUnitOfWork.SaveChangesAsync();
@@ -70,7 +70,7 @@ namespace Project_UnitTests
 		{
 			TaskModel? assertNullTask = null;
 
-			await GenericMockSetup<TaskModel>.SetupAddEntity(assertNullTask!, TasksCollection, DbSetTaskMock, DbOperationsToExecute);
+			await GenericMockSetup<TaskModel>.SetupAddEntity(assertNullTask!, TasksCollection as List<TaskModel>, DbSetTaskMock, DbOperationsToExecute);
 
 			Assert.ThrowsAsync<ArgumentNullException>(async () => await TaskRepo.AddAsync(assertNullTask!));
 		}
@@ -108,9 +108,9 @@ namespace Project_UnitTests
 		[TestCase(2)]
 		public async Task GetSingleTaskByFilterShouldSucceed(int taskId)
 		{
-			TaskModel? assertTask = TasksCollection.Find(t => t.Id == taskId);
+			ITaskModel? assertTask = TasksCollection.Single(t => t.Id == taskId);
 			
-			TaskModel? taskFromDb = await TaskRepo.GetSingleByFilterAsync(t => t.Id == taskId);
+			ITaskModel? taskFromDb = await TaskRepo.GetByFilterAsync(t => t.Id == taskId);
 
 			Assert.That(assertTask, Is.EqualTo(taskFromDb));
 		}
@@ -120,7 +120,7 @@ namespace Project_UnitTests
 		[TestCase(TaskStatusHelper.TaskStatusType.NotStarted)]
 		public async Task GetTasksByFilterShouldSucceed(TaskStatus taskStatus)
 		{
-			var assertTasks = TasksCollection.FindAll(t => t.Status.ToString() == taskStatus.ToString());
+			var assertTasks = TasksCollection.Select(t => t.Status.ToString() == taskStatus.ToString());
 			
 			var tasksFromDb = await TaskRepo.GetAllByFilterAsync(t => t.Status.ToString() == taskStatus.ToString());
 
@@ -228,7 +228,7 @@ namespace Project_UnitTests
 		[Test]
 		public async Task AttemptToAddRangeOfTasksByNullObjectShouldThrowException()
 		{
-			IEnumerable<TaskModel>? nullRange = null;
+			ICollection<TaskModel>? nullRange = null;
 
 			await GenericMockSetup<TaskModel>.SetupAddEntitiesRange(nullRange!, TasksCollection, DbSetTaskMock, DbOperationsToExecute);
 

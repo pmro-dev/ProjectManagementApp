@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Project_IdentityDomainEntities;
-using Project_Main.Infrastructure.DTOs.Entities;
-using Project_Main.Infrastructure.DTOs.Inputs;
 using Project_Main.Models.DataBases.Identity;
+using Project_Main.Models.DTOs;
+using Project_Main.Models.Inputs.DTOs;
 using Project_Main.Services.DTO;
 using System.Security.Claims;
 

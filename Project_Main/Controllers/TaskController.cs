@@ -8,13 +8,12 @@ using System.Security.Claims;
 using Project_Main.Models.DataBases.AppData;
 using Project_Main.Models.DataBases.Helpers;
 using Project_Main.Services.DTO;
-using Project_Main.Models.ViewModels.OutputModels;
-using Project_Main.Models.ViewModels.InputModels;
-using Project_Main.Models.ViewModels.WrapperModels;
-using Project_Main.Infrastructure.DTOs.Entities;
-using Project_Main.Infrastructure.DTOs.Inputs;
-using System.Collections.Generic;
-using Project_Main.Models.ViewModels.ViewModelsFactories;
+using Project_Main.Models.Inputs.DTOs;
+using Project_Main.Models.DTOs;
+using Project_Main.Models.Inputs.ViewModels;
+using Project_Main.Models.Outputs.ViewModels;
+using Project_Main.Models.Factories.ViewModels;
+using Project_Main.Models.Generics.ViewModels.WrapperModels;
 
 namespace Project_Main.Controllers
 {
@@ -250,12 +249,14 @@ namespace Project_Main.Controllers
         [HttpPost]
         [Route(CustomRoutes.TaskEditRoute)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int todoListId, int id, TaskEditInputVM taskEditInputVM)
+        public async Task<IActionResult> Edit(int todoListId, int id, WrapperViewModel<TaskEditInputVM, TaskEditOutputVM> editWrapperVM)
         {
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.IdBottomBoundry, _logger);
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.IdBottomBoundry, _logger);
 
-            if (id != taskEditInputVM.Id)
+            var taskEditInputVM = editWrapperVM.InputVM;
+
+			if (id != taskEditInputVM.Id)
             {
                 _logger.LogCritical(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, id, taskEditInputVM.Id);
                 return Conflict();
@@ -288,7 +289,7 @@ namespace Project_Main.Controllers
                 return RedirectToAction(TodoListCtrl.DetailsAction, TodoListCtrl.Name, routeValue);
             }
 
-            return View(taskEditInputVM);
+            return View(editWrapperVM);
         }
 
         /// <summary>

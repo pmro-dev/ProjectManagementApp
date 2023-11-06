@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Project_Main.Infrastructure.Helpers;
-using Project_Main.Models.ViewModels.InputModels;
 using Project_Main.Services.Identity;
 using Project_Main.Services.DTO;
-using Project_Main.Infrastructure.DTOs.Inputs;
-using Project_Main.Infrastructure.DTOs.Entities;
-using Project_Main.Infrastructure.DTOs;
+using Project_Main.Models.Inputs.DTOs;
+using Project_Main.Models.DTOs;
+using Project_Main.Models.DTOs.Helpers;
+using Project_Main.Models.Inputs.ViewModels;
 
 namespace Project_Main.Controllers
 {
@@ -57,7 +57,7 @@ namespace Project_Main.Controllers
 			if (ModelState.IsValid)
 			{
 				ILoginInputDto loginInputDto = _accountMapper.TransferToDto(loginInputVM);
-				bool isLoginDataInvalid = !LoginDataValidator.Valid(loginInputDto);
+				bool isLoginDataInvalid = !LoginDtoValidator.Valid(loginInputDto);
 
 				if (isLoginDataInvalid)
 				{

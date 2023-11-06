@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Project_IdentityDomainEntities;
-using Project_Main.Infrastructure.DTOs.Entities;
+using Project_Main.Models.DTOs;
 using System.Security.Claims;
 
 namespace Project_Main.Services.Identity

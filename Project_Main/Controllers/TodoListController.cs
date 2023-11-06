@@ -5,11 +5,11 @@ using Project_DomainEntities;
 using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.DataBases.AppData;
 using Project_Main.Models.DataBases.Helpers;
-using Project_Main.Models.ViewModels.OutputModels;
 using Project_Main.Services.DTO;
-using Project_Main.Models.ViewModels.WrapperModels;
-using Project_Main.Models.ViewModels.InputModels;
-using Project_Main.Models.ViewModels.ViewModelsFactories;
+using Project_Main.Models.Inputs.ViewModels;
+using Project_Main.Models.Outputs.ViewModels;
+using Project_Main.Models.Factories.ViewModels;
+using Project_Main.Models.Generics.ViewModels.WrapperModels;
 
 namespace Project_Main.Controllers
 {
@@ -52,7 +52,6 @@ namespace Project_Main.Controllers
         public IActionResult Create()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
 
 			TodoListCreateOutputVM createOutputVM = _todoListViewModelsFactory.CreateCreateOutputVM(userId);
 			WrapperViewModel<TodoListCreateInputVM, TodoListCreateOutputVM> createWrapperVM = _todoListViewModelsFactory.CreateWrapperCreateVM();

@@ -145,7 +145,7 @@ namespace Project_UnitTests
 		{
 			TodoListModel? assertTask = TodoListsCollection.Find(t => t.Id == todoListId);
 
-			TodoListModel? taskFromDb = await TodoListRepo.GetSingleByFilterAsync(t => t.Id == todoListId);
+			TodoListModel? taskFromDb = await TodoListRepo.GetByFilterAsync(t => t.Id == todoListId);
 
 			Assert.That(assertTask, Is.EqualTo(taskFromDb));
 		}
@@ -155,9 +155,9 @@ namespace Project_UnitTests
 		[TestCase(6)]
 		public async Task GetTodoListsByFilterShouldSucceed(int tasksCount)
 		{
-			var assertTodoLists = TodoListsCollection.FindAll(t => t.Tasks.Count == tasksCount);
+			var assertTodoLists = TodoListsCollection.FindAll(t => t.Tasks.Count() == tasksCount);
 
-			var todoListsFromDb = await TodoListRepo.GetAllByFilterAsync(t => t.Tasks.Count == tasksCount);
+			var todoListsFromDb = await TodoListRepo.GetAllByFilterAsync(t => t.Tasks.Count() == tasksCount);
 
 			CollectionAssert.AreEqual(assertTodoLists, todoListsFromDb);
 		}

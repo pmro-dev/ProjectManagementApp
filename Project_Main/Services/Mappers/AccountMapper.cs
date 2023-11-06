@@ -1,84 +1,94 @@
 ﻿using Project_IdentityDomainEntities;
-using Project_Main.Infrastructure.DTOs.Entities;
-using Project_Main.Infrastructure.DTOs.Inputs;
-using Project_Main.Models.ViewModels.InputModels;
+using Project_Main.Models.DTOs;
+using Project_Main.Models.Factories.DTOs;
+using Project_Main.Models.Inputs.DTOs;
+using Project_Main.Models.Inputs.ViewModels;
 
 namespace Project_Main.Services.DTO
 {
-    public class AccountMapper : IAccountMapper
-    {
-        public ILoginInputDto TransferToDto(LoginInputVM loginInputVM)
-        {
-            return new LoginInputDto
-            {
-                Username = loginInputVM.Name,
-                Password = loginInputVM.Password
-            };
-        }
+	public class AccountMapper : IAccountMapper
+	{
+		private readonly IIdentityFactory _identityFactory;
 
-        public IUserDto TransferToUserDto(RegisterInputVM registerInputVM)
-        {
-            return new UserDto
-            {
-                UserId = string.Empty,
-                DataVersion = string.Empty,
-                Provider = string.Empty,
-                NameIdentifier = string.Empty,
-                Username = registerInputVM.Name,
-                Password = registerInputVM.Password,
-                Email = registerInputVM.Email,
-                FirstName = registerInputVM.Name,
-                LastName = registerInputVM.Name,
-                UserRoles = new List<UserRoleModel> { }
-            };
-        }
+		public AccountMapper(IIdentityFactory identityFactory)
+		{
+			_identityFactory = identityFactory;
+		}
 
-        public IUserDto TransferToUserDto(IUserModel userModel)
-        {
-            return new UserDto
-            {
-                UserId = userModel.UserId,
-                DataVersion = userModel.DataVersion,
-                Provider = userModel.Provider,
-                NameIdentifier = userModel.NameIdentifier,
-                Username = userModel.Username,
-                Password = userModel.Password,
-                Email = userModel.Email,
-                FirstName = userModel.FirstName,
-                LastName = userModel.LastName,
-                UserRoles = userModel.UserRoles
-            };
-        }
+		public ILoginInputDto TransferToDto(LoginInputVM loginInputVM)
+		{
+			var loginInputDto = _identityFactory.CreateLoginInputDto();
+			loginInputDto.Username = loginInputVM.Name;
+			loginInputDto.Password = loginInputVM.Password;
 
-        public IUserModel TransferToModel(IUserDto userDto)
-        {
-            UserModel newUser = new()
-            {
-                NameIdentifier = string.Empty,
-                Username = userDto.Username,
-                Email = userDto.Email,
-                FirstName = userDto.FirstName,
-                LastName = userDto.LastName,
-                Password = userDto.Password,
-                Provider = userDto.Provider,
-                UserRoles = userDto.UserRoles
-            };
+			return loginInputDto;
+		}
 
-            newUser.NameIdentifier = newUser.UserId;
-            newUser.UserRoles.ForEach(userRole => userRole.User = newUser);
+		public IUserDto TransferToUserDto(RegisterInputVM registerInputVM)
+		{
+			var userDto = _identityFactory.CreateDto();
 
-            return newUser;
-        }
+			userDto.UserId = string.Empty;
+			userDto.DataVersion = string.Empty;
+			userDto.Provider = string.Empty;
+			userDto.NameIdentifier = string.Empty;
+			userDto.Username = registerInputVM.Name;
+			userDto.Password = registerInputVM.Password;
+			userDto.Email = registerInputVM.Email;
+			userDto.FirstName = registerInputVM.Name;
+			userDto.LastName = registerInputVM.Name;
+			userDto.UserRoles = new List<IUserRoleModel>();
 
-        public IUserModel TransferToUserModel(ILoginInputDto loginInputDto)
-        {
-            UserModel loginUser = new()
-            {
-                Username = loginInputDto.Username,
-                Password = loginInputDto.Password,
-            };
+			return userDto;
+		}
 
-            return loginUser;
-        }
-    }
+		public IUserDto TransferToUserDto(IUserModel userModel)
+		{
+			var userDto = _identityFactory.CreateDto();
+
+			userDto.UserId = userModel.UserId;
+			userDto.DataVersion = userModel.DataVersion;
+			userDto.Provider = userModel.Provider;
+			userDto.NameIdentifier = userModel.NameIdentifier;
+			userDto.Username = userModel.Username;
+			userDto.Password = userModel.Password;
+			userDto.Email = userModel.Email;
+			userDto.FirstName = userModel.FirstName;
+			userDto.LastName = userModel.LastName;
+			userDto.UserRoles = userModel.UserRoles;
+
+			return userDto;
+		}
+
+		public IUserModel TransferToModel(IUserDto userDto)
+		{
+			var userModel = _identityFactory.CreateModel();
+
+			userModel.NameIdentifier = userModel.UserId;
+			userModel.Username = userDto.Username;
+			userModel.Email = userDto.Email;
+			userModel.FirstName = userDto.FirstName;
+			userModel.LastName = userDto.LastName;
+			userModel.Password = userDto.Password;
+			userModel.Provider = userDto.Provider;
+			userModel.UserRoles = userDto.UserRoles;
+
+			foreach (var role in userModel.UserRoles)
+			{
+				role.User = userModel;
+			}
+
+			return userModel;
+		}
+
+		public IUserModel TransferToUserModel(ILoginInputDto loginInputDto)
+		{
+			var userModel = _identityFactory.CreateModel();
+
+			userModel.Username = loginInputDto.Username;
+			userModel.Password = loginInputDto.Password;
+
+			return userModel;
+		}
+	}
 }

@@ -20,7 +20,7 @@ namespace Project_Main.Models.DataBases.Identity
 		}
 
 		///<inheritdoc />
-		public async Task<UserModel?> GetWithDetailsAsync(string userId)
+		public async Task<IUserModel?> GetWithDetailsAsync(string userId)
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetWithDetailsAsync), repoName);
 			HelperCheck.ThrowExceptionWhenParamNullOrEmpty(operationName, ref userId, nameof(userId), _logger);
@@ -35,7 +35,7 @@ namespace Project_Main.Models.DataBases.Identity
 		}
 
 		///<inheritdoc />
-		public async Task<UserModel?> GetByNameAndPasswordAsync(string userLogin, string userPassword)
+		public async Task<IUserModel?> GetByNameAndPasswordAsync(string userLogin, string userPassword)
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetByNameAndPasswordAsync), nameof(UserRepository));
 			HelperCheck.ThrowExceptionWhenParamNullOrEmpty(operationName, ref userLogin, nameof(userLogin), _logger);
@@ -58,10 +58,10 @@ namespace Project_Main.Models.DataBases.Identity
 		}
 
 		///<inheritdoc />
-		public async Task<IEnumerable<RoleModel>> GetRolesAsync(string userId)
+		public async Task<ICollection<IRoleModel>> GetRolesAsync(string userId)
 		{
 			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetRolesAsync), repoName);
-			List<RoleModel> userRoles = await _identityContext
+			ICollection<IRoleModel> userRoles = await _identityContext
 				.Set<UserRoleModel>()
 				.Where(user => user.UserId == userId)
 				.Select(user => user.Role)

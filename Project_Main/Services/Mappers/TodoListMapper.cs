@@ -1,118 +1,117 @@
 ﻿using Project_DomainEntities;
-using Project_Main.Infrastructure.DTOs.Entities;
-using Project_Main.Infrastructure.DTOs.Inputs;
-using Project_Main.Models.ViewModels.InputModels;
+using Project_Main.Models.DTOs;
+using Project_Main.Models.Factories.DTOs;
+using Project_Main.Models.Inputs.DTOs;
+using Project_Main.Models.Inputs.ViewModels;
 
 namespace Project_Main.Services.DTO
 {
-    public class TodoListMapper : ITodoListMapper
-    {
-        private readonly ITaskEntityMapper _taskEntityMapper;
+	public class TodoListMapper : ITodoListMapper
+	{
+		private readonly ITaskEntityMapper _taskEntityMapper;
+		private readonly ITodoListFactory _todoListFactory;
 
-        public TodoListMapper(ITaskEntityMapper taskEntityMapper)
-        {
-            _taskEntityMapper = taskEntityMapper;
-        }
+		public TodoListMapper(ITaskEntityMapper taskEntityMapper, ITodoListFactory todoListFactory)
+		{
+			_taskEntityMapper = taskEntityMapper;
+			_todoListFactory = todoListFactory;
+		}
 
 
-        #region TRANSFER DTO TO MODEL
+		#region TRANSFER DTO TO MODEL
 
-        public ITodoListModel TransferToModel(ITodoListDto todoListDto, IDictionary<object, object>? mappedObjects = null)
-        {
-            return MapTodoListToModel(todoListDto, mappedObjects ?? new Dictionary<object, object>());
-        }
+		public ITodoListModel TransferToModel(ITodoListDto todoListDto, IDictionary<object, object>? mappedObjects = null)
+		{
+			return MapTodoListToModel(todoListDto, mappedObjects ?? new Dictionary<object, object>());
+		}
 
-        private ITodoListModel MapTodoListToModel(ITodoListDto todoListDto, IDictionary<object, object> mappedObjects)
-        {
-            if (mappedObjects.TryGetValue(todoListDto, out var mappedObject))
-                return (ITodoListModel)mappedObject;
+		private ITodoListModel MapTodoListToModel(ITodoListDto todoListDto, IDictionary<object, object> mappedObjects)
+		{
+			if (mappedObjects.TryGetValue(todoListDto, out var mappedObject))
+				return (ITodoListModel)mappedObject;
 
-            var todoListModel = new TodoListModel()
-            {
-                Id = todoListDto.Id,
-                Title = todoListDto.Title,
-                UserId = todoListDto.UserId,
-            };
+			var todoListModel = _todoListFactory.CreateModel();
+			todoListModel.Id = todoListDto.Id;
+			todoListModel.Title = todoListDto.Title;
+			todoListModel.UserId = todoListDto.UserId;
 
-            mappedObjects[todoListDto] = todoListModel;
+			mappedObjects[todoListDto] = todoListModel;
 
-            todoListModel.Tasks = MapMultipleTasksToModels(todoListDto.Tasks, mappedObjects);
+			todoListModel.Tasks = MapMultipleTasksToModels(todoListDto.Tasks, mappedObjects);
 
-            return todoListModel;
-        }
+			return todoListModel;
+		}
 
-        private ICollection<ITaskModel> MapMultipleTasksToModels(ICollection<ITaskDto> taskDtos, IDictionary<object, object> mappedObjects)
-        {
-            return taskDtos.Select(task => _taskEntityMapper.TransferToModel(task, mappedObjects)).ToList();
-        }
+		private ICollection<ITaskModel> MapMultipleTasksToModels(ICollection<ITaskDto> taskDtos, IDictionary<object, object> mappedObjects)
+		{
+			return taskDtos.Select(task => _taskEntityMapper.TransferToModel(task, mappedObjects)).ToList();
+		}
 
 		#endregion
 
 
 		public ITodoListDto TransferToDto(ITodoListCreateInputVM createInputVM)
 		{
-            return new TodoListDto()
-            {
-                UserId = createInputVM.UserId,
-                Title = createInputVM.Title
-            };
+			var todoListDto = _todoListFactory.CreateDto();
+			todoListDto.UserId = createInputVM.UserId;
+			todoListDto.Title = createInputVM.Title;
+
+			return todoListDto;
 		}
 
-        public ITodoListEditInputDto TransferToDto(ITodoListEditInputVM editInputVM)
-        {
-            return new TodoListEditInputDto()
-            {
-                Title = editInputVM.Title
-            };
-        }
+		public ITodoListEditInputDto TransferToDto(ITodoListEditInputVM editInputVM)
+		{
+			var editInputDto = _todoListFactory.CreateEditInputDto();
+			editInputDto.Title = editInputVM.Title;
+
+			return editInputDto;
+		}
 
 
-        #region TRANSFER MODEL TO DTO
+		#region TRANSFER MODEL TO DTO
 
-        public ITodoListDto TransferToDto(ITodoListModel todoListModel, IDictionary<object, object>? mappedObjects = null)
-        {
-            return MapTodoListToDto(todoListModel, mappedObjects ?? new Dictionary<object, object>());
-        }
+		public ITodoListDto TransferToDto(ITodoListModel todoListModel, IDictionary<object, object>? mappedObjects = null)
+		{
+			return MapTodoListToDto(todoListModel, mappedObjects ?? new Dictionary<object, object>());
+		}
 
-        public ICollection<ITodoListDto> TransferToDto(ICollection<ITodoListModel> todoLists) 
-        {
-            var mappedObjects = new Dictionary<object, object>();
+		public ICollection<ITodoListDto> TransferToDto(ICollection<ITodoListModel> todoLists)
+		{
+			var mappedObjects = new Dictionary<object, object>();
 
-            var todoListDtos = todoLists.Select(list => MapTodoListToDto(list, mappedObjects)).ToList();
+			var todoListDtos = todoLists.Select(list => MapTodoListToDto(list, mappedObjects)).ToList();
 
-            return todoListDtos;
-        }
+			return todoListDtos;
+		}
 
-        private ITodoListDto MapTodoListToDto(ITodoListModel todoListModel, IDictionary<object, object> mappedObjects)
-        {
-            if (mappedObjects.TryGetValue(todoListModel, out var mappedObject))
-                return (ITodoListDto)mappedObject;
+		private ITodoListDto MapTodoListToDto(ITodoListModel todoListModel, IDictionary<object, object> mappedObjects)
+		{
+			if (mappedObjects.TryGetValue(todoListModel, out var mappedObject))
+				return (ITodoListDto)mappedObject;
 
-            var todoListDto = new TodoListDto()
-            {
-                Id = todoListModel.Id,
-                Title = todoListModel.Title,
-                UserId = todoListModel.UserId,
-            };
+			var todoListDto = _todoListFactory.CreateDto();
+			todoListDto.Id = todoListModel.Id;
+			todoListDto.Title = todoListModel.Title;
+			todoListDto.UserId = todoListModel.UserId;
 
-            mappedObjects[todoListModel] = todoListDto;
+			mappedObjects[todoListModel] = todoListDto;
 
-            todoListDto.Tasks = MapMultipleTasksToDtos(todoListModel.Tasks, mappedObjects);
+			todoListDto.Tasks = MapMultipleTasksToDtos(todoListModel.Tasks, mappedObjects);
 
-            return todoListDto;
-        }
+			return todoListDto;
+		}
 
-        private ICollection<ITaskDto> MapMultipleTasksToDtos(ICollection<ITaskModel> taskModels, IDictionary<object, object> mappedObjects)
-        {
-            return taskModels.Select(task => _taskEntityMapper.TransferToDto(task, mappedObjects)).ToList();
-        }
+		private ICollection<ITaskDto> MapMultipleTasksToDtos(ICollection<ITaskModel> taskModels, IDictionary<object, object> mappedObjects)
+		{
+			return taskModels.Select(task => _taskEntityMapper.TransferToDto(task, mappedObjects)).ToList();
+		}
 
-        #endregion
+		#endregion
 
 
-        public void UpdateModel(ITodoListModel todoListDbModel, ITodoListEditInputDto taskEditInputDto)
-        {
-            todoListDbModel.Title = taskEditInputDto.Title;
-        }
+		public void UpdateModel(ITodoListModel todoListDbModel, ITodoListEditInputDto taskEditInputDto)
+		{
+			todoListDbModel.Title = taskEditInputDto.Title;
+		}
 	}
 }
