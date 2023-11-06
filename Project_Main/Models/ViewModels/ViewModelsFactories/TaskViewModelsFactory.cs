@@ -4,7 +4,7 @@ using Project_Main.Models.ViewModels.InputModels;
 using Project_Main.Models.ViewModels.OutputModels;
 using Project_Main.Models.ViewModels.WrapperModels;
 
-namespace Project_Main.Services.DTO.ViewModelsFactories
+namespace Project_Main.Models.ViewModels.ViewModelsFactories
 {
     public class TaskViewModelsFactory : ITaskViewModelsFactory
     {

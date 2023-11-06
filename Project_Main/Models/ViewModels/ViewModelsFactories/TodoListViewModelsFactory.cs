@@ -3,8 +3,9 @@ using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.ViewModels.InputModels;
 using Project_Main.Models.ViewModels.OutputModels;
 using Project_Main.Models.ViewModels.WrapperModels;
+using Project_Main.Services;
 
-namespace Project_Main.Services.DTO.ViewModelsFactories
+namespace Project_Main.Models.ViewModels.ViewModelsFactories
 {
     public class TodoListViewModelsFactory : ITodoListViewModelsFactory
     {
@@ -87,7 +88,7 @@ namespace Project_Main.Services.DTO.ViewModelsFactories
 
         public WrapperViewModel<TodoListCreateInputVM, TodoListCreateOutputVM> CreateWrapperCreateVM()
         {
-            return new WrapperViewModel<TodoListCreateInputVM, TodoListCreateOutputVM>(new TodoListCreateInputVM(), new TodoListCreateOutputVM()){};
+            return new WrapperViewModel<TodoListCreateInputVM, TodoListCreateOutputVM>(new TodoListCreateInputVM(), new TodoListCreateOutputVM()) { };
         }
 
         public WrapperViewModel<TodoListEditInputVM, TodoListEditOutputVM> CreateWrapperEditVM()

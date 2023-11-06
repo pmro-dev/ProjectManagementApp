@@ -5,10 +5,10 @@ using Project_Main.Infrastructure.Helpers;
 using Project_Main.Services.Identity;
 using Project_Main.Services.DTO;
 using Project_DomainEntities;
-using Project_Main.Services.DTO.ViewModelsFactories;
 using Project_Main.Infrastructure.DTOs.Inputs;
 using Project_Main.Infrastructure.DTOs.Outputs;
 using Project_Main.Infrastructure.DTOs.Entities;
+using Project_Main.Models.ViewModels.ViewModelsFactories;
 
 namespace Project_Main
 {

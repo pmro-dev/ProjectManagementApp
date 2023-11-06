@@ -3,7 +3,7 @@ using Project_Main.Models.ViewModels.InputModels;
 using Project_Main.Models.ViewModels.OutputModels;
 using Project_Main.Models.ViewModels.WrapperModels;
 
-namespace Project_Main.Services.DTO.ViewModelsFactories
+namespace Project_Main.Models.ViewModels.ViewModelsFactories
 {
     public interface ITodoListViewModelsFactory
     {
@@ -13,7 +13,7 @@ namespace Project_Main.Services.DTO.ViewModelsFactories
         TodoListEditInputVM CreateEditInputVM(ITodoListDto todoListDto);
         TodoListDeleteOutputVM CreateDeleteOutputVM(ITodoListDto todoListDto);
         TodoListDetailsOutputVM CreateDetailsOutputVM(ITodoListDto todoListDto, DateTime? filterDueDate);
-		WrapperViewModel<TodoListCreateInputVM, TodoListCreateOutputVM> CreateWrapperCreateVM();
+        WrapperViewModel<TodoListCreateInputVM, TodoListCreateOutputVM> CreateWrapperCreateVM();
         WrapperViewModel<TodoListEditInputVM, TodoListEditOutputVM> CreateWrapperEditVM();
-	}
+    }
 }
