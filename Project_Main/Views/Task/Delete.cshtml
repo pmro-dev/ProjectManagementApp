@@ -1,9 +1,8 @@
-﻿@    using Project_DomainEntities
-@    using Project_Main.Infrastructure.Helpers
-@    using Project_Main.Models.ViewModels.InputModels;
-@    using Project_Main.Models.ViewModels.OutputModels;
-@    using Project_Main.Models.ViewModels.WrapperModels;
-    using Project_Main.Models.Inputs.ViewModels;
+﻿@using Project_DomainEntities;
+@using Project_Main.Infrastructure.Helpers;
+@using Project_Main.Models.Generics.ViewModels.WrapperModels;
+@using Project_Main.Models.Inputs.ViewModels;
+@using Project_Main.Models.Outputs.ViewModels;
 @model WrapperViewModel<TaskDeleteInputVM, TaskDeleteOutputVM>
 
 @{
@@ -17,7 +16,7 @@
 	<hr />
 	<h5>Are you sure you want to delete this?</h5>
 
-	<partial name="@SharedViews.TaskTableDetails" model="@Model" />
+	<partial name="@SharedViews.TaskTableDetails" model="@Model.OutputVM" />
 
 	<form asp-action="@TaskCtrl.DeletePostAction" asp-controller="@TaskCtrl.Name" method="post">
 		<input type="hidden" asp-for="@inputVM.TodoListId" value="@outputVM.TodoListId" />

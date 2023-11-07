@@ -1,20 +1,28 @@
-﻿@    using Project_Main.Infrastructure.Helpers;
-@    using Project_Main.Models.ViewModels.InputModels;
-@    using Project_Main.Models.ViewModels.OutputModels;
-@    using Project_Main.Models.ViewModels.WrapperModels;
-    using Project_Main.Models.Inputs.ViewModels;
+﻿@using Project_DomainEntities.Helpers;
+@using Project_Main.Infrastructure.Helpers;
+@using Project_Main.Models.Generics.ViewModels.WrapperModels;
+@using Project_Main.Models.Inputs.ViewModels;
+@using Project_Main.Models.Outputs.ViewModels;
+@using System.ComponentModel.DataAnnotations;
+@using Microsoft.AspNetCore.Mvc.ViewFeatures;
 @model WrapperViewModel<TaskEditInputVM, TaskEditOutputVM>
 @{
 	ViewData["Title"] = "Edit";
 	TaskEditInputVM inputVM = Model.InputVM;
 	TaskEditOutputVM outputVM = Model.OutputVM;
 	inputVM.Description = outputVM.Description;
+	inputVM.DueDate = outputVM.DueDate;
+	inputVM.Status = outputVM.Status;
+	inputVM.TodoListId = outputVM.TodoListId;
+	string dueDateString = outputVM.DueDate.ToString(AttributesHelper.DataFormat);
+	string reminderDateString = outputVM.ReminderDate?.ToString(AttributesHelper.DataFormat) ?? string.Empty;
 
 	DateTime LastModificationDate = DateTime.Now;
 
 	object SetLastModificationDate(object sender, EventArgs e)
 	{
 		LastModificationDate = DateTime.Now;
+		inputVM.LastModificationDate = LastModificationDate;
 		return sender;
 	}
 
@@ -24,9 +32,9 @@
 <hr />
 <div class="row">
 	<div class="col-md-4">
-		<form asp-action=@TaskCtrl.EditAction method="post">
+		<form asp-controller="@TaskCtrl.Name" asp-action="@TaskCtrl.EditPostAction" asp-route-todoListId="@outputVM.TodoListId" asp-route-taskId="@outputVM.Id" method="post">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-			<input asp-for="@inputVM.Id" name="id" type="hidden" value="@outputVM.Id"/>
+			<input asp-for="@inputVM.Id" type="hidden" value="@outputVM.Id"/>
 			<input asp-for="@inputVM.UserId" type="hidden" value="@outputVM.UserId" />
 			<div class="form-group">
 				<label asp-for="@inputVM.Title" class="control-label" style="font-weight: 600;"></label>
@@ -40,12 +48,12 @@
 			</div>
 			<div class="form-group">
 				<label asp-for="@inputVM.DueDate" class="control-label" style="font-weight: 600;">Deadline</label>
-				<input asp-for="@inputVM.DueDate" class="form-control" value="@outputVM.DueDate" type="datetime-local" />
+				<input asp-for="@inputVM.DueDate" class="form-control" value="@dueDateString" type="datetime-local" />
 				<span asp-validation-for="@inputVM.DueDate" class="text-danger"></span>
 			</div>
 			<div class="form-group">
 				<label asp-for="@inputVM.ReminderDate" class="control-label" style="font-weight: 600;">Reminder</label>
-				<input asp-for="@inputVM.ReminderDate" class="form-control" value="@outputVM.ReminderDate" />
+				<input asp-for="@inputVM.ReminderDate" class="form-control" value="@reminderDateString" type="datetime-local" />
 				<span asp-validation-for="@inputVM.ReminderDate" class="text-danger"></span>
 			</div>
 			<div class="form-group">
@@ -55,7 +63,7 @@
 			</div>
 			<div class="form-group">
 				<label asp-for="@inputVM.TodoListId" class="control-label" style="font-weight: 600;">To Do List</label>
-				<select asp-for="@inputVM.TodoListId" name="todoListId" class="form-select" asp-items="@outputVM.TodoListsSelector"></select>
+				<select asp-for="@inputVM.TodoListId" class="form-select" asp-items="@outputVM.TodoListSelector"></select>
 				<span asp-validation-for="@inputVM.TodoListId" class="text-danger"></span>
 			</div>
 			<div class="form-group">
