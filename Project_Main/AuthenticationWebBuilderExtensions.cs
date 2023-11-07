@@ -45,7 +45,7 @@ namespace Project_Main
 						var authScheme = cookieSigningInContext.Properties.Items.SingleOrDefault(i => i.Key == ConfigConstants.AuthSchemeClaimKey);
 						Claim authSchemeClaimWithProviderName = new(authScheme.Key, authScheme.Value ?? ConfigConstants.AuthSchemeClaimValue);
 
-						CreateUserBasedOnProviderData(cookieSigningInContext, authSchemeClaimWithProviderName, out ClaimsIdentity principle, out UserModel userBasedOnProviderClaims);
+						CreateUserBasedOnProviderData(cookieSigningInContext, authSchemeClaimWithProviderName, out ClaimsIdentity principle, out IUserModel userBasedOnProviderClaims);
 
 						if (await userRepository.IsNameTakenAsync(userBasedOnProviderClaims.Username))
 						{
@@ -79,7 +79,7 @@ namespace Project_Main
 			}
 
 
-			static void CreateUserBasedOnProviderData(CookieSigningInContext cookieSigningInContext, Claim authSchemeClaimWithProviderName, out ClaimsIdentity principle, out UserModel userBasedOnProviderClaims)
+			static void CreateUserBasedOnProviderData(CookieSigningInContext cookieSigningInContext, Claim authSchemeClaimWithProviderName, out ClaimsIdentity principle, out IUserModel userBasedOnProviderClaims)
 			{
 				principle = cookieSigningInContext.Principal?.Identity as ClaimsIdentity ??
 					throw new ArgumentException(MessagesPacket.ParamObjectNull(nameof(CreateUserBasedOnProviderData), nameof(cookieSigningInContext.Principal)));
@@ -88,7 +88,7 @@ namespace Project_Main
 
 				List<Claim> claims = cookieSigningInContext.Principal?.Claims.ToList() ?? new();
 
-				UserModel userBasedOnClaims = new()
+				IUserModel userBasedOnClaims = new UserModel()
 				{
 					NameIdentifier = claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value,
 					UserId = claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value,
@@ -101,9 +101,9 @@ namespace Project_Main
 			}
 
 
-			static async Task UpdateUserWhenDataOnProviderSideChangedAsync(IUserRepository userRepository, UserModel userBasedOnProviderClaims, Claim authSchemeClaimWithProviderName, ILogger? logger)
+			static async Task UpdateUserWhenDataOnProviderSideChangedAsync(IUserRepository userRepository, IUserModel userBasedOnProviderClaims, Claim authSchemeClaimWithProviderName, ILogger? logger)
 			{
-				UserModel? userFromDb = await userRepository.GetAsync(userBasedOnProviderClaims.NameIdentifier);
+				IUserModel? userFromDb = await userRepository.GetAsync(userBasedOnProviderClaims.NameIdentifier);
 
 				if (userFromDb is null)
 				{
@@ -121,14 +121,14 @@ namespace Project_Main
 					userFromDb.Provider = authSchemeClaimWithProviderName.Value;
 					userFromDb.Email = userBasedOnProviderClaims.Email;
 
-					userRepository.Update(userFromDb);
+					userRepository.Update((UserModel)userFromDb);
 				}
 			}
 
 
-			static async Task AddUserWhenNotExistsAsync(IUserRepository userRepository, UserModel userBasedOnProviderClaims, IRoleRepository roleRepository)
+			static async Task AddUserWhenNotExistsAsync(IUserRepository userRepository, IUserModel userBasedOnProviderClaims, IRoleRepository roleRepository)
 			{
-				RoleModel? roleForNewUser = await roleRepository.GetByFilterAsync(r => r.Name == IdentitySeedData.DefaultRole);
+				IRoleModel? roleForNewUser = await roleRepository.GetByFilterAsync(r => r.Name == IdentitySeedData.DefaultRole);
 
 				if (roleForNewUser is null)
 				{
@@ -144,14 +144,14 @@ namespace Project_Main
 					RoleId = roleForNewUser.Id
 				});
 
-				await userRepository.AddAsync(userBasedOnProviderClaims);
+				await userRepository.AddAsync((UserModel)userBasedOnProviderClaims);
 			}
 
 
 			static async Task SetRolesForUserPrincipleAsync(IUserRepository userRepository, string userId, ClaimsIdentity? principle)
 			{
-				IEnumerable<RoleModel> userRoles = await userRepository.GetRolesAsync(userId);
-				List<string> userRolesNames = userRoles.Select(userRole => userRole.Name).ToList();
+				IEnumerable<IRoleModel> userRoles = await userRepository.GetRolesAsync(userId);
+				IEnumerable<string> userRolesNames = userRoles.Select(userRole => userRole.Name).ToList();
 
 				foreach (string roleName in userRolesNames)
 				{

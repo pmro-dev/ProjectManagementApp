@@ -134,9 +134,9 @@ namespace Project_Main.Models.DataBases.Identity.DbSetup
 			IUserRepository userRepository = identityUnitOfWork.UserRepository;
 			IRoleRepository roleRepository = identityUnitOfWork.RoleRepository;
 
-			UserModel? adminUser = await userRepository.GetWithDetailsAsync(AdminId);
+			IUserModel? adminUser = await userRepository.GetWithDetailsAsync(AdminId);
 			string roleId = string.Concat(AdminRoleName.ToLower(), RoleIdSuffix);
-			RoleModel? roleForAdmin = await roleRepository.GetAsync(roleId);
+			IRoleModel? roleForAdmin = await roleRepository.GetAsync(roleId);
 
 			if (adminUser != null && !adminUser.UserRoles.Any() && roleForAdmin != null)
 			{
