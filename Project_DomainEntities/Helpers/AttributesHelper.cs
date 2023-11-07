@@ -8,5 +8,6 @@
         public const int TitleMinLength = 3;
         public const int NameMaxLength = 70;
         public const int NameMinLength = 3;
-    }
+		public const string DataFormat = "yyyy-MM-ddTHH:mm";
+	}
 }

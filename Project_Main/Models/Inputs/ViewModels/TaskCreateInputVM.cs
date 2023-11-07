@@ -5,7 +5,7 @@ namespace Project_Main.Models.Inputs.ViewModels
 {
     public class TaskCreateInputVM : ITaskCreateInputVM
     {
-        [Required]
+		[Required]
         public int TodoListId { get; set; } = -1;
 
         [Required]
@@ -22,10 +22,12 @@ namespace Project_Main.Models.Inputs.ViewModels
         public string Description { get; set; } = string.Empty;
 
         [Required]
-        [DataType(DataType.Date)]
-        public DateTime DueDate { get; set; } = DateTime.Now;
+		[DataType(DataType.Date)]
+		[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
+		public DateTime DueDate { get; set; } = DateTime.Now;
 
-        [DataType(DataType.Date)]
-        public DateTime? ReminderDate { get; set; } = null;
+		[DataType(DataType.Date)]
+		[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
+		public DateTime? ReminderDate { get; set; } = null;
     }
 }

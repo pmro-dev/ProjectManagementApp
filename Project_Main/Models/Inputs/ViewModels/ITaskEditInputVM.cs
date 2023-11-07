@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Project_DomainEntities.Helpers;
+﻿using Project_DomainEntities.Helpers;
+using System.ComponentModel.DataAnnotations;
 
 namespace Project_Main.Models.Inputs.ViewModels
 {
@@ -8,12 +8,22 @@ namespace Project_Main.Models.Inputs.ViewModels
         int Id { get; set; }
         string Title { get; set; }
         string Description { get; set; }
-        DateTime DueDate { get; set; }
-        DateTime? ReminderDate { get; set; }
-        TaskStatusHelper.TaskStatusType Status { get; set; }
-        SelectList? StatusSelector { get; set; }
+
+		[DataType(DataType.Date)]
+		[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
+
+		DateTime DueDate { get; set; }
+
+		[DataType(DataType.Date)]
+		[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
+		DateTime? ReminderDate { get; set; }
+
+		[DataType(DataType.Date)]
+		[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
+		DateTime LastModificationDate { get; set; }
+
+		TaskStatusHelper.TaskStatusType Status { get; set; }
         int TodoListId { get; set; }
-        SelectList? TodoListSelector { get; set; }
         string UserId { get; set; }
     }
 }

@@ -104,7 +104,7 @@ namespace Project_Main.Models.Factories.ViewModels
                 TodoListId = taskDto.TodoListId,
                 UserId = taskDto.UserId,
                 StatusSelector = statusSelector,
-                TodoListsSelector = todoListSelector
+                TodoListSelector = todoListSelector
             };
         }
 

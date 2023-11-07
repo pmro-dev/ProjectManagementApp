@@ -1,11 +1,15 @@
 ﻿using Project_DomainEntities.Helpers;
 using Project_Main.Models.DTOs;
+using System.ComponentModel.DataAnnotations;
 
 namespace Project_Main.Services
 {
     public static class TasksFilterService
 	{
 		private const int DateCompareValueEarlier = 0;
+
+		[DataType(DataType.Date)]
+		[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
 		private static DateTime todayDate = DateTime.Today;
 
 		private static IEnumerable<ITaskDto> ExecuteFilter(IEnumerable<ITaskDto> source, Func<ITaskDto, bool> predicate)

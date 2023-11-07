@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Project_DomainEntities.Helpers;
 using System.ComponentModel.DataAnnotations;
 using static Project_DomainEntities.Helpers.TaskStatusHelper;
 
@@ -6,7 +7,6 @@ namespace Project_Main.Models.Outputs.ViewModels
 {
     public class TaskEditOutputVM : ITaskEditOutputVM
     {
-        private const string DataFormat = "{0:yyyy-MM-dd}";
         private const int defaultId = 0;
 
         public int Id { get; set; }
@@ -19,12 +19,11 @@ namespace Project_Main.Models.Outputs.ViewModels
         public string Description { get; set; } = string.Empty;
 
         [DataType(DataType.Date)]
-        //[DisplayFormat(DataFormatString = DataFormat, ApplyFormatInEditMode = true)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
         public DateTime DueDate { get; set; } = DateTime.Now;
 
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = DataFormat, ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
         public DateTime? ReminderDate { get; set; } = null;
 
         public TaskStatusType Status { get; set; } = TaskStatusType.NotStarted;
@@ -33,6 +32,6 @@ namespace Project_Main.Models.Outputs.ViewModels
 
         public SelectList? StatusSelector { get; set; }
 
-        public SelectList? TodoListsSelector { get; set; }
+        public SelectList? TodoListSelector { get; set; }
     }
 }
