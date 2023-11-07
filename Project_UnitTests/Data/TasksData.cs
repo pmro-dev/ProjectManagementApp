@@ -36,7 +36,7 @@ namespace Project_UnitTests.Data
 
 		public static readonly string TaskRangeSuffix = "Task Range Test";
 
-		public static List<TaskModel> NewTasksRange { get; private set; } = new ()
+		public static ICollection<ITaskModel> NewTasksRange { get; private set; } = new List<ITaskModel>()
 		{
 				new TaskModel() { Title = "First " + TaskRangeSuffix, Description = "First Description", DueDate = DateTime.ParseExact("2023 10 27 10:30", DueDateFormat, null) },
 				new TaskModel() { Title = "Second " + TaskRangeSuffix, Description = "Second Description", DueDate = DateTime.ParseExact("2023 08 22 09:00", DueDateFormat, null) },

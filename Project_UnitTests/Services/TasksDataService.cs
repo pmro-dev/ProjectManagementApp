@@ -7,22 +7,22 @@ namespace Project_UnitTests.Services
 {
     public static class TasksDataService
     {
-        private static List<TaskModel> TasksUX { get; set; } = new();
-        private static List<TaskModel> TasksBackend { get; set; } = new();
-        private static List<TaskModel> TasksTesting { get; set; } = new();
-        private static List<TaskModel> TasksProjectManagement { get; set; } = new();
+        private static List<ITaskModel> TasksUX { get; set; } = new List<ITaskModel>();
+        private static List<ITaskModel> TasksBackend { get; set; } = new List<ITaskModel>();
+		private static List<ITaskModel> TasksTesting { get; set; } = new List<ITaskModel>();
+		private static List<ITaskModel> TasksProjectManagement { get; set; } = new List<ITaskModel>();
 
-        private static List<TaskModel> tasksCollection = new();
+		private static List<ITaskModel> tasksCollection = new List<ITaskModel>();
 		private static int AllTasksCount;
 
-		public static List<TaskModel> NewTasksRange { get; private set; } = TasksData.NewTasksRange;
+		public static List<ITaskModel> NewTasksRange { get; private set; } = TasksData.NewTasksRange.ToList();
         public static string TaskRangeSuffix { get; private set; } = TasksData.TaskRangeSuffix;
 
         public static readonly object[] ValidTasksForCreateOperation = TasksData.ValidTasksForCreateOperation;
         public static readonly object[] InvalidTasksForCreateOperation = TasksData.InvalidTasksForCreateOperation;
 		public static readonly string AdminId = TasksData.AdminId;
 
-		public static List<TaskModel> GetCollection(SeedData seedBaseData)
+		public static ICollection<ITaskModel> GetCollection(SeedData seedBaseData)
         {
             ArgumentNullException.ThrowIfNull(seedBaseData);
 
@@ -42,7 +42,7 @@ namespace Project_UnitTests.Services
 
         private static void SeedAllTasks()
         {
-            tasksCollection = new List<TaskModel>()
+            tasksCollection = new List<ITaskModel>()
             {
                 TasksUX[0],
                 TasksUX[1],
@@ -68,10 +68,10 @@ namespace Project_UnitTests.Services
             int taskIndex = startingIndex;
             int boundaryIndexForCurrentTasks = 0;
 
-            TasksUX = seedBaseData.TasksUX;
-            TasksBackend = seedBaseData.TasksBackend;
-            TasksTesting = seedBaseData.TasksTesting;
-            TasksProjectManagement = seedBaseData.TasksProjectManagement;
+            TasksUX = seedBaseData.TasksUX.ToList();
+            TasksBackend = seedBaseData.TasksBackend.ToList();
+            TasksTesting = seedBaseData.TasksTesting.ToList();
+            TasksProjectManagement = seedBaseData.TasksProjectManagement.ToList();
             AllTasksCount = TasksUX.Count + TasksTesting.Count + TasksBackend.Count + TasksProjectManagement.Count;
 
             const int BoundaryIndexForTasksUX = 3;

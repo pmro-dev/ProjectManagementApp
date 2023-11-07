@@ -26,7 +26,7 @@ namespace Project_UnitTests
 
 			return new TaskModel()
 			{
-				Id = TasksCollection[LastItemIndex].Id + IndexValueOne,
+				Id = TasksCollection.Last().Id + IndexValueOne,
 				Title = taskTitle + TitleSuffix,
 				Description = taskDescription,
 				DueDate = taskDueDate,
@@ -49,11 +49,11 @@ namespace Project_UnitTests
 		{
 			var assertTask = PrepareTask(taskTitle, taskDescription, taskDueDate);
 
-			await GenericMockSetup<TaskModel>.SetupAddEntity(assertTask, TasksCollection as List<TaskModel>, DbSetTaskMock, DbOperationsToExecute);
+			await GenericMockSetup<TaskModel>.SetupAddEntity(assertTask, TasksCollection.Cast<TaskModel>().ToList(), DbSetTaskMock, DbOperationsToExecute);
 			await TaskRepo.AddAsync(assertTask);
 
 			await DataUnitOfWork.SaveChangesAsync();
-			await GenericMockSetup<TaskModel>.SetupGetEntity(assertTask.Id, DbSetTaskMock, TasksCollection);
+			await GenericMockSetup<TaskModel>.SetupGetEntity(assertTask.Id, DbSetTaskMock, TasksCollection.Cast<TaskModel>().ToList());
 			
 			TaskModel resultTask = await TaskRepo.GetAsync(assertTask.Id) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
@@ -83,7 +83,7 @@ namespace Project_UnitTests
 		{
 			var assertTask = TasksCollection.Single(t => t.Id == taskId);
 
-			await GenericMockSetup<TaskModel>.SetupGetEntity(assertTask.Id, DbSetTaskMock, TasksCollection);
+			await GenericMockSetup<TaskModel>.SetupGetEntity(assertTask.Id, DbSetTaskMock, TasksCollection.Cast<TaskModel>().ToList());
 
 			var resultTask = await TaskRepo.GetAsync(assertTask.Id) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
@@ -134,9 +134,9 @@ namespace Project_UnitTests
 		[TestCase(-5, typeof(ArgumentOutOfRangeException))]
 		public async Task AttemptToGetTaskByInvalidIdShouldThrowException(object id, Type exceptionType)
 		{
-			int taskIdForMockSetup = TasksCollection[FirstItemIndex].Id;
+			int taskIdForMockSetup = TasksCollection.First().Id;
 
-			await GenericMockSetup<TaskModel>.SetupGetEntity(taskIdForMockSetup, DbSetTaskMock, TasksCollection);
+			await GenericMockSetup<TaskModel>.SetupGetEntity(taskIdForMockSetup, DbSetTaskMock, TasksCollection.Cast<TaskModel>().ToList());
 
 			switch (exceptionType)
 			{
@@ -155,12 +155,12 @@ namespace Project_UnitTests
 		[Test]
 		public async Task UpdateTaskShouldSucceed()
 		{
-			int taskToUpdateId = TasksCollection[FirstItemIndex].Id;
-			await GenericMockSetup<TaskModel>.SetupGetEntity(taskToUpdateId, DbSetTaskMock, TasksCollection);
+			int taskToUpdateId = TasksCollection.First().Id;
+			await GenericMockSetup<TaskModel>.SetupGetEntity(taskToUpdateId, DbSetTaskMock, TasksCollection.Cast<TaskModel>().ToList());
 			TaskModel taskToUpdate = await TaskRepo.GetAsync(taskToUpdateId) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
 			ModifyTaskData(taskToUpdate);
-			await GenericMockSetup<TaskModel>.SetupUpdateEntity(taskToUpdate, DbSetTaskMock, TasksCollection, DbOperationsToExecute);
+			await GenericMockSetup<TaskModel>.SetupUpdateEntity(taskToUpdate, DbSetTaskMock, TasksCollection.Cast<TaskModel>().ToList(), DbOperationsToExecute);
 
 			TaskRepo.Update(taskToUpdate);
 			await DataUnitOfWork.SaveChangesAsync();
@@ -179,7 +179,7 @@ namespace Project_UnitTests
 		{
 			TaskModel? NullTask = null;
 
-			await GenericMockSetup<TaskModel>.SetupUpdateEntity(NullTask!, DbSetTaskMock, TasksCollection, DbOperationsToExecute);
+			await GenericMockSetup<TaskModel>.SetupUpdateEntity(NullTask!, DbSetTaskMock, TasksCollection.Cast<TaskModel>().ToList(), DbOperationsToExecute);
 
 			Assert.Throws<ArgumentNullException>(() => TaskRepo.Update(NullTask!));
 		}
@@ -191,17 +191,17 @@ namespace Project_UnitTests
 		public async Task DeleteTaskShouldSucceed(int assertTaskId)
 		{
 			var itemsNumberBeforeDelete = TasksCollection.Count;
-			await GenericMockSetup<TaskModel>.SetupGetEntity(assertTaskId, DbSetTaskMock, TasksCollection);
+			await GenericMockSetup<TaskModel>.SetupGetEntity(assertTaskId, DbSetTaskMock, TasksCollection.Cast<TaskModel>().ToList());
 			TaskModel taskToRemove = await TaskRepo.GetAsync(assertTaskId) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
-			await GenericMockSetup<TaskModel>.SetupDeleteEntity(taskToRemove, DbSetTaskMock, TasksCollection, DbOperationsToExecute);
+			await GenericMockSetup<TaskModel>.SetupDeleteEntity(taskToRemove, DbSetTaskMock, TasksCollection.Cast<TaskModel>().ToList(), DbOperationsToExecute);
 			TaskRepo.Remove(taskToRemove);
 			await DataUnitOfWork.SaveChangesAsync();
 
 			var itemsNumberAfterDelete = TasksCollection.Count;
 
 			// I don't know why but I have to "refresh" TasksCollection because somehow it can get "deleted" task from memory.
-			await GenericMockSetup<TaskModel>.SetupGetEntity(assertTaskId, DbSetTaskMock, TasksCollection);
+			await GenericMockSetup<TaskModel>.SetupGetEntity(assertTaskId, DbSetTaskMock, TasksCollection.Cast<TaskModel>().ToList());
 
 			TaskModel? resultOfTryToGetRemovedTask = await TaskRepo.GetAsync(assertTaskId);
 
@@ -220,7 +220,7 @@ namespace Project_UnitTests
 		{
 			TaskModel? NullTask = null;
 
-			await GenericMockSetup<TaskModel>.SetupDeleteEntity(NullTask!, DbSetTaskMock, TasksCollection, DbOperationsToExecute);
+			await GenericMockSetup<TaskModel>.SetupDeleteEntity(NullTask!, DbSetTaskMock, TasksCollection.Cast<TaskModel>().ToList(), DbOperationsToExecute);
 
 			Assert.Throws<ArgumentNullException>(() => TaskRepo.Remove(NullTask!));
 		}
@@ -230,7 +230,7 @@ namespace Project_UnitTests
 		{
 			ICollection<TaskModel>? nullRange = null;
 
-			await GenericMockSetup<TaskModel>.SetupAddEntitiesRange(nullRange!, TasksCollection, DbSetTaskMock, DbOperationsToExecute);
+			await GenericMockSetup<TaskModel>.SetupAddEntitiesRange(nullRange!, TasksCollection.Cast<TaskModel>().ToList(), DbSetTaskMock, DbOperationsToExecute);
 
 			Assert.ThrowsAsync<ArgumentNullException>(async () => await TaskRepo.AddRangeAsync(nullRange!));
 		}
@@ -240,8 +240,8 @@ namespace Project_UnitTests
 		{
 			var tasksRange = TasksDataService.NewTasksRange;
 
-			await GenericMockSetup<TaskModel>.SetupAddEntitiesRange(tasksRange, TasksCollection, DbSetTaskMock, DbOperationsToExecute);
-			await TaskRepo.AddRangeAsync(tasksRange);
+			await GenericMockSetup<TaskModel>.SetupAddEntitiesRange(tasksRange.Cast<TaskModel>().ToList(), TasksCollection.Cast<TaskModel>().ToList(), DbSetTaskMock, DbOperationsToExecute);
+			await TaskRepo.AddRangeAsync(tasksRange.Cast<TaskModel>().ToList());
 			await DataUnitOfWork.SaveChangesAsync();
 
 			var tasksFromDb = await TaskRepo.GetAllByFilterAsync(t => t.Title.Contains(TasksDataService.TaskRangeSuffix));
@@ -254,7 +254,7 @@ namespace Project_UnitTests
 		{
 			List<TaskModel>? nullRange = null;
 
-			await GenericMockSetup<TaskModel>.SetupAddEntitiesRange(nullRange!, TasksCollection, DbSetTaskMock, DbOperationsToExecute);
+			await GenericMockSetup<TaskModel>.SetupAddEntitiesRange(nullRange!, TasksCollection.Cast<TaskModel>().ToList(), DbSetTaskMock, DbOperationsToExecute);
 
 			Assert.ThrowsAsync<ArgumentNullException>(async () => await TaskRepo.AddRangeAsync(nullRange!));
 		}

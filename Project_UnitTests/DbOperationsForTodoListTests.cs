@@ -23,7 +23,7 @@ namespace Project_UnitTests
 
 			return new TodoListModel()
 			{
-				Id = TodoListsCollection[LastItemIndex].Id + IndexValueOne,
+				Id = TodoListsCollection.Last().Id + IndexValueOne,
 				Title = todoListTitle + TitleSuffix,
 			};
 		}
@@ -43,11 +43,11 @@ namespace Project_UnitTests
 		{
 			var assertTodoList = PrepareTodoList(todoListTitle);
 
-			await GenericMockSetup<TodoListModel>.SetupAddEntity(assertTodoList, TodoListsCollection, DbSetTodoListMock, DbOperationsToExecute);
+			await GenericMockSetup<TodoListModel>.SetupAddEntity(assertTodoList, TodoListsCollection.Cast<TodoListModel>().ToList(), DbSetTodoListMock, DbOperationsToExecute);
 			await TodoListRepo.AddAsync(assertTodoList);
 
 			await DataUnitOfWork.SaveChangesAsync();
-			await GenericMockSetup<TodoListModel>.SetupGetEntity(assertTodoList.Id, DbSetTodoListMock, TodoListsCollection);
+			await GenericMockSetup<TodoListModel>.SetupGetEntity(assertTodoList.Id, DbSetTodoListMock, TodoListsCollection.Cast<TodoListModel>().ToList());
 
 			TodoListModel resultTodoList = await TodoListRepo.GetAsync(assertTodoList.Id) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
@@ -67,7 +67,7 @@ namespace Project_UnitTests
 		{
 			var assertTodoList = TodoListsCollection.Single(t => t.Id == todoListId);
 
-			await GenericMockSetup<TodoListModel>.SetupGetEntity(assertTodoList.Id, DbSetTodoListMock, TodoListsCollection);
+			await GenericMockSetup<TodoListModel>.SetupGetEntity(assertTodoList.Id, DbSetTodoListMock, TodoListsCollection.Cast<TodoListModel>().ToList());
 
 			var resultTodoList = await TodoListRepo.GetAsync(assertTodoList.Id) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
@@ -86,7 +86,7 @@ namespace Project_UnitTests
 		{
 			var assertTodoList = TodoListsCollection.Single(t => t.Id == todoListId);
 
-			await GenericMockSetup<TodoListModel>.SetupGetEntity(assertTodoList.Id, DbSetTodoListMock, TodoListsCollection);
+			await GenericMockSetup<TodoListModel>.SetupGetEntity(assertTodoList.Id, DbSetTodoListMock, TodoListsCollection.Cast<TodoListModel>().ToList());
 
 			var resultTodoList = await TodoListRepo.GetWithDetailsAsync(assertTodoList.Id) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
@@ -124,7 +124,7 @@ namespace Project_UnitTests
 		{
 			TodoListModel? assertNullTodoList = null;
 
-			await GenericMockSetup<TodoListModel>.SetupAddEntity(assertNullTodoList!, TodoListsCollection, DbSetTodoListMock, DbOperationsToExecute);
+			await GenericMockSetup<TodoListModel>.SetupAddEntity(assertNullTodoList!, TodoListsCollection.Cast<TodoListModel>().ToList(), DbSetTodoListMock, DbOperationsToExecute);
 
 			Assert.ThrowsAsync<ArgumentNullException>(async () => await TodoListRepo.AddAsync(assertNullTodoList!));
 		}
@@ -143,9 +143,9 @@ namespace Project_UnitTests
 		[TestCase(2)]
 		public async Task GetSingleTodoListByFilterShouldSucceed(int todoListId)
 		{
-			TodoListModel? assertTask = TodoListsCollection.Find(t => t.Id == todoListId);
+			ITodoListModel? assertTask = TodoListsCollection.Single(t => t.Id == todoListId);
 
-			TodoListModel? taskFromDb = await TodoListRepo.GetByFilterAsync(t => t.Id == todoListId);
+			ITodoListModel? taskFromDb = await TodoListRepo.GetByFilterAsync(t => t.Id == todoListId);
 
 			Assert.That(assertTask, Is.EqualTo(taskFromDb));
 		}
@@ -155,9 +155,9 @@ namespace Project_UnitTests
 		[TestCase(6)]
 		public async Task GetTodoListsByFilterShouldSucceed(int tasksCount)
 		{
-			var assertTodoLists = TodoListsCollection.FindAll(t => t.Tasks.Count() == tasksCount);
+			var assertTodoLists = TodoListsCollection.Select(t => t.Tasks.Count == tasksCount);
 
-			var todoListsFromDb = await TodoListRepo.GetAllByFilterAsync(t => t.Tasks.Count() == tasksCount);
+			var todoListsFromDb = await TodoListRepo.GetAllByFilterAsync(t => t.Tasks.Count == tasksCount);
 
 			CollectionAssert.AreEqual(assertTodoLists, todoListsFromDb);
 		}
@@ -169,9 +169,9 @@ namespace Project_UnitTests
 		[TestCase(-5, typeof(ArgumentOutOfRangeException))]
 		public async Task AttemptToGetTodoListByInvalidIdShouldThrowException(object id, Type exceptionType)
 		{
-			int todoListIdForMockSetup = TodoListsCollection[FirstItemIndex].Id;
+			int todoListIdForMockSetup = TodoListsCollection.First().Id;
 
-			await GenericMockSetup<TodoListModel>.SetupGetEntity(todoListIdForMockSetup, DbSetTodoListMock, TodoListsCollection);
+			await GenericMockSetup<TodoListModel>.SetupGetEntity(todoListIdForMockSetup, DbSetTodoListMock, TodoListsCollection.Cast<TodoListModel>().ToList());
 
 			switch (exceptionType)
 			{
@@ -190,12 +190,12 @@ namespace Project_UnitTests
 		[Test]
 		public async Task UpdateTodoListShouldSucceed()
 		{
-			int todoListToUpdateId = TodoListsCollection[FirstItemIndex].Id;
-			await GenericMockSetup<TodoListModel>.SetupGetEntity(todoListToUpdateId, DbSetTodoListMock, TodoListsCollection);
+			int todoListToUpdateId = TodoListsCollection.First().Id;
+			await GenericMockSetup<TodoListModel>.SetupGetEntity(todoListToUpdateId, DbSetTodoListMock, TodoListsCollection.Cast<TodoListModel>().ToList());
 			TodoListModel todoListToUpdate = await TodoListRepo.GetAsync(todoListToUpdateId) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
 			ModifyTodoListData(todoListToUpdate);
-			await GenericMockSetup<TodoListModel>.SetupUpdateEntity(todoListToUpdate, DbSetTodoListMock, TodoListsCollection, DbOperationsToExecute);
+			await GenericMockSetup<TodoListModel>.SetupUpdateEntity(todoListToUpdate, DbSetTodoListMock, TodoListsCollection.Cast<TodoListModel>().ToList(), DbOperationsToExecute);
 
 			TodoListRepo.Update(todoListToUpdate);
 			await DataUnitOfWork.SaveChangesAsync();
@@ -212,7 +212,7 @@ namespace Project_UnitTests
 		{
 			TodoListModel? NullTodoList = null;
 
-			await GenericMockSetup<TodoListModel>.SetupUpdateEntity(NullTodoList!, DbSetTodoListMock, TodoListsCollection, DbOperationsToExecute);
+			await GenericMockSetup<TodoListModel>.SetupUpdateEntity(NullTodoList!, DbSetTodoListMock, TodoListsCollection.Cast<TodoListModel>().ToList(), DbOperationsToExecute);
 
 			Assert.Throws<ArgumentNullException>(() => TodoListRepo.Update(NullTodoList!));
 		}
@@ -220,15 +220,15 @@ namespace Project_UnitTests
 		[Test]
 		public async Task UpdateTodoListTasksShouldSucceed()
 		{
-			int todoListToUpdateId = TodoListsCollection[FirstItemIndex].Id;
+			int todoListToUpdateId = TodoListsCollection.First().Id;
 			var newTasks = TasksData.NewTasksRange;
 
-			TodoListModel? todoListToUpdate = await TodoListRepo.GetWithDetailsAsync(todoListToUpdateId) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
+			ITodoListModel? todoListToUpdate = await TodoListRepo.GetWithDetailsAsync(todoListToUpdateId) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
 			todoListToUpdate.Tasks = newTasks;
-			TodoListRepo.Update(todoListToUpdate);
+			TodoListRepo.Update((TodoListModel)todoListToUpdate);
 			await DataUnitOfWork.SaveChangesAsync();
 
-			TodoListModel? updatedTodoList = await TodoListRepo.GetWithDetailsAsync(todoListToUpdateId) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
+			ITodoListModel? updatedTodoList = await TodoListRepo.GetWithDetailsAsync(todoListToUpdateId) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
 
 			CollectionAssert.AreEqual(updatedTodoList.Tasks, newTasks);
 		}
@@ -240,17 +240,17 @@ namespace Project_UnitTests
 		public async Task DeleteTodoListShouldSucceed(int assertTodoListId)
 		{
 			var itemsNumberBeforeDelete = TodoListsCollection.Count;
-			await GenericMockSetup<TodoListModel>.SetupGetEntity(assertTodoListId, DbSetTodoListMock, TodoListsCollection);
+			await GenericMockSetup<TodoListModel>.SetupGetEntity(assertTodoListId, DbSetTodoListMock, TodoListsCollection.Cast<TodoListModel>().ToList());
 			TodoListModel todoListToRemove = await TodoListRepo.GetAsync(assertTodoListId) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
-			await GenericMockSetup<TodoListModel>.SetupDeleteEntity(todoListToRemove, DbSetTodoListMock, TodoListsCollection, DbOperationsToExecute);
+			await GenericMockSetup<TodoListModel>.SetupDeleteEntity(todoListToRemove, DbSetTodoListMock, TodoListsCollection.Cast<TodoListModel>().ToList(), DbOperationsToExecute);
 			TodoListRepo.Remove(todoListToRemove);
 			await DataUnitOfWork.SaveChangesAsync();
 
 			var itemsNumberAfterDelete = TodoListsCollection.Count;
 
 			// I don't know why but I have to "refresh" TodoListsCollection because somehow it can get "deleted" task from memory.
-			await GenericMockSetup<TodoListModel>.SetupGetEntity(assertTodoListId, DbSetTodoListMock, TodoListsCollection);
+			await GenericMockSetup<TodoListModel>.SetupGetEntity(assertTodoListId, DbSetTodoListMock, TodoListsCollection.Cast<TodoListModel>().ToList());
 
 			TodoListModel? resultOfTryToGetRemovedTask = await TodoListRepo.GetAsync(assertTodoListId);
 
@@ -269,7 +269,7 @@ namespace Project_UnitTests
 		{
 			TodoListModel? NullTodoList = null;
 
-			await GenericMockSetup<TodoListModel>.SetupDeleteEntity(NullTodoList!, DbSetTodoListMock, TodoListsCollection, DbOperationsToExecute);
+			await GenericMockSetup<TodoListModel>.SetupDeleteEntity(NullTodoList!, DbSetTodoListMock, TodoListsCollection.Cast<TodoListModel>().ToList(), DbOperationsToExecute);
 
 			Assert.Throws<ArgumentNullException>(() => TodoListRepo.Remove(NullTodoList!));
 		}
@@ -277,9 +277,9 @@ namespace Project_UnitTests
 		[Test]
 		public async Task AttemptToAddRangeOfTodoListByNullObjectShouldThrowException()
 		{
-			IEnumerable<TodoListModel>? nullRange = null;
+			ICollection<TodoListModel>? nullRange = null;
 
-			await GenericMockSetup<TodoListModel>.SetupAddEntitiesRange(nullRange!, TodoListsCollection, DbSetTodoListMock, DbOperationsToExecute);
+			await GenericMockSetup<TodoListModel>.SetupAddEntitiesRange(nullRange!, TodoListsCollection.Cast<TodoListModel>().ToList(), DbSetTodoListMock, DbOperationsToExecute);
 
 			Assert.ThrowsAsync<ArgumentNullException>(async () => await TodoListRepo.AddRangeAsync(nullRange!));
 		}
@@ -289,7 +289,7 @@ namespace Project_UnitTests
 		{
 			var todoListsRange = TodoListsDataService.NewTodoListsRange;
 
-			await GenericMockSetup<TodoListModel>.SetupAddEntitiesRange(todoListsRange, TodoListsCollection, DbSetTodoListMock, DbOperationsToExecute);
+			await GenericMockSetup<TodoListModel>.SetupAddEntitiesRange(todoListsRange, TodoListsCollection.Cast<TodoListModel>().ToList(), DbSetTodoListMock, DbOperationsToExecute);
 			await TodoListRepo.AddRangeAsync(todoListsRange);
 			await DataUnitOfWork.SaveChangesAsync();
 
@@ -303,7 +303,7 @@ namespace Project_UnitTests
 		{
 			List<TodoListModel>? nullRange = null;
 
-			await GenericMockSetup<TodoListModel>.SetupAddEntitiesRange(nullRange!, TodoListsCollection, DbSetTodoListMock, DbOperationsToExecute);
+			await GenericMockSetup<TodoListModel>.SetupAddEntitiesRange(nullRange!, TodoListsCollection.Cast<TodoListModel>().ToList(), DbSetTodoListMock, DbOperationsToExecute);
 
 			Assert.ThrowsAsync<ArgumentNullException>(async () => await TodoListRepo.AddRangeAsync(nullRange!));
 		}

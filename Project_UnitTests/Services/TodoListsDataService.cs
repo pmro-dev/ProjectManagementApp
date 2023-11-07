@@ -14,10 +14,10 @@ namespace Project_UnitTests.Services
 
         public static readonly object[] InvalidTodoLists = TodoListsData.InvalidTodoLists;
 
-		public static List<TodoListModel> GetCollection(SeedData seedBaseData)
+		public static List<ITodoListModel> GetCollection(SeedData seedBaseData)
         {
             SetIdsForTodoLists(seedBaseData);
-            return seedBaseData.TodoLists;
+            return seedBaseData.TodoLists.ToList();
         }
 
         private static void SetIdsForTodoLists(SeedData seedData)

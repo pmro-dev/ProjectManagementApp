@@ -33,13 +33,13 @@ namespace Project_UnitTests.Helpers
 			});
 		}
 
-		public static async Task SetupAddEntitiesRange(IEnumerable<T> range, List<T> AllEntities, Mock<DbSet<T>> DbSetEntityMock, List<Action> DbOperationsToExecute)
+		public static async Task SetupAddEntitiesRange(ICollection<T> range, List<T> AllEntities, Mock<DbSet<T>> DbSetEntityMock, List<Action> DbOperationsToExecute)
 		{
 			await Task.Run(() =>
 			{
 				void action() => AllEntities.AddRange(range);
 
-				DbSetEntityMock.Setup(x => x.AddRangeAsync(It.IsAny<IEnumerable<T>>(), default))
+				DbSetEntityMock.Setup(x => x.AddRangeAsync(It.IsAny<ICollection<T>>(), default))
 					.Callback(() =>
 					{
 						DbOperationsToExecute.Add(action);
