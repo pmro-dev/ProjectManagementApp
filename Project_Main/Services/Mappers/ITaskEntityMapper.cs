@@ -8,7 +8,6 @@ namespace Project_Main.Services.DTO
     public interface ITaskEntityMapper
     {
         ITaskDto TransferToDto(ITaskModel taskModel, IDictionary<object, object>? mappedObjects = null);
-        //ITaskEditOutputDto TransferToDto(ITaskModel taskModel, SelectList todoListSelector, SelectList taskStatusSelector);
         ITaskEditInputDto TransferToDto(ITaskEditInputVM taskEditInputVM);
         ITaskDeleteInputDto TransferToDto(ITaskDeleteInputVM deleteInputVM);
         ITaskDto TransferToDto(ITaskCreateInputVM taskInputVM);

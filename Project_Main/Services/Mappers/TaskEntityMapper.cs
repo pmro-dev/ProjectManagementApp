@@ -19,25 +19,6 @@ namespace Project_Main.Services.DTO
 			_taskEntityFactory = taskEntityFactory;
 		}
 
-		//public ITaskEditOutputDto TransferToDto(ITaskModel taskModel, SelectList todoListSelector, SelectList taskStatusSelector)
-		//{
-		//    var taskDto = TransferToDto(taskModel);
-
-		//    return new TaskEditOutputDto
-		//    {
-		//        Id = taskDto.Id,
-		//        UserId = taskDto.UserId,
-		//        Title = taskDto.Title,
-		//        Description = taskDto.Description,
-		//        DueDate = taskDto.DueDate,
-		//        ReminderDate = taskDto.ReminderDate,
-		//        Status = taskDto.Status,
-		//        TodoListId = taskDto.TodoListId,
-		//        TodoListsSelector = todoListSelector,
-		//        StatusSelector = taskStatusSelector
-		//    };
-		//}
-
 		public ITaskDeleteInputDto TransferToDto(ITaskDeleteInputVM deleteInputVM)
 		{
 			var deleteInputDto = _taskEntityFactory.CreateDeleteInputDto();

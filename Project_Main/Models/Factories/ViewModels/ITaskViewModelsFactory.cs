@@ -15,7 +15,7 @@ namespace Project_Main.Models.Factories.ViewModels
         public WrapperViewModel<TaskCreateInputVM, TaskCreateOutputVM> CreateWrapperCreateVM(ITaskDto taskDto, ITodoListDto todoListDto);
         public WrapperViewModel<TaskEditInputVM, TaskEditOutputVM> CreateWrapperEditVM();
         public WrapperViewModel<TaskDeleteInputVM, TaskDeleteOutputVM> CreateWrapperDeleteVM();
-        public TaskEditInputVM CreateEditInputVM(ITaskDto taskDto, SelectList statusSelector, SelectList todoListSelector);
+        public TaskEditInputVM CreateEditInputVM(ITaskDto taskDto);
         public TaskEditOutputVM CreateEditOutputVM(ITaskDto taskDto, SelectList statusSelector, SelectList todoListSelector);
         public TaskDeleteOutputVM CreateDeleteOutputVM(ITaskDto taskDto);
         public TaskDeleteInputVM CreateDeleteInputVM(int id, int todoListId);

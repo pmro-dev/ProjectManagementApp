@@ -74,7 +74,7 @@ namespace Project_Main.Models.Factories.ViewModels
             };
         }
 
-        public TaskEditInputVM CreateEditInputVM(ITaskDto taskDto, SelectList statusSelector, SelectList todoListSelector)
+        public TaskEditInputVM CreateEditInputVM(ITaskDto taskDto)
         {
             return new TaskEditInputVM()
             {
@@ -85,9 +85,7 @@ namespace Project_Main.Models.Factories.ViewModels
                 ReminderDate = taskDto.ReminderDate,
                 Title = taskDto.Title,
                 TodoListId = taskDto.TodoListId,
-                UserId = taskDto.UserId,
-                StatusSelector = statusSelector,
-                TodoListSelector = todoListSelector
+                UserId = taskDto.UserId
             };
         }
 
