@@ -56,7 +56,8 @@ namespace Project_Main.Infrastructure.Helpers
 		public const string Name = "Task";
 		public const string DetailsAction = nameof(TaskController.Details);
 		public const string CreateAction = nameof(TaskController.Create);
-		public const string EditAction = nameof(TaskController.Edit);
+		public const string EditGetAction = nameof(TaskController.Edit);
+		public const string EditPostAction = nameof(TaskController.EditPost);
 		public const string DeleteAction = nameof(TaskController.Delete);
 		public const string DeletePostAction = nameof(TaskController.DeletePost);
 	}

@@ -25,7 +25,8 @@
         public const string TaskDetailsRoute = $"/Boards/[action]/{TodoListCtrl.Name}/{{routeTodoListId:int}}/[controller]/{{routeTaskId:int}}";
         public const string CreateTaskRoute = TodoListCtrl.Name + "/{id:int}/[controller]/[action]";
         public const string CreateTaskPostRoute = TodoListCtrl.Name + "/{todoListId:int}/[controller]/[action]";
-        public const string TaskEditRoute = TodoListCtrl.Name + "/{todoListId:int}/[controller]/{taskId:int}/[action]";
+        public const string TaskEditGetRoute = TodoListCtrl.Name + $"/{{todoListId:int}}/{TaskCtrl.Name}/{{taskId:int}}/{TaskCtrl.EditGetAction}";
+        public const string TaskEditPostRoute = TodoListCtrl.Name + $"/{{todoListId:int}}/{TaskCtrl.Name}/{{taskId:int}}/{TaskCtrl.EditPostAction}";
         public const string TaskDeleteGetRoute = TodoListCtrl.Name + "/{todoListId:int}/[controller]/{taskId:int}/[action]";
 		public const string TaskDeletePostRoute = TodoListCtrl.Name + "/[controller]/[action]";
 	}

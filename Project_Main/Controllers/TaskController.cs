@@ -168,8 +168,8 @@ namespace Project_Main.Controllers
         /// <returns>Return different view based on the final result.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
         [HttpGet]
-        [Route(CustomRoutes.TaskEditRoute)]
-        public async Task<IActionResult> Edit(int todoListId, int taskId)
+        [Route(CustomRoutes.TaskEditGetRoute)]
+        public async Task<IActionResult> Edit([FromRoute] int todoListId, [FromRoute] int taskId)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Edit), controllerName);
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.IdBottomBoundry, _logger);
@@ -247,25 +247,19 @@ namespace Project_Main.Controllers
         /// <returns>Return different respond based on the final result.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
         [HttpPost]
-        [Route(CustomRoutes.TaskEditRoute)]
+        [Route(CustomRoutes.TaskEditPostRoute)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int todoListId, int id, WrapperViewModel<TaskEditInputVM, TaskEditOutputVM> editWrapperVM)
+        public async Task<IActionResult> EditPost([FromForm] WrapperViewModel<TaskEditInputVM, TaskEditOutputVM> editWrapperVM)
         {
-            HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.IdBottomBoundry, _logger);
-            HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.IdBottomBoundry, _logger);
-
             var taskEditInputVM = editWrapperVM.InputVM;
 
-			if (id != taskEditInputVM.Id)
-            {
-                _logger.LogCritical(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, id, taskEditInputVM.Id);
-                return Conflict();
-            }
+            HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskEditInputVM.TodoListId, nameof(taskEditInputVM.TodoListId), HelperCheck.IdBottomBoundry, _logger);
+            HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskEditInputVM.Id, nameof(taskEditInputVM.Id), HelperCheck.IdBottomBoundry, _logger);
 
             if (ModelState.IsValid)
             {
                 ITaskEditInputDto taskEditInputDto = _taskEntityMapper.TransferToDto(taskEditInputVM);
-                ITaskModel? taskDbModel = await _taskRepository.GetAsync(id);
+                ITaskModel? taskDbModel = await _taskRepository.GetAsync(taskEditInputDto.Id);
 
                 if (taskDbModel is null)
                 {
@@ -273,9 +267,9 @@ namespace Project_Main.Controllers
                     return NotFound();
                 }
 
-                if (taskDbModel.Id != id)
+                if (taskDbModel.Id != taskEditInputDto.Id)
                 {//TODO WRITE NEW LOG MESSAGE FOR THIS SITUATION
-                    _logger.LogCritical(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, id, taskDbModel.Id);
+                    _logger.LogCritical(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, taskEditInputDto.Id, taskDbModel.Id);
                     return Conflict();
                 }
 
@@ -284,7 +278,7 @@ namespace Project_Main.Controllers
                 _taskRepository.Update((TaskModel)taskDbModel);
                 await _dataUnitOfWork.SaveChangesAsync();
 
-                object routeValue = new { id = todoListId };
+                object routeValue = new { id = taskEditInputDto.TodoListId };
 
                 return RedirectToAction(TodoListCtrl.DetailsAction, TodoListCtrl.Name, routeValue);
             }
