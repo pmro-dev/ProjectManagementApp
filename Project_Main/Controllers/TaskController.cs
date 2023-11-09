@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
 using Project_Main.Infrastructure.Helpers;
-using static Project_DomainEntities.Helpers.TaskStatusHelper;
 using Project_DomainEntities;
 using System.Security.Claims;
 using Project_Main.Models.DataBases.AppData;
@@ -213,24 +211,8 @@ namespace Project_Main.Controllers
 			ICollection<ITodoListDto> userTodoListDtos = _todoListMapper.TransferToDto(userTodoListModels);
             // END OF TO DO
 
-            string dataValueField = "Value";
-            string dataTextField = "Text";
-
-            var todoListSelectorDto = new SelectList(userTodoListDtos, nameof(ITodoListDto.Id), nameof(ITodoListDto.Title), todoListId);
-            var taskStatusSelectorDto = new SelectList(Enum.GetValues(typeof(TaskStatusType))
-                .Cast<TaskStatusType>()
-                .Select(taskStatusType => new SelectListItem
-                {
-                    Text = taskStatusType.ToString(),
-                    Value = ((int)taskStatusType).ToString()
-                })
-                .ToList(),
-                dataValueField,
-                dataTextField,
-                taskDto.Status);
-
-            var editOutputVM = _taskViewModelsFactory.CreateEditOutputVM(taskDto, taskStatusSelectorDto, todoListSelectorDto);
-            var editWrapperVM = _taskViewModelsFactory.CreateWrapperEditVM();
+            var editOutputVM = _taskViewModelsFactory.CreateEditOutputVM(taskDto, userTodoListDtos);
+			var editWrapperVM = _taskViewModelsFactory.CreateWrapperEditVM();
 			editWrapperVM.OutputVM = editOutputVM;
 
 			return View(TaskViews.Edit, editWrapperVM);

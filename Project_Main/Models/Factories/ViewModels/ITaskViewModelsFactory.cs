@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Project_Main.Models.DTOs;
+﻿using Project_Main.Models.DTOs;
 using Project_Main.Models.Generics.ViewModels.WrapperModels;
 using Project_Main.Models.Inputs.ViewModels;
 using Project_Main.Models.Outputs.ViewModels;
@@ -16,7 +15,7 @@ namespace Project_Main.Models.Factories.ViewModels
         public WrapperViewModel<TaskEditInputVM, TaskEditOutputVM> CreateWrapperEditVM();
         public WrapperViewModel<TaskDeleteInputVM, TaskDeleteOutputVM> CreateWrapperDeleteVM();
         public TaskEditInputVM CreateEditInputVM(ITaskDto taskDto);
-        public TaskEditOutputVM CreateEditOutputVM(ITaskDto taskDto, SelectList statusSelector, SelectList todoListSelector);
+        public TaskEditOutputVM CreateEditOutputVM(ITaskDto taskDto, ICollection<ITodoListDto> userTodoListDtos);
         public TaskDeleteOutputVM CreateDeleteOutputVM(ITaskDto taskDto);
         public TaskDeleteInputVM CreateDeleteInputVM(int id, int todoListId);
     }

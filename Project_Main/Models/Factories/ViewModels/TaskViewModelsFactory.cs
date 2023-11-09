@@ -1,14 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Project_Main.Models.DTOs;
+﻿using Project_Main.Models.DTOs;
 using Project_Main.Models.Generics.ViewModels.WrapperModels;
 using Project_Main.Models.Inputs.ViewModels;
 using Project_Main.Models.Outputs.ViewModels;
+using Project_Main.Services;
 
 namespace Project_Main.Models.Factories.ViewModels
 {
     public class TaskViewModelsFactory : ITaskViewModelsFactory
     {
-        public TaskCreateInputVM CreateCreateInputVM(ITaskDto taskDto)
+        private readonly IServiceProvider _serviceProvider;
+
+		public TaskViewModelsFactory(IServiceProvider serviceProvider)
+		{
+			_serviceProvider = serviceProvider;
+		}
+
+		public TaskCreateInputVM CreateCreateInputVM(ITaskDto taskDto)
         {
             return new TaskCreateInputVM()
             {
@@ -89,8 +96,17 @@ namespace Project_Main.Models.Factories.ViewModels
             };
         }
 
-        public TaskEditOutputVM CreateEditOutputVM(ITaskDto taskDto, SelectList statusSelector, SelectList todoListSelector)
+		private ISelectListService GetSelectListService()
+		{
+			return _serviceProvider.CreateScope().ServiceProvider.GetRequiredService<ISelectListService>();
+		}
+
+		public TaskEditOutputVM CreateEditOutputVM(ITaskDto taskDto, ICollection<ITodoListDto> userTodoListDtos)
         {
+            var selectListService = GetSelectListService();
+			var todoListSelectorDto = selectListService.CreateTodoListSelector(userTodoListDtos, taskDto.TodoListId);
+			var taskStatusSelectorDto = selectListService.CreateTaskStatusSelector(taskDto);
+
             return new TaskEditOutputVM()
             {
                 Id = taskDto.Id,
@@ -101,9 +117,9 @@ namespace Project_Main.Models.Factories.ViewModels
                 Status = taskDto.Status,
                 TodoListId = taskDto.TodoListId,
                 UserId = taskDto.UserId,
-                StatusSelector = statusSelector,
-                TodoListSelector = todoListSelector
-            };
+                StatusSelector = taskStatusSelectorDto,
+                TodoListSelector = todoListSelectorDto
+			};
         }
 
         public WrapperViewModel<TaskCreateInputVM, TaskCreateOutputVM> CreateWrapperCreateVM(ITaskDto taskDto, ITodoListDto todoListDto)
