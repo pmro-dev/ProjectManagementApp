@@ -34,7 +34,7 @@ namespace Project_Main.Controllers
 		[Authorize]
 		public async Task<ActionResult<IBoardBrieflyOutputVM>> Briefly()
 		{
-			ICollection<ITodoListModel> todoListModels = await _todoListRepository.GetAllWithDetailsByFilterAsync(todoList => todoList.UserId == _signedInUserId);
+			ICollection<TodoListModel> todoListModels = await _todoListRepository.GetAllWithDetailsByFilterAsync(todoList => todoList.UserId == _signedInUserId);
 			var todoListDtos = _todoListMapper.TransferToDto(todoListModels);
             var brieflyOutputVM = _boardsVMFactory.CreateBrieflyOutputVM(todoListDtos);
 

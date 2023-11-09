@@ -69,7 +69,7 @@ namespace Project_Main.Controllers
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, routeTodoListId, nameof(routeTodoListId), HelperCheck.IdBottomBoundry, _logger);
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, routeTaskId, nameof(routeTaskId), HelperCheck.IdBottomBoundry, _logger);
 
-            ITaskModel? taskModel = await _taskRepository.GetAsync(routeTaskId);
+            TaskModel? taskModel = await _taskRepository.GetAsync(routeTaskId);
 
             if (taskModel is null)
             {
@@ -150,9 +150,9 @@ namespace Project_Main.Controllers
 
             ITaskCreateInputVM inputVM = taskCreateWrapperVM.InputVM;
             ITaskDto taskDto = _taskEntityMapper.TransferToDto(inputVM);
-            ITaskModel taskModel = _taskEntityMapper.TransferToModel(taskDto);
+            TaskModel taskModel = _taskEntityMapper.TransferToModel(taskDto);
 
-            await _taskRepository.AddAsync((TaskModel)taskModel);
+            await _taskRepository.AddAsync(taskModel);
             await _dataUnitOfWork.SaveChangesAsync();
 
             object routeValue = new { id = taskDto.TodoListId };
@@ -177,7 +177,7 @@ namespace Project_Main.Controllers
 
             var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            ITaskModel? taskModel = await _taskRepository.GetAsync(taskId);
+            TaskModel? taskModel = await _taskRepository.GetAsync(taskId);
 
             if (taskModel == null)
             {
@@ -210,9 +210,7 @@ namespace Project_Main.Controllers
                 return NotFound();
             }
 
-            var castedListModels = userTodoListModels.Cast<ITodoListModel>().ToList();
-
-			ICollection<ITodoListDto> userTodoListDtos = _todoListMapper.TransferToDto(castedListModels);
+			ICollection<ITodoListDto> userTodoListDtos = _todoListMapper.TransferToDto(userTodoListModels);
             // END OF TO DO
 
             string dataValueField = "Value";
@@ -259,7 +257,7 @@ namespace Project_Main.Controllers
             if (ModelState.IsValid)
             {
                 ITaskEditInputDto taskEditInputDto = _taskEntityMapper.TransferToDto(taskEditInputVM);
-                ITaskModel? taskDbModel = await _taskRepository.GetAsync(taskEditInputDto.Id);
+                TaskModel? taskDbModel = await _taskRepository.GetAsync(taskEditInputDto.Id);
 
                 if (taskDbModel is null)
                 {
@@ -275,7 +273,7 @@ namespace Project_Main.Controllers
 
                 _taskEntityMapper.UpdateModel(taskDbModel, taskEditInputDto);
 
-                _taskRepository.Update((TaskModel)taskDbModel);
+                _taskRepository.Update(taskDbModel);
                 await _dataUnitOfWork.SaveChangesAsync();
 
                 object routeValue = new { id = taskEditInputDto.TodoListId };
@@ -304,7 +302,7 @@ namespace Project_Main.Controllers
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.IdBottomBoundry, _logger);
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskId, nameof(taskId), HelperCheck.IdBottomBoundry, _logger);
 
-            ITaskModel? taskToDeleteModel = await _taskRepository.GetAsync(taskId);
+            TaskModel? taskToDeleteModel = await _taskRepository.GetAsync(taskId);
 
             if (taskToDeleteModel == null)
             {
@@ -351,7 +349,7 @@ namespace Project_Main.Controllers
 
             if (ModelState.IsValid)
             {
-                ITaskModel? taskToDeleteModel = await _taskRepository.GetAsync(deleteInputDto.Id);
+                TaskModel? taskToDeleteModel = await _taskRepository.GetAsync(deleteInputDto.Id);
 
                 if (taskToDeleteModel is null)
                 {
@@ -365,7 +363,7 @@ namespace Project_Main.Controllers
                     return Conflict();
                 }
 
-                _taskRepository.Remove((TaskModel)taskToDeleteModel);
+                _taskRepository.Remove(taskToDeleteModel);
                 await _dataUnitOfWork.SaveChangesAsync();
             }
 

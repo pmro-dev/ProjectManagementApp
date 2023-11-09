@@ -12,21 +12,21 @@ namespace Project_Main.Models.DataBases.AppData
 		/// </summary>
 		/// <param name="id">Targeted list id.</param>
 		/// <returns>ToDoList with details from Db.</returns>
-		Task<ITodoListModel?> GetWithDetailsAsync(int id);
+		Task<TodoListModel?> GetWithDetailsAsync(int id);
 
 		/// <summary>
 		/// Get All ToDoLists with details (where details are related data in other tables).
 		/// </summary>
 		/// <param name="userId"></param>
 		/// <returns>All ToDoLists wiith details from Db.</returns>
-		Task<ICollection<ITodoListModel>> GetAllWithDetailsAsync(string userId);
+		Task<ICollection<TodoListModel>> GetAllWithDetailsAsync(string userId);
 
 		/// <summary>
 		/// Get only those TodoLists with details (where details are related data in other tables) which follow predicate filter.
 		/// </summary>
 		/// <param name="filter"></param>
 		/// <returns></returns>
-		Task<ICollection<ITodoListModel>> GetAllWithDetailsByFilterAsync(Expression<Func<ITodoListModel, bool>> filter);
+		Task<ICollection<TodoListModel>> GetAllWithDetailsByFilterAsync(Expression<Func<TodoListModel, bool>> filter);
 
         /// <summary>
         /// Duplicate a whole, specifc ToDoList with details in Db (where details are related data in other tables).

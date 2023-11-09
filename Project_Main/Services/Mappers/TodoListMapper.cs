@@ -20,15 +20,15 @@ namespace Project_Main.Services.DTO
 
 		#region TRANSFER DTO TO MODEL
 
-		public ITodoListModel TransferToModel(ITodoListDto todoListDto, IDictionary<object, object>? mappedObjects = null)
+		public TodoListModel TransferToModel(ITodoListDto todoListDto, IDictionary<object, object>? mappedObjects = null)
 		{
 			return MapTodoListToModel(todoListDto, mappedObjects ?? new Dictionary<object, object>());
 		}
 
-		private ITodoListModel MapTodoListToModel(ITodoListDto todoListDto, IDictionary<object, object> mappedObjects)
+		private TodoListModel MapTodoListToModel(ITodoListDto todoListDto, IDictionary<object, object> mappedObjects)
 		{
 			if (mappedObjects.TryGetValue(todoListDto, out var mappedObject))
-				return (ITodoListModel)mappedObject;
+				return (TodoListModel)mappedObject;
 
 			var todoListModel = _todoListFactory.CreateModel();
 			todoListModel.Id = todoListDto.Id;
@@ -44,7 +44,7 @@ namespace Project_Main.Services.DTO
 
 		private ICollection<ITaskModel> MapMultipleTasksToModels(ICollection<ITaskDto> taskDtos, IDictionary<object, object> mappedObjects)
 		{
-			return taskDtos.Select(task => _taskEntityMapper.TransferToModel(task, mappedObjects)).ToList();
+			return taskDtos.Select(task => _taskEntityMapper.TransferToModel(task, mappedObjects)).Cast<ITaskModel>().ToList();
 		}
 
 		#endregion
@@ -75,7 +75,7 @@ namespace Project_Main.Services.DTO
 			return MapTodoListToDto(todoListModel, mappedObjects ?? new Dictionary<object, object>());
 		}
 
-		public ICollection<ITodoListDto> TransferToDto(ICollection<ITodoListModel> todoLists)
+		public ICollection<ITodoListDto> TransferToDto(ICollection<TodoListModel> todoLists)
 		{
 			var mappedObjects = new Dictionary<object, object>();
 
@@ -103,13 +103,13 @@ namespace Project_Main.Services.DTO
 
 		private ICollection<ITaskDto> MapMultipleTasksToDtos(ICollection<ITaskModel> taskModels, IDictionary<object, object> mappedObjects)
 		{
-			return taskModels.Select(task => _taskEntityMapper.TransferToDto(task, mappedObjects)).ToList();
+			return taskModels.Select(task => _taskEntityMapper.TransferToDto((TaskModel)task, mappedObjects)).ToList();
 		}
 
 		#endregion
 
 
-		public void UpdateModel(ITodoListModel todoListDbModel, ITodoListEditInputDto taskEditInputDto)
+		public void UpdateModel(TodoListModel todoListDbModel, ITodoListEditInputDto taskEditInputDto)
 		{
 			todoListDbModel.Title = taskEditInputDto.Title;
 		}

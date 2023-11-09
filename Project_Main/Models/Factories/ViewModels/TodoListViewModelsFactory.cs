@@ -32,7 +32,7 @@ namespace Project_Main.Models.Factories.ViewModels
             {
                 Id = todoListDto.Id,
                 Title = todoListDto.Title,
-                TasksCount = todoListDto.Tasks.Count()
+                TasksCount = todoListDto.Tasks.Count
             };
         }
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Project_DomainEntities;
 using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.DataBases.AppData;
 using Project_Main.Models.DataBases.Helpers;
@@ -84,7 +83,7 @@ namespace Project_Main.Controllers
 
                 var todoListModel = _todoListMapper.TransferToModel(todoListDto);
 
-                await _todoListRepository.AddAsync((TodoListModel)todoListModel);
+                await _todoListRepository.AddAsync(todoListModel);
                 await _dataUnitOfWork.SaveChangesAsync();
 
                 return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
@@ -149,7 +148,7 @@ namespace Project_Main.Controllers
 
             if (!ModelState.IsValid) return View(TodoListViews.Edit, editWrapperVM);
 
-            ITodoListModel? todoListDbModel = await _todoListRepository.GetAsync(todoListId);
+            var todoListDbModel = await _todoListRepository.GetAsync(todoListId);
 
             if (todoListDbModel is null)
             {
@@ -160,7 +159,7 @@ namespace Project_Main.Controllers
             var editInputDto = _todoListMapper.TransferToDto(editWrapperVM.InputVM);
             _todoListMapper.UpdateModel(todoListDbModel, editInputDto);
 
-            _todoListRepository.Update((TodoListModel)todoListDbModel);
+            _todoListRepository.Update(todoListDbModel);
             await _dataUnitOfWork.SaveChangesAsync();
 
             return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);

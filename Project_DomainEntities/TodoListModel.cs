@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.VisualBasic;
 using Project_DomainEntities.Helpers;
 
 namespace Project_DomainEntities
@@ -99,7 +98,7 @@ namespace Project_DomainEntities
 						if (Tasks is not null && obj.Tasks is not null)
 						{
 							var tempTasks = Tasks;
-							var tempObjTasks = (ICollection<ITaskModel>)obj.Tasks;
+							var tempObjTasks = obj.Tasks;
 
 							return tempTasks.Count == tempObjTasks.Count && Id == obj.Id;
 						}

@@ -77,8 +77,6 @@ namespace Project_Main.Models.DataBases.AppData
 			todoItemBuilder.Property(x => x.Status)
 				.HasConversion(new EnumToStringConverter<TaskStatusType>());
 
-			//modelBuilder.Entity<TaskTagModel>().HasKey(tt => new { tt.TaskId, tt.TagId });
-
 			_logger?.LogInformation(MessagesPacket.LogBuildingSucceed, nameof(OnModelCreating), nameof(CustomAppDbContext));
 		}
 	}

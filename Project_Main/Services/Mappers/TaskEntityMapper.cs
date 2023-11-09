@@ -62,7 +62,7 @@ namespace Project_Main.Services.DTO
 
 		#region Map TaskModel To TaskDto
 
-		public ITaskDto TransferToDto(ITaskModel taskModel, IDictionary<object, object>? mappedObjects = null)
+		public ITaskDto TransferToDto(TaskModel taskModel, IDictionary<object, object>? mappedObjects = null)
 		{
 			return MapTaskToDto(taskModel, mappedObjects ?? new Dictionary<object, object>());
 		}
@@ -143,7 +143,7 @@ namespace Project_Main.Services.DTO
 		#endregion
 
 
-		public void UpdateModel(ITaskModel taskDbModel, ITaskEditInputDto taskEditInputDto)
+		public void UpdateModel(TaskModel taskDbModel, ITaskEditInputDto taskEditInputDto)
 		{
 			taskDbModel.Id = taskEditInputDto.Id;
 			taskDbModel.Title = taskEditInputDto.Title;
@@ -157,17 +157,17 @@ namespace Project_Main.Services.DTO
 
 		#region Map TaskDto to TaskModel
 
-		public ITaskModel TransferToModel(ITaskDto taskDto, IDictionary<object, object>? mappedObjects = null)
+		public TaskModel TransferToModel(ITaskDto taskDto, IDictionary<object, object>? mappedObjects = null)
 		{
 			return MapTaskToModel(taskDto, mappedObjects ?? new Dictionary<object, object>());
 		}
 
-		private ITaskModel MapTaskToModel(ITaskDto taskDto, IDictionary<object, object> mappedObjects)
+		private TaskModel MapTaskToModel(ITaskDto taskDto, IDictionary<object, object> mappedObjects)
 		{
 			if (mappedObjects.TryGetValue(taskDto, out var mappedObject))
-				return (ITaskModel)mappedObject;
+				return (TaskModel)mappedObject;
 
-			ITaskModel taskModel = _taskEntityFactory.CreateModel();
+			TaskModel taskModel = _taskEntityFactory.CreateModel();
 			taskModel.Id = taskDto.Id;
 			taskModel.CreationDate = taskDto.CreationDate;
 			taskModel.Description = taskDto.Description;

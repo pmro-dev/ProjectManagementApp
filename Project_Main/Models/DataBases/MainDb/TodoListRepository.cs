@@ -70,14 +70,14 @@ namespace Project_Main.Models.DataBases.AppData
         }
 
 		///<inheritdoc />
-		public async Task<ICollection<ITodoListModel>> GetAllWithDetailsAsync(string userId)
+		public async Task<ICollection<TodoListModel>> GetAllWithDetailsAsync(string userId)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetAllWithDetailsAsync), nameof(TodoListRepository));
             HelperCheck.ThrowExceptionWhenParamNullOrEmpty(operationName, ref userId, nameof(userId), _logger);
 
-			ICollection<ITodoListModel> allTodoListsWithDetails = await _dbContext
+			ICollection<TodoListModel> allTodoListsWithDetails = await _dbContext
                 .Set<TodoListModel>()
-                .Where((ITodoListModel todoList) => todoList.UserId == userId)
+                .Where(todoList => todoList.UserId == userId)
                 .Include(todoList => todoList.Tasks)
                 .ToListAsync();
 
@@ -85,9 +85,9 @@ namespace Project_Main.Models.DataBases.AppData
         }
 
         ///<inheritdoc />
-        public async Task<ICollection<ITodoListModel>> GetAllWithDetailsByFilterAsync(Expression<Func<ITodoListModel, bool>> filter)
+        public async Task<ICollection<TodoListModel>> GetAllWithDetailsByFilterAsync(Expression<Func<TodoListModel, bool>> filter)
         {
-			ICollection<ITodoListModel> entities = await _dbContext
+			ICollection<TodoListModel> entities = await _dbContext
                 .Set<TodoListModel>()
                 .Where(filter)
                 .Include(todoList => todoList.Tasks)
@@ -97,12 +97,12 @@ namespace Project_Main.Models.DataBases.AppData
         }
 
         ///<inheritdoc />
-        public async Task<ITodoListModel?> GetWithDetailsAsync(int id)
+        public async Task<TodoListModel?> GetWithDetailsAsync(int id)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetWithDetailsAsync), nameof(TodoListRepository));
             HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.IdBottomBoundry, _logger);
 
-            ITodoListModel? todoListFromDb = await _dbContext
+            TodoListModel? todoListFromDb = await _dbContext
                 .Set<TodoListModel>()
                 .Where(todoList => todoList.Id == id)
                 .Include(todoList => todoList.Tasks)
