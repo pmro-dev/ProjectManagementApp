@@ -1,4 +1,6 @@
-﻿namespace Project_Main.Infrastructure.Helpers
+﻿using Project_Main.Infrastructure.Helpers;
+
+namespace Web.Infrastructure.Helpers
 {
 	/// <summary>
 	/// Helper to check for exceptions to throw.

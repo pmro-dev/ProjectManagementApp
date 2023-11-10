@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Project_Main.Controllers;
+using Web.Controllers;
 
-namespace Project_Main.Infrastructure.Helpers
+namespace Web.Infrastructure.Helpers
 {
 	/// <summary>
 	/// Class contains constants values (the most) for authentication setup but also for database and user claims creation.

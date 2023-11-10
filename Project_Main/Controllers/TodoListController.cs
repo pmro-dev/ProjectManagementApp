@@ -5,12 +5,14 @@ using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.DataBases.AppData;
 using Project_Main.Models.DataBases.Helpers;
 using Project_Main.Services.DTO;
-using Project_Main.Models.Inputs.ViewModels;
-using Project_Main.Models.Outputs.ViewModels;
 using Project_Main.Models.Factories.ViewModels;
-using Project_Main.Models.Generics.ViewModels.WrapperModels;
+using Web.Infrastructure.Helpers;
+using Web.ViewModels.Wrappers;
+using Web.ViewModels.Outputs;
+using Web.Infrastructure;
+using Web.ViewModels.Inputs;
 
-namespace Project_Main.Controllers
+namespace Web.Controllers
 {
 	/// <summary>
 	/// Controller to manage To Do List actions based on specific routes.

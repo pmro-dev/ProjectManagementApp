@@ -1,19 +1,19 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Project_DomainEntities;
-using Project_Main.Infrastructure.Helpers;
 using Project_Main.Models.DataBases.AppData;
 using Project_Main.Models.Factories.ViewModels;
-using Project_Main.Models.Outputs.ViewModels;
 using Project_Main.Services.DTO;
 using Project_Main.Services.Identity;
+using Web.Infrastructure;
+using Web.ViewModels.Outputs.Abstract;
 
-namespace Project_Main.Controllers
+namespace Web.Controllers
 {
-    public class BoardsController : Controller
+	public class BoardsController : Controller
 	{
 		private readonly IBoardViewModelsFactory _boardsVMFactory;
-        private readonly ITodoListMapper _todoListMapper;
+		private readonly ITodoListMapper _todoListMapper;
 		private readonly ITodoListRepository _todoListRepository;
 		private readonly string _signedInUserId;
 

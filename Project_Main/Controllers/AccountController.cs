@@ -6,14 +6,16 @@ using Project_Main.Services.DTO;
 using Project_Main.Models.Inputs.DTOs;
 using Project_Main.Models.DTOs;
 using Project_Main.Models.DTOs.Helpers;
-using Project_Main.Models.Inputs.ViewModels;
+using Web.Infrastructure.Helpers;
+using Web.ViewModels.Inputs;
+using Web.Infrastructure;
 
-namespace Project_Main.Controllers
+namespace Web.Controllers
 {
-    /// <summary>
-    /// Controller to manage availability of page's resources via Authentication.
-    /// </summary>
-    [Authorize]
+	/// <summary>
+	/// Controller to manage availability of page's resources via Authentication.
+	/// </summary>
+	[Authorize]
 	[AllowAnonymous]
 	public class AccountController : Controller
 	{
@@ -24,25 +26,25 @@ namespace Project_Main.Controllers
 		private readonly ILogoutService _logoutService;
 		private readonly IAccountMapper _accountMapper;
 
-        private string operationName = string.Empty;
+		private string operationName = string.Empty;
 		private readonly string controllerName = nameof(AccountController);
 
-        public AccountController(ILoginService loginService, IUserRegisterService userRegisterService, ILogger<AccountController> logger,
-            IUserAuthenticationService userAuthenticationService, ILogoutService logoutService, IAccountMapper accountMapper)
-        {
-            _loginService = loginService;
-            _userRegisterService = userRegisterService;
-            _logger = logger;
-            _userAuthenticationService = userAuthenticationService;
-            _logoutService = logoutService;
-            _accountMapper = accountMapper;
-        }
+		public AccountController(ILoginService loginService, IUserRegisterService userRegisterService, ILogger<AccountController> logger,
+			IUserAuthenticationService userAuthenticationService, ILogoutService logoutService, IAccountMapper accountMapper)
+		{
+			_loginService = loginService;
+			_userRegisterService = userRegisterService;
+			_logger = logger;
+			_userAuthenticationService = userAuthenticationService;
+			_logoutService = logoutService;
+			_accountMapper = accountMapper;
+		}
 
-        /// <summary>
-        /// Return Index of the whole page that is Login Page.
-        /// </summary>
-        /// <returns>Return user to Login Page.</returns>
-        [HttpGet]
+		/// <summary>
+		/// Return Index of the whole page that is Login Page.
+		/// </summary>
+		/// <returns>Return user to Login Page.</returns>
+		[HttpGet]
 		public ViewResult Login() { return View(); }
 
 		/// <summary>

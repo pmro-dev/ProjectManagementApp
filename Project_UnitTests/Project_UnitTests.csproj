@@ -27,8 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Project_DomainEntities\Project_DomainEntities.csproj" />
-    <ProjectReference Include="..\Project_Main\Project_Main.csproj" />
+    <ProjectReference Include="..\Project_Main\Web.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,6 @@
 using System.Reflection;
 using Project_Main.Models.DataBases.AppData.DbSetup;
 using Project_Main.Models.DataBases.Identity.DbSetup;
-using Project_Main.Infrastructure.Helpers;
 using Project_Main.Services.Identity;
 using Project_Main.Services.DTO;
 using Project_DomainEntities;
@@ -9,10 +8,11 @@ using Project_Main.Models.DTOs;
 using Project_Main.Models.Factories.ViewModels;
 using Project_Main.Models.Factories.DTOs;
 using Project_Main.Services;
+using Web.Infrastructure;
 
-namespace Project_Main
+namespace Web
 {
-    public static class Program
+	public static class Program
 	{
 		public static async Task Main(string[] args)
 		{
@@ -33,7 +33,7 @@ namespace Project_Main
 
 			builder.AddCustomDbContexts();
 			builder.SetupUnitOfWorkServices();
-			
+
 			builder.Services.AddHttpContextAccessor();
 
 
@@ -74,8 +74,8 @@ namespace Project_Main
 			#region FACTORIES
 
 			builder.Services.AddScoped<IBoardViewModelsFactory, BoardViewModelsFactory>();
-            builder.Services.AddScoped<ITodoListViewModelsFactory, TodoListViewModelsFactory>();
-            builder.Services.AddScoped<ITaskViewModelsFactory, TaskViewModelsFactory>();
+			builder.Services.AddScoped<ITodoListViewModelsFactory, TodoListViewModelsFactory>();
+			builder.Services.AddScoped<ITaskViewModelsFactory, TaskViewModelsFactory>();
 
 			builder.Services.AddScoped<ITodoListFactory, TodoListFactory>();
 			builder.Services.AddScoped<ITaskEntityFactory, TaskEntityFactory>();
