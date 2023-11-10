@@ -5,10 +5,10 @@ using Project_Main.Infrastructure.Helpers;
 using Project_Main.Services.Identity;
 using Project_Main.Services.DTO;
 using Project_DomainEntities;
-using Project_Main.Models.Inputs.DTOs;
 using Project_Main.Models.DTOs;
 using Project_Main.Models.Factories.ViewModels;
 using Project_Main.Models.Factories.DTOs;
+using Project_Main.Services;
 
 namespace Project_Main
 {
@@ -37,42 +37,43 @@ namespace Project_Main
 			builder.Services.AddHttpContextAccessor();
 
 
-            #region IDENTITY SERVICES
+			#region IDENTITY SERVICES
 
-            builder.Services.AddScoped<ILoginService, LoginService>();
+			builder.Services.AddScoped<ILoginService, LoginService>();
 			builder.Services.AddScoped<ILogoutService, LogoutService>();
 			builder.Services.AddScoped<IUserRegisterService, UserRegisterService>();
 			builder.Services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
 			builder.Services.AddScoped<IClaimsService, ClaimsService>();
 			builder.Services.AddScoped<IAccountService, AccountService>();
 
-            #endregion
+			#endregion
 
 
-            #region DTO SERVICES
+			#region MAPPERS
 
 			builder.Services.AddScoped<IAccountMapper, AccountMapper>();
 
-            builder.Services.AddTransient<ITaskDto, TaskDto>();
-            builder.Services.AddTransient<ITaskModel, TaskModel>();
-            //builder.Services.AddScoped<ITaskCreateInputDto, TaskCreateInputDto>();
-            builder.Services.AddScoped<ITaskEntityMapper, TaskEntityMapper>();
+			builder.Services.AddTransient<ITaskDto, TaskDto>();
+			builder.Services.AddTransient<ITaskModel, TaskModel>();
+			//builder.Services.AddScoped<ITaskCreateInputDto, TaskCreateInputDto>();
+			builder.Services.AddScoped<ITaskEntityMapper, TaskEntityMapper>();
 
-            builder.Services.AddTransient<ITodoListDto, TodoListDto>();
-            builder.Services.AddTransient<ITodoListModel, TodoListModel>();
-            builder.Services.AddScoped<ITodoListMapper, TodoListMapper>();
+			builder.Services.AddTransient<ITodoListDto, TodoListDto>();
+			builder.Services.AddTransient<ITodoListModel, TodoListModel>();
+			builder.Services.AddScoped<ITodoListMapper, TodoListMapper>();
 
-            builder.Services.AddTransient<ITagDto, TagDto>();
-            builder.Services.AddTransient<ITagModel, TagModel>();
+			builder.Services.AddTransient<ITagDto, TagDto>();
+			builder.Services.AddTransient<ITagModel, TagModel>();
 
-            builder.Services.AddTransient<ITaskTagDto, TaskTagDto>();
-            builder.Services.AddTransient<ITaskTagModel, TaskTagModel>();
+			builder.Services.AddTransient<ITaskTagDto, TaskTagDto>();
+			builder.Services.AddTransient<ITaskTagModel, TaskTagModel>();
 
-            #endregion
+			#endregion
 
-            #region FACTORIES
 
-            builder.Services.AddScoped<IBoardViewModelsFactory, BoardViewModelsFactory>();
+			#region FACTORIES
+
+			builder.Services.AddScoped<IBoardViewModelsFactory, BoardViewModelsFactory>();
             builder.Services.AddScoped<ITodoListViewModelsFactory, TodoListViewModelsFactory>();
             builder.Services.AddScoped<ITaskViewModelsFactory, TaskViewModelsFactory>();
 
@@ -81,6 +82,7 @@ namespace Project_Main
 			builder.Services.AddScoped<IIdentityFactory, IdentityFactory>();
 
 			#endregion
+
 
 			builder.SetupSeedDataServices();
 

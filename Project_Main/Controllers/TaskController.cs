@@ -59,7 +59,7 @@ namespace Project_Main.Controllers
         /// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
         [HttpGet]
         [Route(CustomRoutes.TaskDetailsRoute)]
-        public async Task<IActionResult> Details(int routeTodoListId, int routeTaskId)
+        public async Task<IActionResult> Details([FromRoute] int routeTodoListId, [FromRoute] int routeTaskId)
         {
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Details), controllerName);
 

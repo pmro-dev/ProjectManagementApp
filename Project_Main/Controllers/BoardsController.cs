@@ -18,10 +18,10 @@ namespace Project_Main.Controllers
 		private readonly string _signedInUserId;
 
 		public BoardsController(IBoardViewModelsFactory boardsVMFactory, ITodoListMapper todoListMapper, ITodoListRepository todoListRepository, IAccountService accountService)
-        {
-            _boardsVMFactory = boardsVMFactory;
-            _todoListMapper = todoListMapper;
-            _todoListRepository = todoListRepository;
+		{
+			_boardsVMFactory = boardsVMFactory;
+			_todoListMapper = todoListMapper;
+			_todoListRepository = todoListRepository;
 			_signedInUserId = accountService.GetSignedInUserId();
 		}
 
@@ -36,7 +36,7 @@ namespace Project_Main.Controllers
 		{
 			ICollection<TodoListModel> todoListModels = await _todoListRepository.GetAllWithDetailsByFilterAsync(todoList => todoList.UserId == _signedInUserId);
 			var todoListDtos = _todoListMapper.TransferToDto(todoListModels);
-            var brieflyOutputVM = _boardsVMFactory.CreateBrieflyOutputVM(todoListDtos);
+			var brieflyOutputVM = _boardsVMFactory.CreateBrieflyOutputVM(todoListDtos);
 
 			return View(brieflyOutputVM);
 		}
