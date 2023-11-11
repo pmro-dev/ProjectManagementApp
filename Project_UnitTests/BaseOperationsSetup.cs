@@ -1,6 +1,5 @@
 ﻿using Moq;
 using Project_DomainEntities;
-using Project_Main.Models.DataBases.AppData;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Project_UnitTests.Helpers;
@@ -9,14 +8,19 @@ using Autofac.Extras.Moq;
 using Autofac;
 using Project_UnitTests.Services;
 using Project_UnitTests.Data;
-using ClassLibrary_SeedData;
+using Web.TodoLists.Common.Interfaces;
+using Web.Databases.App.Seeds;
+using Web.TodoLists.Common;
+using Web.Databases.App.Interfaces;
+using Web.Tasks.Common;
+using Web.Databases.App;
 
 namespace Project_UnitTests
 {
-    /// <summary>
-    /// Class that setup basic properties such Tasks and seeds data / sets data format / sets mock for DbContext
-    /// </summary>
-    public class BaseOperationsSetup
+	/// <summary>
+	/// Class that setup basic properties such Tasks and seeds data / sets data format / sets mock for DbContext
+	/// </summary>
+	public class BaseOperationsSetup
     {
 		#region PROPERTIES
 

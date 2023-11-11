@@ -1,0 +1,19 @@
+﻿@using Web.Infrastructure.Helpers;
+@using Web.Tasks.Show;
+@model TaskDetailsOutputVM
+
+@{
+	ViewData["Title"] = "Details";
+}
+
+<div>
+	<h4>Task Details</h4>
+	<hr />
+
+	<partial name="_TaskTableDetails" model="@Model" />
+
+	<input type="hidden" name="routeTodoListId" asp-for="@Model.TodoListId" />
+	<input type="hidden" name="routeTaskId" asp-for="@Model.Id" />
+	<input type="hidden" asp-for="@Model.UserId" />
+    <a asp-controller="@TodoListCtrl.Name" asp-action="@TodoListCtrl.DetailsAction" asp-route-id="@Model.TodoListId" class="btn btn-primary">Back</a>
+</div>

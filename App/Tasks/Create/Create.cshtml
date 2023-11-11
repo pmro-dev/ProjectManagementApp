@@ -1,0 +1,56 @@
+﻿@using Web.Common.ViewModels;
+@using Web.Infrastructure.Helpers;
+@using Web.Tasks.Create;
+@model WrapperViewModel<TaskCreateInputVM, TaskCreateOutputVM>
+
+@{
+    ViewData["Title"] = "Create Task";
+    var inputVM = Model.InputVM;
+    var outputVM = Model.OutputVM;
+}
+
+<h4>Create Task</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="@TaskCtrl.CreateAction" asp-controller="@TaskCtrl.Name" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <label asp-for="@outputVM.TodoListId" type="hidden" />
+            <label asp-for="@outputVM.UserId" type="hidden" value="@outputVM.UserId" />
+            <div class="form-group">
+                <label asp-for="@outputVM.TodoListName" class="control-label">To Do List Name</label>
+                <input asp-for="@outputVM.TodoListName" class="form-control" readonly />
+            </div>
+            <input asp-for="@inputVM.TodoListId" type="hidden" value="@outputVM.TodoListId" />
+            <input asp-for="@inputVM.UserId" type="hidden" value="@outputVM.UserId" />
+            <div class="form-group">
+                <label asp-for="@inputVM.Title" class="control-label"></label>
+                <input asp-for="@inputVM.Title" class="form-control" />
+                <span asp-validation-for="@inputVM.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@inputVM.Description" class="control-label"></label>
+                <textarea asp-for="@inputVM.Description" class="form-control"></textarea>
+                <span asp-validation-for="@inputVM.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@inputVM.DueDate" class="control-label">Deadline</label>
+                <input asp-for="@inputVM.DueDate" asp-format="{0:dd'/'MM'/'yyyy}" class="form-control" />
+                <span asp-validation-for="@inputVM.DueDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@inputVM.ReminderDate" class="control-label">Reminder</label>
+                <input asp-for="@inputVM.ReminderDate" asp-format="{0:dd'/'MM'/'yyyy}" class="form-control" />
+                <span asp-validation-for="@inputVM.ReminderDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn" style="background-color: #671dff; color: white; font-weight: 500;"  />
+                <a asp-controller="@BoardsCtrl.Name" asp-action="@BoardsCtrl.BrieflyAction" asp-route-id="@outputVM.TodoListId" class="btn btn-primary">Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync(SharedViews.ValidationPartial);}
+}

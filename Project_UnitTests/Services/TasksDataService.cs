@@ -1,11 +1,11 @@
 ﻿using Castle.Core.Internal;
-using ClassLibrary_SeedData;
 using Project_DomainEntities;
 using Project_UnitTests.Data;
+using Web.Databases.App.Seeds;
 
 namespace Project_UnitTests.Services
 {
-    public static class TasksDataService
+	public static class TasksDataService
     {
         private static List<ITaskModel> TasksUX { get; set; } = new List<ITaskModel>();
         private static List<ITaskModel> TasksBackend { get; set; } = new List<ITaskModel>();

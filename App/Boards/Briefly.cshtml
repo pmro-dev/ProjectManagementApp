@@ -1,0 +1,45 @@
+﻿@using Web.Boards;
+@using Web.Infrastructure.Helpers;
+@model BoardBrieflyOutputVM
+
+@{
+	Layout = SharedViews.DefaultLayout;
+}
+
+<h1>To Do Lists Briefly</h1>
+
+<p>
+	<a asp-action=@TodoListCtrl.CreateAction asp-controller=@TodoListCtrl.Name class="btn" style="background-color: #671dff; color: white; font-weight: 500;">Create Todo List</a>
+	<a asp-action=@BoardsCtrl.AllAction class="btn btn-dark" >Show All - Details</a>
+</p>
+
+@foreach (var todoList in Model.TodoLists)
+{
+	<div class="card border-primary mb-3 align-items-center" style="max-width: 25rem;">
+		<div class="card-header" style="font-weight: 600; width: 100%; background-color: #7866e2; color: white;">
+			
+			@Html.DisplayFor(modelItem => todoList.Title)
+
+			@if (Model.IsReminderForToday(todoList))
+			{
+				<div class="alert-danger btn-sm" role="alert" style="width: 30%; float: right; text-align: center; font-weight: 500;">
+					Reminder!
+				</div>
+			}
+		</div>
+		<div style="width: 100%; text-align: center;">
+			<img src="\list-puzzle.jpg" class="card-img-top" style="width: 30%;" alt="...">
+			<p class="card-text" style="font-size: 11px; font-weight: 500;">@Model.GetNumberOfCompletedTasks(todoList) / @Model.GetNumberOfAllTasks(todoList) tasks</p>
+
+		</div>
+		<div class="card-body">
+			<a asp-action=@TodoListCtrl.DetailsAction asp-controller=@TodoListCtrl.Name asp-route-id="@todoList.Id" class="btn btn-outline-primary btn-sm">Details</a>
+			<a asp-action=@TodoListCtrl.EditAction asp-controller=@TodoListCtrl.Name asp-route-id="@todoList.Id" class="btn btn-outline-warning btn-sm">Edit</a>
+			<button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal+@todoList.Id">Delete</button>
+			<a asp-action=@TodoListCtrl.DuplicateAction asp-controller=@TodoListCtrl.Name asp-route-todoListId="@todoList.Id" class="btn btn-outline-info btn-sm">Duplicate</a>
+		</div>
+	</div>
+
+	<!-- Delete Modal -->
+	<partial name=@BoardsViews.DeleteModal model="@todoList" />
+}
