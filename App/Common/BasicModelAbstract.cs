@@ -1,4 +1,4 @@
-﻿namespace Web.Common;
+﻿namespace App.Common;
 
 public abstract class BasicModelAbstract
 {

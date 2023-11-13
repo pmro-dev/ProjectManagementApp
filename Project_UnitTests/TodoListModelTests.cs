@@ -1,61 +1,60 @@
-﻿using Project_UnitTests.Helpers;
-using Project_DomainEntities;
+﻿using App.Features.TodoLists.Common.Models;
+using Project_UnitTests.Helpers;
 using Project_UnitTests.Services;
 
-namespace Project_UnitTests
+namespace Project_UnitTests;
+
+/// <summary>
+/// Tests class for To Do List Model.
+/// </summary>
+public class TodoListModelTests
 {
+	private const int numberOfFails = 1;
+	protected const string AdminId = "adminId";
+
+	private static readonly object[] ValidTodoListsExamples = TodoListsDataService.ValidSimpleTodoLists;
+
+	private static readonly object[] InvalidTodoListsExamples = TodoListsDataService.InvalidTodoLists;
+
 	/// <summary>
-	/// Tests class for To Do List Model.
+	/// Checks that is possible to create To Do List object with Valid data. 
 	/// </summary>
-	public class TodoListModelTests
+	/// <param name="name">To Do List name.</param>
+	[Test]
+	[TestCaseSource(nameof(ValidTodoListsExamples))]
+	public void CreateTodoListObjectWithValidDataShouldSucceed(string name)
 	{
-		private const int numberOfFails = 1;
-		protected const string AdminId = "adminId";
-
-		private static readonly object[] ValidTodoListsExamples = TodoListsDataService.ValidSimpleTodoLists;
-
-		private static readonly object[] InvalidTodoListsExamples = TodoListsDataService.InvalidTodoLists;
-
-		/// <summary>
-		/// Checks that is possible to create To Do List object with Valid data. 
-		/// </summary>
-		/// <param name="name">To Do List name.</param>
-		[Test]
-		[TestCaseSource(nameof(ValidTodoListsExamples))]
-		public void CreateTodoListObjectWithValidDataShouldSucceed(string name)
+		TodoListModel newValidTodoList = new()
 		{
-			TodoListModel newValidTodoList = new()
-			{
-				Title = name,
-				UserId = AdminId
-			};
+			Title = name,
+			UserId = AdminId
+		};
 
-			var propertiesThatViolatedValidations = DataAnnotationValidator.ValidNewObject(newValidTodoList);
+		var propertiesThatViolatedValidations = DataAnnotationValidator.ValidNewObject(newValidTodoList);
 
-			Assert.Multiple(() =>
-			{
-				Assert.That(propertiesThatViolatedValidations, Is.Empty);
-				Assert.That(newValidTodoList.Tasks, Is.Empty);
-			});
-		}
-
-		/// <summary>
-		/// Checks that is data annotations validations failed on creating To Do List object with Invalid data. 
-		/// </summary>
-		/// <param name="name">To Do List name.</param>
-		[Test]
-		[TestCaseSource(nameof(InvalidTodoListsExamples))]
-		public void CreateTodoListObjectWithInvalidDataShouldFailed(string name)
+		Assert.Multiple(() =>
 		{
-			TodoListModel newInvalidTodoList = new()
-			{
-				Title = name,
-				UserId = AdminId
-			};
+			Assert.That(propertiesThatViolatedValidations, Is.Empty);
+			Assert.That(newValidTodoList.Tasks, Is.Empty);
+		});
+	}
 
-			var propertiesThatViolatedValidations = DataAnnotationValidator.ValidNewObject(newInvalidTodoList);
+	/// <summary>
+	/// Checks that is data annotations validations failed on creating To Do List object with Invalid data. 
+	/// </summary>
+	/// <param name="name">To Do List name.</param>
+	[Test]
+	[TestCaseSource(nameof(InvalidTodoListsExamples))]
+	public void CreateTodoListObjectWithInvalidDataShouldFailed(string name)
+	{
+		TodoListModel newInvalidTodoList = new()
+		{
+			Title = name,
+			UserId = AdminId
+		};
 
-			Assert.That(propertiesThatViolatedValidations, Has.Count.EqualTo(numberOfFails));
-		}
+		var propertiesThatViolatedValidations = DataAnnotationValidator.ValidNewObject(newInvalidTodoList);
+
+		Assert.That(propertiesThatViolatedValidations, Has.Count.EqualTo(numberOfFails));
 	}
 }

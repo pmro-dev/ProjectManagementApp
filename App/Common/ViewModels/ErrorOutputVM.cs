@@ -1,12 +1,11 @@
-namespace Web.Common.ViewModels
-{
-    /// <summary>
-    /// Model for Error View.
-    /// </summary>
-    public class ErrorOutputVM
-    {
-        public string? RequestId { get; set; }
+namespace App.Common.ViewModels;
 
-        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
-    }
+/// <summary>
+/// Model for Error View.
+/// </summary>
+public class ErrorOutputVM
+{
+	public string? RequestId { get; set; }
+
+	public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 }

@@ -1,4 +1,4 @@
-﻿namespace Web.Common.Interfaces;
+﻿namespace App.Common.Interfaces;
 
 public interface IBaseEntityFactory<out ModelType, out DTOType> where ModelType : class, new() where DTOType : class, new()
 {

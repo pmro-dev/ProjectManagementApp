@@ -1,5 +1,4 @@
 ﻿using Moq;
-using Project_DomainEntities;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Project_UnitTests.Helpers;
@@ -8,119 +7,119 @@ using Autofac.Extras.Moq;
 using Autofac;
 using Project_UnitTests.Services;
 using Project_UnitTests.Data;
-using Web.TodoLists.Common.Interfaces;
-using Web.Databases.App.Seeds;
-using Web.TodoLists.Common;
-using Web.Databases.App.Interfaces;
-using Web.Tasks.Common;
-using Web.Databases.App;
+using App.Infrastructure.Databases.App;
+using App.Features.Tasks.Common;
+using App.Infrastructure.Databases.App.Interfaces;
+using App.Features.TodoLists.Common.Models;
+using App.Features.TodoLists.Common.Interfaces;
+using App.Infrastructure.Databases.App.Seeds;
+using App.Features.Tasks.Common.Interfaces;
 
-namespace Project_UnitTests
+namespace Project_UnitTests;
+
+/// <summary>
+/// Class that setup basic properties such Tasks and seeds data / sets data format / sets mock for DbContext
+/// </summary>
+public class BaseOperationsSetup
 {
-	/// <summary>
-	/// Class that setup basic properties such Tasks and seeds data / sets data format / sets mock for DbContext
-	/// </summary>
-	public class BaseOperationsSetup
-    {
-		#region PROPERTIES
+	#region PROPERTIES
 
-		protected static ICollection<ITaskModel> TasksCollection { get; set; }
-		protected ICollection<ITaskModel> DefaultTasksCollection { get; set; }
-		protected static ICollection<ITodoListModel> TodoListsCollection { get; set; }
-		protected ICollection<ITodoListModel> DefaultTodoListsCollection { get; set; }
-		protected Mock<DbSet<TaskModel>> DbSetTaskMock { get; set; }
-        protected Mock<DbSet<TodoListModel>> DbSetTodoListMock { get; set; }
-		protected Mock<ILogger<TodoListRepository>> TodoListRepoLoggerMock { get; set; }
-		protected Mock<ILogger<TaskRepository>> TaskRepoLoggerMock { get; set; }
-		protected DataUnitOfWork DataUnitOfWork { get; set; }
-		protected ITodoListRepository TodoListRepo { get; set; }
-		protected ITaskRepository TaskRepo { get; set; }
-		protected List<Action> DbOperationsToExecute { get; set; } = new();
+	protected static ICollection<ITaskModel> TasksCollection { get; set; }
+	protected ICollection<ITaskModel> DefaultTasksCollection { get; set; }
+	protected static ICollection<ITodoListModel> TodoListsCollection { get; set; }
+	protected ICollection<ITodoListModel> DefaultTodoListsCollection { get; set; }
+	protected Mock<DbSet<TaskModel>> DbSetTaskMock { get; set; }
+	protected Mock<DbSet<TodoListModel>> DbSetTodoListMock { get; set; }
+	protected Mock<ILogger<TodoListRepository>> TodoListRepoLoggerMock { get; set; }
+	protected Mock<ILogger<TaskRepository>> TaskRepoLoggerMock { get; set; }
+	protected DataUnitOfWork DataUnitOfWork { get; set; }
+	protected ITodoListRepository TodoListRepo { get; set; }
+	protected ITaskRepository TaskRepo { get; set; }
+	protected List<Action> DbOperationsToExecute { get; set; } = new();
 
-		protected SeedData seedBaseData;
-		#endregion
+	protected SeedData seedBaseData;
+	#endregion
 
 
-		#region FIELDS
+	#region FIELDS
 
-		protected const int FirstItemIndex = 0;
-		protected readonly string AdminId = TodoListsData.AdminId;
-		protected static readonly Index LastItemIndex = ^1;
+	protected const int FirstItemIndex = 0;
+	protected readonly string AdminId = TodoListsData.AdminId;
+	protected static readonly Index LastItemIndex = ^1;
 
-		#endregion
+	#endregion
 
 
-		[OneTimeSetUp]
-		[Order(1)]
-		public void SetupOnce()
-        {
-			seedBaseData = new SeedData();
-			SetDefaultDataCollection(seedBaseData);
-			InitUnitOfWorkMocks();
-		}
+	[OneTimeSetUp]
+	[Order(1)]
+	public void SetupOnce()
+	{
+		seedBaseData = new SeedData();
+		SetDefaultDataCollection(seedBaseData);
+		InitUnitOfWorkMocks();
+	}
 
-		private void SetDefaultDataCollection(SeedData seedBaseData)
+	private void SetDefaultDataCollection(SeedData seedBaseData)
+	{
+		DefaultTodoListsCollection = TodoListsDataService.GetCollection(seedBaseData);
+		DefaultTasksCollection = TasksDataService.GetCollection(seedBaseData);
+	}
+
+	private void InitUnitOfWorkMocks()
+	{
+		TodoListRepoLoggerMock = new();
+		TaskRepoLoggerMock = new();
+	}
+
+
+	[SetUp]
+	[Order(2)]
+	public void SetupBeforeEachTest()
+	{
+		ClearUnitOfWorkOperationsCache();
+		SetupDefaultDataForCollections();
+		SetupUnitOfWorkMocks();
+
+		using AutoMock mock = RegisterMockInstance();
+		var unitOfWork = mock.Create<IDataUnitOfWork>();
+		TaskRepo = unitOfWork.TaskRepository;
+		TodoListRepo = unitOfWork.TodoListRepository;
+	}
+
+	private AutoMock RegisterMockInstance()
+	{
+		return AutoMock.GetLoose(builder =>
 		{
-			DefaultTodoListsCollection = TodoListsDataService.GetCollection(seedBaseData);
-			DefaultTasksCollection = TasksDataService.GetCollection(seedBaseData);
-		}
+			builder.RegisterInstance(DataUnitOfWork).As<IDataUnitOfWork>();
+		});
+	}
 
-		private void InitUnitOfWorkMocks()
-		{
-			TodoListRepoLoggerMock = new();
-			TaskRepoLoggerMock = new();
-		}
+	private void ClearUnitOfWorkOperationsCache()
+	{
+		DbOperationsToExecute = new();
+	}
 
+	private void SetupDefaultDataForCollections()
+	{
+		TasksCollection = new List<ITaskModel>(DefaultTasksCollection);
+		TodoListsCollection = new List<ITodoListModel>(DefaultTodoListsCollection);
+	}
 
-		[SetUp]
-        [Order(2)]
-        public void SetupBeforeEachTest()
-        {
-			ClearUnitOfWorkOperationsCache();
-			SetupDefaultDataForCollections();
-			SetupUnitOfWorkMocks();
+	private void SetupUnitOfWorkMocks()
+	{
+		DbSetTaskMock = TasksCollection.Cast<TaskModel>().AsQueryable().BuildMockDbSet();
+		DbSetTodoListMock = TodoListsCollection.Cast<TodoListModel>().AsQueryable().BuildMockDbSet();
+		Mock<CustomAppDbContext> dbContextMock = new();
 
-			using AutoMock mock = RegisterMockInstance();
-			var unitOfWork = mock.Create<IDataUnitOfWork>();
-			TaskRepo = unitOfWork.TaskRepository;
-			TodoListRepo = unitOfWork.TodoListRepository;
-		}
+		dbContextMock.Setup(context => context.Set<TaskModel>())
+			.Returns(DbSetTaskMock.Object);
 
-		private AutoMock RegisterMockInstance()
-		{
-			return AutoMock.GetLoose(builder =>
-			{
-				builder.RegisterInstance(DataUnitOfWork).As<IDataUnitOfWork>();
-			});
-		}
+		dbContextMock.Setup(context => context.Set<TodoListModel>())
+			.Returns(DbSetTodoListMock.Object);
 
-		private void ClearUnitOfWorkOperationsCache()
-		{
-			DbOperationsToExecute = new();
-		}
-
-		private void SetupDefaultDataForCollections()
-		{
-			TasksCollection = new List<ITaskModel>(DefaultTasksCollection);
-			TodoListsCollection = new List<ITodoListModel>(DefaultTodoListsCollection);
-		}
-
-		private void SetupUnitOfWorkMocks()
-		{
-			DbSetTaskMock = TasksCollection.Cast<TaskModel>().AsQueryable().BuildMockDbSet();
-			DbSetTodoListMock = TodoListsCollection.Cast<TodoListModel>().AsQueryable().BuildMockDbSet();
-			Mock<CustomAppDbContext> dbContextMock = new();
-
-			dbContextMock.Setup(context => context.Set<TaskModel>())
-				.Returns(DbSetTaskMock.Object);
-
-			dbContextMock.Setup(context => context.Set<TodoListModel>())
-				.Returns(DbSetTodoListMock.Object);
-
-			GenericMockSetup<TaskModel>.SetupDbContextSaveChangesAsync(dbContextMock, DbOperationsToExecute);
-			var tempTodoListRepo = new TodoListRepository(dbContextMock.Object, TodoListRepoLoggerMock.Object);
-			var tempTaskRepo = new TaskRepository(dbContextMock.Object, TaskRepoLoggerMock.Object);
-			DataUnitOfWork = new DataUnitOfWork(dbContextMock.Object, tempTodoListRepo, tempTaskRepo);
-		}
+		GenericMockSetup<TaskModel>.SetupDbContextSaveChangesAsync(dbContextMock, DbOperationsToExecute);
+		var tempTodoListRepo = new TodoListRepository(dbContextMock.Object, TodoListRepoLoggerMock.Object);
+		var tempTaskRepo = new TaskRepository(dbContextMock.Object, TaskRepoLoggerMock.Object);
+		DataUnitOfWork = new DataUnitOfWork(dbContextMock.Object, tempTodoListRepo, tempTaskRepo);
 	}
 }

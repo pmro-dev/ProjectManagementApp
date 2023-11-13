@@ -1,0 +1,56 @@
+﻿@* @using static App.Common.ControllersConsts;
+@using static App.Common.Views.ViewsConsts; *@
+@using App.Features.Users.Register;
+
+@model RegisterInputVM
+
+@{
+	Layout = UserViews.DefaultLayout;
+}
+
+<div class="card" style="width: 25rem;">
+	<img src="\earth-welcome.jpg" class="card-img-top" alt="...">
+	<div class="card-body">
+		<h5 class="card-title">Register Page</h5>
+
+		<form asp-action="@UserCtrl.RegisterAction" asp-controller="@UserCtrl.Name" method="post">
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<span class="input-group-text">@@</span>
+				</div>
+				<input asp-for="Name" type="text" class="form-control" placeholder="Username" aria-label="Username" />
+				<span asp-validation-for="Name" class="text-danger" style="width: 100%;"></span>
+			</div>
+
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<span class="input-group-text">@@</span>
+				</div>
+
+				<input asp-for="Email" type="email" class="form-control" placeholder="Email" aria-label="Email" />
+				<span asp-validation-for="Email" class="text-danger" style="width: 100%;"></span>
+			</div>
+
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<span class="input-group-text">#</span>
+				</div>
+				<input asp-for="Password" type="password" class="form-control" placeholder="Password" aria-label="Password" />
+				<span asp-validation-for="Password" class="text-danger" style="width: 100%;"></span>
+			</div>
+
+			<div class="card-body">
+				<button class="btn btn-info" style="font-weight: 500; color: white;" type="submit">Register</button>
+				<a asp-controller="@UserCtrl.Name" asp-action="@UserCtrl.LoginAction" class="btn btn-primary" style="font-weight: 500;">Back</a>
+			</div>
+
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		</form>
+	</div>
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync(SharedViews.ValidationPartial);
+	}
+}

@@ -1,7 +1,6 @@
-﻿namespace Web.Common.Helpers
+﻿namespace App.Common.Helpers;
+
+public static class AttributesHelper
 {
-    public static class AttributesHelper
-    {
-        public const string DataFormat = "yyyy-MM-ddTHH:mm";
-    }
+	public const string DataFormat = "yyyy-MM-ddTHH:mm";
 }

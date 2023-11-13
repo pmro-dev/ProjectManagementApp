@@ -1,0 +1,37 @@
+﻿@* @using static App.Common.ControllersConsts;
+@using static App.Common.Views.ViewsConsts; *@
+@* @using App.Common.ViewModels; *@
+@using App.Features.TodoLists.Edit;
+@model WrapperViewModel<TodoListEditInputVM, TodoListEditOutputVM>
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = SharedViews.DefaultLayout;
+    TodoListEditInputVM inputVM = Model.InputVM;
+    TodoListEditOutputVM outputVM = Model.OutputVM;
+}
+
+<h4>Edit To Do List</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action=@TodoListCtrl.EditAction method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="@outputVM.Id" />
+            <input asp-for="@outputVM.UserId" type="hidden" value="@outputVM.UserId" />
+            <div class="form-group">
+                <label asp-for="@inputVM.Title" class="control-label"></label>
+                <input asp-for="@inputVM.Title" class="form-control" value="@outputVM.Title" />
+                <span asp-validation-for="@inputVM.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn" style="background-color: #671dff; color: white; font-weight: 500;" />
+                <a asp-controller=@TodoListCtrl.Name asp-action=@TodoListCtrl.DetailsAction asp-route-id="@outputVM.Id" class="btn btn-primary">Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync(SharedViews.ValidationPartial);}
+}

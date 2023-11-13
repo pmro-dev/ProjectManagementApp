@@ -2,36 +2,38 @@
 #region USINGS
 
 using System.Reflection;
-using Web.Infrastructure;
-using Web.Databases.Identity.Seeds;
-using Web.Accounts.Register;
-using Web.Accounts.Authentication;
-using Web.TodoLists.Common.Interfaces;
-using Web.Tasks.Common.Interfaces;
-using Web.Tasks.Common;
-using Web.TodoLists.Common;
-using Web.Accounts.Logout;
-using Web.Databases.App.Seeds;
-using Web.Accounts.Login.Interfaces;
-using Web.Accounts.Login;
-using Web.Accounts.Logout.Interfaces;
-using Web.Accounts.Register.Interfaces;
-using Web.Accounts.Claims;
-using Web.Accounts.Common.Interfaces;
-using Web.Accounts.Common;
-using Web.Tags.Common.Interfaces;
-using Web.Tags.Common;
-using Web.TaskTags.Common.Interfaces;
-using Web.TaskTags.Common;
-using Web.Boards.Interfaces;
-using Web.Boards;
-using Web.Accounts.Users.Interfaces;
-using Web.Accounts.Users;
+using App.Features.Tasks.Common.TaskTags.Common;
+using App.Features.TodoLists.Common.Interfaces;
+using App.Features.Tasks.Common.Interfaces;
+using App.Features.Users.Login.Interfaces;
+using App.Features.Users.Authentication;
+using App.Features.Tags.Common;
+using App.Features.TodoLists.Common;
+using App.Features.Users.Logout;
+using App.Features.TodoLists.Common.Models;
+using App.Features.Tasks.Common.TaskTags.Common.Interfaces;
+using App.Features.Tasks.Common;
+using App.Features.Users.Common;
+using App.Features.Boards.Interfaces;
+using App.Features.Users.Common.Claims;
+using App.Infrastructure;
+using App.Features.Users.Login;
+using App.Features.Users.Register;
+using App.Infrastructure.Databases.Identity.Seeds;
+using App.Features.Users.Common.Interfaces;
+using App.Features.Tags.Common.Interfaces;
+using App.Infrastructure.Databases.App.Seeds;
+using App.Features.Users.Logout.Interfaces;
+using App.Features.Boards.Common;
+using App.Features.Users.Interfaces;
+using App.Features.Users.Register.Interfaces;
+using Microsoft.AspNetCore.Mvc.Razor;
+using App.Common.Views;
 
 #endregion
 
 
-namespace Web
+namespace App
 {
 	public static class Program
 	{
@@ -65,14 +67,14 @@ namespace Web
 			builder.Services.AddScoped<IUserRegisterService, UserRegisterService>();
 			builder.Services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
 			builder.Services.AddScoped<IClaimsService, ClaimsService>();
-			builder.Services.AddScoped<IAccountService, AccountService>();
+			builder.Services.AddScoped<IUserService, UserService>();
 
 			#endregion
 
 
 			#region MAPPERS
 
-			builder.Services.AddScoped<IAccountMapper, AccountMapper>();
+			builder.Services.AddScoped<IUserMapper, UserMapper>();
 
 			builder.Services.AddTransient<ITaskDto, TaskDto>();
 			builder.Services.AddTransient<ITaskModel, TaskModel>();
@@ -117,6 +119,10 @@ namespace Web
 
 			#endregion
 
+			builder.Services.Configure<RazorViewEngineOptions>(options =>
+			{
+				options.ViewLocationExpanders.Add(new ViewLocationExpander());
+			});
 
 			var app = builder.Build();
 			app.SetupPipeline();

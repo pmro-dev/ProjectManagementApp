@@ -1,0 +1,29 @@
+﻿@using static App.Common.ControllersConsts;
+@using App.Features.TodoLists.Common.Models;
+@model TodoListDto
+
+<div class="modal fade" id="deleteModal+@Model.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="staticBackdropLabel">Deleting To Do List</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label asp-for="@Model.Title">Title</label>
+					<input type="text" class="form-control" value="@Model.Title" readonly/>
+					<label asp-for="@Model.Tasks.Count">Tasks Number</label>
+					<input type="text" class="form-control" value="@Model.Tasks.Count" readonly />
+				</div>
+			</div>
+			<div class="modal-footer">
+				<form asp-action="@TodoListCtrl.DeletePostAction" asp-controller="@TodoListCtrl.Name" asp-route-id="@Model.Id" method="post">
+					<input type="hidden" asp-for="Id" value="@Model.Id" />
+					<input type="submit" id="submitDeleteInModal" value="Delete" class="btn btn-danger" />
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

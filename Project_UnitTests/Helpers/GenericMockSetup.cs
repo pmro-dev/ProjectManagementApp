@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using App.Common;
+using App.Infrastructure.Databases.App;
+using Microsoft.EntityFrameworkCore;
 using Moq;
-using Project_DomainEntities;
-using Project_Main.Models.DataBases.AppData;
 
 namespace Project_UnitTests.Helpers
 {
