@@ -3,126 +3,125 @@ using App.Infrastructure.Databases.App.Seeds;
 using Castle.Core.Internal;
 using Project_UnitTests.Data;
 
-namespace Project_UnitTests.Services
+namespace Project_UnitTests.Services;
+
+public static class TasksDataService
 {
-	public static class TasksDataService
+    private static List<ITaskModel> TasksUX { get; set; } = new List<ITaskModel>();
+    private static List<ITaskModel> TasksBackend { get; set; } = new List<ITaskModel>();
+    private static List<ITaskModel> TasksTesting { get; set; } = new List<ITaskModel>();
+    private static List<ITaskModel> TasksProjectManagement { get; set; } = new List<ITaskModel>();
+
+    private static List<ITaskModel> tasksCollection = new List<ITaskModel>();
+    private static int AllTasksCount;
+
+    public static List<ITaskModel> NewTasksRange { get; private set; } = TasksData.NewTasksRange.ToList();
+    public static string TaskRangeSuffix { get; private set; } = TasksData.TaskRangeSuffix;
+
+    public static readonly object[] ValidTasksForCreateOperation = TasksData.ValidTasksForCreateOperation;
+    public static readonly object[] InvalidTasksForCreateOperation = TasksData.InvalidTasksForCreateOperation;
+    public static readonly string AdminId = TasksData.AdminId;
+
+    public static List<ITaskModel> GetCollection(SeedData seedBaseData)
     {
-        private static List<ITaskModel> TasksUX { get; set; } = new List<ITaskModel>();
-        private static List<ITaskModel> TasksBackend { get; set; } = new List<ITaskModel>();
-		private static List<ITaskModel> TasksTesting { get; set; } = new List<ITaskModel>();
-		private static List<ITaskModel> TasksProjectManagement { get; set; } = new List<ITaskModel>();
+        ArgumentNullException.ThrowIfNull(seedBaseData);
 
-		private static List<ITaskModel> tasksCollection = new List<ITaskModel>();
-		private static int AllTasksCount;
+        PrepareData(seedBaseData);
 
-		public static List<ITaskModel> NewTasksRange { get; private set; } = TasksData.NewTasksRange.ToList();
-        public static string TaskRangeSuffix { get; private set; } = TasksData.TaskRangeSuffix;
+        if (tasksCollection.IsNullOrEmpty()) { throw new InvalidOperationException($"Something went wrong with {nameof(tasksCollection)} preparation!"); }
 
-        public static readonly object[] ValidTasksForCreateOperation = TasksData.ValidTasksForCreateOperation;
-        public static readonly object[] InvalidTasksForCreateOperation = TasksData.InvalidTasksForCreateOperation;
-		public static readonly string AdminId = TasksData.AdminId;
+        return tasksCollection;
+    }
 
-		public static ICollection<ITaskModel> GetCollection(SeedData seedBaseData)
+    private static void PrepareData(SeedData seedBaseData)
+    {
+        SetIdsForTasks(seedBaseData);
+        SetTodoListIdsForTasks();
+        SeedAllTasks();
+    }
+
+    private static void SeedAllTasks()
+    {
+        tasksCollection = new List<ITaskModel>()
         {
-            ArgumentNullException.ThrowIfNull(seedBaseData);
+            TasksUX[0],
+            TasksUX[1],
+            TasksUX[2],
+            TasksBackend[0],
+            TasksBackend[1],
+            TasksBackend[2],
+            TasksTesting[0],
+            TasksTesting[1],
+            TasksTesting[2],
+            TasksProjectManagement[0],
+            TasksProjectManagement[1],
+            TasksProjectManagement[2],
+        };
+    }
 
-            PrepareData(seedBaseData);
+    private static void SetIdsForTasks(SeedData seedBaseData)
+    {
+        ArgumentNullException.ThrowIfNull(seedBaseData);
 
-            if (tasksCollection.IsNullOrEmpty()) { throw new InvalidOperationException($"Something went wrong with {nameof(tasksCollection)} preparation!"); }
-			
-            return tasksCollection;
-		}
+        int iterator = 0;
+        int startingIndex = 0;
+        int taskIndex = startingIndex;
+        int boundaryIndexForCurrentTasks = 0;
 
-        private static void PrepareData(SeedData seedBaseData)
+        TasksUX = seedBaseData.TasksUX.ToList();
+        TasksBackend = seedBaseData.TasksBackend.ToList();
+        TasksTesting = seedBaseData.TasksTesting.ToList();
+        TasksProjectManagement = seedBaseData.TasksProjectManagement.ToList();
+        AllTasksCount = TasksUX.Count + TasksTesting.Count + TasksBackend.Count + TasksProjectManagement.Count;
+
+        const int BoundaryIndexForTasksUX = 3;
+        const int BoundaryIndexForTasksBackend = 6;
+        const int BoundaryIndexForTasksTesting = 9;
+        const int BoundaryIndexForTasksProjectManagement = 12;
+
+        while (iterator < AllTasksCount)
         {
-			SetIdsForTasks(seedBaseData);
-			SetTodoListIdsForTasks();
-			SeedAllTasks();
-		}
-
-        private static void SeedAllTasks()
-        {
-            tasksCollection = new List<ITaskModel>()
+            switch (iterator)
             {
-                TasksUX[0],
-                TasksUX[1],
-                TasksUX[2],
-                TasksBackend[0],
-                TasksBackend[1],
-                TasksBackend[2],
-                TasksTesting[0],
-                TasksTesting[1],
-                TasksTesting[2],
-                TasksProjectManagement[0],
-                TasksProjectManagement[1],
-                TasksProjectManagement[2],
-            };
-        }
+                case < BoundaryIndexForTasksUX:
+                    boundaryIndexForCurrentTasks = TasksUX.Count;
+                    TasksUX[taskIndex++].Id = iterator++;
+                    break;
+                case < BoundaryIndexForTasksBackend:
+                    boundaryIndexForCurrentTasks = TasksBackend.Count;
+                    TasksBackend[taskIndex++].Id = iterator++;
+                    break;
+                case < BoundaryIndexForTasksTesting:
+                    boundaryIndexForCurrentTasks = TasksTesting.Count;
+                    TasksTesting[taskIndex++].Id = iterator++;
+                    break;
+                case < BoundaryIndexForTasksProjectManagement:
+                    boundaryIndexForCurrentTasks = TasksProjectManagement.Count;
+                    TasksProjectManagement[taskIndex++].Id = iterator++;
+                    break;
+            }
 
-        private static void SetIdsForTasks(SeedData seedBaseData)
-        {
-            ArgumentNullException.ThrowIfNull(seedBaseData);
-
-            int iterator = 0;
-            int startingIndex = 0;
-            int taskIndex = startingIndex;
-            int boundaryIndexForCurrentTasks = 0;
-
-            TasksUX = seedBaseData.TasksUX.ToList();
-            TasksBackend = seedBaseData.TasksBackend.ToList();
-            TasksTesting = seedBaseData.TasksTesting.ToList();
-            TasksProjectManagement = seedBaseData.TasksProjectManagement.ToList();
-            AllTasksCount = TasksUX.Count + TasksTesting.Count + TasksBackend.Count + TasksProjectManagement.Count;
-
-            const int BoundaryIndexForTasksUX = 3;
-            const int BoundaryIndexForTasksBackend = 6;
-            const int BoundaryIndexForTasksTesting = 9;
-            const int BoundaryIndexForTasksProjectManagement = 12;
-
-            while (iterator < AllTasksCount)
+            if (taskIndex == boundaryIndexForCurrentTasks)
             {
-                switch (iterator)
-                {
-                    case < BoundaryIndexForTasksUX:
-                        boundaryIndexForCurrentTasks = TasksUX.Count;
-                        TasksUX[taskIndex++].Id = iterator++;
-                        break;
-                    case < BoundaryIndexForTasksBackend:
-                        boundaryIndexForCurrentTasks = TasksBackend.Count;
-                        TasksBackend[taskIndex++].Id = iterator++;
-                        break;
-                    case < BoundaryIndexForTasksTesting:
-                        boundaryIndexForCurrentTasks = TasksTesting.Count;
-                        TasksTesting[taskIndex++].Id = iterator++;
-                        break;
-                    case < BoundaryIndexForTasksProjectManagement:
-                        boundaryIndexForCurrentTasks = TasksProjectManagement.Count;
-                        TasksProjectManagement[taskIndex++].Id = iterator++;
-                        break;
-                }
-
-                if (taskIndex == boundaryIndexForCurrentTasks)
-                {
-                    taskIndex = 0;
-                }
+                taskIndex = 0;
             }
         }
+    }
 
-        private static void SetTodoListIdsForTasks()
+    private static void SetTodoListIdsForTasks()
+    {
+        var sameAmountOfTasks = TasksUX.Count;
+
+        if (TasksBackend.Count == sameAmountOfTasks && TasksTesting.Count == sameAmountOfTasks && TasksProjectManagement.Count == sameAmountOfTasks)
         {
-            var sameAmountOfTasks = TasksUX.Count;
-
-            if (TasksBackend.Count == sameAmountOfTasks && TasksTesting.Count == sameAmountOfTasks && TasksProjectManagement.Count == sameAmountOfTasks)
+            for (int i = 0; i < 3; i++)
             {
-                for (int i = 0; i < 3; i++)
-                {
-                    TasksUX[i].TodoListId = 1;
-                    TasksBackend[i].TodoListId = 2;
-                    TasksTesting[i].TodoListId = 3;
-                    TasksProjectManagement[i].TodoListId = 4;
-                }
+                TasksUX[i].TodoListId = 1;
+                TasksBackend[i].TodoListId = 2;
+                TasksTesting[i].TodoListId = 3;
+                TasksProjectManagement[i].TodoListId = 4;
             }
-            else { throw new InvalidOperationException("Number of elements in tasks lists have to be the same to execute this part of code!"); }
         }
+        else { throw new InvalidOperationException("Number of elements in tasks lists have to be the same to execute this part of code!"); }
     }
 }

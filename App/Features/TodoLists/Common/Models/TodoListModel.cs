@@ -1,6 +1,5 @@
 ﻿using App.Common;
 using App.Features.Tasks.Common.Interfaces;
-using App.Features.TodoLists.Common;
 using App.Features.TodoLists.Common.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
@@ -9,14 +8,14 @@ namespace App.Features.TodoLists.Common.Models;
 /// <summary>
 /// Model for To Do List.
 /// </summary>
-public class TodoListModel : BasicModelAbstract, ITodoListModel
+public class TodoListModel : ITodoListModel
 {
 	/// <summary>
 	/// Gets or Sets Key of the Model / Object.
 	/// </summary>
 	[Key]
 	[Required]
-	public override int Id { get; set; }
+	public int Id { get; set; }
 
 	/// <summary>
 	/// Gets or sets To Do List's name.
@@ -24,7 +23,7 @@ public class TodoListModel : BasicModelAbstract, ITodoListModel
 	[Required]
 	[MaxLength(TodoListAttributesHelper.NameMaxLength)]
 	[MinLength(TodoListAttributesHelper.NameMinLength)]
-	public override string Title { get; set; } = string.Empty;
+	public string Title { get; set; } = string.Empty;
 
 	/// <summary>
 	/// Owner id.

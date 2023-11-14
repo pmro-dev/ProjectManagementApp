@@ -24,10 +24,10 @@ public class BaseOperationsSetup
 {
 	#region PROPERTIES
 
-	protected static ICollection<ITaskModel> TasksCollection { get; set; }
-	protected ICollection<ITaskModel> DefaultTasksCollection { get; set; }
-	protected static ICollection<ITodoListModel> TodoListsCollection { get; set; }
-	protected ICollection<ITodoListModel> DefaultTodoListsCollection { get; set; }
+	protected static List<ITaskModel> TasksCollection { get; set; }
+	protected List<ITaskModel> DefaultTasksCollection { get; set; }
+	protected static List<ITodoListModel> TodoListsCollection { get; set; }
+	protected List<ITodoListModel> DefaultTodoListsCollection { get; set; }
 	protected Mock<DbSet<TaskModel>> DbSetTaskMock { get; set; }
 	protected Mock<DbSet<TodoListModel>> DbSetTodoListMock { get; set; }
 	protected Mock<ILogger<TodoListRepository>> TodoListRepoLoggerMock { get; set; }
@@ -117,7 +117,7 @@ public class BaseOperationsSetup
 		dbContextMock.Setup(context => context.Set<TodoListModel>())
 			.Returns(DbSetTodoListMock.Object);
 
-		GenericMockSetup<TaskModel>.SetupDbContextSaveChangesAsync(dbContextMock, DbOperationsToExecute);
+		GenericMockSetup<ITaskModel, TaskModel>.SetupDbContextSaveChangesAsync(dbContextMock, DbOperationsToExecute);
 		var tempTodoListRepo = new TodoListRepository(dbContextMock.Object, TodoListRepoLoggerMock.Object);
 		var tempTaskRepo = new TaskRepository(dbContextMock.Object, TaskRepoLoggerMock.Object);
 		DataUnitOfWork = new DataUnitOfWork(dbContextMock.Object, tempTodoListRepo, tempTaskRepo);

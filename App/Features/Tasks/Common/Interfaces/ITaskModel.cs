@@ -1,15 +1,16 @@
-﻿using App.Features.Tasks.Common.TaskTags.Common.Interfaces;
+﻿using App.Common;
+using App.Common.Helpers;
+using App.Features.Tasks.Common.TaskTags.Common.Interfaces;
 using App.Features.TodoLists.Common.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using static App.Features.Tasks.Common.TaskStatusHelper;
 
 namespace App.Features.Tasks.Common.Interfaces;
 
-public interface ITaskModel
+public interface ITaskModel : IBasicModelAbstract
 {
-	private const string DataFormat = "{0:dd'/'MM'/'yyyy}";
-	public int Id { get; set; }
-	public string Title { get; set; }
+	private const string DataFormat = AttributesHelper.DataFormat;
+
 	public string Description { get; set; }
 
 	[DisplayFormat(DataFormatString = DataFormat, ApplyFormatInEditMode = true)]

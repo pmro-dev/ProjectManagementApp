@@ -12,18 +12,18 @@ namespace App.Features.Tasks.Common;
 /// <summary>
 /// Model for Task.
 /// </summary>
-public class TaskModel : BasicModelAbstract, ITaskModel
+public class TaskModel : ITaskModel
 {
 	private const int defaultId = 0;
 
 	[Key]
 	[Required]
-	public override int Id { get; set; }
+	public int Id { get; set; }
 
 	[Required]
 	[MaxLength(TaskAttributesHelper.TitleMaxLength)]
 	[MinLength(TaskAttributesHelper.TitleMinLength)]
-	public override string Title { get; set; } = string.Empty;
+	public string Title { get; set; } = string.Empty;
 
 	[Required]
 	[DataType(DataType.MultilineText)]
