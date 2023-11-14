@@ -28,7 +28,7 @@ public static class ControllersConsts
 	public readonly struct TaskCtrl
 	{
 		public const string Name = "Task";
-		public const string DetailsAction = nameof(TaskController.Details);
+		public const string DetailsAction = nameof(TaskController.Show);
 		public const string CreateAction = nameof(TaskController.Create);
 		public const string EditGetAction = nameof(TaskController.Edit);
 		public const string EditPostAction = nameof(TaskController.EditPost);
@@ -44,6 +44,6 @@ public static class ControllersConsts
 		public const string DeleteAction = nameof(TodoListController.Delete);
 		public const string DeletePostAction = nameof(TodoListController.DeletePost);
 		public const string DuplicateAction = nameof(TodoListController.Duplicate);
-		public const string DetailsAction = nameof(TodoListController.TodoListDetails);
+		public const string DetailsAction = nameof(TodoListController.Show);
 	}
 }

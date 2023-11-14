@@ -23,10 +23,13 @@ public static class DbSeeder
 
 		using var transaction = await unitOfWork.BeginTransactionAsync();
 
-		try
+        try
 		{
+			await transaction.CreateSavepointAsync("BeforeMigrations");
 			await EnsurePendingMigrationsAppliedAsync(unitOfWork);
-			await EnsureTodoListsPopulatedAsync(seedContainer, unitOfWork);
+
+            await transaction.CreateSavepointAsync("BeforeRolesAndAdminPopulated");
+            await EnsureTodoListsPopulatedAsync(seedContainer, unitOfWork);
 			await EnsureTasksPopulatedAsync(seedContainer, unitOfWork);
 
 			await unitOfWork.SaveChangesAsync();
@@ -35,7 +38,7 @@ public static class DbSeeder
 		catch (Exception ex)
 		{
 			await unitOfWork.RollbackTransactionAsync();
-			logger.LogCritical(ex, "An error occurred while populating the database.");
+			logger.LogCritical(ex, "An error occurred while populating the App database.");
 			throw;
 		}
 	}

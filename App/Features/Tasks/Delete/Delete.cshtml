@@ -1,11 +1,10 @@
-﻿@* @using static App.Common.ControllersConsts;
-@using static App.Common.Views.ViewsConsts;
-@using App.Common.ViewModels; *@
-@using App.Features.Tasks.Delete;
+﻿@using App.Features.Tasks.Delete;
 @model WrapperViewModel<TaskDeleteInputVM, TaskDeleteOutputVM>
 
 @{
 	ViewData["Title"] = "Delete";
+	Layout = SharedViews.DefaultLayout;
+
 	var inputVM = Model.InputVM;
 	var outputVM = Model.OutputVM;
 }

@@ -1,16 +1,16 @@
-﻿@* @using static App.Common.ControllersConsts; *@
-@using App.Features.Tasks.Show;
+﻿@using App.Features.Tasks.Show;
 @model TaskDetailsOutputVM
 
 @{
-	ViewData["Title"] = "Details";
+	ViewData["Title"] = "Show Task Details";
+	Layout = SharedViews.DefaultLayout;
 }
 
 <div>
 	<h4>Task Details</h4>
 	<hr />
 
-	<partial name="_TaskTableDetails" model="@Model" />
+	<partial name="@SharedViews.TaskTableDetails" model="@Model" />
 
 	<input type="hidden" name="routeTodoListId" asp-for="@Model.TodoListId" />
 	<input type="hidden" name="routeTaskId" asp-for="@Model.Id" />

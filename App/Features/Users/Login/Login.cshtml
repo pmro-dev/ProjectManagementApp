@@ -1,6 +1,4 @@
-﻿@* @using static App.Common.ControllersConsts;
-@using static App.Common.Views.ViewsConsts; *@
-@using App.Features.Users.Login;
+﻿@using App.Features.Users.Login;
 @model LoginInputVM
 
 @{
@@ -33,9 +31,6 @@
 				<button class="btn btn-primary" type="submit" style="font-weight: 500; color:white;">Log In</button>
 				<a asp-controller="@UserCtrl.Name" asp-action="@UserCtrl.LoginByProviderAction" asp-route-provider="@UserCtrl.GoogleProvider" class="btn btn-info" style="font-weight: 500; color:white;">by Google</a>
 				<a asp-controller="@UserCtrl.Name" asp-action="@UserCtrl.RegisterAction" class="btn btn-info" style="font-weight: 500; color:white;">Register</a>
-				<a href="/LoginByProvider/google" class="btn btn-info" style="font-weight: 500; color:white;">by TEST</a>
-				<a asp-route-id="123">Link</a>
-
 			</div>
 
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>

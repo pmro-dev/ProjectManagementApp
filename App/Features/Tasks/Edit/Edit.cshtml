@@ -1,11 +1,10 @@
-﻿@* @using static App.Common.Views.ViewsConsts;
-@using static App.Common.ControllersConsts;
-@using App.Common.ViewModels; *@
-@using App.Features.Tasks.Edit;
+﻿@using App.Features.Tasks.Edit;
 @using App.Common.Helpers;
 @model WrapperViewModel<TaskEditInputVM, TaskEditOutputVM>
 @{
 	ViewData["Title"] = "Edit";
+	Layout = SharedViews.DefaultLayout;
+
 	TaskEditInputVM inputVM = Model.InputVM;
 	TaskEditOutputVM outputVM = Model.OutputVM;
 	inputVM.Description = outputVM.Description;

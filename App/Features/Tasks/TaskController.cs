@@ -64,10 +64,10 @@ namespace App.Features.Tasks
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
 		[HttpGet]
-		[Route(CustomRoutes.TaskDetailsRoute)]
-		public async Task<IActionResult> Details([FromRoute] int routeTodoListId, [FromRoute] int routeTaskId)
+		[Route(CustomRoutes.TaskShowRoute)]
+		public async Task<IActionResult> Show([FromRoute] int routeTodoListId, [FromRoute] int routeTaskId)
 		{
-			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Details), controllerName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Show), controllerName);
 
 			//TODO find and implement the right approach of handling exceptions and params validations
 			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, routeTodoListId, nameof(routeTodoListId), HelperCheck.IdBottomBoundry, _logger);
@@ -92,7 +92,7 @@ namespace App.Features.Tasks
 			var detailsOutputVM = _taskViewModelsFactory.CreateDetailsOutputVM(taskDto);
 			//END TO DO
 
-			return View(TaskViews.Details, detailsOutputVM);
+			return View(TaskViews.Show, detailsOutputVM);
 		}
 
 		/// <summary>

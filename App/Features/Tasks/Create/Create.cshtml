@@ -1,11 +1,9 @@
-﻿@* @using static App.Common.Views.ViewsConsts;
-@using static App.Common.ControllersConsts;
-@using App.Common.ViewModels; *@
-@using App.Features.Tasks.Create;
+﻿@using App.Features.Tasks.Create;
 @model WrapperViewModel<TaskCreateInputVM, TaskCreateOutputVM>
 
 @{
     ViewData["Title"] = "Create Task";
+    Layout = SharedViews.DefaultLayout;
     var inputVM = Model.InputVM;
     var outputVM = Model.OutputVM;
 }
@@ -36,12 +34,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="@inputVM.DueDate" class="control-label">Deadline</label>
-                <input asp-for="@inputVM.DueDate" asp-format="{0:dd'/'MM'/'yyyy}" class="form-control" />
+                <input asp-for="@inputVM.DueDate" asp-format="{0:dd'/'MM'/'yyyy}" type="datetime-local" class="form-control" />
                 <span asp-validation-for="@inputVM.DueDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="@inputVM.ReminderDate" class="control-label">Reminder</label>
-                <input asp-for="@inputVM.ReminderDate" asp-format="{0:dd'/'MM'/'yyyy}" class="form-control" />
+                <input asp-for="@inputVM.ReminderDate" asp-format="{0:dd'/'MM'/'yyyy}" type="datetime-local" class="form-control" />
                 <span asp-validation-for="@inputVM.ReminderDate" class="text-danger"></span>
             </div>
             <div class="form-group">

@@ -2,16 +2,12 @@
 #region USINGS
 
 using System.Reflection;
-using App.Features.Tasks.Common.TaskTags.Common;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.Tasks.Common.Interfaces;
 using App.Features.Users.Login.Interfaces;
 using App.Features.Users.Authentication;
-using App.Features.Tags.Common;
 using App.Features.TodoLists.Common;
 using App.Features.Users.Logout;
-using App.Features.TodoLists.Common.Models;
-using App.Features.Tasks.Common.TaskTags.Common.Interfaces;
 using App.Features.Tasks.Common;
 using App.Features.Users.Common;
 using App.Features.Boards.Interfaces;
@@ -21,7 +17,6 @@ using App.Features.Users.Login;
 using App.Features.Users.Register;
 using App.Infrastructure.Databases.Identity.Seeds;
 using App.Features.Users.Common.Interfaces;
-using App.Features.Tags.Common.Interfaces;
 using App.Infrastructure.Databases.App.Seeds;
 using App.Features.Users.Logout.Interfaces;
 using App.Features.Boards.Common;
@@ -75,21 +70,8 @@ namespace App
 			#region MAPPERS
 
 			builder.Services.AddScoped<IUserMapper, UserMapper>();
-
-			builder.Services.AddTransient<ITaskDto, TaskDto>();
-			builder.Services.AddTransient<ITaskModel, TaskModel>();
-			//builder.Services.AddScoped<ITaskCreateInputDto, TaskCreateInputDto>();
 			builder.Services.AddScoped<ITaskEntityMapper, TaskEntityMapper>();
-
-			builder.Services.AddTransient<ITodoListDto, TodoListDto>();
-			builder.Services.AddTransient<ITodoListModel, TodoListModel>();
 			builder.Services.AddScoped<ITodoListMapper, TodoListMapper>();
-
-			builder.Services.AddTransient<ITagDto, TagDto>();
-			builder.Services.AddTransient<ITagModel, TagModel>();
-
-			builder.Services.AddTransient<ITaskTagDto, TaskTagDto>();
-			builder.Services.AddTransient<ITaskTagModel, TaskTagModel>();
 
 			#endregion
 
@@ -108,6 +90,8 @@ namespace App
 
 			#endregion
 
+			builder.Services.AddScoped<ITaskSelector, TaskSelector>();
+			builder.Services.AddScoped<ITodoListSelector, TodoListSelector>();
 
 			builder.SetupSeedDataServices();
 

@@ -60,19 +60,24 @@ public static class IdentitySeedData
 
 		try
 		{
+			await transaction.CreateSavepointAsync("BeforeMigrations");
 			await EnsurePendingMigrationsAppliedAsync(identityUnitOfWork);
-			await EnsureRolesPopulatedAsync(identityUnitOfWork);
-			await EnsureAdminPopulatedAsync(identityUnitOfWork);
 
+            await transaction.CreateSavepointAsync("BeforeRolesAndAdminPopulated");
+            await EnsureRolesPopulatedAsync(identityUnitOfWork);
+            await EnsureAdminPopulatedAsync(identityUnitOfWork);
 			await identityUnitOfWork.SaveChangesAsync();
-			await SetRoleForAdmin(identityUnitOfWork);
+
+            await transaction.CreateSavepointAsync("BeforeRoleForAdminSetup");
+            await SetRoleForAdmin(identityUnitOfWork);
 			await identityUnitOfWork.SaveChangesAsync();
+
 			await identityUnitOfWork.CommitTransactionAsync();
 		}
 		catch (Exception ex)
 		{
 			await identityUnitOfWork.RollbackTransactionAsync();
-			logger.LogCritical(ex, "An error occurred while populating the database.");
+			logger.LogCritical(ex, "An error occurred while populating the Identity database.");
 			throw;
 		}
 	}

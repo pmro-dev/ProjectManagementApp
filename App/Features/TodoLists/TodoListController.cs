@@ -257,10 +257,10 @@ namespace App.Features.TodoLists
 		/// <returns>Single To Do List with details.</returns>
 		/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
 		[HttpGet]
-		[Route(CustomRoutes.TodoListDetailsRoute)]
-		public async Task<IActionResult> TodoListDetails(int id, DateTime? filterDueDate)
+		[Route(CustomRoutes.TodoListShowRoute)]
+		public async Task<IActionResult> Show(int id, DateTime? filterDueDate)
 		{
-			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(TodoListDetails), controllerName);
+			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Show), controllerName);
 			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.IdBottomBoundry, _logger);
 
 			var todoListDbModel = await _todoListRepository.GetWithDetailsAsync(id);
@@ -274,7 +274,7 @@ namespace App.Features.TodoLists
 			var todoListDto = _todoListMapper.TransferToDto(todoListDbModel);
 			var detailsOutputVM = _todoListViewModelsFactory.CreateDetailsOutputVM(todoListDto, filterDueDate);
 
-			return View(TodoListViews.Details, detailsOutputVM);
+			return View(TodoListViews.Show, detailsOutputVM);
 		}
 	}
 }
