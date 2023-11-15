@@ -7,6 +7,7 @@ using App.Features.Users.Interfaces;
 using App.Features.Users.Register.Interfaces;
 using App.Infrastructure.Databases.Identity.Interfaces;
 using App.Infrastructure.Databases.Identity.Seeds;
+using AutoMapper;
 
 namespace App.Features.Users.Register;
 
@@ -16,16 +17,18 @@ public class UserRegisterService : IUserRegisterService
 	private readonly IUserRepository _userRepository;
 	private readonly IRoleRepository _roleRepository;
 	private readonly IUserMapper _accountMapper;
+	private readonly IMapper _mapper;
 	private readonly ILogger<UserRegisterService> _logger;
 	private readonly string _defaultRole = IdentitySeedData.DefaultRole;
 
-	public UserRegisterService(IIdentityUnitOfWork identityUnitOfWork, ILogger<UserRegisterService> logger, IUserMapper accountMapper)
+	public UserRegisterService(IIdentityUnitOfWork identityUnitOfWork, ILogger<UserRegisterService> logger, IMapper mapper)
 	{
 		_identityUnitOfWork = identityUnitOfWork;
 		_userRepository = _identityUnitOfWork.UserRepository;
 		_roleRepository = _identityUnitOfWork.RoleRepository;
 		_logger = logger;
 		_accountMapper = accountMapper;
+		_mapper = mapper;
 	}
 
 	public async Task<bool> RegisterAsync(IUserDto userDto)
@@ -37,7 +40,7 @@ public class UserRegisterService : IUserRegisterService
 		userDto.Provider = AuthenticationConsts.DefaultScheme;
 		await SetRoles(userDto);
 
-		IUserModel userModel = _accountMapper.TransferToModel(userDto);
+		IUserModel userModel = _mapper.Map<IUserModel>(userDto);
 
 		Task.WaitAny(Task.Run(async () =>
 		{

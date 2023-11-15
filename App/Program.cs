@@ -24,9 +24,9 @@ using App.Features.Users.Interfaces;
 using App.Features.Users.Register.Interfaces;
 using Microsoft.AspNetCore.Mvc.Razor;
 using App.Common.Views;
+using App.Common;
 
 #endregion
-
 
 namespace App
 {
@@ -69,7 +69,7 @@ namespace App
 
 			#region MAPPERS
 
-			builder.Services.AddScoped<IUserMapper, UserMapper>();
+			builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 			builder.Services.AddScoped<ITaskEntityMapper, TaskEntityMapper>();
 			builder.Services.AddScoped<ITodoListMapper, TodoListMapper>();
 

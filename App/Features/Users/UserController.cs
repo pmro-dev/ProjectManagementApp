@@ -13,6 +13,7 @@ using App.Infrastructure;
 using App.Infrastructure.Helpers;
 using App.Common.Helpers;
 using App.Features.Users.Register.Interfaces;
+using AutoMapper;
 
 namespace App.Features.Users;
 
@@ -28,20 +29,20 @@ public class UserController : Controller
     private readonly IUserRegisterService _userRegisterService;
     private readonly IUserAuthenticationService _userAuthenticationService;
     private readonly ILogoutService _logoutService;
-    private readonly IUserMapper _accountMapper;
+    private readonly IMapper _mapper;
 
     private string operationName = string.Empty;
     private readonly string controllerName = nameof(UserController);
 
     public UserController(ILoginService loginService, IUserRegisterService userRegisterService, ILogger<UserController> logger,
-        IUserAuthenticationService userAuthenticationService, ILogoutService logoutService, IUserMapper accountMapper)
+        IUserAuthenticationService userAuthenticationService, ILogoutService logoutService, IMapper mapper)
     {
         _loginService = loginService;
         _userRegisterService = userRegisterService;
         _logger = logger;
         _userAuthenticationService = userAuthenticationService;
         _logoutService = logoutService;
-        _accountMapper = accountMapper;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -62,7 +63,7 @@ public class UserController : Controller
     {
         if (ModelState.IsValid)
         {
-            ILoginInputDto loginInputDto = _accountMapper.TransferToDto(loginInputVM);
+            ILoginInputDto loginInputDto = _mapper.Map<ILoginInputDto>(loginInputVM);
             bool isLoginDataInvalid = !LoginDtoValidator.Valid(loginInputDto);
 
             if (isLoginDataInvalid)
@@ -152,8 +153,7 @@ public class UserController : Controller
     {
         if (ModelState.IsValid)
         {
-            IUserDto userDto = _accountMapper.TransferToUserDto(registerInputVM);
-
+            IUserDto userDto = _mapper.Map<IUserDto>(registerInputVM);
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Register), controllerName);
 
             bool isDataInvalid = !UserDtoValidator.ValidData(userDto);
