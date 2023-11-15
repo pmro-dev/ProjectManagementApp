@@ -131,7 +131,7 @@ public class UserController : Controller
     /// <returns>Return Login View.</returns>
     public async Task<IActionResult> LogOut()
     {
-        var actionResult = await _logoutService.LogoutByProviderAsync();
+        var actionResult = await _logoutService.LogoutAsync();
 
         return actionResult;
     }

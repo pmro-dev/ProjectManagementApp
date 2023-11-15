@@ -19,23 +19,24 @@ public class LogoutService : ILogoutService
 		_logger = logger;
 	}
 
-	public async Task<IActionResult> LogoutByProviderAsync()
+	public async Task<IActionResult> LogoutAsync()
 	{
 		HttpContext? httpContext = _httpContextAccessor.HttpContext;
 
 		if (httpContext is null)
 		{
-			_logger.LogCritical(MessagesPacket.LogHttpContextNullOnLogout, nameof(LogoutByProviderAsync));
+			_logger.LogCritical(MessagesPacket.LogHttpContextNullOnLogout, nameof(LogoutAsync));
 			throw new InvalidOperationException(MessagesPacket.HttpContextNullOnLogout);
 		}
 
-		string userAuthenticationScheme = httpContext.User.Claims.First(c => c.Type == AuthenticationConsts.AuthSchemeClaimKey).Value;
+		//TODO error logging
+		string userAuthenticationScheme = httpContext.User.Claims.Single(claim => claim.Type == ".AuthScheme").Value ?? throw new InvalidOperationException();
 
 		IActionResult actionResult = userAuthenticationScheme switch
 		{
 			AuthenticationConsts.GoogleOpenIDScheme => new RedirectResult(AuthenticationConsts.GoogleUrlToLogout),
 			CookieAuthenticationDefaults.AuthenticationScheme => new RedirectToActionResult(UserCtrl.LoginAction, UserCtrl.Name, null),
-			_ => new SignOutResult(new[] { CookieAuthenticationDefaults.AuthenticationScheme, userAuthenticationScheme }),
+			_ => new SignOutResult(new[] { CookieAuthenticationDefaults.AuthenticationScheme, userAuthenticationScheme })
 		};
 
 		await httpContext.SignOutAsync();

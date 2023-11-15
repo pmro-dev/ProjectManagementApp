@@ -4,5 +4,5 @@ namespace App.Features.Users.Logout.Interfaces;
 
 public interface ILogoutService
 {
-	Task<IActionResult> LogoutByProviderAsync();
+	Task<IActionResult> LogoutAsync();
 }
