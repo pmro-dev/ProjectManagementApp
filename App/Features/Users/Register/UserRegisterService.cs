@@ -32,9 +32,9 @@ public class UserRegisterService : IUserRegisterService
 
 	public async Task<bool> RegisterAsync(IUserDto userDto)
 	{
-		bool isNotUsernameAvailableToRegister = !await CheckIsUsernameAvailable(userDto.Username);
+		bool isUsernameUnavailableToRegister = !await CheckIsUsernameAvailable(userDto.Username);
 
-		if (isNotUsernameAvailableToRegister) return false;
+		if (isUsernameUnavailableToRegister) return false;
 
 		userDto.Provider = AuthenticationConsts.DefaultScheme;
 		await SetRoles(userDto);

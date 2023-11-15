@@ -6,7 +6,6 @@ using App.Features.Users.Authentication;
 using App.Features.Users.Interfaces;
 using App.Features.Users.Login;
 using App.Features.Users.Common;
-using App.Features.Users.Common.Interfaces;
 using App.Features.Users.Login.Interfaces;
 using App.Features.Users.Logout.Interfaces;
 using App.Infrastructure;
@@ -20,8 +19,6 @@ namespace App.Features.Users;
 /// <summary>
 /// Controller to manage availability of page's resources via Authentication.
 /// </summary>
-//[Authorize]
-[AllowAnonymous]
 public class UserController : Controller
 {
     private readonly ILogger<UserController> _logger;
@@ -50,7 +47,8 @@ public class UserController : Controller
     /// </summary>
     /// <returns>Return user to Login Page.</returns>
     [HttpGet]
-    public ViewResult Login() { return View(); }
+	[AllowAnonymous]
+	public ViewResult Login() { return View(); }
 
     /// <summary>
     /// Method allows to login user with provided data by form.
@@ -58,7 +56,8 @@ public class UserController : Controller
     /// <param name="loginInputVM">Model with provided login data.</param>
     /// <returns>Redirect user to specific index view or to login view if authentication failed.</returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
+	[AllowAnonymous]
+	[ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginInputVM loginInputVM)
     {
         if (ModelState.IsValid)
@@ -74,9 +73,9 @@ public class UserController : Controller
 
             try
             {
-                bool isNotUserRegistered = !await _loginService.CheckIsUserAlreadyRegisteredAsync(loginInputDto);
+                bool isUserNotRegistered = !await _loginService.CheckIsUserAlreadyRegisteredAsync(loginInputDto);
 
-                if (isNotUserRegistered)
+                if (isUserNotRegistered)
                 {
                     ModelState.AddModelError(string.Empty, MessagesPacket.InvalidLoginData);
                     return View();
@@ -108,7 +107,8 @@ public class UserController : Controller
     /// <param name="provider">Authentication provider name.</param>
     /// <returns>Challenge for a certain Authentication.</returns>
     [HttpGet]
-    [Route(CustomRoutes.LoginByProviderRoute)]
+	[AllowAnonymous]
+	[Route(CustomRoutes.LoginByProviderRoute)]
     public IActionResult LoginByProvider([FromRoute] string provider)
     {
         if (string.IsNullOrEmpty(provider))
@@ -125,11 +125,12 @@ public class UserController : Controller
             return _userAuthenticationService.ChallengeProviderToLogin(provider);
     }
 
-    /// <summary>
-    /// Method logout user from account.
-    /// </summary>
-    /// <returns>Return Login View.</returns>
-    public async Task<IActionResult> LogOut()
+	/// <summary>
+	/// Method logout user from account.
+	/// </summary>
+	/// <returns>Return Login View.</returns>
+	[Authorize]
+	public async Task<IActionResult> LogOut()
     {
         var actionResult = await _logoutService.LogoutAsync();
 
@@ -140,7 +141,8 @@ public class UserController : Controller
     /// Return Register view.
     /// </summary>
     /// <returns>Return user to Register Page.</returns>
-    public ViewResult Register() { return View(); }
+	[AllowAnonymous]
+	public ViewResult Register() { return View(); }
 
     /// <summary>
     /// Method allows to register new user identity.
@@ -148,7 +150,8 @@ public class UserController : Controller
     /// <param name="registerInputVM">Model with provided register data.</param>
     /// <returns>Redirect user to login page.</returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
+	[AllowAnonymous]
+	[ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterInputVM registerInputVM)
     {
         if (ModelState.IsValid)
@@ -186,5 +189,6 @@ public class UserController : Controller
     /// </summary>
     /// <returns>Return Error View.</returns>
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error() { return View(); }
+	[AllowAnonymous]
+	public IActionResult Error() { return View(); }
 }

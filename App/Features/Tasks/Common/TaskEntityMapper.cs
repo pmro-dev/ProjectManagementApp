@@ -145,18 +145,6 @@ public class TaskEntityMapper : ITaskEntityMapper
 	#endregion
 
 
-	public void UpdateModel(TaskModel taskDbModel, ITaskEditInputDto taskEditInputDto)
-	{
-		taskDbModel.Id = taskEditInputDto.Id;
-		taskDbModel.Title = taskEditInputDto.Title;
-		taskDbModel.Description = taskEditInputDto.Description;
-		taskDbModel.DueDate = taskEditInputDto.DueDate;
-		taskDbModel.ReminderDate = taskEditInputDto.ReminderDate;
-		taskDbModel.Status = taskEditInputDto.Status;
-		taskDbModel.TodoListId = taskEditInputDto.TodoListId;
-		taskDbModel.UserId = taskEditInputDto.UserId;
-	}
-
 	#region Map TaskDto to TaskModel
 
 	public TaskModel TransferToModel(ITaskDto taskDto, IDictionary<object, object>? mappedObjects = null)
@@ -232,5 +220,18 @@ public class TaskEntityMapper : ITaskEntityMapper
 		return tagModel;
 	}
 
-	#endregion
+    #endregion
+
+
+    public void UpdateModel(TaskModel taskDbModel, ITaskEditInputDto taskEditInputDto)
+    {
+        taskDbModel.Id = taskEditInputDto.Id;
+        taskDbModel.Title = taskEditInputDto.Title;
+        taskDbModel.Description = taskEditInputDto.Description;
+        taskDbModel.DueDate = taskEditInputDto.DueDate;
+        taskDbModel.ReminderDate = taskEditInputDto.ReminderDate;
+        taskDbModel.Status = taskEditInputDto.Status;
+        taskDbModel.TodoListId = taskEditInputDto.TodoListId;
+        taskDbModel.UserId = taskEditInputDto.UserId;
+    }
 }
