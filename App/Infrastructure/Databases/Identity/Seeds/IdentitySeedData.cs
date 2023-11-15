@@ -149,12 +149,10 @@ public static class IdentitySeedData
 
 		if (adminUser != null && !adminUser.UserRoles.Any() && roleForAdmin != null)
 		{
-			UserRoleModel roleModel = new()
+			UserRoleModel roleModel = new(adminUser, roleForAdmin)
 			{
 				UserId = adminUser.UserId,
-				User = adminUser,
 				RoleId = roleForAdmin.Id,
-				Role = roleForAdmin
 			};
 
 			adminUser.UserRoles.Add(roleModel);

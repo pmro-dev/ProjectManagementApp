@@ -1,5 +1,4 @@
-﻿using App.Features.Users.Common;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace App.Features.Users.Common.Roles;
 

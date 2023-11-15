@@ -24,6 +24,7 @@ using App.Features.Users.Interfaces;
 using App.Features.Users.Register.Interfaces;
 using Microsoft.AspNetCore.Mvc.Razor;
 using App.Common.Views;
+using App.Features.Users.Common.Roles;
 using App.Common;
 
 #endregion
@@ -88,11 +89,12 @@ namespace App
 			builder.Services.AddScoped<ITaskEntityFactory, TaskEntityFactory>();
 
 			builder.Services.AddScoped<ILoginFactory, LoginFactory>();
+			builder.Services.AddScoped<IRoleFactory, RoleFactory>();
 			builder.Services.AddScoped<IUserFactory, UserFactory>();
 
-			#endregion
+            #endregion
 
-			builder.Services.AddScoped<ITaskSelector, TaskSelector>();
+            builder.Services.AddScoped<ITaskSelector, TaskSelector>();
 			builder.Services.AddScoped<ITodoListSelector, TodoListSelector>();
 
 			builder.SetupSeedDataServices();
@@ -110,7 +112,7 @@ namespace App
 				options.ViewLocationExpanders.Add(new ViewLocationExpander());
 			});
 
-			var app = builder.Build();
+            var app = builder.Build();
 			app.SetupPipeline();
 
 

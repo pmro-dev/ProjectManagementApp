@@ -1,6 +1,5 @@
 ﻿using App.Common.Helpers;
 using App.Features.Users.Authentication;
-using App.Features.Users.Common.Interfaces;
 using App.Features.Users.Common.Models;
 using App.Features.Users.Common.Roles;
 using App.Features.Users.Interfaces;
@@ -16,18 +15,18 @@ public class UserRegisterService : IUserRegisterService
 	private readonly IIdentityUnitOfWork _identityUnitOfWork;
 	private readonly IUserRepository _userRepository;
 	private readonly IRoleRepository _roleRepository;
-	private readonly IUserMapper _accountMapper;
+	private readonly IUserFactory _userFactory;
 	private readonly IMapper _mapper;
 	private readonly ILogger<UserRegisterService> _logger;
 	private readonly string _defaultRole = IdentitySeedData.DefaultRole;
 
-	public UserRegisterService(IIdentityUnitOfWork identityUnitOfWork, ILogger<UserRegisterService> logger, IMapper mapper)
+	public UserRegisterService(IIdentityUnitOfWork identityUnitOfWork, ILogger<UserRegisterService> logger, IUserFactory userFactory, IMapper mapper)
 	{
 		_identityUnitOfWork = identityUnitOfWork;
 		_userRepository = _identityUnitOfWork.UserRepository;
 		_roleRepository = _identityUnitOfWork.RoleRepository;
 		_logger = logger;
-		_accountMapper = accountMapper;
+		_userFactory = userFactory;
 		_mapper = mapper;
 	}
 
@@ -75,13 +74,13 @@ public class UserRegisterService : IUserRegisterService
 			throw new InvalidOperationException(MessagesPacket.RoleForNewUserNotFoundInDb(nameof(roleForNewUser), _defaultRole));
 		}
 
-		userDto.UserRoles.Add(new UserRoleModel()
-		{
-			User = new UserModel { },
-			UserId = userDto.UserId,
-			Role = roleForNewUser,
-			RoleId = roleForNewUser.Id
-		});
+		var roleDto = _mapper.Map<IRoleDto>(roleForNewUser);
+
+		var userRoleDto = _userFactory.CreateUserRoleDto();
+		userRoleDto.UserId = userDto.UserId;
+		userRoleDto.RoleId = roleDto.Id;
+
+		userDto.UserRoles.Add(userRoleDto);
 	}
 
 	#endregion

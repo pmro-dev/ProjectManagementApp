@@ -13,5 +13,5 @@ public interface IUserDto
 	string Provider { get; set; }
 	string UserId { get; set; }
 	string Username { get; set; }
-	ICollection<IUserRoleModel> UserRoles { get; set; }
+	ICollection<IUserRoleDto> UserRoles { get; set; }
 }
