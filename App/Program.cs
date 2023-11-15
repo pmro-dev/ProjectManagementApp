@@ -63,6 +63,8 @@ namespace App
 			builder.Services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
 			builder.Services.AddScoped<IClaimsService, ClaimsService>();
 			builder.Services.AddScoped<IUserService, UserService>();
+			builder.Services.AddScoped<IIdentityService, IdentityService>();
+            builder.Services.AddScoped<ICookieService, CookieService>();
 
 			#endregion
 

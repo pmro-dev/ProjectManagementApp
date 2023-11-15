@@ -7,7 +7,7 @@ namespace App.Features.Users.Common.Claims;
 
 public class ClaimsService : IClaimsService
 {
-	public ClaimsPrincipal CreateUserClaimsPrincipal(IUserDto userDto)
+    public ClaimsPrincipal CreateUserClaimsPrincipal(IUserDto userDto)
 	{
 		var userClaims = CreateUserClaims(userDto);
 
@@ -28,11 +28,11 @@ public class ClaimsService : IClaimsService
 
 		var userClaims = new List<Claim>(userClaimsCapacity)
 				{
-					new Claim(ClaimTypes.Name, userDto.Username),
-					new Claim(ClaimTypes.Email, userDto.Email),
-					new Claim(ClaimTypes.NameIdentifier, userDto.NameIdentifier),
-					new Claim(ClaimTypes.Surname, userDto.LastName),
-					new Claim(ClaimTypes.GivenName, userDto.FirstName),
+					new(ClaimTypes.Name, userDto.Username),
+					new(ClaimTypes.Email, userDto.Email),
+					new(ClaimTypes.NameIdentifier, userDto.NameIdentifier),
+					new(ClaimTypes.Surname, userDto.LastName),
+					new(ClaimTypes.GivenName, userDto.FirstName),
 				};
 
 		AddRolesToUserClaims(userClaims, userDto.UserRoles);
@@ -40,13 +40,19 @@ public class ClaimsService : IClaimsService
 		return userClaims;
 	}
 
-	private static void AddRolesToUserClaims(ICollection<Claim> userClaims, IEnumerable<IUserRoleModel> userRoles)
+	private static void AddRolesToUserClaims(ICollection<Claim> userClaims, IEnumerable<IUserRoleDto> userRolesDto)
 	{
-		foreach (var userRole in userRoles)
+		foreach (var userRole in userRolesDto)
 		{
+			//TODO add error logging
+			if (userRole.Role is null)
+			{
+				throw new ArgumentNullException(nameof(userRolesDto));
+			}
+
 			userClaims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
 		}
 	}
 
-	#endregion
+    #endregion
 }
