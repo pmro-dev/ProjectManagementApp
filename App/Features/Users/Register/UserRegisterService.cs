@@ -41,13 +41,17 @@ public class UserRegisterService : IUserRegisterService
 
 		IUserModel userModel = _mapper.Map<IUserModel>(userDto);
 
-		Task.WaitAny(Task.Run(async () =>
+		try
 		{
 			await _userRepository.AddAsync((UserModel)userModel);
 			await _identityUnitOfWork.SaveChangesAsync();
-		}));
-
-		return true;
+			return true;
+		}
+		catch(Exception ex)
+		{
+			_logger.LogError(ex, "Error occured while adding new user to DB");
+			return false;
+		}
 	}
 
 
