@@ -5,6 +5,7 @@ using App.Infrastructure.Databases.Common;
 using App.Infrastructure.Databases.Identity.Interfaces;
 using App.Infrastructure.Helpers;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace App.Infrastructure.Databases.Identity;
 
@@ -13,8 +14,6 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 {
 	private readonly CustomIdentityDbContext _identityContext;
 	private readonly ILogger<UserRepository> _logger;
-	private string operationName = string.Empty;
-	private readonly string repoName = nameof(UserRepository);
 
 	public UserRepository(CustomIdentityDbContext identityContext, ILogger<UserRepository> logger) : base(identityContext, logger)
 	{
@@ -25,8 +24,7 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 	///<inheritdoc />
 	public async Task<IUserModel?> GetWithDetailsAsync(string userId)
 	{
-		operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetWithDetailsAsync), repoName);
-		HelperCheck.ThrowExceptionWhenParamNullOrEmpty(operationName, ref userId, nameof(userId), _logger);
+		ExceptionsService.ThrowWhenArgumentIsInvalid(nameof(GetWithDetailsAsync), userId, nameof(userId), _logger);
 
 		UserModel? userWithDetailsFromDb = await _identityContext
 			.Set<UserModel>()
@@ -40,19 +38,21 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 	///<inheritdoc />
 	public async Task<IUserModel?> GetByNameAndPasswordAsync(string userLogin, string userPassword)
 	{
-		operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetByNameAndPasswordAsync), nameof(UserRepository));
-		HelperCheck.ThrowExceptionWhenParamNullOrEmpty(operationName, ref userLogin, nameof(userLogin), _logger);
-		HelperCheck.ThrowExceptionWhenParamNullOrEmpty(operationName, ref userPassword, nameof(userPassword), _logger);
+		ExceptionsService.ThrowExceptionWhenArgumentIsNullOrEmpty(nameof(GetByNameAndPasswordAsync), userLogin, nameof(userLogin), _logger);
+		ExceptionsService.ThrowExceptionWhenArgumentIsNullOrEmpty(nameof(GetByNameAndPasswordAsync), userPassword, nameof(userPassword), _logger);
+
+		Expression<Func<UserModel, bool>> userDataPredicateExpression = (UserModel user) => user.Username == userLogin && user.Password == userPassword;
 
 		return await _identityContext
 			.Set<UserModel>()
-			.SingleOrDefaultAsync(user => user.Username == userLogin && user.Password == userPassword);
+			.SingleOrDefaultAsync(userDataPredicateExpression);
 	}
 
 	///<inheritdoc />
 	public async Task<bool> IsNameTakenAsync(string userName)
 	{
-		operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(IsNameTakenAsync), repoName);
+		ExceptionsService.ThrowWhenArgumentIsInvalid(nameof(IsNameTakenAsync), userName, nameof(userName), _logger);
+
 		bool result = await _identityContext
 			.Set<UserModel>()
 			.AnyAsync(user => user.Username == userName);
@@ -63,7 +63,8 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 	///<inheritdoc />
 	public async Task<ICollection<IRoleModel>> GetRolesAsync(string userId)
 	{
-		operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetRolesAsync), repoName);
+		ExceptionsService.ThrowWhenArgumentIsInvalid(nameof(GetRolesAsync), userId, nameof(userId), _logger);
+
 		ICollection<IRoleModel> userRoles = await _identityContext
 			.Set<UserRoleModel>()
 			.Where(user => user.UserId == userId)

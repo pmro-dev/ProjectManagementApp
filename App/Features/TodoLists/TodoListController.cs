@@ -10,15 +10,15 @@ using App.Infrastructure;
 using App.Features.TodoLists.Create;
 using App.Infrastructure.Helpers;
 using App.Common.Helpers;
-using App.Infrastructure.Databases.Common.Helpers;
 using App.Common.ViewModels;
+using App.Features.TodoLists.Common.Models;
 
 namespace App.Features.TodoLists
 {
-    /// <summary>
-    /// Controller to manage To Do List actions based on specific routes.
-    /// </summary>
-    [Authorize]
+	/// <summary>
+	/// Controller to manage To Do List actions based on specific routes.
+	/// </summary>
+	[Authorize]
 	public class TodoListController : Controller
 	{
 		private readonly IDataUnitOfWork _dataUnitOfWork;
@@ -26,8 +26,6 @@ namespace App.Features.TodoLists
 		private readonly ILogger<TodoListController> _logger;
 		private readonly ITodoListMapper _todoListMapper;
 		private readonly ITodoListViewModelsFactory _todoListViewModelsFactory;
-		private readonly string controllerName = nameof(TodoListController);
-		private string operationName = string.Empty;
 
 		public static string ShortName { get; } = nameof(TodoListController).Replace("Controller", string.Empty);
 
@@ -100,14 +98,13 @@ namespace App.Features.TodoLists
 		[Route(CustomRoutes.TodoListEditRoute)]
 		public async Task<IActionResult> Edit(int id)
 		{
-			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Edit), controllerName);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.IdBottomBoundry, _logger);
+			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Edit), id, nameof(id), _logger);
 
-			var todoListModel = await _todoListRepository.GetAsync(id);
+			TodoListModel? todoListModel = await _todoListRepository.GetAsync(id);
 
 			if (todoListModel == null)
 			{
-				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, id, HelperDatabase.TodoListsDbSetName);
+				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, nameof(Edit), nameof(TodoListModel), id);
 				return NotFound();
 			}
 
@@ -136,21 +133,17 @@ namespace App.Features.TodoLists
 		{
 			if (!ModelState.IsValid) return View(TodoListViews.Edit, editWrapperVM);
 
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.IdBottomBoundry, _logger);
+			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Edit), id, nameof(id), _logger);
 
 			var todoListId = editWrapperVM.OutputVM.Id;
 
-			if (id != todoListId)
-			{
-				_logger.LogError(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, id, todoListId);
-				return Conflict();
-			}
+			ExceptionsService.ThrowWhenIdsAreNotEqual(nameof(Edit), id, nameof(id), todoListId, nameof(todoListId), _logger);
 
-			var todoListDbModel = await _todoListRepository.GetAsync(todoListId);
+			TodoListModel? todoListDbModel = await _todoListRepository.GetAsync(todoListId);
 
 			if (todoListDbModel is null)
 			{
-				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, todoListId, HelperDatabase.TodoListsDbSetName);
+				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, nameof(Edit), nameof(TodoListModel), todoListId);
 				return NotFound();
 			}
 
@@ -176,15 +169,13 @@ namespace App.Features.TodoLists
 		[Route(CustomRoutes.TodoListDeleteRoute)]
 		public async Task<IActionResult> Delete(int id)
 		{
-			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Delete), controllerName);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.IdBottomBoundry, _logger);
+			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Delete), id, nameof(id), _logger);
 
-			//TODO PROBABLY I WOULD NEED TO GET WITH DETAILS TO BE ABLE TO COUNT TASKS ;)
-			var todoListDbModel = await _todoListRepository.GetAsync(id);
+			TodoListModel? todoListDbModel = await _todoListRepository.GetAsync(id);
 
 			if (todoListDbModel == null)
 			{
-				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, id, HelperDatabase.TodoListsDbSetName);
+				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, nameof(Delete), nameof(TodoListModel), id);
 				return NotFound();
 			}
 
@@ -208,25 +199,23 @@ namespace App.Features.TodoLists
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeletePost(int id)
 		{
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.IdBottomBoundry, _logger);
+			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(DeletePost), id, nameof(id), _logger);
 
 			if (ModelState.IsValid)
 			{
-				var todoListDbModel = await _todoListRepository.GetAsync(id);
+				TodoListModel? todoListDbModel = await _todoListRepository.GetAsync(id);
 
-				if (todoListDbModel != null)
+				if (todoListDbModel is null)
 				{
-					if (todoListDbModel.Id != id)
-					{
-						_logger.LogError(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, id, todoListDbModel.Id);
-						return Conflict();
-					}
-
-					_todoListRepository.Remove(todoListDbModel);
-					await _dataUnitOfWork.SaveChangesAsync();
-
-					return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
+					ExceptionsService.ThrowEntityNotFoundInDb(nameof(DeletePost), nameof(TodoListModel), id.ToString(), _logger);
 				}
+
+				ExceptionsService.ThrowWhenIdsAreNotEqual(nameof(DeletePost), todoListDbModel!.Id, nameof(todoListDbModel.Id), id, nameof(id), _logger);
+
+				_todoListRepository.Remove(todoListDbModel);
+				await _dataUnitOfWork.SaveChangesAsync();
+
+				return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
 			}
 
 			return View(TodoListCtrl.DeleteAction);
@@ -241,7 +230,7 @@ namespace App.Features.TodoLists
 		[Route(CustomRoutes.TodoListDuplicateRoute)]
 		public async Task<IActionResult> Duplicate(int todoListId)
 		{
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.IdBottomBoundry, _logger);
+			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Duplicate), todoListId, nameof(todoListId), _logger);
 
 			await _todoListRepository.DuplicateWithDetailsAsync(todoListId);
 			await _dataUnitOfWork.SaveChangesAsync();
@@ -260,14 +249,13 @@ namespace App.Features.TodoLists
 		[Route(CustomRoutes.TodoListShowRoute)]
 		public async Task<IActionResult> Show(int id, DateTime? filterDueDate)
 		{
-			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Show), controllerName);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.IdBottomBoundry, _logger);
+			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Show), id, nameof(id), _logger);
 
-			var todoListDbModel = await _todoListRepository.GetWithDetailsAsync(id);
+			TodoListModel? todoListDbModel = await _todoListRepository.GetWithDetailsAsync(id);
 
 			if (todoListDbModel is null)
 			{
-				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, id, HelperDatabase.TodoListsDbSetName);
+				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, nameof(Show), nameof(TodoListModel), id);
 				return NotFound();
 			}
 

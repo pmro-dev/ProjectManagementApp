@@ -25,8 +25,8 @@ public class LogoutService : ILogoutService
 
 		if (httpContext is null)
 		{
-			_logger.LogCritical(MessagesPacket.LogHttpContextNullOnLogout, nameof(LogoutAsync));
-			throw new InvalidOperationException(MessagesPacket.HttpContextNullOnLogout);
+			_logger.LogCritical(MessagesPacket.LogHttpContextObjectIsNull, nameof(LogoutAsync));
+			throw new InvalidOperationException(MessagesPacket.LogHttpContextObjectIsNull);
 		}
 
 		//TODO error logging

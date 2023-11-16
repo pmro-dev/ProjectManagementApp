@@ -111,11 +111,7 @@ public class UserController : Controller
 	[Route(CustomRoutes.LoginByProviderRoute)]
     public IActionResult LoginByProvider([FromRoute] string provider)
     {
-        if (string.IsNullOrEmpty(provider))
-        {
-            _logger.LogError(MessagesPacket.LogInvalidProviderName);
-            throw new ArgumentNullException(nameof(provider));
-        }
+        ExceptionsService.ThrowExceptionWhenArgumentIsNullOrEmpty(nameof(LoginByProvider), provider, nameof(provider), _logger);
 
         var isUserAuthenticated = _userAuthenticationService.AuthenticateUser(User);
 

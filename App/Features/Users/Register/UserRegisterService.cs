@@ -74,8 +74,8 @@ public class UserRegisterService : IUserRegisterService
 
 		if (roleForNewUser is null)
 		{
-			_logger.LogCritical(MessagesPacket.LogCriticalErrorRoleForNewUserNotFoundInDb, nameof(SetRoles), nameof(roleForNewUser), _defaultRole);
-			throw new InvalidOperationException(MessagesPacket.RoleForNewUserNotFoundInDb(nameof(roleForNewUser), _defaultRole));
+			_logger.LogCritical(MessagesPacket.LogCriticalErrorRoleNotFoundInDb, nameof(SetRoles), nameof(roleForNewUser), _defaultRole);
+			throw new InvalidOperationException(MessagesPacket.RoleNotFoundInDb(nameof(roleForNewUser), _defaultRole));
 		}
 
 		var roleDto = _mapper.Map<IRoleDto>(roleForNewUser);

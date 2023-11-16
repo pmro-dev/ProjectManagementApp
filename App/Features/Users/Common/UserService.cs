@@ -3,9 +3,9 @@ using App.Features.Users.Common.Interfaces;
 using App.Features.Users.Common.Models;
 using App.Features.Users.Common.Roles;
 using App.Features.Users.Interfaces;
-using App.Infrastructure.Databases.Common.Helpers;
 using App.Infrastructure.Databases.Identity.Interfaces;
 using App.Infrastructure.Databases.Identity.Seeds;
+using App.Infrastructure.Helpers;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
@@ -38,11 +38,7 @@ public class UserService : IUserService
     {
         IRoleModel? roleModel = await _roleRepository.GetByFilterAsync(r => r.Name == IdentitySeedData.DefaultRole);
 
-        if (roleModel is null)
-        {
-            //TODO add logging
-            throw new InvalidOperationException("Role model was not found");
-        }
+        ExceptionsService.ThrowWhenRoleNotFoundInDb(nameof(AddUserAsync), roleModel, IdentitySeedData.DefaultRole, _logger);
 
         IRoleDto? roleDto = _mapper.Map<IRoleDto>(roleModel);
 
@@ -66,12 +62,12 @@ public class UserService : IUserService
 
     public async Task UpdateUserAsync(IUserDto userBasedOnProviderClaimsDto, Claim authSchemeClaimWithProviderName)
     {
-        IUserModel? userFromDb = await _userRepository.GetAsync(userBasedOnProviderClaimsDto.NameIdentifier);
+        UserModel? userFromDb = await _userRepository.GetAsync(userBasedOnProviderClaimsDto.NameIdentifier);
 
         if (userFromDb is null)
         {
-            _logger?.LogCritical(MessagesPacket.LogEntityNotFoundInDbSet, nameof(UpdateUserAsync), userBasedOnProviderClaimsDto.NameIdentifier, HelperDatabase.UsersDbSetName);
-            throw new InvalidOperationException(MessagesPacket.EntityNotFoundByIdInDb(nameof(UpdateUserAsync), HelperDatabase.UsersDbSetName, -2));
+            _logger?.LogCritical(MessagesPacket.LogEntityNotFoundInDbSet, nameof(UpdateUserAsync), nameof(UserModel), userBasedOnProviderClaimsDto.NameIdentifier);
+            throw new InvalidOperationException(MessagesPacket.EntityNotFoundInDb(nameof(UpdateUserAsync), nameof(UserModel), userBasedOnProviderClaimsDto.NameIdentifier));
         }
 
         bool doesUserUseOtherProvider = userBasedOnProviderClaimsDto.Provider != CookieAuthenticationDefaults.AuthenticationScheme;
@@ -84,12 +80,15 @@ public class UserService : IUserService
             userFromDb.Provider = authSchemeClaimWithProviderName.Value;
             userFromDb.Email = userBasedOnProviderClaimsDto.Email;
 
-            _userRepository.Update((UserModel)userFromDb);
+            _userRepository.Update(userFromDb);
         }
     }
 
     public async Task SetRolesForUserPrincipleAsync(string userId, ClaimsIdentity principle)
     {
+        ExceptionsService.ThrowWhenArgumentIsInvalid(nameof(SetRolesForUserPrincipleAsync), userId, nameof(userId), _logger);
+        ExceptionsService.ThrowWhenIdentityIsNull(principle, _logger);
+
         IEnumerable<IRoleModel> userRoles = await _userRepository.GetRolesAsync(userId);
         IEnumerable<string> userRolesNames = userRoles.Select(userRole => userRole.Name).ToList();
 

@@ -22,9 +22,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	///<inheritdoc />
 	public async Task AddAsync(TEntity entity)
 	{
-		string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
-		string operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(AddAsync), classAndEntityInfo);
-		HelperCheck.ThrowExceptionWhenModelNull(operationName, entity, nameof(entity), _logger);
+		ExceptionsService.ThrowWhenModelIsNull(nameof(AddAsync), entity, _logger);
 
 		await _dbSet.AddAsync(entity);
 	}
@@ -38,9 +36,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	///<inheritdoc />
 	public async Task<TEntity?> GetAsync(object id)
 	{
-		string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
-		string operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetAsync), classAndEntityInfo);
-		HelperCheck.ThrowExceptionWhenArgumentIsNullOrEmpty(operationName, id, nameof(id), _logger);
+		ExceptionsService.ThrowWhenArgumentIsInvalid(nameof(GetAsync), id, nameof(id), _logger);
 
 		return await _dbSet.FindAsync(id);
 	}
@@ -48,33 +44,23 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	///<inheritdoc />
 	public async Task<ICollection<TEntity>> GetAllByFilterAsync(Expression<Func<TEntity, bool>> filter)
 	{
-		IQueryable<TEntity> entities = _dbSet;
+		ExceptionsService.ThrowWhenFilterExpressionIsNull(filter, nameof(GetAllByFilterAsync), _logger);
 
-		if (filter != null)
-		{
-			entities = entities.Where(filter);
-		}
-
-		return await entities.ToListAsync();
+		return await _dbSet.Where(filter).ToListAsync();
 	}
 
 	///<inheritdoc />
 	public async Task<TEntity?> GetByFilterAsync(Expression<Func<TEntity, bool>> filter)
 	{
-		if (filter != null)
-		{
-			return await _dbSet.SingleOrDefaultAsync(filter);
-		}
-
-		return null;
+		ExceptionsService.ThrowWhenFilterExpressionIsNull(filter, nameof(GetByFilterAsync), _logger);
+	
+		return await _dbSet.SingleOrDefaultAsync(filter);
 	}
 
 	///<inheritdoc />
 	public void Remove(TEntity entity)
 	{
-		string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
-		string operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Remove), classAndEntityInfo);
-		HelperCheck.ThrowExceptionWhenModelNull(operationName, entity, nameof(entity), _logger);
+		ExceptionsService.ThrowWhenModelIsNull(nameof(Remove), entity, _logger);
 
 		_dbSet.Remove(entity);
 	}
@@ -82,9 +68,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	///<inheritdoc />
 	public void Update(TEntity entity)
 	{
-		string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
-		string operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Update), classAndEntityInfo);
-		HelperCheck.ThrowExceptionWhenModelNull(operationName, entity, nameof(entity), _logger);
+		ExceptionsService.ThrowWhenModelIsNull(nameof(Update), entity, _logger);
 
 		_dbSet.Update(entity);
 	}
@@ -92,9 +76,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	///<inheritdoc />
 	public async Task AddRangeAsync(ICollection<TEntity> range)
 	{
-		string classAndEntityInfo = string.Concat(nameof(GenericRepository<TEntity>), typeof(TEntity));
-		string operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(AddRangeAsync), classAndEntityInfo);
-		HelperCheck.ThrowExceptionWhenModelNull(operationName, range, nameof(range), _logger);
+		ExceptionsService.ThrowWhenModelIsNull(nameof(AddRangeAsync), range, _logger);
 
 		await _dbSet.AddRangeAsync(range, default);
 	}

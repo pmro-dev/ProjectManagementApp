@@ -1,8 +1,8 @@
-﻿using App.Common.Helpers;
-using App.Features.Users.Common.Interfaces;
+﻿using App.Features.Users.Common.Interfaces;
 using App.Features.Users.Interfaces;
 using App.Infrastructure;
 using App.Infrastructure.Databases.Identity.Interfaces;
+using App.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 
@@ -14,13 +14,15 @@ public class CookieService : ICookieService
 	private readonly IUserRepository _userRepository;
 	private readonly IIdentityService _identityService;
 	private readonly IUserService _userService;
+	private readonly ILogger<CookieService> _logger;
 
-	public CookieService(IIdentityUnitOfWork identityUnitOfWork, IIdentityService identityService, IUserService userService)
+	public CookieService(IIdentityUnitOfWork identityUnitOfWork, IIdentityService identityService, IUserService userService, ILogger<CookieService> logger)
 	{
 		_identityUnitOfWork = identityUnitOfWork;
 		_userRepository = _identityUnitOfWork.UserRepository;
 		_identityService = identityService;
 		_userService = userService;
+		_logger = logger;
 	}
 
 	public void SetupOptions(CookieAuthenticationOptions options)
@@ -37,11 +39,11 @@ public class CookieService : ICookieService
 			{
 				var authScheme = cookieSigningInContext.Properties.Items.SingleOrDefault(authProperty => authProperty.Key == AuthenticationConsts.AuthSchemeClaimKey);
 				Claim authSchemeClaimWithProviderName = new(authScheme.Key, authScheme.Value ?? AuthenticationConsts.AuthSchemeClaimValue);
-				
-				ClaimsIdentity identity = cookieSigningInContext.Principal?.Identity as ClaimsIdentity ??
-					throw new ArgumentException(MessagesPacket.ParamObjectNull("Creating user identity on signingin", nameof(cookieSigningInContext.Principal)));
 
-				identity.AddClaim(authSchemeClaimWithProviderName);
+				ClaimsIdentity? identity = cookieSigningInContext.Principal?.Identity as ClaimsIdentity;
+				ExceptionsService.ThrowWhenIdentityIsNull(identity, _logger);
+
+				identity!.AddClaim(authSchemeClaimWithProviderName);
 
 				IUserDto user = _identityService.CreateUser(identity.Claims, authSchemeClaimWithProviderName);
 

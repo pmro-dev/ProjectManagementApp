@@ -16,8 +16,8 @@ using App.Features.Tasks.Edit.Interfaces;
 using App.Infrastructure.Helpers;
 using App.Features.Tasks.Create.Interfaces;
 using App.Common.Helpers;
-using App.Infrastructure.Databases.Common.Helpers;
 using App.Common.ViewModels;
+using App.Features.TodoLists.Common.Models;
 
 namespace App.Features.Tasks
 {
@@ -27,7 +27,6 @@ namespace App.Features.Tasks
     [Authorize]
 	public class TaskController : Controller
 	{
-		private readonly string controllerName = nameof(TaskController);
 		private readonly IDataUnitOfWork _dataUnitOfWork;
 		private readonly ITaskRepository _taskRepository;
 		private readonly ITodoListRepository _todoListRepository;
@@ -35,8 +34,6 @@ namespace App.Features.Tasks
 		private readonly ITaskEntityMapper _taskEntityMapper;
 		private readonly ITodoListMapper _todoListMapper;
 		private readonly ITaskViewModelsFactory _taskViewModelsFactory;
-
-		private string operationName = string.Empty;
 
 		/// <summary>
 		/// Initializes controller with DbContext and Logger.
@@ -67,30 +64,22 @@ namespace App.Features.Tasks
 		[Route(CustomRoutes.TaskShowRoute)]
 		public async Task<IActionResult> Show([FromRoute] int routeTodoListId, [FromRoute] int routeTaskId)
 		{
-			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Show), controllerName);
-
 			//TODO find and implement the right approach of handling exceptions and params validations
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, routeTodoListId, nameof(routeTodoListId), HelperCheck.IdBottomBoundry, _logger);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, routeTaskId, nameof(routeTaskId), HelperCheck.IdBottomBoundry, _logger);
+			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Show), routeTodoListId, nameof(routeTodoListId), _logger);
+			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Show), routeTaskId, nameof(routeTaskId), _logger);
 
 			TaskModel? taskModel = await _taskRepository.GetAsync(routeTaskId);
 
 			if (taskModel is null)
 			{
-				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, routeTaskId, HelperDatabase.TasksDbSetName);
+				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, nameof(Show), nameof(TaskModel), routeTaskId);
 				return NotFound();
 			}
 
-			if (routeTodoListId != taskModel.TodoListId)
-			{
-				_logger.LogError(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, routeTodoListId, taskModel.TodoListId);
-				return Conflict();
-			}
+			ExceptionsService.ThrowWhenIdsAreNotEqual(nameof(Show), routeTodoListId, nameof(routeTodoListId), taskModel.TodoListId, nameof(taskModel.TodoListId), _logger);
 
-			//TODO THOSE OPERATIONS MOVE TO TASKSERVICE
 			ITaskDto taskDto = _taskEntityMapper.TransferToDto(taskModel);
 			var detailsOutputVM = _taskViewModelsFactory.CreateDetailsOutputVM(taskDto);
-			//END TO DO
 
 			return View(TaskViews.Show, detailsOutputVM);
 		}
@@ -108,26 +97,23 @@ namespace App.Features.Tasks
 		[Route(CustomRoutes.CreateTaskRoute)]
 		public async Task<IActionResult> Create(int id)
 		{
-			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Create), controllerName);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.IdBottomBoundry, _logger);
+			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Create), id, nameof(id), _logger);
 
 			if (!ModelState.IsValid)
 				return View();
 
-			ITodoListModel? todoListModel = await _todoListRepository.GetAsync(id);
+			TodoListModel? todoListModel = await _todoListRepository.GetAsync(id);
 
 			if (todoListModel is null)
 			{
-				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, id, HelperDatabase.TodoListsDbSetName);
+				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, nameof(Create), nameof(TodoListModel), id);
 				return NotFound();
 			}
 
-			//TODO MOVE THOSE OPERATIONS TO TASKSERVICE
 			ITodoListDto todoListDto = _todoListMapper.TransferToDto(todoListModel);
 			var taskCreateOutputVM = _taskViewModelsFactory.CreateCreateOutputVM(todoListDto);
 			var taskCreateWrapperVM = _taskViewModelsFactory.CreateWrapperCreateVM();
 			taskCreateWrapperVM.OutputVM = taskCreateOutputVM;
-			//END TO DO
 
 			return View(taskCreateWrapperVM);
 		}
@@ -147,7 +133,7 @@ namespace App.Features.Tasks
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create(int todoListId, WrapperViewModel<TaskCreateInputVM, TaskCreateOutputVM> taskCreateWrapperVM)
 		{
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.IdBottomBoundry, _logger);
+			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Create), todoListId, nameof(todoListId), _logger);
 
 			if (!ModelState.IsValid)
 				return View(taskCreateWrapperVM);
@@ -175,9 +161,8 @@ namespace App.Features.Tasks
 		[Route(CustomRoutes.TaskEditGetRoute)]
 		public async Task<IActionResult> Edit([FromRoute] int todoListId, [FromRoute] int taskId)
 		{
-			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Edit), controllerName);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.IdBottomBoundry, _logger);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskId, nameof(taskId), HelperCheck.IdBottomBoundry, _logger);
+			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Edit), todoListId, nameof(todoListId), _logger);
+			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Edit), taskId, nameof(taskId), _logger);
 
 			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -185,34 +170,26 @@ namespace App.Features.Tasks
 
 			if (taskModel == null)
 			{
-				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, taskId, HelperDatabase.TasksDbSetName);
+				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, nameof(Edit), nameof(TaskModel), taskId);
 				return NotFound();
 			}
 
-			ITodoListModel? targetTodoListModel = await _todoListRepository.GetAsync(todoListId);
+			TodoListModel? targetTodoListModel = await _todoListRepository.GetAsync(todoListId);
 
 			if (targetTodoListModel == null)
 			{
-				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, todoListId, HelperDatabase.TodoListsDbSetName);
+				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, nameof(Edit), nameof(TodoListModel), todoListId);
 				return NotFound();
 			}
 
-			if (taskModel.TodoListId != targetTodoListModel.Id)
-			{
-				_logger.LogError(MessagesPacket.LogConflictBetweenTodoListIdsFromTodoListModelAndTaskModel, operationName, taskModel.TodoListId, targetTodoListModel.Id);
-				return Conflict();
-			}
+			ExceptionsService.ThrowWhenIdsAreNotEqual(nameof(Edit), taskModel.TodoListId, nameof(taskModel.TodoListId), targetTodoListModel.Id, nameof(targetTodoListModel.Id), _logger);
 
 			ITaskDto taskDto = _taskEntityMapper.TransferToDto(taskModel);
 
 			// TODO implement method that allow to get only concrete properties by Select expression, here I need only TodoLists Ids and Names
-			var userTodoListModels = await _todoListRepository.GetAllByFilterAsync(todoList => todoList.UserId == signedInUserId);
+			ICollection<TodoListModel>? userTodoListModels = await _todoListRepository.GetAllByFilterAsync(todoList => todoList.UserId == signedInUserId);
 
-			if (!userTodoListModels.Any())
-			{
-				_logger.LogInformation(MessagesPacket.LogNotAnyTodoListInDb, operationName);
-				return NotFound();
-			}
+			ExceptionsService.ThrowGroupOfEntitiesNotFoundInDb(nameof(Edit), nameof(ICollection<TodoListModel>), _logger);
 
 			ICollection<ITodoListDto> userTodoListDtos = _todoListMapper.TransferToDto(userTodoListModels);
 			// END OF TO DO
@@ -239,8 +216,8 @@ namespace App.Features.Tasks
 		{
 			var taskEditInputVM = editWrapperVM.InputVM;
 
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskEditInputVM.TodoListId, nameof(taskEditInputVM.TodoListId), HelperCheck.IdBottomBoundry, _logger);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskEditInputVM.Id, nameof(taskEditInputVM.Id), HelperCheck.IdBottomBoundry, _logger);
+			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(EditPost), taskEditInputVM.TodoListId, nameof(taskEditInputVM.TodoListId), _logger);
+			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(EditPost), taskEditInputVM.Id, nameof(taskEditInputVM.Id), _logger);
 
 			if (ModelState.IsValid)
 			{
@@ -249,15 +226,11 @@ namespace App.Features.Tasks
 
 				if (taskDbModel is null)
 				{
-					_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, taskEditInputDto.Id, HelperDatabase.TasksDbSetName);
+					_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, nameof(EditPost), nameof(TaskModel), taskEditInputDto.Id);
 					return NotFound();
 				}
 
-				if (taskDbModel.Id != taskEditInputDto.Id)
-				{//TODO WRITE NEW LOG MESSAGE FOR THIS SITUATION
-					_logger.LogCritical(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, taskEditInputDto.Id, taskDbModel.Id);
-					return Conflict();
-				}
+				ExceptionsService.ThrowWhenIdsAreNotEqual(nameof(EditPost), taskDbModel.Id, nameof(taskDbModel.Id), taskEditInputDto.Id, nameof(taskEditInputDto.Id), _logger);
 
 				_taskEntityMapper.UpdateModel(taskDbModel, taskEditInputDto);
 
@@ -286,25 +259,20 @@ namespace App.Features.Tasks
 		[Route(CustomRoutes.TaskDeleteGetRoute)]
 		public async Task<IActionResult> Delete(int todoListId, int taskId)
 		{
-			operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Delete), controllerName);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, todoListId, nameof(todoListId), HelperCheck.IdBottomBoundry, _logger);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, taskId, nameof(taskId), HelperCheck.IdBottomBoundry, _logger);
+			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Delete), todoListId, nameof(todoListId), _logger);
+			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Delete), taskId, nameof(taskId), _logger);
 
 			TaskModel? taskToDeleteModel = await _taskRepository.GetAsync(taskId);
 
 			if (taskToDeleteModel == null)
 			{
-				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, taskId, HelperDatabase.TasksDbSetName);
+				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, nameof(Delete), nameof(TaskModel), taskId);
 				return NotFound();
 			}
 
 			ITaskDto taskToDeleteDto = _taskEntityMapper.TransferToDto(taskToDeleteModel);
 
-			if (taskToDeleteDto.TodoListId != todoListId)
-			{
-				_logger.LogCritical(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, todoListId, taskToDeleteDto.TodoListId);
-				return Conflict();
-			}
+			ExceptionsService.ThrowWhenIdsAreNotEqual(nameof(Delete), taskToDeleteDto.TodoListId, nameof(taskToDeleteDto.TodoListId), todoListId, nameof(todoListId), _logger);
 
 			var deleteOutputVM = _taskViewModelsFactory.CreateDeleteOutputVM(taskToDeleteDto);
 			var deleteWrapperVM = _taskViewModelsFactory.CreateWrapperDeleteVM();
@@ -330,8 +298,8 @@ namespace App.Features.Tasks
 		{
 			ITaskDeleteInputVM deleteInputVM = deleteWrapperVM.InputVM;
 
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, deleteInputVM.TodoListId, nameof(deleteInputVM.TodoListId), HelperCheck.IdBottomBoundry, _logger);
-			HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, deleteInputVM.Id, nameof(deleteInputVM.Id), HelperCheck.IdBottomBoundry, _logger);
+			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(DeletePost), deleteInputVM.TodoListId, nameof(deleteInputVM.TodoListId), _logger);
+			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(DeletePost), deleteInputVM.Id, nameof(deleteInputVM.Id), _logger);
 
 			ITaskDeleteInputDto deleteInputDto = _taskEntityMapper.TransferToDto(deleteInputVM);
 
@@ -341,15 +309,11 @@ namespace App.Features.Tasks
 
 				if (taskToDeleteModel is null)
 				{
-					_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, deleteInputDto.Id, HelperDatabase.TasksDbSetName);
+					_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, nameof(DeletePost), nameof(TaskModel), deleteInputDto.Id);
 					return NotFound();
 				}
 
-				if (taskToDeleteModel.TodoListId != deleteInputDto.TodoListId)
-				{
-					_logger.LogError(MessagesPacket.LogConflictBetweenIdsOfTodoListAndModelObject, operationName, deleteInputDto.TodoListId, taskToDeleteModel.TodoListId);
-					return Conflict();
-				}
+				ExceptionsService.ThrowWhenIdsAreNotEqual(nameof(DeletePost), taskToDeleteModel.TodoListId, nameof(taskToDeleteModel.TodoListId), deleteInputDto.TodoListId, nameof(deleteInputDto.TodoListId), _logger);
 
 				_taskRepository.Remove(taskToDeleteModel);
 				await _dataUnitOfWork.SaveChangesAsync();

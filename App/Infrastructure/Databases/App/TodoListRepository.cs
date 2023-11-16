@@ -1,5 +1,3 @@
-﻿using App.Common.Helpers;
-using App.Features.Tasks.Common;
 using App.Features.Tasks.Common.Interfaces;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
@@ -25,25 +23,29 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	}
 
 	///<inheritdoc />
-	public async Task<bool> CheckThatAnyWithSameNameExistAsync(string name)
+	public async Task<bool> CheckThatAnyWithSameNameExistAsync(string todoListName)
 	{
+		ExceptionsService.ThrowWhenArgumentIsInvalid(nameof(CheckThatAnyWithSameNameExistAsync), todoListName, nameof(todoListName), _logger);
+
 		return await _dbContext.Set<TodoListModel>()
-			.AnyAsync(todoList => todoList.Title == name);
+			.AnyAsync(todoList => todoList.Title == todoListName);
 	}
 
 	///<inheritdoc />
-	public async Task DuplicateWithDetailsAsync(int id)
+	public async Task DuplicateWithDetailsAsync(int todoListId)
 	{
-		operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(DuplicateWithDetailsAsync), nameof(TodoListRepository));
-		HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.IdBottomBoundry, _logger);
+		ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(DuplicateWithDetailsAsync), todoListId, nameof(todoListId), _logger);
 
 		ITodoListModel? todoListWithDetails = await _dbContext
 			.Set<TodoListModel>()
-			.Where(todoList => todoList.Id == id)
+			.Where(todoList => todoList.Id == todoListId)
 			.Include(todoList => todoList.Tasks)
 			.SingleOrDefaultAsync();
 
 		if (todoListWithDetails is null)
+			ExceptionsService.ThrowEntityNotFoundInDb(nameof(DuplicateWithDetailsAsync), typeof(ITodoListModel).Name, todoListId.ToString(), _logger);
+
+	}
 		{
 			_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, id, "TodoLists");
 			throw new InvalidOperationException(MessagesPacket.ExceptionNullObjectOnAction(operationName, nameof(todoListWithDetails)));
@@ -77,8 +79,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	///<inheritdoc />
 	public async Task<ICollection<TodoListModel>> GetAllWithDetailsAsync(string userId)
 	{
-		operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetAllWithDetailsAsync), nameof(TodoListRepository));
-		HelperCheck.ThrowExceptionWhenParamNullOrEmpty(operationName, ref userId, nameof(userId), _logger);
+		ExceptionsService.ThrowExceptionWhenArgumentIsNullOrEmpty(nameof(GetAllWithDetailsAsync), userId, nameof(userId), _logger);
 
 		ICollection<TodoListModel> allTodoListsWithDetails = await _dbContext
 			.Set<TodoListModel>()
@@ -92,6 +93,8 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	///<inheritdoc />
 	public async Task<ICollection<TodoListModel>> GetAllWithDetailsByFilterAsync(Expression<Func<TodoListModel, bool>> filter)
 	{
+		ExceptionsService.ThrowWhenFilterExpressionIsNull(filter, nameof(GetAllWithDetailsByFilterAsync), _logger);
+
 		ICollection<TodoListModel> entities = await _dbContext
 			.Set<TodoListModel>()
 			.Where(filter)
@@ -102,14 +105,13 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	}
 
 	///<inheritdoc />
-	public async Task<TodoListModel?> GetWithDetailsAsync(int id)
+	public async Task<TodoListModel?> GetWithDetailsAsync(int todoListId)
 	{
-		operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(GetWithDetailsAsync), nameof(TodoListRepository));
-		HelperCheck.ThrowExceptionWhenIdLowerThanBottomBoundry(operationName, id, nameof(id), HelperCheck.IdBottomBoundry, _logger);
+		ExceptionsService.ThrowWhenArgumentIsInvalid(nameof(GetWithDetailsAsync), todoListId, nameof(todoListId), _logger);
 
 		TodoListModel? todoListFromDb = await _dbContext
 			.Set<TodoListModel>()
-			.Where(todoList => todoList.Id == id)
+			.Where(todoList => todoList.Id == todoListId)
 			.Include(todoList => todoList.Tasks)
 			.SingleOrDefaultAsync();
 

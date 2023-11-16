@@ -12,6 +12,7 @@ public class SeedData : ISeedData
 {
 	protected const string DueDateFormat = AttributesHelper.DataFormat;
 	protected readonly IFormatProvider formatProvider = CultureInfo.InvariantCulture;
+	private readonly ILogger<SeedData> _logger;
 
 	public string AdminId { get; } = "adminId";
 
@@ -37,15 +38,18 @@ public class SeedData : ISeedData
 	/// Seeds the data to properties.
 	/// </summary>
 	/// <exception cref="OperationCanceledException"></exception>
-	public SeedData()
+	public SeedData(ILogger<SeedData> logger)
 	{
 		SeedTasks();
 		SeedTodoLists();
 		SeedAllTasks();
 
+		_logger = logger;
+
 		if (AllTasks is null || TodoLists is null || TasksUX is null || TasksBackend is null || TasksTesting is null || TasksProjectManagement is null)
 		{
-			throw new InvalidOperationException("Critical error! Some property is not set with data!");
+			_logger.LogCritical(MessagesPacket.SeedCollectionsAreEmpty);
+			throw new InvalidOperationException(MessagesPacket.SeedCollectionsAreEmpty);
 		}
 	}
 
@@ -198,9 +202,5 @@ public class SeedData : ISeedData
 		Parallel.ForEach(TasksBackend, taskModel => AllTasks.Add(taskModel));
 		Parallel.ForEach(TasksTesting, taskModel => AllTasks.Add(taskModel));
 		Parallel.ForEach(TasksProjectManagement, taskModel => AllTasks.Add(taskModel));
-		//AllTasks.AddRange(TasksUX);
-		//AllTasks.AddRange(TasksBackend);
-		//AllTasks.AddRange(TasksTesting);
-		//AllTasks.AddRange(TasksProjectManagement);
 	}
 }

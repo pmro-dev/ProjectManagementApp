@@ -12,39 +12,29 @@ public static class MessagesPacket
 		return $"Error occured on attempt to {actionName}. Details: Object {objectName} cannot be null.";
 	}
 
-	public static string ParamObjectNull(string actionName, string objectName)
+	public static string ArgumentOutOfRange(string operationName, string argumentName, int argumentValue)
 	{
-		return $"{actionName} | Provided param object {objectName} cannot be null!";
+		return $"{operationName} | Given argument {argumentName} with value ( {argumentValue} ) is out of range!";
 	}
 
-	public static string DbSetNull(string actionName, string dbSetName)
+	public static string EntityNotFoundInDb(string operationName, string dataTypeName, string entityId)
 	{
-		return $"{actionName} | DbSet - {dbSetName} cannot be null!";
+		return $"{operationName} | {dataTypeName} Entity with given id ( {entityId} ) not found in DbSet.";
 	}
 
-	public static string BuildingSucceed(string actionName, string typeName)
+	public static string RoleNotFoundInDb(string operationName, string roleName)
 	{
-		return $"{typeName} - {actionName} succeed!";
+		return $"{operationName} | Role ( {roleName} ) not found in a database.";
 	}
 
-	public static string OutOfRange(string actionName, string paramName, int paramValue)
+	public static string HttpContextObjectIsNull(string operationName)
 	{
-		return $"{actionName} | Given param {paramName} with value ( {paramValue} ) is out of range!";
+		return $"{operationName} | Unable to get HttpContext - accessor returned null object.";
 	}
 
-	public static string EntityNotFoundByIdInDb(string actionName, string dbSetName, int entityId)
+	public static string ConflictBetweenEntitiesIds(string operationName, object firstId, string firstIdName, object secondId, string secondIdName)
 	{
-		return $"{actionName} | Entity with given id ( {entityId} ) not found in {dbSetName} DbSet.";
-	}
-
-	public static string DbContextIsNull(string dbContextName)
-	{
-		return $"Critical Error occured! DbContext object is null - {dbContextName}";
-	}
-
-	public static string RoleForNewUserNotFoundInDb(string roleObjectName, string roleName)
-	{
-		return $"Critical Error occured! Role for new user not found in Db! Object: {roleObjectName} Role: {roleName}";
+		return $"{operationName} | Entities Ids Conflict! Given id ( {firstId} ) for {firstIdName} and ( {secondId} ) for {secondIdName} are not equal!";
 	}
 
 	public const string ProvidedObjectIsNull = "Critical error! Provided object cannot be null!";
@@ -57,7 +47,6 @@ public static class MessagesPacket
 	public const string UnableToLogin = "Unable to login, try again or contact support";
 	public const string InvalidRegisterData = "Invalid register data: login, password or email!";
 	public const string NameTaken = "Name already taken! Try again and get new one!";
-	public const string HttpContextNullOnLogout = "Critical error occured while logging out by 3rd party provider!";
 
 	#endregion
 
@@ -67,23 +56,30 @@ public static class MessagesPacket
 	public const string LogInvalidProviderName = "Invalid provider name from route!.";
 	public const string LogExceptionOccurredOnLogging = "Error occured on attempt to login user.";
 	public const string LogExceptionOccuredOnMethod = "Error {exceptionType} occured on method: {methodName}";
-	public const string LogConflictBetweenIdsOfTodoListAndModelObject = "{operationName} | Conflict occured! Given id ( {todoListId} ) for To Do List and To Do List id in Model object ( {taskTodoListId} ) are not equal!";
+	public const string LogConflictBetweenEntitiesIds = "{operationName} | Entities Ids Conflict! Given id ( {firstId} ) for {firstIdName} and ( {secondId} ) for {secondIdName} are not equal!";
 	public const string LogConflictBetweenTodoListIdsFromTodoListModelAndTaskModel = "{operationName} | Conflict occured! To Do List id ( {taskModelTodoListId} ) from Task object and target To Do List id ( {todoListId} ) in To Do List object are not equal!";
 	public const string LogErrorOnMethod = "Error errors occured on method: {methodName}";
 	public const string LogTransactionFailed = "{operationName} | Transaction failed! - entity id {idValue}";
-	public const string LogEntityNotFoundInDbSet = "{actionName} | Entity with given id ( {entityId} ) not found in {dbSetName} DbSet.";
+	public const string LogEntityNotFoundInDbSet = "{actionName} | {entityTypeName} Entity with given id ( {entityId} ) not found in DbSet.";
+	public const string LogGroupOfEntitiesNotFoundInDbSet = "{actionName} | Group of {entityTypeName} Entities not found in DbSet.";
 	public const string LogOutOfRange = "{actionName} | Given param {paramName} with value ( {paramValue} ) is out of range!";
 	public const string LogInvalidArgumentType = "{actionName} | Given param {paramName} has invalid type!";
 	public const string LogBuildingSucceed = "{typeName} - {actionName} succeed!";
-	public const string LogParamNullOrEmpty = "{actionName} | Provided param object {objectName} cannot be null, nor empty!";
+	public const string LogArgumentNullOrEmpty = "{actionName} | Provided argument ( name: {objectName} ) cannot be null, nor empty!";
 	public const string LogDbSetNull = "{actionName} | DbSet - {dbSetName} cannot be null!";
 	public const string LogErrorDbContextIsNull = "Critical Error occured! DbContext object is null - {DbContextName}";
 	public const string LogNotAnyTodoListInDb = "{operationName} | There's not any To Do List in Database.";
 	public const string LogCreatingUserIdentityFailed = "{operationName} | Creating new User Identity failed!";
-	public const string LogCriticalErrorRoleForNewUserNotFoundInDb = "{operationName} | Object with role (from Db) for new user is null! Object: {roleObjectName} Role: {roleName}";
+	public const string LogCriticalErrorRoleNotFoundInDb = "{operationName} | Role ( {roleName} ) not found in a database.";
 	public const string LoginFailedForRegisteredUser = "{operationName} | Attempt to login registered user failed! User: {username}";
 	public const string UnableToAuthenticateUserPrincipal = "{operationName} | User Claims Principal is null when authenticating in {serviceName}!";
-	public const string LogHttpContextNullOnLogout = "{operationName} | HttpContext is null while logging out by 3rd party provider.";
-
+	public const string LogHttpContextObjectIsNull = "{operationName} | Unable to get HttpContext - accessor returned null object.";
+	public const string LogFilterExpressionIsNull = "{operationName} | Given filter expression is set to null which does not allow to proceed operation.";
+	public const string LogExceptionOccuredOnSavingDataToDataBase = "{operationName} | Exception occured on attempt to save data to database!";
+	public const string LogRollbackProceed = "Rollback proceed!";
+	public const string LogExceptionOccuredOnCommitingTransaction = "{operationName} | Exception occured on attempt to commit transaction to database!";
+	public const string SeedCollectionsAreEmpty = "Some Seed collections are empty!";
+	public const string ClaimsIdentityIsNull = "Unable to proceed with signing in user because of null value of claims identity!";
+	
 	#endregion
 }

@@ -24,9 +24,7 @@ public class CustomAppDbContext : DbContext
 		_logger = logger;
 	}
 
-	public CustomAppDbContext()
-	{
-	}
+	public CustomAppDbContext(){}
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -80,6 +78,6 @@ public class CustomAppDbContext : DbContext
 		todoItemBuilder.Property(x => x.Status)
 			.HasConversion(new EnumToStringConverter<TaskStatusType>());
 
-		_logger?.LogInformation(MessagesPacket.LogBuildingSucceed, nameof(OnModelCreating), nameof(CustomAppDbContext));
+		_logger?.LogInformation(MessagesPacket.LogBuildingSucceed, nameof(CustomAppDbContext), nameof(OnModelCreating));
 	}
 }
