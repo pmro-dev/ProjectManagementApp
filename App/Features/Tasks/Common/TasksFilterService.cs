@@ -21,7 +21,7 @@ public static class TasksFilterService
 	{
 		todayDate = DateTime.Today;
 
-		Func<ITaskDto, bool> tasksForTodayPredicate = task =>
+		static bool tasksForTodayPredicate(ITaskDto task) =>
 		task.DueDate.ToShortDateString() == todayDate.ToShortDateString() &&
 		task.Status != TaskStatusHelper.TaskStatusType.Completed;
 
@@ -32,7 +32,7 @@ public static class TasksFilterService
 	{
 		todayDate = DateTime.Today;
 
-		Func<ITaskDto, bool> tasksCompletedPredicate = task =>
+		static bool tasksCompletedPredicate(ITaskDto task) =>
 		task.Status == TaskStatusHelper.TaskStatusType.Completed &&
 		task.DueDate.CompareTo(todayDate) > DateCompareValueEarlier;
 
@@ -60,7 +60,7 @@ public static class TasksFilterService
 	{
 		todayDate = DateTime.Today;
 
-		Func<ITaskDto, bool> TasksExpiredPredicate = t =>
+		static bool TasksExpiredPredicate(ITaskDto t) =>
 		t.DueDate.CompareTo(todayDate) < DateCompareValueEarlier;
 
 		return ExecuteFilter(tasks, TasksExpiredPredicate);

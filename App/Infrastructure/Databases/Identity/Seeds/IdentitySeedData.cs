@@ -50,12 +50,8 @@ public static class IdentitySeedData
 	/// Checks that Identity Database is set and populated, if not -> try to create database, applies migrations and seed data to it.
 	/// </summary>
 	/// <param name="app">Application builder.</param>
-	public static async Task EnsurePopulated(IApplicationBuilder app, ILogger logger)
+	public static async Task EnsurePopulated(IIdentityUnitOfWork identityUnitOfWork, ILogger logger)
 	{
-		//TODO TRY TO GET IDENTITY UNIT OF WORK SERVICE BY ISERVICE PROVIDER AND DEPENDENCY INJECTION INSTEAD OF USING APP BUILDER PARAM
-		IIdentityUnitOfWork identityUnitOfWork = app.ApplicationServices
-			.CreateScope().ServiceProvider.GetRequiredService<IIdentityUnitOfWork>();
-
 		using var transaction = await identityUnitOfWork.BeginTransactionAsync();
 
 		try

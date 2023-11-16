@@ -13,14 +13,8 @@ public static class DbSeeder
 	/// Checks that Database is set and populated, if not -> try to create database, applies migrations and seed data to it.
 	/// </summary>
 	/// <param name="app">Application builder.</param>
-	public static async Task EnsurePopulated(IApplicationBuilder app, ILogger logger)
+	public static async Task EnsurePopulated(IDataUnitOfWork unitOfWork, ISeedData seedContainer, ILogger logger)
 	{
-		IDataUnitOfWork unitOfWork = app.ApplicationServices
-					.CreateScope().ServiceProvider.GetRequiredService<IDataUnitOfWork>();
-
-		ISeedData seedContainer = app.ApplicationServices
-					.CreateScope().ServiceProvider.GetRequiredService<ISeedData>();
-
 		using var transaction = await unitOfWork.BeginTransactionAsync();
 
         try

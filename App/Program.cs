@@ -26,6 +26,10 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using App.Common.Views;
 using App.Features.Users.Common.Roles;
 using App.Common;
+using App.Infrastructure.Databases.App.Interfaces;
+using App.Infrastructure.Databases.Identity.Interfaces;
+
+
 
 #endregion
 
@@ -127,8 +131,14 @@ namespace App
 
 			#region POPULATE DATABASES
 
-			await IdentitySeedData.EnsurePopulated(app, app.Logger);
-			await DbSeeder.EnsurePopulated(app, app.Logger);
+			IIdentityUnitOfWork identityUnitOfWork = app.Services.CreateScope().ServiceProvider.GetRequiredService<IIdentityUnitOfWork>();
+
+			await IdentitySeedData.EnsurePopulated(identityUnitOfWork, app.Logger);
+
+			IDataUnitOfWork unitOfWork = app.Services.CreateScope().ServiceProvider.GetRequiredService<IDataUnitOfWork>();
+			ISeedData seedContainer = app.Services.CreateScope().ServiceProvider.GetRequiredService<ISeedData>();
+
+			await DbSeeder.EnsurePopulated(unitOfWork, seedContainer, app.Logger);
 
 			#endregion
 
