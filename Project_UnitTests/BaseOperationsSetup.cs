@@ -34,6 +34,8 @@ public class BaseOperationsSetup
 	protected Mock<ILogger<TaskRepository>> TaskRepoLoggerMock { get; set; }
 	protected Mock<ILogger<DataUnitOfWork>> DataUnitOfWorkLoggerMock { get; set; } = new();
 	protected Mock<ILogger<SeedData>> SeedDataLoggerMock { get; set; } = new();
+	protected Mock<ITaskEntityFactory> TaskEntityFactoryMock{ get; set; } = new();
+	protected Mock<ITodoListFactory> TodoListFactoryMock{ get; set; } = new();
 	protected DataUnitOfWork DataUnitOfWork { get; set; }
 	protected ITodoListRepository TodoListRepo { get; set; }
 	protected ITaskRepository TaskRepo { get; set; }
@@ -120,7 +122,7 @@ public class BaseOperationsSetup
 			.Returns(DbSetTodoListMock.Object);
 
 		GenericMockSetup<ITaskModel, TaskModel>.SetupDbContextSaveChangesAsync(dbContextMock, DbOperationsToExecute);
-		var tempTodoListRepo = new TodoListRepository(dbContextMock.Object, TodoListRepoLoggerMock.Object);
+		var tempTodoListRepo = new TodoListRepository(dbContextMock.Object, TodoListRepoLoggerMock.Object, TaskEntityFactoryMock.Object, TodoListFactoryMock.Object);
 		var tempTaskRepo = new TaskRepository(dbContextMock.Object, TaskRepoLoggerMock.Object);
 		DataUnitOfWork = new DataUnitOfWork(dbContextMock.Object, tempTodoListRepo, tempTaskRepo, DataUnitOfWorkLoggerMock.Object);
 	}
