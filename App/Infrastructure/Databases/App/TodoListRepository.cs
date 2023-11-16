@@ -1,4 +1,5 @@
-using App.Features.Tasks.Common.Interfaces;
+﻿using App.Features.Tasks.Common.Interfaces;
+using App.Features.Tasks.Common.TaskTags.Common.Interfaces;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
 using App.Infrastructure.Databases.App.Interfaces;
@@ -14,12 +15,15 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 {
 	private readonly CustomAppDbContext _dbContext;
 	private readonly ILogger<TodoListRepository> _logger;
-	private string operationName = string.Empty;
+	private readonly ITaskEntityFactory _taskEntityFactory;
+	private readonly ITodoListFactory _todoListFactory;
 
-	public TodoListRepository(CustomAppDbContext dbContext, ILogger<TodoListRepository> logger) : base(dbContext, logger)
+	public TodoListRepository(CustomAppDbContext dbContext, ILogger<TodoListRepository> logger, ITaskEntityFactory taskEntityFactory, ITodoListFactory todoListFactory) : base(dbContext, logger)
 	{
 		_dbContext = dbContext;
 		_logger = logger;
+		_taskEntityFactory = taskEntityFactory;
+		_todoListFactory = todoListFactory;
 	}
 
 	///<inheritdoc />
@@ -45,36 +49,51 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 		if (todoListWithDetails is null)
 			ExceptionsService.ThrowEntityNotFoundInDb(nameof(DuplicateWithDetailsAsync), typeof(ITodoListModel).Name, todoListId.ToString(), _logger);
 
+		var duplicatedTasks = todoListWithDetails!.Tasks.Select(originTask => CreateNewTaskObject(originTask)).ToList();
+		var duplicatedTodoList = CreateNewTodoListObject(todoListWithDetails, duplicatedTasks);
+		
+		await AddAsync((TodoListModel)duplicatedTodoList);
 	}
-		{
-			_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, id, "TodoLists");
-			throw new InvalidOperationException(MessagesPacket.ExceptionNullObjectOnAction(operationName, nameof(todoListWithDetails)));
-		}
 
-		var tasksTemp = todoListWithDetails.Tasks.Select(t => new TaskModel()
-		{
-			Id = 0,
-			CreationDate = DateTime.Now,
-			LastModificationDate = DateTime.Now,
-			UserId = t.UserId,
-			Description = t.Description,
-			DueDate = t.DueDate,
-			ReminderDate = t.ReminderDate,
-			Status = t.Status,
-			TaskTags = t.TaskTags,
-			Title = t.Title,
-		}).Cast<ITaskModel>().ToList();
 
-		TodoListModel newTodoList = new()
-		{
-			Id = 0,
-			Title = todoListWithDetails.Title,
-			Tasks = tasksTemp,
-			UserId = todoListWithDetails.UserId
-		};
+	#region LOCAL FUNCTIONS FOR DUPLICATE OPERATION
 
-		await AddAsync(newTodoList);
+	private ITaskModel CreateNewTaskObject(ITaskModel originTask)
+	{
+		var newTask = _taskEntityFactory.CreateModel();
+		newTask.UserId = originTask.UserId;
+		newTask.Title = originTask.Title;
+		newTask.Description = originTask.Description;
+		newTask.DueDate = originTask.DueDate;
+		newTask.ReminderDate = originTask.ReminderDate;
+		newTask.Status = originTask.Status;
+
+		newTask.TaskTags = originTask.TaskTags.Select(originTaskTag => CreateNewTaskTagObject(originTaskTag)).ToList();
+
+		return newTask;
 	}
+
+	private ITaskTagModel CreateNewTaskTagObject(ITaskTagModel originTaskTag)
+	{
+		var newTaskTag = _taskEntityFactory.CreateTaskTagModel();
+		newTaskTag.TagId = originTaskTag.TagId;
+		newTaskTag.TaskId = originTaskTag.TaskId;
+
+		return newTaskTag;
+	}
+
+	private ITodoListModel CreateNewTodoListObject(ITodoListModel originTodoList, ICollection<ITaskModel> newTasks)
+	{
+		TodoListModel newTodoList = _todoListFactory.CreateModel();
+		newTodoList.Title = originTodoList.Title;
+		newTodoList.Tasks = newTasks;
+		newTodoList.UserId = originTodoList.UserId;
+
+		return newTodoList;
+	}
+
+	#endregion
+
 
 	///<inheritdoc />
 	public async Task<ICollection<TodoListModel>> GetAllWithDetailsAsync(string userId)
