@@ -27,6 +27,7 @@ using App.Features.Users.Common.Roles;
 using App.Common;
 using App.Infrastructure.Databases.App.Interfaces;
 using App.Infrastructure.Databases.Identity.Interfaces;
+using App.Features.Users.Authentication.Interfaces;
 
 
 
@@ -34,7 +35,7 @@ using App.Infrastructure.Databases.Identity.Interfaces;
 
 namespace App
 {
-	public static class Program
+    public static class Program
 	{
 		public static async Task Main(string[] args)
 		{
@@ -67,6 +68,7 @@ namespace App
 			builder.Services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
 			builder.Services.AddScoped<IClaimsService, ClaimsService>();
 			builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ICookieEventsService, CookieEventsService>();
 			builder.Services.AddScoped<IIdentityService, IdentityService>();
             builder.Services.AddScoped<ICookieService, CookieService>();
 
