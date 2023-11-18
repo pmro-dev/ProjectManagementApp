@@ -1,21 +1,29 @@
 ﻿using App.Features.Users.Authentication.Interfaces;
 using App.Features.Users.Common.Models;
+using App.Features.Users.Interfaces;
+using App.Infrastructure.Helpers;
 using System.Security.Claims;
 namespace App.Features.Users.Authentication;
 
 public class IdentityService : IIdentityService
 {
     private readonly IUserFactory _userFactory;
+    private readonly ILogger<IdentityService>  _logger;
 
-    public IdentityService(IUserFactory userFactory)
+	public IdentityService(IUserFactory userFactory, ILogger<IdentityService> logger)
+	{
+		_userFactory = userFactory;
+		_logger = logger;
+	}
+
+	public UserDto CreateUser(ClaimsIdentity? identity, Claim authSchemeClaimWithProviderName)
     {
-        _userFactory = userFactory;
-    }
+		ExceptionsService.ThrowWhenIdentityIsNull(identity, _logger);
 
-    public IUserDto CreateUser(IEnumerable<Claim> identityClaims, Claim authSchemeClaimWithProviderName)
-    {
-		IUserDto userBasedOnClaims = _userFactory.CreateDto();
+		identity!.AddClaim(authSchemeClaimWithProviderName);
+        var identityClaims = identity.Claims;
 
+		UserDto userBasedOnClaims = _userFactory.CreateDto();
         userBasedOnClaims.NameIdentifier = identityClaims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value;
         userBasedOnClaims.UserId = identityClaims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value;
         userBasedOnClaims.Username = identityClaims.Single(c => c.Type == ClaimTypes.GivenName).Value;

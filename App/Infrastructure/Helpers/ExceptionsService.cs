@@ -1,6 +1,6 @@
 ﻿using App.Common.Helpers;
 using App.Features.Users.Common.Roles;
-using App.Infrastructure.Databases.Identity.Seeds;
+using Microsoft.AspNetCore.Authentication;
 using System.Linq.Expressions;
 using System.Security.Claims;
 
@@ -105,7 +105,7 @@ public static class ExceptionsService
 		if (string.IsNullOrEmpty(argument))
 		{
 			logger.LogError(MessagesPacket.LogArgumentNullOrEmpty, operationName, argumentName);
-			throw new ArgumentNullException(MessagesPacket.ExceptionNullObjectOnAction(operationName, argumentName));
+			throw new ArgumentNullException(MessagesPacket.ExceptionErrorNullObjectOnAction(operationName, argumentName));
 		}
 	}
 
@@ -172,6 +172,15 @@ public static class ExceptionsService
 		{
 			logger.LogCritical(MessagesPacket.LogCriticalErrorRoleNotFoundInDb, operationName, roleName);
 			throw new InvalidOperationException(MessagesPacket.RoleNotFoundInDb(operationName, roleName));
+		}
+	}
+
+	public static void ThrowWhenAuthOptionsObjectIsNull(string operationName, AuthenticationSchemeOptions? options, string optionsTypeName, ILogger logger)
+	{
+		if (options is null)
+		{
+			logger.LogCritical(MessagesPacket.LogOptionsObjectIsNull, operationName, optionsTypeName);
+			throw new InvalidOperationException(MessagesPacket.ExceptionErrorNullObjectOnAction(operationName, optionsTypeName));
 		}
 	}
 }

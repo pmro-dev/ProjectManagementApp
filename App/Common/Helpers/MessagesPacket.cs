@@ -7,9 +7,9 @@ public static class MessagesPacket
 {
 	#region MESSAGES FOR EXCEPTIONS
 
-	public static string ExceptionNullObjectOnAction(string actionName, string objectName)
+	public static string ExceptionErrorNullObjectOnAction(string operationName, string objectTypeName)
 	{
-		return $"Error occured on attempt to {actionName}. Details: Object {objectName} cannot be null.";
+		return $"Error occured on attempt to {operationName}. Details: Object {objectTypeName} cannot be null.";
 	}
 
 	public static string ArgumentOutOfRange(string operationName, string argumentName, int argumentValue)
@@ -80,6 +80,7 @@ public static class MessagesPacket
 	public const string LogExceptionOccuredOnCommitingTransaction = "{operationName} | Exception occured on attempt to commit transaction to database!";
 	public const string SeedCollectionsAreEmpty = "Some Seed collections are empty!";
 	public const string ClaimsIdentityIsNull = "Unable to proceed with signing in user because of null value of claims identity!";
-	
+	public const string LogOptionsObjectIsNull = "{operationName} | Used options ( {optionsTypeName} ) object was null!";
+
 	#endregion
 }
