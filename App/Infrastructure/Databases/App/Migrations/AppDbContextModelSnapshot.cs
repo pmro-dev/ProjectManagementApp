@@ -1,5 +1,4 @@
-﻿using App.Infrastructure.Databases.App;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 #nullable disable
@@ -18,7 +17,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 
 		modelBuilder.UseIdentityColumns(1L, 1);
 
-		modelBuilder.Entity("Project_DomainEntities.TagModel", b =>
+		modelBuilder.Entity("App.Features.Tags.Common.TagModel", b =>
 			{
 				b.Property<int>("Id")
 					.ValueGeneratedOnAdd()
@@ -35,7 +34,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 				b.ToTable("Tags", (string)null);
 			});
 
-		modelBuilder.Entity("Project_DomainEntities.TaskModel", b =>
+		modelBuilder.Entity("App.Features.Tasks.Common.TaskModel", b =>
 			{
 				b.Property<int>("Id")
 					.ValueGeneratedOnAdd()
@@ -83,7 +82,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 				b.ToTable("Tasks", (string)null);
 			});
 
-		modelBuilder.Entity("Project_DomainEntities.TaskTagModel", b =>
+		modelBuilder.Entity("App.Features.Tasks.Common.TaskTags.Common.TaskTagModel", b =>
 			{
 				b.Property<int>("TaskId")
 					.HasColumnType("int");
@@ -98,13 +97,13 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 				b.ToTable("TaskTags", (string)null);
 			});
 
-		modelBuilder.Entity("Project_DomainEntities.TodoListModel", b =>
+		modelBuilder.Entity("App.Features.TodoLists.Common.Models.TodoListModel", b =>
 			{
 				b.Property<int>("Id")
 					.ValueGeneratedOnAdd()
 					.HasColumnType("int");
 
-				b.Property<int>("Id").UseIdentityColumn(1L, 1);
+				SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
 				b.Property<string>("Title")
 					.IsRequired()
@@ -120,9 +119,9 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 				b.ToTable("TodoLists", (string)null);
 			});
 
-		modelBuilder.Entity("Project_DomainEntities.TaskModel", b =>
+		modelBuilder.Entity("App.Features.Tasks.Common.TaskModel", b =>
 			{
-				b.HasOne("Project_DomainEntities.TodoListModel", "TodoList")
+				b.HasOne("App.Features.TodoLists.Common.Models.TodoListModel", "TodoList")
 					.WithMany("Tasks")
 					.HasForeignKey("TodoListId")
 					.OnDelete(DeleteBehavior.Cascade)
@@ -131,15 +130,15 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 				b.Navigation("TodoList");
 			});
 
-		modelBuilder.Entity("Project_DomainEntities.TaskTagModel", b =>
+		modelBuilder.Entity("App.Features.Tasks.Common.TaskTags.Common.TaskTagModel", b =>
 			{
-				b.HasOne("Project_DomainEntities.TagModel", "Tag")
+				b.HasOne("App.Features.Tags.Common.TagModel", "Tag")
 					.WithMany("TaskTags")
 					.HasForeignKey("TagId")
 					.OnDelete(DeleteBehavior.Cascade)
 					.IsRequired();
 
-				b.HasOne("Project_DomainEntities.TaskModel", "Task")
+				b.HasOne("App.Features.Tasks.Common.TaskModel", "Task")
 					.WithMany("TaskTags")
 					.HasForeignKey("TaskId")
 					.OnDelete(DeleteBehavior.Cascade)
@@ -150,17 +149,17 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 				b.Navigation("Task");
 			});
 
-		modelBuilder.Entity("Project_DomainEntities.TagModel", b =>
+		modelBuilder.Entity("App.Features.Tags.Common.TagModel", b =>
 			{
 				b.Navigation("TaskTags");
 			});
 
-		modelBuilder.Entity("Project_DomainEntities.TaskModel", b =>
+		modelBuilder.Entity("App.Features.Tasks.Common.TaskModel", b =>
 			{
 				b.Navigation("TaskTags");
 			});
 
-		modelBuilder.Entity("Project_DomainEntities.TodoListModel", b =>
+		modelBuilder.Entity("App.Features.TodoLists.Common.Models.TodoListModel", b =>
 			{
 				b.Navigation("Tasks");
 			});

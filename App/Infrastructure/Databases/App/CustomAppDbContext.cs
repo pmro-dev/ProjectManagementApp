@@ -24,51 +24,52 @@ public class CustomAppDbContext : DbContext
 		_logger = logger;
 	}
 
-	public CustomAppDbContext(){}
+	public CustomAppDbContext() { }
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		base.OnModelCreating(modelBuilder);
 
 		modelBuilder.Entity<TodoListModel>()
-		.HasMany(list => (ICollection<TaskModel>)list.Tasks)
-		.WithOne()
-		.HasForeignKey(x => x.Id);
+			.HasMany(list => list.Tasks)
+			.WithOne()
+			.HasForeignKey(x => x.Id);
 
 		modelBuilder.Entity<TodoListModel>()
-			.ToTable("TodoLists");
+			.ToTable("TodoLists")
+			.HasKey(t => t.Id);
 
 		modelBuilder.Entity<TaskModel>()
-			.HasMany(task => (ICollection<TaskTagModel>)task.TaskTags)
+			.HasMany(task => task.TaskTags)
 			.WithOne()
 			.HasForeignKey(x => x.TaskId)
 			.HasForeignKey(x => x.TagId);
 
 		modelBuilder.Entity<TaskModel>()
-			.HasOne(task => (TodoListModel?)task.TodoList)
-			.WithMany(x => (ICollection<TaskModel>)x.Tasks)
+			.HasOne(task => task.TodoList)
+			.WithMany(x => x.Tasks)
 			.HasForeignKey(x => x.TodoListId);
 
 		modelBuilder.Entity<TaskModel>()
-			.ToTable("Tasks");
+			.ToTable("Tasks").HasKey(t => t.Id);
 
 		modelBuilder.Entity<TagModel>()
-			.HasMany(tag => (ICollection<TaskTagModel>)tag.TaskTags)
-			.WithOne(x => (TagModel)x.Tag)
+			.HasMany(tag => tag.TaskTags)
+			.WithOne(x => x.Tag)
 			.HasForeignKey(x => x.TagId)
 			.HasForeignKey(x => x.TaskId);
 
 		modelBuilder.Entity<TagModel>()
-			.ToTable("Tags");
+			.ToTable("Tags").HasKey(t => t.Id);
 
 		modelBuilder.Entity<TaskTagModel>()
-			.HasOne(taskTag => (TaskModel)taskTag.Task)
-			.WithMany(x => (ICollection<TaskTagModel>)x.TaskTags)
+			.HasOne(taskTag => taskTag.Task)
+			.WithMany(x => x.TaskTags)
 			.HasForeignKey(x => x.TaskId);
 
 		modelBuilder.Entity<TaskTagModel>()
-			.HasOne(taskTag => (TagModel)taskTag.Tag)
-			.WithMany(x => (ICollection<TaskTagModel>)x.TaskTags)
+			.HasOne(taskTag => taskTag.Tag)
+			.WithMany(x => x.TaskTags)
 			.HasForeignKey(x => x.TagId);
 
 		modelBuilder.Entity<TaskTagModel>()
