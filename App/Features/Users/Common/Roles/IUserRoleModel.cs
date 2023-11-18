@@ -1,11 +1,11 @@
-﻿using App.Features.Users.Interfaces;
+﻿using App.Features.Users.Common.Models;
 
 namespace App.Features.Users.Common.Roles;
 
 public interface IUserRoleModel
 {
-	IRoleModel Role { get; set; }
+	RoleModel Role { get; set; }
 	string RoleId { get; set; }
-	IUserModel User { get; set; }
+	UserModel User { get; set; }
 	string UserId { get; set; }
 }

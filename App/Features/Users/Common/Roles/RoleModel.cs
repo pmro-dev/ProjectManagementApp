@@ -19,7 +19,7 @@ public class RoleModel : IRoleModel
 
 	public string Description { get; set; }
 
-	public ICollection<IUserRoleModel> UserRoles { get; set; }
+	public ICollection<UserRoleModel> UserRoles { get; set; }
 
 	public RoleModel()
 	{
@@ -27,6 +27,6 @@ public class RoleModel : IRoleModel
 		DataVersion = Guid.NewGuid().ToString();
 		Name = string.Empty;
 		Description = string.Empty;
-		UserRoles = new List<IUserRoleModel>();
+		UserRoles = new List<UserRoleModel>();
 	}
 }

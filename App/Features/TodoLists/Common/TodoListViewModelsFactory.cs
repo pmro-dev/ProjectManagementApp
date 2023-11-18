@@ -1,6 +1,7 @@
 ﻿using App.Common.ViewModels;
 using App.Features.Tasks.Common;
 using App.Features.TodoLists.Common.Interfaces;
+using App.Features.TodoLists.Common.Models;
 using App.Features.TodoLists.Create;
 using App.Features.TodoLists.Delete;
 using App.Features.TodoLists.Edit;
@@ -10,7 +11,7 @@ namespace App.Features.TodoLists.Common;
 
 public class TodoListViewModelsFactory : ITodoListViewModelsFactory
 {
-	public TodoListCreateInputVM CreateCreateInputVM(ITodoListDto todoListDto)
+	public TodoListCreateInputVM CreateCreateInputVM(TodoListDto todoListDto)
 	{
 		return new TodoListCreateInputVM()
 		{
@@ -27,7 +28,7 @@ public class TodoListViewModelsFactory : ITodoListViewModelsFactory
 		};
 	}
 
-	public TodoListDeleteOutputVM CreateDeleteOutputVM(ITodoListDto todoListDto)
+	public TodoListDeleteOutputVM CreateDeleteOutputVM(TodoListDto todoListDto)
 	{
 		return new TodoListDeleteOutputVM()
 		{
@@ -37,7 +38,7 @@ public class TodoListViewModelsFactory : ITodoListViewModelsFactory
 		};
 	}
 
-	public TodoListDetailsOutputVM CreateDetailsOutputVM(ITodoListDto todoListDto, DateTime? filterDueDate)
+	public TodoListDetailsOutputVM CreateDetailsOutputVM(TodoListDto todoListDto, DateTime? filterDueDate)
 	{
 		var tasksForTodayDtos = TasksFilterService.FilterForTasksForToday(todoListDto.Tasks);
 		var tasksCompletedDtos = TasksFilterService.FilterForTasksCompleted(todoListDto.Tasks);
@@ -69,7 +70,7 @@ public class TodoListViewModelsFactory : ITodoListViewModelsFactory
 		return detailsOutputVM;
 	}
 
-	public TodoListEditInputVM CreateEditInputVM(ITodoListDto todoListDto)
+	public TodoListEditInputVM CreateEditInputVM(TodoListDto todoListDto)
 	{
 		return new TodoListEditInputVM
 		{
@@ -77,7 +78,7 @@ public class TodoListViewModelsFactory : ITodoListViewModelsFactory
 		};
 	}
 
-	public TodoListEditOutputVM CreateEditOutputVM(ITodoListDto todoListDto)
+	public TodoListEditOutputVM CreateEditOutputVM(TodoListDto todoListDto)
 	{
 		return new TodoListEditOutputVM
 		{

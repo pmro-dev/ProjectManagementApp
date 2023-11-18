@@ -18,6 +18,6 @@
 @foreach (var todoListDto in Model.TodoLists)
 {
 	ViewData["TableTitle"] = todoListDto.Title;
-	ICollection<ITaskDto> sortedTasks = todoListDto.Tasks.OrderBy(t => t, new TasksComparer()).ToList();
+	ICollection<TaskDto> sortedTasks = todoListDto.Tasks.OrderBy(t => t, new TasksComparer()).ToList();
 	<partial name="@SharedViews.TodoListTableDetails" model="@sortedTasks" view-data="ViewData" />
 }

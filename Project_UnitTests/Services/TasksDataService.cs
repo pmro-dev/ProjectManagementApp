@@ -1,4 +1,5 @@
-﻿using App.Features.Tasks.Common.Interfaces;
+﻿using App.Features.Tasks.Common;
+using App.Features.Tasks.Common.Interfaces;
 using App.Infrastructure.Databases.App.Seeds;
 using Castle.Core.Internal;
 using Project_UnitTests.Data;
@@ -7,22 +8,22 @@ namespace Project_UnitTests.Services;
 
 public static class TasksDataService
 {
-    private static List<ITaskModel> TasksUX { get; set; } = new List<ITaskModel>();
-    private static List<ITaskModel> TasksBackend { get; set; } = new List<ITaskModel>();
-    private static List<ITaskModel> TasksTesting { get; set; } = new List<ITaskModel>();
-    private static List<ITaskModel> TasksProjectManagement { get; set; } = new List<ITaskModel>();
+    private static List<TaskModel> TasksUX { get; set; } = new List<TaskModel>();
+    private static List<TaskModel> TasksBackend { get; set; } = new List<TaskModel>();
+    private static List<TaskModel> TasksTesting { get; set; } = new List<TaskModel>();
+    private static List<TaskModel> TasksProjectManagement { get; set; } = new List<TaskModel>();
 
-    private static List<ITaskModel> tasksCollection = new List<ITaskModel>();
+    private static List<TaskModel> tasksCollection = new List<TaskModel>();
     private static int AllTasksCount;
 
-    public static List<ITaskModel> NewTasksRange { get; private set; } = TasksData.NewTasksRange.ToList();
+    public static List<TaskModel> NewTasksRange { get; private set; } = TasksData.NewTasksRange.ToList();
     public static string TaskRangeSuffix { get; private set; } = TasksData.TaskRangeSuffix;
 
     public static readonly object[] ValidTasksForCreateOperation = TasksData.ValidTasksForCreateOperation;
     public static readonly object[] InvalidTasksForCreateOperation = TasksData.InvalidTasksForCreateOperation;
     public static readonly string AdminId = TasksData.AdminId;
 
-    public static List<ITaskModel> GetCollection(SeedData seedBaseData)
+    public static List<TaskModel> GetCollection(SeedData seedBaseData)
     {
         ArgumentNullException.ThrowIfNull(seedBaseData);
 
@@ -42,7 +43,7 @@ public static class TasksDataService
 
     private static void SeedAllTasks()
     {
-        tasksCollection = new List<ITaskModel>()
+        tasksCollection = new List<TaskModel>()
         {
             TasksUX[0],
             TasksUX[1],

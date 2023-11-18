@@ -1,5 +1,4 @@
 ﻿using App.Common.Helpers;
-using App.Features.Tasks.Common.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace App.Features.Tasks.Common;
@@ -12,38 +11,38 @@ public static class TasksFilterService
 	[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
 	private static DateTime todayDate = DateTime.Today;
 
-	private static IEnumerable<ITaskDto> ExecuteFilter(IEnumerable<ITaskDto> source, Func<ITaskDto, bool> predicate)
+	private static IEnumerable<TaskDto> ExecuteFilter(IEnumerable<TaskDto> source, Func<TaskDto, bool> predicate)
 	{
 		return source.AsParallel().Where(predicate).ToList();
 	}
 
-	public static IEnumerable<ITaskDto> FilterForTasksForToday(IEnumerable<ITaskDto> tasks)
+	public static IEnumerable<TaskDto> FilterForTasksForToday(IEnumerable<TaskDto> tasks)
 	{
 		todayDate = DateTime.Today;
 
-		static bool tasksForTodayPredicate(ITaskDto task) =>
+		static bool tasksForTodayPredicate(TaskDto task) =>
 		task.DueDate.ToShortDateString() == todayDate.ToShortDateString() &&
 		task.Status != TaskStatusHelper.TaskStatusType.Completed;
 
 		return ExecuteFilter(tasks, tasksForTodayPredicate);
 	}
 
-	public static IEnumerable<ITaskDto> FilterForTasksCompleted(IEnumerable<ITaskDto> tasks)
+	public static IEnumerable<TaskDto> FilterForTasksCompleted(IEnumerable<TaskDto> tasks)
 	{
 		todayDate = DateTime.Today;
 
-		static bool tasksCompletedPredicate(ITaskDto task) =>
+		static bool tasksCompletedPredicate(TaskDto task) =>
 		task.Status == TaskStatusHelper.TaskStatusType.Completed &&
 		task.DueDate.CompareTo(todayDate) > DateCompareValueEarlier;
 
 		return ExecuteFilter(tasks, tasksCompletedPredicate);
 	}
 
-	public static IEnumerable<ITaskDto> FilterForTasksNotCompleted(IEnumerable<ITaskDto> tasks, DateTime? filterDueDate)
+	public static IEnumerable<TaskDto> FilterForTasksNotCompleted(IEnumerable<TaskDto> tasks, DateTime? filterDueDate)
 	{
 		todayDate = DateTime.Today;
 
-		bool tasksNotCompletedPredicate(ITaskDto task)
+		bool tasksNotCompletedPredicate(TaskDto task)
 		{
 			if (filterDueDate is null)
 			{
@@ -56,11 +55,11 @@ public static class TasksFilterService
 		return ExecuteFilter(tasks, tasksNotCompletedPredicate);
 	}
 
-	public static IEnumerable<ITaskDto> FilterForTasksExpired(IEnumerable<ITaskDto> tasks)
+	public static IEnumerable<TaskDto> FilterForTasksExpired(IEnumerable<TaskDto> tasks)
 	{
 		todayDate = DateTime.Today;
 
-		static bool TasksExpiredPredicate(ITaskDto t) =>
+		static bool TasksExpiredPredicate(TaskDto t) =>
 		t.DueDate.CompareTo(todayDate) < DateCompareValueEarlier;
 
 		return ExecuteFilter(tasks, TasksExpiredPredicate);

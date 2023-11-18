@@ -15,7 +15,7 @@ public static class TodoListsDataService
 
 	public static readonly object[] InvalidTodoLists = TodoListsData.InvalidTodoLists;
 
-	public static List<ITodoListModel> GetCollection(SeedData seedBaseData)
+	public static List<TodoListModel> GetCollection(SeedData seedBaseData)
 	{
 		SetIdsForTodoLists(seedBaseData);
 		return seedBaseData.TodoLists.ToList();

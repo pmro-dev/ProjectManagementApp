@@ -1,6 +1,4 @@
-﻿using App.Features.Tasks.Common;
-using App.Features.TodoLists.Common.Models;
-using App.Infrastructure.Databases.App.Interfaces;
+﻿using App.Infrastructure.Databases.App.Interfaces;
 
 namespace App.Infrastructure.Databases.App.Seeds;
 
@@ -53,7 +51,7 @@ public static class DbSeeder
 
 		if (!await todoListRepository.ContainsAny())
 		{
-			await todoListRepository.AddRangeAsync(seedContainer.TodoLists.Select(list => list as TodoListModel ?? new TodoListModel()).ToList());
+			await todoListRepository.AddRangeAsync(seedContainer.TodoLists);
 		}
 	}
 
@@ -63,7 +61,7 @@ public static class DbSeeder
 
 		if (!await taskRepository.ContainsAny())
 		{
-			await taskRepository.AddRangeAsync(seedContainer.AllTasks.Select(task => task as TaskModel ?? new TaskModel()).ToList());
+			await taskRepository.AddRangeAsync(seedContainer.AllTasks);
 		}
 	}
 }

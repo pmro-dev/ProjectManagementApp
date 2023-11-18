@@ -1,4 +1,5 @@
-﻿using App.Features.Users.Interfaces;
+﻿using App.Features.Users.Authentication.Interfaces;
+using App.Features.Users.Common.Models;
 using System.Security.Claims;
 namespace App.Features.Users.Authentication;
 

@@ -1,13 +1,12 @@
-﻿using App.Features.Boards.Interfaces;
-using App.Features.Boards.ShowAll;
+﻿using App.Features.Boards.ShowAll;
 using App.Features.Boards.ShowBriefly;
-using App.Features.TodoLists.Common.Interfaces;
+using App.Features.TodoLists.Common.Models;
 
 namespace App.Features.Boards.Common;
 
 public class BoardViewModelsFactory : IBoardViewModelsFactory
 {
-	public IBoardAllOutputVM CreateAllOutputVM(ICollection<ITodoListDto> todolistDto)
+	public BoardAllOutputVM CreateAllOutputVM(ICollection<TodoListDto> todolistDto)
 	{
 		return new BoardAllOutputVM()
 		{
@@ -15,7 +14,7 @@ public class BoardViewModelsFactory : IBoardViewModelsFactory
 		};
 	}
 
-	public IBoardBrieflyOutputVM CreateBrieflyOutputVM(ICollection<ITodoListDto> todolistDto)
+	public BoardBrieflyOutputVM CreateBrieflyOutputVM(ICollection<TodoListDto> todolistDto)
 	{
 		return new BoardBrieflyOutputVM()
 		{

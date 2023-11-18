@@ -1,6 +1,4 @@
-﻿using App.Features.Tasks.Common.Interfaces;
-
-namespace App.Features.Tasks.Common;
+﻿namespace App.Features.Tasks.Common;
 
 public static class TaskModelExtension
 {
@@ -9,7 +7,7 @@ public static class TaskModelExtension
 	/// </summary>
 	/// <param name="obj">Second Task compare to.</param>
 	/// <returns>Result of compare -> true if certain properties (Title, Description) of objects are equal, otherwise false.</returns>
-	public static bool Equals(this ITaskModel taskModel, object? obj)
+	public static bool Equals(this TaskModel taskModel, object? obj)
 	{
 		if (obj == null || !taskModel.GetType().Equals(obj.GetType()))
 		{
@@ -17,7 +15,7 @@ public static class TaskModelExtension
 		}
 		else
 		{
-			var task = (ITaskModel)obj;
+			var task = (TaskModel)obj;
 
 			if (taskModel.Title == task.Title && taskModel.Description == task.Description)
 			{
@@ -34,7 +32,7 @@ public static class TaskModelExtension
 	/// Create and sets Hash Code.
 	/// </summary>
 	/// <returns></returns>
-	public static int GetHashCode(this ITaskModel taskModel)
+	public static int GetHashCode(this TaskModel taskModel)
 	{
 		return HashCode.Combine(taskModel.Title, taskModel.Id);
 	}

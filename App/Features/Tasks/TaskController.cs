@@ -40,7 +40,8 @@ namespace App.Features.Tasks
 		/// </summary>
 		/// <param name="context">Database context.</param>
 		/// <param name="logger">Logger provider.</param>
-		public TaskController(IDataUnitOfWork dataUnitOfWork, ILogger<TaskController> logger, ITaskEntityMapper taskEntityMapper, ITodoListMapper todoListMapper, ITaskViewModelsFactory taskViewModelsFactory)
+		public TaskController(IDataUnitOfWork dataUnitOfWork, ILogger<TaskController> logger, ITaskEntityMapper taskEntityMapper, 
+			ITodoListMapper todoListMapper, ITaskViewModelsFactory taskViewModelsFactory)
 		{
 			_dataUnitOfWork = dataUnitOfWork;
 			_taskRepository = _dataUnitOfWork.TaskRepository;
@@ -78,7 +79,7 @@ namespace App.Features.Tasks
 
 			ExceptionsService.ThrowWhenIdsAreNotEqual(nameof(Show), routeTodoListId, nameof(routeTodoListId), taskModel.TodoListId, nameof(taskModel.TodoListId), _logger);
 
-			ITaskDto taskDto = _taskEntityMapper.TransferToDto(taskModel);
+			TaskDto taskDto = _taskEntityMapper.TransferToDto(taskModel);
 			var detailsOutputVM = _taskViewModelsFactory.CreateDetailsOutputVM(taskDto);
 
 			return View(TaskViews.Show, detailsOutputVM);
@@ -110,7 +111,7 @@ namespace App.Features.Tasks
 				return NotFound();
 			}
 
-			ITodoListDto todoListDto = _todoListMapper.TransferToDto(todoListModel);
+			TodoListDto todoListDto = _todoListMapper.TransferToDto(todoListModel);
 			var taskCreateOutputVM = _taskViewModelsFactory.CreateCreateOutputVM(todoListDto);
 			var taskCreateWrapperVM = _taskViewModelsFactory.CreateWrapperCreateVM();
 			taskCreateWrapperVM.OutputVM = taskCreateOutputVM;
@@ -138,8 +139,8 @@ namespace App.Features.Tasks
 			if (!ModelState.IsValid)
 				return View(taskCreateWrapperVM);
 
-			ITaskCreateInputVM inputVM = taskCreateWrapperVM.InputVM;
-			ITaskDto taskDto = _taskEntityMapper.TransferToDto(inputVM);
+			TaskCreateInputVM inputVM = taskCreateWrapperVM.InputVM;
+			TaskDto taskDto = _taskEntityMapper.TransferToDto(inputVM);
 			TaskModel taskModel = _taskEntityMapper.TransferToModel(taskDto);
 
 			await _taskRepository.AddAsync(taskModel);
@@ -184,14 +185,14 @@ namespace App.Features.Tasks
 
 			ExceptionsService.ThrowWhenIdsAreNotEqual(nameof(Edit), taskModel.TodoListId, nameof(taskModel.TodoListId), targetTodoListModel.Id, nameof(targetTodoListModel.Id), _logger);
 
-			ITaskDto taskDto = _taskEntityMapper.TransferToDto(taskModel);
+			TaskDto taskDto = _taskEntityMapper.TransferToDto(taskModel);
 
 			// TODO implement method that allow to get only concrete properties by Select expression, here I need only TodoLists Ids and Names
 			ICollection<TodoListModel>? userTodoListModels = await _todoListRepository.GetAllByFilterAsync(todoList => todoList.UserId == signedInUserId);
 
 			ExceptionsService.ThrowGroupOfEntitiesNotFoundInDb(nameof(Edit), nameof(ICollection<TodoListModel>), _logger);
 
-			ICollection<ITodoListDto> userTodoListDtos = _todoListMapper.TransferToDto(userTodoListModels);
+			ICollection<TodoListDto> userTodoListDtos = _todoListMapper.TransferToDto(userTodoListModels);
 			// END OF TO DO
 
 			var editOutputVM = _taskViewModelsFactory.CreateEditOutputVM(taskDto, userTodoListDtos);
@@ -221,7 +222,7 @@ namespace App.Features.Tasks
 
 			if (ModelState.IsValid)
 			{
-				ITaskEditInputDto taskEditInputDto = _taskEntityMapper.TransferToDto(taskEditInputVM);
+				TaskEditInputDto taskEditInputDto = _taskEntityMapper.TransferToDto(taskEditInputVM);
 				TaskModel? taskDbModel = await _taskRepository.GetAsync(taskEditInputDto.Id);
 
 				if (taskDbModel is null)
@@ -270,7 +271,7 @@ namespace App.Features.Tasks
 				return NotFound();
 			}
 
-			ITaskDto taskToDeleteDto = _taskEntityMapper.TransferToDto(taskToDeleteModel);
+			TaskDto taskToDeleteDto = _taskEntityMapper.TransferToDto(taskToDeleteModel);
 
 			ExceptionsService.ThrowWhenIdsAreNotEqual(nameof(Delete), taskToDeleteDto.TodoListId, nameof(taskToDeleteDto.TodoListId), todoListId, nameof(todoListId), _logger);
 
@@ -296,12 +297,12 @@ namespace App.Features.Tasks
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeletePost([FromForm] WrapperViewModel<TaskDeleteInputVM, TaskDeleteOutputVM> deleteWrapperVM)
 		{
-			ITaskDeleteInputVM deleteInputVM = deleteWrapperVM.InputVM;
+			TaskDeleteInputVM deleteInputVM = deleteWrapperVM.InputVM;
 
 			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(DeletePost), deleteInputVM.TodoListId, nameof(deleteInputVM.TodoListId), _logger);
 			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(DeletePost), deleteInputVM.Id, nameof(deleteInputVM.Id), _logger);
 
-			ITaskDeleteInputDto deleteInputDto = _taskEntityMapper.TransferToDto(deleteInputVM);
+			TaskDeleteInputDto deleteInputDto = _taskEntityMapper.TransferToDto(deleteInputVM);
 
 			if (ModelState.IsValid)
 			{

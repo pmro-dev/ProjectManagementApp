@@ -10,7 +10,6 @@ using App.Features.TodoLists.Common;
 using App.Features.Users.Logout;
 using App.Features.Tasks.Common;
 using App.Features.Users.Common;
-using App.Features.Boards.Interfaces;
 using App.Features.Users.Common.Claims;
 using App.Infrastructure;
 using App.Features.Users.Login;

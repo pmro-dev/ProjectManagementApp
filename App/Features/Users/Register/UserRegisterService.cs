@@ -30,7 +30,7 @@ public class UserRegisterService : IUserRegisterService
 		_mapper = mapper;
 	}
 
-	public async Task<bool> RegisterAsync(IUserDto userDto)
+	public async Task<bool> RegisterAsync(UserDto userDto)
 	{
 		bool isUsernameUnavailableToRegister = !await CheckIsUsernameAvailable(userDto.Username);
 
@@ -39,11 +39,11 @@ public class UserRegisterService : IUserRegisterService
 		userDto.Provider = AuthenticationConsts.DefaultScheme;
 		await SetRoles(userDto);
 
-		IUserModel userModel = _mapper.Map<IUserModel>(userDto);
+		UserModel userModel = _mapper.Map<UserModel>(userDto);
 
 		try
 		{
-			await _userRepository.AddAsync((UserModel)userModel);
+			await _userRepository.AddAsync(userModel);
 			await _identityUnitOfWork.SaveChangesAsync();
 			return true;
 		}
@@ -68,17 +68,17 @@ public class UserRegisterService : IUserRegisterService
 		return true;
 	}
 
-	private async Task SetRoles(IUserDto userDto)
+	private async Task SetRoles(UserDto userDto)
 	{
 		RoleModel? roleForNewUser = await _roleRepository.GetByFilterAsync(role => role.Name == _defaultRole);
 
 		if (roleForNewUser is null)
 		{
-			_logger.LogCritical(MessagesPacket.LogCriticalErrorRoleNotFoundInDb, nameof(SetRoles), nameof(roleForNewUser), _defaultRole);
-			throw new InvalidOperationException(MessagesPacket.RoleNotFoundInDb(nameof(roleForNewUser), _defaultRole));
+			_logger.LogCritical(MessagesPacket.LogCriticalErrorRoleNotFoundInDb, nameof(SetRoles), _defaultRole);
+			throw new InvalidOperationException(MessagesPacket.RoleNotFoundInDb(nameof(SetRoles), _defaultRole));
 		}
 
-		var roleDto = _mapper.Map<IRoleDto>(roleForNewUser);
+		var roleDto = _mapper.Map<RoleDto>(roleForNewUser);
 
 		var userRoleDto = _userFactory.CreateUserRoleDto();
 		userRoleDto.UserId = userDto.UserId;

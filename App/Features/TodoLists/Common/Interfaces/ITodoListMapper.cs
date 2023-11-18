@@ -1,15 +1,15 @@
 ﻿using App.Features.TodoLists.Common.Models;
-using App.Features.TodoLists.Create.Interfaces;
-using App.Features.TodoLists.Edit.Interfaces;
+using App.Features.TodoLists.Create;
+using App.Features.TodoLists.Edit;
 
 namespace App.Features.TodoLists.Common.Interfaces;
 
 public interface ITodoListMapper
 {
-	ICollection<ITodoListDto> TransferToDto(ICollection<TodoListModel> todoLists);
-	ITodoListDto TransferToDto(ITodoListModel todoListModel, IDictionary<object, object>? mappedObjects = null);
-	ITodoListDto TransferToDto(ITodoListCreateInputVM createInputVM);
-	ITodoListEditInputDto TransferToDto(ITodoListEditInputVM editInputVM);
-	TodoListModel TransferToModel(ITodoListDto todoListDto, IDictionary<object, object>? mappedObjects = null);
-	void UpdateModel(TodoListModel todoListDbModel, ITodoListEditInputDto taskEditInputDto);
+	ICollection<TodoListDto> TransferToDto(ICollection<TodoListModel> todoLists);
+	TodoListDto TransferToDto(TodoListModel todoListModel, IDictionary<object, object>? mappedObjects = null);
+	TodoListDto TransferToDto(TodoListCreateInputVM createInputVM);
+	TodoListEditInputDto TransferToDto(TodoListEditInputVM editInputVM);
+	TodoListModel TransferToModel(TodoListDto todoListDto, IDictionary<object, object>? mappedObjects = null);
+	void UpdateModel(TodoListModel todoListDbModel, TodoListEditInputDto taskEditInputDto);
 }

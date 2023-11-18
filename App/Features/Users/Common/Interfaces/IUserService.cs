@@ -1,4 +1,4 @@
-﻿using App.Features.Users.Interfaces;
+﻿using App.Features.Users.Common.Models;
 using System.Security.Claims;
 
 namespace App.Features.Users.Common.Interfaces;
@@ -7,9 +7,9 @@ public interface IUserService
 {
 	string GetSignedInUserId();
 
-    Task UpdateUserAsync(IUserDto userBasedOnProviderClaimsDto, Claim authSchemeClaimWithProviderName);
+    Task UpdateUserInDbAsync(UserDto userBasedOnProviderDataDto, Claim authenticationSchemeClaim);
 
-    Task AddUserAsync(IUserDto userDto);
+    Task AddNewUserToDbAsync(UserDto userDto);
 
-    Task SetRolesForUserPrincipleAsync(string userId, ClaimsIdentity principle);
+    Task SetRolesForUserPrincipleAsync(string userId, ClaimsIdentity identity);
 }

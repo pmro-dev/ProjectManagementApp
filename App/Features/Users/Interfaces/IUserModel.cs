@@ -1,8 +1,9 @@
-﻿using App.Features.Users.Common.Roles;
+﻿using App.Features.Users.Common.Models;
+using App.Features.Users.Common.Roles;
 
 namespace App.Features.Users.Interfaces;
 
-public interface IUserModel : IEquatable<IUserModel>
+public interface IUserModel : IEquatable<UserModel>
 {
 	string DataVersion { get; set; }
 	string Email { get; set; }
@@ -13,5 +14,5 @@ public interface IUserModel : IEquatable<IUserModel>
 	string Provider { get; set; }
 	string UserId { get; set; }
 	string Username { get; set; }
-	ICollection<IUserRoleModel> UserRoles { get; set; }
+	ICollection<UserRoleModel> UserRoles { get; set; }
 }

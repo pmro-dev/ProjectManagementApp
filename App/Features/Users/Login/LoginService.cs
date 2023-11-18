@@ -1,7 +1,7 @@
 ﻿using App.Common.Helpers;
-using App.Features.Users.Authentication;
+using App.Features.Users.Authentication.Interfaces;
 using App.Features.Users.Common.Claims;
-using App.Features.Users.Interfaces;
+using App.Features.Users.Common.Models;
 using App.Features.Users.Login.Interfaces;
 using App.Infrastructure.Databases.Identity.Interfaces;
 using AutoMapper;
@@ -35,18 +35,18 @@ public class LoginService : ILoginService
 		_mapper = mapper;
 	}
 
-	public async Task<bool> CheckIsUserAlreadyRegisteredAsync(ILoginInputDto loginInputDto)
+	public async Task<bool> CheckIsUserAlreadyRegisteredAsync(LoginInputDto loginInputDto)
 	{
 		return await _userRepository.ContainsAny(dbUser => dbUser.Username == loginInputDto.Username && dbUser.Password == loginInputDto.Password);
 	}
 
-	public async Task<bool> LogInUserAsync(ILoginInputDto loginInputDto)
+	public async Task<bool> LogInUserAsync(LoginInputDto loginInputDto)
 	{
-		IUserModel? loggingUserModel = await _userRepository.GetByNameAndPasswordAsync(loginInputDto.Username, loginInputDto.Password);
+		UserModel? loggingUserModel = await _userRepository.GetByNameAndPasswordAsync(loginInputDto.Username, loginInputDto.Password);
 
 		if (loggingUserModel is null) return false;
 
-		IUserDto userDto = _mapper.Map<IUserDto>(loggingUserModel);
+		UserDto userDto = _mapper.Map<UserDto>(loggingUserModel);
 
 		ClaimsPrincipal userPrincipal = _claimsService.CreateUserClaimsPrincipal(userDto);
 		AuthenticationProperties authProperties = _userAuthenticationService.CreateDefaultAuthProperties();

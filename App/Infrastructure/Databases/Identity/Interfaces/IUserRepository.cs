@@ -1,6 +1,5 @@
 ﻿using App.Features.Users.Common.Models;
 using App.Features.Users.Common.Roles;
-using App.Features.Users.Interfaces;
 using App.Infrastructure.Databases.Common.Interfaces;
 
 namespace App.Infrastructure.Databases.Identity.Interfaces;
@@ -19,7 +18,7 @@ public interface IUserRepository : IGenericRepository<UserModel>
 	/// <exception cref="ArgumentNullException"></exception>
 	/// <exception cref="InvalidOperationException"></exception>
 	/// <exception cref="OperationCanceledException"></exception>
-	Task<IUserModel?> GetWithDetailsAsync(string userId);
+	Task<UserModel?> GetWithDetailsAsync(string userId);
 
 	/// <summary>
 	/// Get a specific User by User Login and Password from Db.
@@ -30,7 +29,7 @@ public interface IUserRepository : IGenericRepository<UserModel>
 	/// <exception cref="ArgumentNullException"></exception>
 	/// <exception cref="InvalidOperationException"></exception>
 	/// <exception cref="OperationCanceledException"></exception>
-	Task<IUserModel?> GetByNameAndPasswordAsync(string userLogin, string userPassword);
+	Task<UserModel?> GetByNameAndPasswordAsync(string userLogin, string userPassword);
 
 	/// <summary>
 	/// Check that any UserLogin with the same name already exists.
@@ -40,9 +39,17 @@ public interface IUserRepository : IGenericRepository<UserModel>
 	Task<bool> IsNameTakenAsync(string userName);
 
 	/// <summary>
+	/// Check that any user with same email already exists.
+	/// </summary>
+	/// <param name="userEmail">User email to check.</param>
+	/// <returns>True when account for such email already exists, false otherwise.</returns>
+	Task<bool> IsAccountExistedAsync(string userEmail);
+
+
+	/// <summary>
 	/// Get roles of a specific user.
 	/// </summary>
 	/// <param name="userId">Targeted User id.</param>
 	/// <returns>Set of roles of targeted User.</returns>
-	Task<ICollection<IRoleModel>> GetRolesAsync(string userId);
+	Task<ICollection<RoleModel>> GetRolesAsync(string userId);
 }

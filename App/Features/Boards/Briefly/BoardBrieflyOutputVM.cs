@@ -1,7 +1,6 @@
-﻿using App.Features.Boards.Interfaces;
+﻿using App.Features.Boards.Briefly;
 using App.Features.Tasks.Common;
-using App.Features.Tasks.Common.Interfaces;
-using App.Features.TodoLists.Common.Interfaces;
+using App.Features.TodoLists.Common.Models;
 
 namespace App.Features.Boards.ShowBriefly;
 
@@ -12,14 +11,14 @@ public class BoardBrieflyOutputVM : IBoardBrieflyOutputVM
 {
 	private readonly int ValueIndicatesEquality = 0;
 
-	public ICollection<ITodoListDto> TodoLists { get; set; } = new List<ITodoListDto>();
+	public ICollection<TodoListDto> TodoLists { get; set; } = new List<TodoListDto>();
 
 	/// <summary>
 	/// Get completed tasks count.
 	/// </summary>
 	/// <param name="todoList">Targeted ToDoList oobject.</param>
 	/// <returns>Completed Tasks number.</returns>
-	public int GetNumberOfCompletedTasks(ITodoListDto todoList)
+	public int GetNumberOfCompletedTasks(TodoListDto todoList)
 	{
 		return todoList.Tasks.Count(t => t.Status == TaskStatusHelper.TaskStatusType.Completed);
 	}
@@ -29,7 +28,7 @@ public class BoardBrieflyOutputVM : IBoardBrieflyOutputVM
 	/// </summary>
 	/// <param name="todoList">Targeted ToDoList oobject.</param>
 	/// <returns>All Tasks count in a specific ToDoList.</returns>
-	public int GetNumberOfAllTasks(ITodoListDto todoList)
+	public int GetNumberOfAllTasks(TodoListDto todoList)
 	{
 		return todoList.Tasks.Count;
 	}
@@ -39,7 +38,7 @@ public class BoardBrieflyOutputVM : IBoardBrieflyOutputVM
 	/// </summary>
 	/// <param name="todoList">Targeted ToDoList object.</param>
 	/// <returns>True when ToDoList has any Task's reminder, otherwise false.</returns>
-	public bool IsReminderForToday(ITodoListDto todoList)
+	public bool IsReminderForToday(TodoListDto todoList)
 	{
 		return todoList.Tasks.Any(t =>
 		{
@@ -60,7 +59,7 @@ public class BoardBrieflyOutputVM : IBoardBrieflyOutputVM
 		return fistDate.CompareTo(secondDate) == ValueIndicatesEquality;
 	}
 
-	private static bool IsTaskNotCompleted(ITaskDto task)
+	private static bool IsTaskNotCompleted(TaskDto task)
 	{
 		return task.Status != TaskStatusHelper.TaskStatusType.Completed;
 	}

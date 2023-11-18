@@ -1,5 +1,4 @@
-﻿using App.Common;
-using App.Features.Tasks.Common.Interfaces;
+﻿using App.Features.Tasks.Common;
 using App.Features.TodoLists.Common.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
@@ -34,7 +33,7 @@ public class TodoListModel : ITodoListModel
 	/// <summary>
 	/// Gets or Sets
 	/// </summary>
-	public ICollection<ITaskModel> Tasks { get; set; } = new List<ITaskModel>();
+	public ICollection<TaskModel> Tasks { get; set; } = new List<TaskModel>();
 
 	/// <summary>
 	/// Compares properties of two To Do Lists and return result of that compare.
@@ -49,7 +48,7 @@ public class TodoListModel : ITodoListModel
 		}
 		else
 		{
-			var todoList = (ITodoListModel)obj;
+			var todoList = (TodoListModel)obj;
 
 			if (Title == todoList.Title)
 			{
@@ -81,7 +80,7 @@ public class TodoListModel : ITodoListModel
 	/// </summary>
 	/// <param name="obj">Second To Do List compare to.</param>
 	/// <returns>Result of compare -> true if Names of objects, tasks numbers and ids are equal, otherwise false.</returns>
-	public bool IsTheSame(ITodoListModel obj)
+	public bool IsTheSame(TodoListModel obj)
 	{
 		if (obj == null || !GetType().Equals(obj.GetType()))
 		{

@@ -1,7 +1,6 @@
 ﻿using App.Features.Users.Authentication;
 using App.Features.Users.Common.Models;
 using App.Features.Users.Common.Roles;
-using App.Features.Users.Interfaces;
 using App.Infrastructure.Databases.Identity.Interfaces;
 using MethodTimer;
 using System.Text;
@@ -102,7 +101,7 @@ public static class IdentitySeedData
 
 		if (!await roleRepository.ContainsAny())
 		{
-			List<RoleModel> defaultRoles = new();
+			ICollection<RoleModel> defaultRoles = new List<RoleModel>();
 			StringBuilder idBuilder = new();
 
 			foreach (KeyValuePair<string, string> pair in BasicRoles)
@@ -139,9 +138,9 @@ public static class IdentitySeedData
 		IUserRepository userRepository = identityUnitOfWork.UserRepository;
 		IRoleRepository roleRepository = identityUnitOfWork.RoleRepository;
 
-		IUserModel? adminUser = await userRepository.GetWithDetailsAsync(AdminId);
+		UserModel? adminUser = await userRepository.GetWithDetailsAsync(AdminId);
 		string roleId = string.Concat(AdminRoleName.ToLower(), RoleIdSuffix);
-		IRoleModel? roleForAdmin = await roleRepository.GetAsync(roleId);
+		RoleModel? roleForAdmin = await roleRepository.GetAsync(roleId);
 
 		if (adminUser != null && !adminUser.UserRoles.Any() && roleForAdmin != null)
 		{

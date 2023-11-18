@@ -1,5 +1,4 @@
-﻿using App.Features.Users.Common;
-using App.Features.Users.Common.Roles;
+﻿using App.Features.Users.Common.Roles;
 using App.Features.Users.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
@@ -43,14 +42,14 @@ public sealed class UserModel : IUserModel
 	[MaxLength(UserAttributesHelper.LastNameMaxLength)]
 	public string LastName { get; set; } = string.Empty;
 
-	public ICollection<IUserRoleModel> UserRoles { get; set; } = new List<IUserRoleModel>();
+	public ICollection<UserRoleModel> UserRoles { get; set; } = new List<UserRoleModel>();
 
 	public override bool Equals(object? obj)
 	{
 		if (obj == null || !GetType().Equals(obj.GetType())) { return false; }
 		else
 		{
-			var user = (IUserModel)obj;
+			var user = (UserModel)obj;
 			return NameIdentifier == user.NameIdentifier &&
 				Provider == user.Provider &&
 				Username == user.Username &&
@@ -60,7 +59,7 @@ public sealed class UserModel : IUserModel
 		}
 	}
 
-	public bool Equals(IUserModel? other)
+	public bool Equals(UserModel? other)
 	{
 		if (other == null || !GetType().Equals(other.GetType())) { return false; }
 		else

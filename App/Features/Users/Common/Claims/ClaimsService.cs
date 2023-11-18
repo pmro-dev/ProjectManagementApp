@@ -1,5 +1,5 @@
-﻿using App.Features.Users.Common.Roles;
-using App.Features.Users.Interfaces;
+﻿using App.Features.Users.Common.Models;
+using App.Features.Users.Common.Roles;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 
@@ -7,7 +7,7 @@ namespace App.Features.Users.Common.Claims;
 
 public class ClaimsService : IClaimsService
 {
-    public ClaimsPrincipal CreateUserClaimsPrincipal(IUserDto userDto)
+    public ClaimsPrincipal CreateUserClaimsPrincipal(UserDto userDto)
 	{
 		var userClaims = CreateUserClaims(userDto);
 
@@ -20,7 +20,7 @@ public class ClaimsService : IClaimsService
 
 	#region LOCAL METHODS
 
-	private static IEnumerable<Claim> CreateUserClaims(IUserDto userDto)
+	private static IEnumerable<Claim> CreateUserClaims(UserDto userDto)
 	{
 		var basicClaimsCount = 5;
 		var userRolesCount = userDto.UserRoles.Count;
@@ -40,7 +40,7 @@ public class ClaimsService : IClaimsService
 		return userClaims;
 	}
 
-	private static void AddRolesToUserClaims(ICollection<Claim> userClaims, IEnumerable<IUserRoleDto> userRolesDto)
+	private static void AddRolesToUserClaims(ICollection<Claim> userClaims, IEnumerable<UserRoleDto> userRolesDto)
 	{
 		foreach (var userRole in userRolesDto)
 		{

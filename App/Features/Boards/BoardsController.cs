@@ -1,4 +1,6 @@
-﻿using App.Features.Boards.Interfaces;
+﻿using App.Features.Boards.Common;
+using App.Features.Boards.ShowAll;
+using App.Features.Boards.ShowBriefly;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Interfaces;
@@ -9,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace App.Features.Boards
 {
-	public class BoardsController : Controller
+    public class BoardsController : Controller
 	{
 		private readonly IBoardViewModelsFactory _boardsVMFactory;
 		private readonly ITodoListMapper _todoListMapper;
@@ -31,7 +33,7 @@ namespace App.Features.Boards
 		[HttpGet]
 		[Route(CustomRoutes.MainBoardRoute)]
 		[Authorize]
-		public async Task<ActionResult<IBoardBrieflyOutputVM>> Briefly()
+		public async Task<ActionResult<BoardBrieflyOutputVM>> Briefly()
 		{
 			ICollection<TodoListModel> todoListModels = await _todoListRepository.GetAllWithDetailsByFilterAsync(todoList => todoList.UserId == _signedInUserId);
 			var todoListDtos = _todoListMapper.TransferToDto(todoListModels);
@@ -50,7 +52,7 @@ namespace App.Features.Boards
 		/// </returns>
 		[HttpGet]
 		[Route(CustomRoutes.AllDetailsRoute)]
-		public async Task<ActionResult<IBoardAllOutputVM>> All()
+		public async Task<ActionResult<BoardAllOutputVM>> All()
 		{
 			var todoListModels = await _todoListRepository.GetAllWithDetailsAsync(_signedInUserId);
 			var todoListDtos = _todoListMapper.TransferToDto(todoListModels);

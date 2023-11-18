@@ -1,6 +1,4 @@
-﻿using App.Features.Tasks.Common.Interfaces;
-using App.Features.TodoLists.Common.Interfaces;
-using System.Globalization;
+﻿using System.Globalization;
 using App.Features.Tasks.Common;
 using App.Features.TodoLists.Common.Models;
 using App.Common.Helpers;
@@ -17,22 +15,22 @@ public class SeedData : ISeedData
 	public string AdminId { get; } = "adminId";
 
 	///<inheritdoc />
-	public ICollection<ITaskModel> AllTasks { get; set; }
+	public ICollection<TaskModel> AllTasks { get; set; }
 
 	///<inheritdoc />
-	public ICollection<ITodoListModel> TodoLists { get; set; }
+	public ICollection<TodoListModel> TodoLists { get; set; }
 
 	///<inheritdoc />
-	public ICollection<ITaskModel> TasksUX { get; set; }
+	public ICollection<TaskModel> TasksUX { get; set; }
 
 	///<inheritdoc />
-	public ICollection<ITaskModel> TasksBackend { get; set; }
+	public ICollection<TaskModel> TasksBackend { get; set; }
 
 	///<inheritdoc />
-	public ICollection<ITaskModel> TasksTesting { get; set; }
+	public ICollection<TaskModel> TasksTesting { get; set; }
 
 	///<inheritdoc />
-	public ICollection<ITaskModel> TasksProjectManagement { get; set; }
+	public ICollection<TaskModel> TasksProjectManagement { get; set; }
 
 	/// <summary>
 	/// Seeds the data to properties.
@@ -55,7 +53,7 @@ public class SeedData : ISeedData
 
 	private void SeedTasks()
 	{
-		TasksUX = new List<ITaskModel>()
+		TasksUX = new List<TaskModel>()
 		{
 			new TaskModel{
 				Title = "New Top Bar",
@@ -83,7 +81,7 @@ public class SeedData : ISeedData
 			},
 		};
 
-		TasksBackend = new List<ITaskModel>()
+		TasksBackend = new List<TaskModel>()
 		{
 			new TaskModel{
 				Title = "Add Authentication",
@@ -111,7 +109,7 @@ public class SeedData : ISeedData
 			},
 		};
 
-		TasksTesting = new List<ITaskModel>()
+		TasksTesting = new List<TaskModel>()
 		{
 			new TaskModel{
 				Title = "Integration Tests",
@@ -138,7 +136,7 @@ public class SeedData : ISeedData
 				UserId = AdminId
 			},
 		};
-		TasksProjectManagement = new List<ITaskModel>()
+		TasksProjectManagement = new List<TaskModel>()
 		{
 			new TaskModel{
 				Title = "Project Opportunities",
@@ -169,7 +167,7 @@ public class SeedData : ISeedData
 
 	private void SeedTodoLists()
 	{
-		TodoLists = new List<ITodoListModel>()
+		TodoLists = new List<TodoListModel>()
 		{
 			new TodoListModel{
 				Title = "App UX",
@@ -196,7 +194,7 @@ public class SeedData : ISeedData
 
 	private void SeedAllTasks()
 	{
-		AllTasks = new List<ITaskModel>();
+		AllTasks = new List<TaskModel>();
 
 		Parallel.ForEach(TasksUX, taskModel => AllTasks.Add(taskModel));
 		Parallel.ForEach(TasksBackend, taskModel => AllTasks.Add(taskModel));

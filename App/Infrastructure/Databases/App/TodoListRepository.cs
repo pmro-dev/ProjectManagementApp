@@ -1,5 +1,6 @@
-﻿using App.Features.Tasks.Common.Interfaces;
-using App.Features.Tasks.Common.TaskTags.Common.Interfaces;
+﻿using App.Features.Tasks.Common;
+using App.Features.Tasks.Common.Interfaces;
+using App.Features.Tasks.Common.TaskTags.Common;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
 using App.Infrastructure.Databases.App.Interfaces;
@@ -18,7 +19,8 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	private readonly ITaskEntityFactory _taskEntityFactory;
 	private readonly ITodoListFactory _todoListFactory;
 
-	public TodoListRepository(CustomAppDbContext dbContext, ILogger<TodoListRepository> logger, ITaskEntityFactory taskEntityFactory, ITodoListFactory todoListFactory) : base(dbContext, logger)
+	public TodoListRepository(CustomAppDbContext dbContext, ILogger<TodoListRepository> logger, ITaskEntityFactory taskEntityFactory, ITodoListFactory todoListFactory) 
+		: base(dbContext, logger)
 	{
 		_dbContext = dbContext;
 		_logger = logger;
@@ -40,25 +42,25 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	{
 		ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(DuplicateWithDetailsAsync), todoListId, nameof(todoListId), _logger);
 
-		ITodoListModel? todoListWithDetails = await _dbContext
+		TodoListModel? todoListWithDetails = await _dbContext
 			.Set<TodoListModel>()
 			.Where(todoList => todoList.Id == todoListId)
 			.Include(todoList => todoList.Tasks)
 			.SingleOrDefaultAsync();
 
 		if (todoListWithDetails is null)
-			ExceptionsService.ThrowEntityNotFoundInDb(nameof(DuplicateWithDetailsAsync), typeof(ITodoListModel).Name, todoListId.ToString(), _logger);
+			ExceptionsService.ThrowEntityNotFoundInDb(nameof(DuplicateWithDetailsAsync), typeof(TodoListModel).Name, todoListId.ToString(), _logger);
 
 		var duplicatedTasks = todoListWithDetails!.Tasks.Select(originTask => CreateNewTaskObject(originTask)).ToList();
 		var duplicatedTodoList = CreateNewTodoListObject(todoListWithDetails, duplicatedTasks);
 		
-		await AddAsync((TodoListModel)duplicatedTodoList);
+		await AddAsync(duplicatedTodoList);
 	}
 
 
 	#region LOCAL FUNCTIONS FOR DUPLICATE OPERATION
 
-	private ITaskModel CreateNewTaskObject(ITaskModel originTask)
+	private TaskModel CreateNewTaskObject(TaskModel originTask)
 	{
 		var newTask = _taskEntityFactory.CreateModel();
 		newTask.UserId = originTask.UserId;
@@ -73,7 +75,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 		return newTask;
 	}
 
-	private ITaskTagModel CreateNewTaskTagObject(ITaskTagModel originTaskTag)
+	private TaskTagModel CreateNewTaskTagObject(TaskTagModel originTaskTag)
 	{
 		var newTaskTag = _taskEntityFactory.CreateTaskTagModel();
 		newTaskTag.TagId = originTaskTag.TagId;
@@ -82,7 +84,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 		return newTaskTag;
 	}
 
-	private ITodoListModel CreateNewTodoListObject(ITodoListModel originTodoList, ICollection<ITaskModel> newTasks)
+	private TodoListModel CreateNewTodoListObject(TodoListModel originTodoList, ICollection<TaskModel> newTasks)
 	{
 		TodoListModel newTodoList = _todoListFactory.CreateModel();
 		newTodoList.Title = originTodoList.Title;

@@ -1,4 +1,5 @@
 ﻿using App.Common.Helpers;
+using App.Features.Users.Authentication.Interfaces;
 using App.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

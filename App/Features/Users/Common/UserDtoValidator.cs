@@ -1,10 +1,10 @@
-﻿using App.Features.Users.Interfaces;
+﻿using App.Features.Users.Common.Models;
 
 namespace App.Features.Users.Common;
 
 public static class UserDtoValidator
 {
-	public static bool ValidData(IUserDto userDto)
+	public static bool ValidData(UserDto userDto)
 	{
 		return !(string.IsNullOrEmpty(userDto.Username) ||
 			string.IsNullOrEmpty(userDto.FirstName) ||

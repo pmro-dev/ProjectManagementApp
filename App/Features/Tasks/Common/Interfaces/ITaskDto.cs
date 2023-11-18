@@ -1,5 +1,5 @@
-﻿using App.Features.Tasks.Common.TaskTags.Common.Interfaces;
-using App.Features.TodoLists.Common.Interfaces;
+﻿using App.Features.Tasks.Common.TaskTags.Common;
+using App.Features.TodoLists.Common.Models;
 using static App.Features.Tasks.Common.TaskStatusHelper;
 
 namespace App.Features.Tasks.Common.Interfaces;
@@ -24,9 +24,9 @@ public interface ITaskDto
 
 	public int TodoListId { get; set; }
 
-	public ITodoListDto? TodoList { get; set; }
+	public TodoListDto? TodoList { get; set; }
 
 	public string UserId { get; set; }
 
-	public ICollection<ITaskTagDto> TaskTags { get; set; }
+	public ICollection<TaskTagDto> TaskTags { get; set; }
 }

@@ -9,7 +9,7 @@ public class TaskSelector : ITaskSelector
 	private const string _dataValueField = "Value";
 	private const string _dataTextField = "Text";
 
-	public SelectList Create(ITaskDto taskDto)
+	public SelectList Create(TaskDto taskDto)
 	{
 		var statusTypesForSelector = Enum.GetValues(typeof(TaskStatusType))
 				.Cast<TaskStatusType>()

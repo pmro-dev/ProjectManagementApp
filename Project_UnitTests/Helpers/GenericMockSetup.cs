@@ -1,4 +1,4 @@
-﻿using App.Common;
+﻿using App.Common.Interfaces;
 using App.Infrastructure.Databases.App;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -19,7 +19,7 @@ public static class GenericMockSetup<IModel, TModel> where TModel : class, IMode
             }).ReturnsAsync(1);
     }
 
-    public static async Task SetupAddEntity(TModel assertEntity, List<IModel> AllEntities, Mock<DbSet<TModel>> DbSetTaskMock, List<Action> DbOperationsToExecute)
+    public static async Task SetupAddEntity(TModel assertEntity, List<TModel> AllEntities, Mock<DbSet<TModel>> DbSetTaskMock, List<Action> DbOperationsToExecute)
     {
         await Task.Run(() =>
         {
@@ -33,7 +33,7 @@ public static class GenericMockSetup<IModel, TModel> where TModel : class, IMode
         });
     }
 
-    public static async Task SetupAddEntitiesRange(List<TModel> range, List<IModel> AllEntities, Mock<DbSet<TModel>> DbSetEntityMock, List<Action> DbOperationsToExecute)
+    public static async Task SetupAddEntitiesRange(List<TModel> range, List<TModel> AllEntities, Mock<DbSet<TModel>> DbSetEntityMock, List<Action> DbOperationsToExecute)
     {
         await Task.Run(() =>
         {
@@ -47,7 +47,7 @@ public static class GenericMockSetup<IModel, TModel> where TModel : class, IMode
         });
     }
 
-    public static async Task SetupGetEntity(int assertEntityId, Mock<DbSet<TModel>> DbSetEntityMock, List<IModel> AllEntities)
+    public static async Task SetupGetEntity(int assertEntityId, Mock<DbSet<TModel>> DbSetEntityMock, List<TModel> AllEntities)
     {
         await Task.Run(() =>
         {
@@ -55,7 +55,7 @@ public static class GenericMockSetup<IModel, TModel> where TModel : class, IMode
         });
     }
 
-    public static async Task SetupUpdateEntity(TModel entityToUpdate, Mock<DbSet<TModel>> DbSetEntityMock, List<IModel> AllEntities, List<Action> DbOperationsToExecute)
+    public static async Task SetupUpdateEntity(TModel entityToUpdate, Mock<DbSet<TModel>> DbSetEntityMock, List<TModel> AllEntities, List<Action> DbOperationsToExecute)
     {
         await Task.Run(() =>
         {
@@ -73,7 +73,7 @@ public static class GenericMockSetup<IModel, TModel> where TModel : class, IMode
         });
     }
 
-    public static async Task SetupDeleteEntity(TModel entityToRemove, Mock<DbSet<TModel>> DbSetEntityMock, List<IModel> AllEntities, List<Action> DbOperationsToExecute)
+    public static async Task SetupDeleteEntity(TModel entityToRemove, Mock<DbSet<TModel>> DbSetEntityMock, List<TModel> AllEntities, List<Action> DbOperationsToExecute)
     {
         await Task.Run(() =>
         {

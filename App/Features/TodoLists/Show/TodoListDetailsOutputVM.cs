@@ -1,4 +1,4 @@
-﻿using App.Features.Tasks.Common.Interfaces;
+﻿using App.Features.Tasks.Common;
 using App.Features.TodoLists.Show.Interfaces;
 
 namespace App.Features.TodoLists.Show;
@@ -14,8 +14,8 @@ public class TodoListDetailsOutputVM : ITodoListDetailsOutputVM
 
 	public string UserId { get; set; } = string.Empty;
 
-	public IEnumerable<ITaskDto> TasksForToday { get; set; } = new List<ITaskDto>();
-	public IEnumerable<ITaskDto> TasksCompleted { get; set; } = new List<ITaskDto>();
-	public IEnumerable<ITaskDto> TasksNotCompleted { get; set; } = new List<ITaskDto>();
-	public IEnumerable<ITaskDto> TasksExpired { get; set; } = new List<ITaskDto>();
+	public IEnumerable<TaskDto> TasksForToday { get; set; } = new List<TaskDto>();
+	public IEnumerable<TaskDto> TasksCompleted { get; set; } = new List<TaskDto>();
+	public IEnumerable<TaskDto> TasksNotCompleted { get; set; } = new List<TaskDto>();
+	public IEnumerable<TaskDto> TasksExpired { get; set; } = new List<TaskDto>();
 }

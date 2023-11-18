@@ -24,10 +24,10 @@ public class BaseOperationsSetup
 {
 	#region PROPERTIES
 
-	protected static List<ITaskModel> TasksCollection { get; set; }
-	protected List<ITaskModel> DefaultTasksCollection { get; set; }
-	protected static List<ITodoListModel> TodoListsCollection { get; set; }
-	protected List<ITodoListModel> DefaultTodoListsCollection { get; set; }
+	protected static List<TaskModel> TasksCollection { get; set; }
+	protected List<TaskModel> DefaultTasksCollection { get; set; }
+	protected static List<TodoListModel> TodoListsCollection { get; set; }
+	protected List<TodoListModel> DefaultTodoListsCollection { get; set; }
 	protected Mock<DbSet<TaskModel>> DbSetTaskMock { get; set; }
 	protected Mock<DbSet<TodoListModel>> DbSetTodoListMock { get; set; }
 	protected Mock<ILogger<TodoListRepository>> TodoListRepoLoggerMock { get; set; }
@@ -105,14 +105,14 @@ public class BaseOperationsSetup
 
 	private void SetupDefaultDataForCollections()
 	{
-		TasksCollection = new List<ITaskModel>(DefaultTasksCollection);
-		TodoListsCollection = new List<ITodoListModel>(DefaultTodoListsCollection);
+		TasksCollection = new List<TaskModel>(DefaultTasksCollection);
+		TodoListsCollection = new List<TodoListModel>(DefaultTodoListsCollection);
 	}
 
 	private void SetupUnitOfWorkMocks()
 	{
-		DbSetTaskMock = TasksCollection.Cast<TaskModel>().AsQueryable().BuildMockDbSet();
-		DbSetTodoListMock = TodoListsCollection.Cast<TodoListModel>().AsQueryable().BuildMockDbSet();
+		DbSetTaskMock = TasksCollection.AsQueryable().BuildMockDbSet();
+		DbSetTodoListMock = TodoListsCollection.AsQueryable().BuildMockDbSet();
 		Mock<CustomAppDbContext> dbContextMock = new();
 
 		dbContextMock.Setup(context => context.Set<TaskModel>())

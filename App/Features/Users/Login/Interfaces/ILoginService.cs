@@ -2,6 +2,6 @@
 
 public interface ILoginService
 {
-	Task<bool> CheckIsUserAlreadyRegisteredAsync(ILoginInputDto loginInputDto);
-	Task<bool> LogInUserAsync(ILoginInputDto loginInputDto);
+	Task<bool> CheckIsUserAlreadyRegisteredAsync(LoginInputDto loginInputDto);
+	Task<bool> LogInUserAsync(LoginInputDto loginInputDto);
 }

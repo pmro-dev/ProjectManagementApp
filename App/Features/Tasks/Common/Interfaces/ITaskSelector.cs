@@ -4,5 +4,5 @@ namespace App.Features.Tasks.Common.Interfaces;
 
 public interface ITaskSelector
 {
-	SelectList Create(ITaskDto taskDto);
+	SelectList Create(TaskDto taskDto);
 }

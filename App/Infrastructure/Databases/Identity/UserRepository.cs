@@ -1,6 +1,5 @@
 ﻿using App.Features.Users.Common.Models;
 using App.Features.Users.Common.Roles;
-using App.Features.Users.Interfaces;
 using App.Infrastructure.Databases.Common;
 using App.Infrastructure.Databases.Identity.Interfaces;
 using App.Infrastructure.Helpers;
@@ -22,7 +21,7 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 	}
 
 	///<inheritdoc />
-	public async Task<IUserModel?> GetWithDetailsAsync(string userId)
+	public async Task<UserModel?> GetWithDetailsAsync(string userId)
 	{
 		ExceptionsService.ThrowWhenArgumentIsInvalid(nameof(GetWithDetailsAsync), userId, nameof(userId), _logger);
 
@@ -36,7 +35,7 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 	}
 
 	///<inheritdoc />
-	public async Task<IUserModel?> GetByNameAndPasswordAsync(string userLogin, string userPassword)
+	public async Task<UserModel?> GetByNameAndPasswordAsync(string userLogin, string userPassword)
 	{
 		ExceptionsService.ThrowExceptionWhenArgumentIsNullOrEmpty(nameof(GetByNameAndPasswordAsync), userLogin, nameof(userLogin), _logger);
 		ExceptionsService.ThrowExceptionWhenArgumentIsNullOrEmpty(nameof(GetByNameAndPasswordAsync), userPassword, nameof(userPassword), _logger);
@@ -60,12 +59,23 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 		return result;
 	}
 
+	public async Task<bool> IsAccountExistedAsync(string userEmail)
+	{
+		ExceptionsService.ThrowWhenArgumentIsInvalid(nameof(IsAccountExistedAsync), userEmail, nameof(userEmail), _logger);
+
+		bool result = await _identityContext
+			.Set<UserModel>()
+			.AnyAsync(user => user.Email == userEmail);
+
+		return result;
+	}
+
 	///<inheritdoc />
-	public async Task<ICollection<IRoleModel>> GetRolesAsync(string userId)
+	public async Task<ICollection<RoleModel>> GetRolesAsync(string userId)
 	{
 		ExceptionsService.ThrowWhenArgumentIsInvalid(nameof(GetRolesAsync), userId, nameof(userId), _logger);
 
-		ICollection<IRoleModel> userRoles = await _identityContext
+		ICollection<RoleModel> userRoles = await _identityContext
 			.Set<UserRoleModel>()
 			.Where(user => user.UserId == userId)
 			.Select(user => user.Role)

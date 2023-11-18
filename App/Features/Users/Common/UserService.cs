@@ -1,4 +1,3 @@
-﻿using App.Common.Helpers;
 using App.Features.Users.Common.Interfaces;
 using App.Features.Users.Common.Models;
 using App.Features.Users.Common.Roles;
@@ -34,23 +33,21 @@ public class UserService : IUserService
         _mapper = mapper;
     }
 
-    public async Task AddUserAsync(IUserDto userDto)
+	public async Task AddNewUserToDbAsync(UserDto userDto)
     {
-        IRoleModel? roleModel = await _roleRepository.GetByFilterAsync(r => r.Name == IdentitySeedData.DefaultRole);
+		RoleModel? roleModel = await _roleRepository.GetByFilterAsync(r => r.Name == IdentitySeedData.DefaultRole);
+		ExceptionsService.ThrowWhenRoleNotFoundInDb(nameof(AddNewUserToDbAsync), roleModel, IdentitySeedData.DefaultRole, _logger);
 
-        ExceptionsService.ThrowWhenRoleNotFoundInDb(nameof(AddUserAsync), roleModel, IdentitySeedData.DefaultRole, _logger);
-
-        IRoleDto? roleDto = _mapper.Map<IRoleDto>(roleModel);
+		RoleDto? roleDto = _mapper.Map<RoleDto>(roleModel);
 
         var userRoleDto = _userFactory.CreateUserRoleDto();
         userRoleDto.UserId = userDto.UserId;
         userRoleDto.RoleId = roleDto.Id;
-        
         userDto.UserRoles.Add(userRoleDto);
         
-        IUserModel userModel = _mapper.Map<IUserModel>(userDto);
+		UserModel userModel = _mapper.Map<UserModel>(userDto);
 
-        await _userRepository.AddAsync((UserModel)userModel);
+		await _userRepository.AddAsync(userModel);
     }
 
     public string GetSignedInUserId()
@@ -60,9 +57,9 @@ public class UserService : IUserService
         return httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? throw new InvalidOperationException("Error with signed In User");
     }
 
-    public async Task UpdateUserAsync(IUserDto userBasedOnProviderClaimsDto, Claim authSchemeClaimWithProviderName)
+	public async Task UpdateUserInDbAsync(UserDto userBasedOnProviderDataDto, Claim authenticationSchemeClaim)
     {
-        UserModel? userFromDb = await _userRepository.GetAsync(userBasedOnProviderClaimsDto.NameIdentifier);
+		UserModel? userFromDb = await _userRepository.GetAsync(userBasedOnProviderDataDto.NameIdentifier);
 
         if (userFromDb is null)
         {
@@ -84,17 +81,17 @@ public class UserService : IUserService
         }
     }
 
-    public async Task SetRolesForUserPrincipleAsync(string userId, ClaimsIdentity principle)
+	public async Task SetRolesForUserPrincipleAsync(string userId, ClaimsIdentity? identity)
     {
         ExceptionsService.ThrowWhenArgumentIsInvalid(nameof(SetRolesForUserPrincipleAsync), userId, nameof(userId), _logger);
-        ExceptionsService.ThrowWhenIdentityIsNull(principle, _logger);
+		ExceptionsService.ThrowWhenIdentityIsNull(identity, _logger);
 
-        IEnumerable<IRoleModel> userRoles = await _userRepository.GetRolesAsync(userId);
+		IEnumerable<RoleModel> userRoles = await _userRepository.GetRolesAsync(userId);
         IEnumerable<string> userRolesNames = userRoles.Select(userRole => userRole.Name).ToList();
 
         foreach (string roleName in userRolesNames)
         {
-            principle?.AddClaim(new Claim(ClaimTypes.Role, roleName));
+			identity!.AddClaim(new Claim(ClaimTypes.Role, roleName));
         }
 	}
 }

@@ -1,8 +1,7 @@
-﻿using App.Common;
-using App.Common.Helpers;
+﻿using App.Common.Helpers;
 using App.Features.Tasks.Common.Interfaces;
-using App.Features.Tasks.Common.TaskTags.Common.Interfaces;
-using App.Features.TodoLists.Common.Interfaces;
+using App.Features.Tasks.Common.TaskTags.Common;
+using App.Features.TodoLists.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static App.Features.Tasks.Common.TaskStatusHelper;
@@ -49,13 +48,13 @@ public class TaskModel : ITaskModel
 	[Required]
 	public TaskStatusType Status { get; set; } = TaskStatusType.NotStarted;
 
-	public ICollection<ITaskTagModel> TaskTags { get; set; } = new List<ITaskTagModel>();
+	public ICollection<TaskTagModel> TaskTags { get; set; } = new List<TaskTagModel>();
 
 	[Required]
 	public int TodoListId { get; set; } = defaultId;
 
 	[ForeignKey(nameof(TodoListId))]
-	public virtual ITodoListModel? TodoList { get; set; }
+	public virtual TodoListModel? TodoList { get; set; }
 
 	[Required]
 	public string UserId { get; set; } = string.Empty;

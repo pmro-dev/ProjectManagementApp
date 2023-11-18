@@ -1,14 +1,15 @@
-﻿using App.Common;
-using App.Features.Tasks.Common.Interfaces;
+﻿using App.Common.Interfaces;
+using App.Features.Tasks.Common;
+using App.Features.TodoLists.Common.Models;
 
 namespace App.Features.TodoLists.Common.Interfaces;
 
 public interface ITodoListModel : IBasicModelAbstract
 {
-	ICollection<ITaskModel> Tasks { get; set; }
+	ICollection<TaskModel> Tasks { get; set; }
 	string UserId { get; set; }
 
 	bool Equals(object? obj);
 	int GetHashCode();
-	bool IsTheSame(ITodoListModel obj);
+	bool IsTheSame(TodoListModel obj);
 }

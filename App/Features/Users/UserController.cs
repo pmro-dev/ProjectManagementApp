@@ -2,8 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using static App.Common.ControllersConsts;
 using App.Features.Users.Register;
-using App.Features.Users.Authentication;
-using App.Features.Users.Interfaces;
+using App.Features.Users.Common.Models;
 using App.Features.Users.Login;
 using App.Features.Users.Common;
 using App.Features.Users.Login.Interfaces;
@@ -13,6 +12,7 @@ using App.Infrastructure.Helpers;
 using App.Common.Helpers;
 using App.Features.Users.Register.Interfaces;
 using AutoMapper;
+using App.Features.Users.Authentication.Interfaces;
 
 namespace App.Features.Users;
 
@@ -62,7 +62,7 @@ public class UserController : Controller
     {
         if (ModelState.IsValid)
         {
-            ILoginInputDto loginInputDto = _mapper.Map<ILoginInputDto>(loginInputVM);
+            LoginInputDto loginInputDto = _mapper.Map<LoginInputDto>(loginInputVM);
             bool isLoginDataInvalid = !LoginDtoValidator.Valid(loginInputDto);
 
             if (isLoginDataInvalid)
@@ -152,7 +152,7 @@ public class UserController : Controller
     {
         if (ModelState.IsValid)
         {
-            IUserDto userDto = _mapper.Map<IUserDto>(registerInputVM);
+            UserDto userDto = _mapper.Map<UserDto>(registerInputVM);
             operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(Register), controllerName);
 
             bool isDataInvalid = !UserDtoValidator.ValidData(userDto);

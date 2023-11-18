@@ -1,5 +1,5 @@
-﻿using App.Features.Tasks.Common.Interfaces;
-using App.Features.TodoLists.Common.Interfaces;
+﻿using App.Features.Tasks.Common;
+using App.Features.TodoLists.Common.Models;
 
 namespace App.Infrastructure.Databases.App.Seeds;
 
@@ -8,32 +8,32 @@ namespace App.Infrastructure.Databases.App.Seeds;
 /// </summary>
 public interface ISeedData
 {
-	public ICollection<ITaskModel> AllTasks { get; set; }
+	public ICollection<TaskModel> AllTasks { get; set; }
 
 	/// <summary>
 	/// All Todolists for Database Set.
 	/// </summary>
-	public ICollection<ITodoListModel> TodoLists { get; set; }
+	public ICollection<TodoListModel> TodoLists { get; set; }
 
 	/// <summary>
 	/// Specific 'UX' Tasks for a list.
 	/// </summary>
-	public ICollection<ITaskModel> TasksUX { get; set; }
+	public ICollection<TaskModel> TasksUX { get; set; }
 
 	/// <summary>
 	/// Specific 'Backend' Tasks for a list.
 	/// </summary>
-	public ICollection<ITaskModel> TasksBackend { get; set; }
+	public ICollection<TaskModel> TasksBackend { get; set; }
 
 	/// <summary>
 	/// Specific 'Testing' Tasks for a list.
 	/// 
 	/// </summary>
-	public ICollection<ITaskModel> TasksTesting { get; set; }
+	public ICollection<TaskModel> TasksTesting { get; set; }
 
 	/// <summary>
 	/// Specific 'Project Management' Tasks for a list.
 	/// 
 	/// </summary>
-	public ICollection<ITaskModel> TasksProjectManagement { get; set; }
+	public ICollection<TaskModel> TasksProjectManagement { get; set; }
 }

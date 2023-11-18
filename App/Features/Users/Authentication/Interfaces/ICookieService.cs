@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 
-namespace App.Features.Users.Authentication
+namespace App.Features.Users.Authentication.Interfaces
 {
     public interface ICookieService
     {

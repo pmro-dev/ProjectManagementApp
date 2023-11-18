@@ -1,7 +1,7 @@
-﻿using App.Common;
-using App.Common.Helpers;
-using App.Features.Tasks.Common.TaskTags.Common.Interfaces;
-using App.Features.TodoLists.Common.Interfaces;
+﻿using App.Common.Helpers;
+using App.Common.Interfaces;
+using App.Features.Tasks.Common.TaskTags.Common;
+using App.Features.TodoLists.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using static App.Features.Tasks.Common.TaskStatusHelper;
 
@@ -29,9 +29,9 @@ public interface ITaskModel : IBasicModelAbstract
 
 	public int TodoListId { get; set; }
 
-	public ITodoListModel? TodoList { get; set; }
+	public TodoListModel? TodoList { get; set; }
 
 	public string UserId { get; set; }
 
-	public ICollection<ITaskTagModel> TaskTags { get; set; }
+	public ICollection<TaskTagModel> TaskTags { get; set; }
 }

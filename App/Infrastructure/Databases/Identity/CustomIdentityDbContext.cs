@@ -22,28 +22,28 @@ public class CustomIdentityDbContext : DbContext
 		base.OnModelCreating(modelBuilder);
 
 		modelBuilder.Entity<RoleModel>()
-			.HasMany(role => (ICollection<UserRoleModel>)role.UserRoles)
-			.WithOne(s => (RoleModel)s.Role);
+			.HasMany(role => role.UserRoles)
+			.WithOne(s => s.Role);
 
 		modelBuilder.Entity<RoleModel>()
 			.ToTable("Roles");
 
 
 		modelBuilder.Entity<UserModel>()
-			.HasMany(user => (ICollection<UserRoleModel>)user.UserRoles)
-			.WithOne(s => (UserModel)s.User);
+			.HasMany(user => user.UserRoles)
+			.WithOne(s => s.User);
 
 		modelBuilder.Entity<UserModel>()
 			.ToTable("Users");
 
 
 		modelBuilder.Entity<UserRoleModel>()
-			.HasOne(userRole => (RoleModel)userRole.Role)
-			.WithMany(s => (ICollection<UserRoleModel>)s.UserRoles);
+			.HasOne(userRole => userRole.Role)
+			.WithMany(s => s.UserRoles);
 
 		modelBuilder.Entity<UserRoleModel>()
-		.HasOne(userRole => (UserModel)userRole.User)
-		.WithMany(userModel => (ICollection<UserRoleModel>)userModel.UserRoles);
+		.HasOne(userRole => userRole.User)
+		.WithMany(userModel => userModel.UserRoles);
 
 		modelBuilder.Entity<UserRoleModel>()
 			.HasKey(ur => new { ur.UserId, ur.RoleId });

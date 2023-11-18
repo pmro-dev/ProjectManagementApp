@@ -1,5 +1,5 @@
 ﻿using App.Features.Tags.Common.Interfaces;
-using App.Features.Tasks.Common.TaskTags.Common.Interfaces;
+using App.Features.Tasks.Common.TaskTags.Common;
 
 namespace App.Features.Tags.Common
 {
@@ -9,6 +9,6 @@ namespace App.Features.Tags.Common
 
 		public string Title { get; set; } = string.Empty;
 
-		public ICollection<ITaskTagDto> TaskTags { get; set; } = new List<ITaskTagDto>();
+		public ICollection<TaskTagDto> TaskTags { get; set; } = new List<TaskTagDto>();
 	}
 }

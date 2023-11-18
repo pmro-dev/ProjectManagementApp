@@ -5,6 +5,7 @@ using App.Features.Tasks.Delete;
 using App.Features.Tasks.Edit;
 using App.Features.Tasks.Show;
 using App.Features.TodoLists.Common.Interfaces;
+using App.Features.TodoLists.Common.Models;
 
 namespace App.Features.Tasks.Common;
 
@@ -17,7 +18,7 @@ public class TaskViewModelsFactory : ITaskViewModelsFactory
 		_serviceProvider = serviceProvider;
 	}
 
-	public TaskCreateInputVM CreateCreateInputVM(ITaskDto taskDto)
+	public TaskCreateInputVM CreateCreateInputVM(TaskDto taskDto)
 	{
 		return new TaskCreateInputVM()
 		{
@@ -30,7 +31,7 @@ public class TaskViewModelsFactory : ITaskViewModelsFactory
 		};
 	}
 
-	public TaskCreateOutputVM CreateCreateOutputVM(ITodoListDto todoListDto)
+	public TaskCreateOutputVM CreateCreateOutputVM(TodoListDto todoListDto)
 	{
 		return new TaskCreateOutputVM
 		{
@@ -49,7 +50,7 @@ public class TaskViewModelsFactory : ITaskViewModelsFactory
 		};
 	}
 
-	public TaskDeleteOutputVM CreateDeleteOutputVM(ITaskDto taskDto)
+	public TaskDeleteOutputVM CreateDeleteOutputVM(TaskDto taskDto)
 	{
 		return new TaskDeleteOutputVM()
 		{
@@ -66,7 +67,7 @@ public class TaskViewModelsFactory : ITaskViewModelsFactory
 		};
 	}
 
-	public TaskDetailsOutputVM CreateDetailsOutputVM(ITaskDto taskDto)
+	public TaskDetailsOutputVM CreateDetailsOutputVM(TaskDto taskDto)
 	{
 		return new TaskDetailsOutputVM()
 		{
@@ -83,7 +84,7 @@ public class TaskViewModelsFactory : ITaskViewModelsFactory
 		};
 	}
 
-	public TaskEditInputVM CreateEditInputVM(ITaskDto taskDto)
+	public TaskEditInputVM CreateEditInputVM(TaskDto taskDto)
 	{
 		return new TaskEditInputVM()
 		{
@@ -103,7 +104,7 @@ public class TaskViewModelsFactory : ITaskViewModelsFactory
 		return (_serviceProvider.CreateScope().ServiceProvider.GetRequiredService<ITaskSelector>(), _serviceProvider.CreateScope().ServiceProvider.GetRequiredService<ITodoListSelector>());
 	}
 
-	public TaskEditOutputVM CreateEditOutputVM(ITaskDto taskDto, ICollection<ITodoListDto> userTodoListDtos)
+	public TaskEditOutputVM CreateEditOutputVM(TaskDto taskDto, ICollection<TodoListDto> userTodoListDtos)
 	{
 		var selectors = GetSelectors();
 		var taskStatusSelectorDto = selectors.Item1.Create(taskDto);
@@ -124,7 +125,7 @@ public class TaskViewModelsFactory : ITaskViewModelsFactory
 		};
 	}
 
-	public WrapperViewModel<TaskCreateInputVM, TaskCreateOutputVM> CreateWrapperCreateVM(ITaskDto taskDto, ITodoListDto todoListDto)
+	public WrapperViewModel<TaskCreateInputVM, TaskCreateOutputVM> CreateWrapperCreateVM(TaskDto taskDto, TodoListDto todoListDto)
 	{
 		TaskCreateInputVM inputVM = CreateCreateInputVM(taskDto);
 		TaskCreateOutputVM outputVM = CreateCreateOutputVM(todoListDto);

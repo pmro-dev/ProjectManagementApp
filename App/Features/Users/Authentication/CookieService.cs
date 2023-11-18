@@ -1,4 +1,4 @@
-﻿using App.Features.Users.Common.Interfaces;
+﻿using App.Features.Users.Authentication.Interfaces;
 using App.Features.Users.Interfaces;
 using App.Infrastructure;
 using App.Infrastructure.Databases.Identity.Interfaces;

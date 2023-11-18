@@ -1,13 +1,11 @@
-﻿using App.Features.Tasks.Common.Interfaces;
-
-namespace App.Features.Tasks.Common;
+﻿namespace App.Features.Tasks.Common;
 
 /// <summary>
 /// Class allows to compare object based on the same Task Model type.
 /// </summary>
-public class TasksComparer : IComparer<ITaskDto>
+public class TasksComparer : IComparer<TaskDto>
 {
-	public int Compare(ITaskDto? x, ITaskDto? y)
+	public int Compare(TaskDto? x, TaskDto? y)
 	{
 		if (x is null && y is null)
 		{

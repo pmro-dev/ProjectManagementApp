@@ -1,8 +1,8 @@
-﻿using App.Features.Users.Interfaces;
+﻿using App.Features.Users.Common.Models;
 
 namespace App.Features.Users.Register.Interfaces;
 
 public interface IUserRegisterService
 {
-	Task<bool> RegisterAsync(IUserDto userDto);
+	Task<bool> RegisterAsync(UserDto userDto);
 }

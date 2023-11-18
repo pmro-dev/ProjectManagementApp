@@ -1,4 +1,4 @@
-﻿using App.Features.Tasks.Common.Interfaces;
+﻿using App.Features.Tasks.Common;
 using App.Features.TodoLists.Common.Interfaces;
 
 namespace App.Features.TodoLists.Common.Models;
@@ -11,5 +11,5 @@ public class TodoListDto : ITodoListDto
 
 	public string UserId { get; set; } = string.Empty;
 
-	public ICollection<ITaskDto> Tasks { get; set; } = new List<ITaskDto>();
+	public ICollection<TaskDto> Tasks { get; set; } = new List<TaskDto>();
 }

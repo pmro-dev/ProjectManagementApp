@@ -1,15 +1,15 @@
-﻿using App.Features.Tasks.Create.Interfaces;
-using App.Features.Tasks.Delete.Interfaces;
-using App.Features.Tasks.Edit.Interfaces;
+﻿using App.Features.Tasks.Create;
+using App.Features.Tasks.Delete;
+using App.Features.Tasks.Edit;
 
 namespace App.Features.Tasks.Common.Interfaces;
 
 public interface ITaskEntityMapper
 {
-	ITaskDto TransferToDto(TaskModel taskModel, IDictionary<object, object>? mappedObjects = null);
-	ITaskEditInputDto TransferToDto(ITaskEditInputVM taskEditInputVM);
-	ITaskDeleteInputDto TransferToDto(ITaskDeleteInputVM deleteInputVM);
-	ITaskDto TransferToDto(ITaskCreateInputVM taskInputVM);
-	void UpdateModel(TaskModel taskDbModel, ITaskEditInputDto taskEditInputDto);
-	TaskModel TransferToModel(ITaskDto taskDto, IDictionary<object, object>? mappedObjects = null);
+	TaskDto TransferToDto(TaskModel taskModel, IDictionary<object, object>? mappedObjects = null);
+	TaskEditInputDto TransferToDto(TaskEditInputVM taskEditInputVM);
+	TaskDeleteInputDto TransferToDto(TaskDeleteInputVM deleteInputVM);
+	TaskDto TransferToDto(TaskCreateInputVM taskInputVM);
+	void UpdateModel(TaskModel taskDbModel, TaskEditInputDto taskEditInputDto);
+	TaskModel TransferToModel(TaskDto taskDto, IDictionary<object, object>? mappedObjects = null);
 }
