@@ -143,6 +143,15 @@ public static class ExceptionsService
 		}
 	}
 
+	public static void WhenPropertyIsNullOrEmptyThrowCritical(string operationName, string? property, string propertyOrTypeName, ILogger logger)
+	{
+		if (string.IsNullOrEmpty(property))
+		{
+			logger.LogCritical(MessagesPacket.LogPropertyIsNullOrEmpty, operationName, propertyOrTypeName);
+			throw new InvalidOperationException(MessagesPacket.ExceptionCriticalPropertyNullOrEmpty(operationName, propertyOrTypeName));
+		}
+	}
+
 	/// <summary>
 	/// Throws and Logs exception when id value is lower than bottom boundry.
 	/// </summary>

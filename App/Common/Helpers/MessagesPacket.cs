@@ -12,6 +12,11 @@ public static class MessagesPacket
 		return $"Error occured on attempt to {operationName}. Details: object {objectTypeName} cannot be null.";
 	}
 
+	public static string ExceptionCriticalPropertyNullOrEmpty(string operationName, string objectTypeOrPropertyName)
+	{
+		return $"Critical error occured on attempt to {operationName}. Details: object {objectTypeOrPropertyName} cannot be null, nor empty!";
+	}
+
 	public static string ArgumentOutOfRange(string operationName, string argumentName, int argumentValue)
 	{
 		return $"{operationName} | Given argument {argumentName} with value ( {argumentValue} ) is out of range!";
@@ -66,7 +71,7 @@ public static class MessagesPacket
 	public const string LogInvalidArgumentType = "{operationName} | Given param {paramName} has invalid type!";
 	public const string LogBuildingSucceed = "{typeName} - {operationName} succeed!";
 	public const string LogArgumentIsNullOrEmpty = "{operationName} | Provided argument ( name: {objectName} ) cannot be null, nor empty!";
-	public const string LogDbSetNull = "{actionName} | DbSet - {dbSetName} cannot be null!";
+	public const string LogPropertyIsNullOrEmpty = "{operationName} | Property ( name: {propertyName} ) has invalid value! It cannot be null, nor empty!";
 	public const string LogDbSetNull = "{operationName} | DbSet - {dbSetName} cannot be null!";
 	public const string LogErrorDbContextIsNull = "Critical Error occured! DbContext object is null - {DbContextName}";
 	public const string LogNotAnyTodoListInDb = "{operationName} | There's not any To Do List in Database.";

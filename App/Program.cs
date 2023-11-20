@@ -58,6 +58,7 @@ namespace App
 			builder.SetupUnitOfWorkServices();
 
 			builder.Services.AddHttpContextAccessor();
+			builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 
 			#region IDENTITY SERVICES
