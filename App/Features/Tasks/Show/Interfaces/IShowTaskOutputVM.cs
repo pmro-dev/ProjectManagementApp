@@ -2,6 +2,6 @@
 
 namespace App.Features.Tasks.Show.Interfaces;
 
-public interface ITaskDetailsOutputVM : ITaskCommonOutputVM
+public interface IShowTaskOutputVM : ITaskCommonOutputVM
 {
 }

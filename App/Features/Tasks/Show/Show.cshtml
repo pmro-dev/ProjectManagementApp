@@ -1,5 +1,5 @@
 ﻿@using App.Features.Tasks.Show;
-@model TaskDetailsOutputVM
+@model ShowTaskOutputVM
 
 @{
 	ViewData["Title"] = "Show Task Details";
@@ -15,5 +15,5 @@
 	<input type="hidden" name="routeTodoListId" asp-for="@Model.TodoListId" />
 	<input type="hidden" name="routeTaskId" asp-for="@Model.Id" />
 	<input type="hidden" asp-for="@Model.UserId" />
-    <a asp-controller="@TodoListCtrl.Name" asp-action="@TodoListCtrl.DetailsAction" asp-route-id="@Model.TodoListId" class="btn btn-primary">Back</a>
+    <a asp-controller="@TodoListCtrl.Name" asp-action="@TodoListCtrl.ShowAction" asp-route-id="@Model.TodoListId" class="btn btn-primary">Back</a>
 </div>

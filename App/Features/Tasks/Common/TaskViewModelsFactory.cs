@@ -67,9 +67,9 @@ public class TaskViewModelsFactory : ITaskViewModelsFactory
 		};
 	}
 
-	public TaskDetailsOutputVM CreateDetailsOutputVM(TaskDto taskDto)
+	public ShowTaskOutputVM CreateDetailsOutputVM(TaskDto taskDto)
 	{
-		return new TaskDetailsOutputVM()
+		return new ShowTaskOutputVM()
 		{
 			Id = taskDto.Id,
 			Title = taskDto.Title,

@@ -9,7 +9,7 @@ namespace App.Features.Tasks.Common.Interfaces;
 
 public interface ITaskViewModelsFactory
 {
-	public TaskDetailsOutputVM CreateDetailsOutputVM(TaskDto taskDto);
+	public ShowTaskOutputVM CreateDetailsOutputVM(TaskDto taskDto);
 	public TaskCreateOutputVM CreateCreateOutputVM(TodoListDto todoListDto);
 	public TaskCreateInputVM CreateCreateInputVM(TaskDto taskDto);
 	public WrapperViewModel<TaskCreateInputVM, TaskCreateOutputVM> CreateWrapperCreateVM();

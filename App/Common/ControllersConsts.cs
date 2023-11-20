@@ -44,6 +44,6 @@ public static class ControllersConsts
 		public const string DeleteAction = nameof(TodoListController.Delete);
 		public const string DeletePostAction = nameof(TodoListController.DeletePost);
 		public const string DuplicateAction = nameof(TodoListController.Duplicate);
-		public const string DetailsAction = nameof(TodoListController.Show);
+		public const string ShowAction = nameof(TodoListController.Show);
 	}
 }

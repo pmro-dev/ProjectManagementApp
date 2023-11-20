@@ -240,7 +240,7 @@ namespace App.Features.Tasks
 
 				object routeValue = new { id = taskEditInputDto.TodoListId };
 
-				return RedirectToAction(TodoListCtrl.DetailsAction, TodoListCtrl.Name, routeValue);
+			return RedirectToAction(TodoListCtrl.ShowAction, TodoListCtrl.Name, routeValue);
 			}
 
 			return View(editWrapperVM);
@@ -322,7 +322,6 @@ namespace App.Features.Tasks
 
 			object routeValue = new { id = deleteInputDto.TodoListId };
 
-			return RedirectToAction(TodoListCtrl.DetailsAction, TodoListCtrl.Name, routeValue);
-		}
+		return RedirectToAction(TodoListCtrl.ShowAction, TodoListCtrl.Name, routeValue);
 	}
 }

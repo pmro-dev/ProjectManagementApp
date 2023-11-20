@@ -5,7 +5,7 @@ using static App.Features.Tasks.Common.TaskStatusHelper;
 
 namespace App.Features.Tasks.Show;
 
-public class TaskDetailsOutputVM : ITaskDetailsOutputVM
+public class ShowTaskOutputVM : IShowTaskOutputVM
 {
 	public int Id { get; set; }
 	public string Title { get; set; } = string.Empty;

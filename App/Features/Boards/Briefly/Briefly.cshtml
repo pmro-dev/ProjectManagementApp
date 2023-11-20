@@ -32,7 +32,7 @@
 
 		</div>
 		<div class="card-body">
-			<a asp-action=@TodoListCtrl.DetailsAction asp-controller=@TodoListCtrl.Name asp-route-id="@todoList.Id" class="btn btn-outline-primary btn-sm">Details</a>
+			<a asp-action=@TodoListCtrl.ShowAction asp-controller=@TodoListCtrl.Name asp-route-id="@todoList.Id" class="btn btn-outline-primary btn-sm">Details</a>
 			<a asp-action=@TodoListCtrl.EditAction asp-controller=@TodoListCtrl.Name asp-route-id="@todoList.Id" class="btn btn-outline-warning btn-sm">Edit</a>
 			<button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal+@todoList.Id">Delete</button>
 			<a asp-action=@TodoListCtrl.DuplicateAction asp-controller=@TodoListCtrl.Name asp-route-todoListId="@todoList.Id" class="btn btn-outline-info btn-sm">Duplicate</a>

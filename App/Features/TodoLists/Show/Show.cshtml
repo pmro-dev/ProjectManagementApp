@@ -34,8 +34,8 @@
 	<div class="row">
 		<div class="col-md-4">
 			<div class="card-group">
-				<form id="resetDate" asp-action=@TodoListCtrl.DetailsAction asp-route-id="@Model?.Id" asp-route-filterDueDate="@null" method="get"></form>
-				<form id="filterDate" asp-action=@TodoListCtrl.DetailsAction asp-route-id="@Model?.Id" asp-route-filterDueDate="@filterDueDate" method="get">
+				<form id="resetDate" asp-action=@TodoListCtrl.ShowAction asp-route-id="@Model?.Id" asp-route-filterDueDate="@null" method="get"></form>
+				<form id="filterDate" asp-action=@TodoListCtrl.ShowAction asp-route-id="@Model?.Id" asp-route-filterDueDate="@filterDueDate" method="get">
 					<input asp-for="@filterDueDate" asp-format="{0:dd'/'MM'/'yyyy}" class="form-control" />
 					<span asp-validation-for="@filterDueDate" class="text-danger"></span>
 				</form>
