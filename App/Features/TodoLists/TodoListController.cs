@@ -98,7 +98,7 @@ namespace App.Features.TodoLists
 		[Route(CustomRoutes.TodoListEditRoute)]
 		public async Task<IActionResult> Edit(int id)
 		{
-			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Edit), id, nameof(id), _logger);
+			ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), id, nameof(id), _logger);
 
 			TodoListModel? todoListModel = await _todoListRepository.GetAsync(id);
 
@@ -133,11 +133,11 @@ namespace App.Features.TodoLists
 		{
 			if (!ModelState.IsValid) return View(TodoListViews.Edit, editWrapperVM);
 
-			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Edit), id, nameof(id), _logger);
+			ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), id, nameof(id), _logger);
 
 			var todoListId = editWrapperVM.OutputVM.Id;
 
-			ExceptionsService.ThrowWhenIdsAreNotEqual(nameof(Edit), id, nameof(id), todoListId, nameof(todoListId), _logger);
+			ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(Edit), id, nameof(id), todoListId, nameof(todoListId), _logger);
 
 			TodoListModel? todoListDbModel = await _todoListRepository.GetAsync(todoListId);
 
@@ -169,7 +169,7 @@ namespace App.Features.TodoLists
 		[Route(CustomRoutes.TodoListDeleteRoute)]
 		public async Task<IActionResult> Delete(int id)
 		{
-			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Delete), id, nameof(id), _logger);
+			ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Delete), id, nameof(id), _logger);
 
 			TodoListModel? todoListDbModel = await _todoListRepository.GetAsync(id);
 
@@ -199,7 +199,7 @@ namespace App.Features.TodoLists
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeletePost(int id)
 		{
-			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(DeletePost), id, nameof(id), _logger);
+			ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(DeletePost), id, nameof(id), _logger);
 
 			if (ModelState.IsValid)
 			{
@@ -210,7 +210,7 @@ namespace App.Features.TodoLists
 					ExceptionsService.ThrowEntityNotFoundInDb(nameof(DeletePost), nameof(TodoListModel), id.ToString(), _logger);
 				}
 
-				ExceptionsService.ThrowWhenIdsAreNotEqual(nameof(DeletePost), todoListDbModel!.Id, nameof(todoListDbModel.Id), id, nameof(id), _logger);
+				ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(DeletePost), todoListDbModel!.Id, nameof(todoListDbModel.Id), id, nameof(id), _logger);
 
 				_todoListRepository.Remove(todoListDbModel);
 				await _dataUnitOfWork.SaveChangesAsync();
@@ -230,7 +230,7 @@ namespace App.Features.TodoLists
 		[Route(CustomRoutes.TodoListDuplicateRoute)]
 		public async Task<IActionResult> Duplicate(int todoListId)
 		{
-			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Duplicate), todoListId, nameof(todoListId), _logger);
+			ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Duplicate), todoListId, nameof(todoListId), _logger);
 
 			await _todoListRepository.DuplicateWithDetailsAsync(todoListId);
 			await _dataUnitOfWork.SaveChangesAsync();
@@ -249,7 +249,7 @@ namespace App.Features.TodoLists
 		[Route(CustomRoutes.TodoListShowRoute)]
 		public async Task<IActionResult> Show(int id, DateTime? filterDueDate)
 		{
-			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Show), id, nameof(id), _logger);
+			ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Show), id, nameof(id), _logger);
 
 			TodoListModel? todoListDbModel = await _todoListRepository.GetWithDetailsAsync(id);
 

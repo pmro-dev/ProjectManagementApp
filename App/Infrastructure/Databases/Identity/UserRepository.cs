@@ -23,7 +23,7 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 	///<inheritdoc />
 	public async Task<UserModel?> GetWithDetailsAsync(string userId)
 	{
-		ExceptionsService.ThrowWhenArgumentIsInvalid(nameof(GetWithDetailsAsync), userId, nameof(userId), _logger);
+		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetWithDetailsAsync), userId, nameof(userId), _logger);
 
 		UserModel? userWithDetailsFromDb = await _identityContext
 			.Set<UserModel>()
@@ -37,8 +37,8 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 	///<inheritdoc />
 	public async Task<UserModel?> GetByNameAndPasswordAsync(string userLogin, string userPassword)
 	{
-		ExceptionsService.ThrowExceptionWhenArgumentIsNullOrEmpty(nameof(GetByNameAndPasswordAsync), userLogin, nameof(userLogin), _logger);
-		ExceptionsService.ThrowExceptionWhenArgumentIsNullOrEmpty(nameof(GetByNameAndPasswordAsync), userPassword, nameof(userPassword), _logger);
+		ExceptionsService.WhenArgumentIsNullOrEmptyThrowError(nameof(GetByNameAndPasswordAsync), userLogin, nameof(userLogin), _logger);
+		ExceptionsService.WhenArgumentIsNullOrEmptyThrowError(nameof(GetByNameAndPasswordAsync), userPassword, nameof(userPassword), _logger);
 
 		Expression<Func<UserModel, bool>> userDataPredicateExpression = (UserModel user) => user.Username == userLogin && user.Password == userPassword;
 
@@ -50,7 +50,7 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 	///<inheritdoc />
 	public async Task<bool> IsNameTakenAsync(string userName)
 	{
-		ExceptionsService.ThrowWhenArgumentIsInvalid(nameof(IsNameTakenAsync), userName, nameof(userName), _logger);
+		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(IsNameTakenAsync), userName, nameof(userName), _logger);
 
 		bool result = await _identityContext
 			.Set<UserModel>()
@@ -61,7 +61,7 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 
 	public async Task<bool> IsAccountExistedAsync(string userEmail)
 	{
-		ExceptionsService.ThrowWhenArgumentIsInvalid(nameof(IsAccountExistedAsync), userEmail, nameof(userEmail), _logger);
+		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(IsAccountExistedAsync), userEmail, nameof(userEmail), _logger);
 
 		bool result = await _identityContext
 			.Set<UserModel>()
@@ -73,7 +73,7 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 	///<inheritdoc />
 	public async Task<ICollection<RoleModel>> GetRolesAsync(string userId)
 	{
-		ExceptionsService.ThrowWhenArgumentIsInvalid(nameof(GetRolesAsync), userId, nameof(userId), _logger);
+		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetRolesAsync), userId, nameof(userId), _logger);
 
 		ICollection<RoleModel> userRoles = await _identityContext
 			.Set<UserRoleModel>()

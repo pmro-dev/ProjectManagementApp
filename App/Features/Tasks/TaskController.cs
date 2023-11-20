@@ -65,9 +65,8 @@ namespace App.Features.Tasks
 		[Route(CustomRoutes.TaskShowRoute)]
 		public async Task<IActionResult> Show([FromRoute] int routeTodoListId, [FromRoute] int routeTaskId)
 		{
-			//TODO find and implement the right approach of handling exceptions and params validations
-			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Show), routeTodoListId, nameof(routeTodoListId), _logger);
-			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Show), routeTaskId, nameof(routeTaskId), _logger);
+		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Show), routeTodoListId, nameof(routeTodoListId), _logger);
+		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Show), routeTaskId, nameof(routeTaskId), _logger);
 
 			TaskModel? taskModel = await _taskRepository.GetAsync(routeTaskId);
 
@@ -98,7 +97,7 @@ namespace App.Features.Tasks
 		[Route(CustomRoutes.CreateTaskRoute)]
 		public async Task<IActionResult> Create(int id)
 		{
-			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Create), id, nameof(id), _logger);
+		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Create), id, nameof(id), _logger);
 
 			if (!ModelState.IsValid)
 				return View();
@@ -134,7 +133,7 @@ namespace App.Features.Tasks
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create(int todoListId, WrapperViewModel<TaskCreateInputVM, TaskCreateOutputVM> taskCreateWrapperVM)
 		{
-			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Create), todoListId, nameof(todoListId), _logger);
+		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Create), todoListId, nameof(todoListId), _logger);
 
 			if (!ModelState.IsValid)
 				return View(taskCreateWrapperVM);
@@ -162,8 +161,8 @@ namespace App.Features.Tasks
 		[Route(CustomRoutes.TaskEditGetRoute)]
 		public async Task<IActionResult> Edit([FromRoute] int todoListId, [FromRoute] int taskId)
 		{
-			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Edit), todoListId, nameof(todoListId), _logger);
-			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Edit), taskId, nameof(taskId), _logger);
+		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), todoListId, nameof(todoListId), _logger);
+		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), taskId, nameof(taskId), _logger);
 
 			var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -217,8 +216,8 @@ namespace App.Features.Tasks
 		{
 			var taskEditInputVM = editWrapperVM.InputVM;
 
-			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(EditPost), taskEditInputVM.TodoListId, nameof(taskEditInputVM.TodoListId), _logger);
-			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(EditPost), taskEditInputVM.Id, nameof(taskEditInputVM.Id), _logger);
+		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(EditPost), taskEditInputVM.TodoListId, nameof(taskEditInputVM.TodoListId), _logger);
+		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(EditPost), taskEditInputVM.Id, nameof(taskEditInputVM.Id), _logger);
 
 			if (ModelState.IsValid)
 			{
@@ -231,7 +230,7 @@ namespace App.Features.Tasks
 					return NotFound();
 				}
 
-				ExceptionsService.ThrowWhenIdsAreNotEqual(nameof(EditPost), taskDbModel.Id, nameof(taskDbModel.Id), taskEditInputDto.Id, nameof(taskEditInputDto.Id), _logger);
+			ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(EditPost), taskDbModel.Id, nameof(taskDbModel.Id), taskEditInputDto.Id, nameof(taskEditInputDto.Id), _logger);
 
 				_taskEntityMapper.UpdateModel(taskDbModel, taskEditInputDto);
 
@@ -260,8 +259,8 @@ namespace App.Features.Tasks
 		[Route(CustomRoutes.TaskDeleteGetRoute)]
 		public async Task<IActionResult> Delete(int todoListId, int taskId)
 		{
-			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Delete), todoListId, nameof(todoListId), _logger);
-			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(Delete), taskId, nameof(taskId), _logger);
+		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Delete), todoListId, nameof(todoListId), _logger);
+		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Delete), taskId, nameof(taskId), _logger);
 
 			TaskModel? taskToDeleteModel = await _taskRepository.GetAsync(taskId);
 
@@ -273,7 +272,7 @@ namespace App.Features.Tasks
 
 			TaskDto taskToDeleteDto = _taskEntityMapper.TransferToDto(taskToDeleteModel);
 
-			ExceptionsService.ThrowWhenIdsAreNotEqual(nameof(Delete), taskToDeleteDto.TodoListId, nameof(taskToDeleteDto.TodoListId), todoListId, nameof(todoListId), _logger);
+		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(Delete), taskToDeleteDto.TodoListId, nameof(taskToDeleteDto.TodoListId), todoListId, nameof(todoListId), _logger);
 
 			var deleteOutputVM = _taskViewModelsFactory.CreateDeleteOutputVM(taskToDeleteDto);
 			var deleteWrapperVM = _taskViewModelsFactory.CreateWrapperDeleteVM();
@@ -299,8 +298,8 @@ namespace App.Features.Tasks
 		{
 			TaskDeleteInputVM deleteInputVM = deleteWrapperVM.InputVM;
 
-			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(DeletePost), deleteInputVM.TodoListId, nameof(deleteInputVM.TodoListId), _logger);
-			ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(DeletePost), deleteInputVM.Id, nameof(deleteInputVM.Id), _logger);
+		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(DeletePost), deleteInputVM.TodoListId, nameof(deleteInputVM.TodoListId), _logger);
+		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(DeletePost), deleteInputVM.Id, nameof(deleteInputVM.Id), _logger);
 
 			TaskDeleteInputDto deleteInputDto = _taskEntityMapper.TransferToDto(deleteInputVM);
 
@@ -314,7 +313,7 @@ namespace App.Features.Tasks
 					return NotFound();
 				}
 
-				ExceptionsService.ThrowWhenIdsAreNotEqual(nameof(DeletePost), taskToDeleteModel.TodoListId, nameof(taskToDeleteModel.TodoListId), deleteInputDto.TodoListId, nameof(deleteInputDto.TodoListId), _logger);
+			ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(DeletePost), taskToDeleteModel.TodoListId, nameof(taskToDeleteModel.TodoListId), deleteInputDto.TodoListId, nameof(deleteInputDto.TodoListId), _logger);
 
 				_taskRepository.Remove(taskToDeleteModel);
 				await _dataUnitOfWork.SaveChangesAsync();

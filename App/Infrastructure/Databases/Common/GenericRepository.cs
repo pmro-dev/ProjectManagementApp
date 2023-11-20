@@ -22,7 +22,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	///<inheritdoc />
 	public async Task AddAsync(TEntity entity)
 	{
-		ExceptionsService.ThrowWhenModelIsNull(nameof(AddAsync), entity, _logger);
+		ExceptionsService.WhenModelIsNullThrowError(nameof(AddAsync), entity, _logger);
 
 		await _dbSet.AddAsync(entity);
 	}
@@ -36,7 +36,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	///<inheritdoc />
 	public async Task<TEntity?> GetAsync(object id)
 	{
-		ExceptionsService.ThrowWhenArgumentIsInvalid(nameof(GetAsync), id, nameof(id), _logger);
+		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetAsync), id, nameof(id), _logger);
 
 		return await _dbSet.FindAsync(id);
 	}
@@ -44,7 +44,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	///<inheritdoc />
 	public async Task<ICollection<TEntity>> GetAllByFilterAsync(Expression<Func<TEntity, bool>> filter)
 	{
-		ExceptionsService.ThrowWhenFilterExpressionIsNull(filter, nameof(GetAllByFilterAsync), _logger);
+		ExceptionsService.ThrowErrorFilterExpressionIsNull(filter, nameof(GetAllByFilterAsync), _logger);
 
 		return await _dbSet.Where(filter).ToListAsync();
 	}
@@ -52,7 +52,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	///<inheritdoc />
 	public async Task<TEntity?> GetByFilterAsync(Expression<Func<TEntity, bool>> filter)
 	{
-		ExceptionsService.ThrowWhenFilterExpressionIsNull(filter, nameof(GetByFilterAsync), _logger);
+		ExceptionsService.ThrowErrorFilterExpressionIsNull(filter, nameof(GetByFilterAsync), _logger);
 	
 		return await _dbSet.SingleOrDefaultAsync(filter);
 	}
@@ -60,7 +60,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	///<inheritdoc />
 	public void Remove(TEntity entity)
 	{
-		ExceptionsService.ThrowWhenModelIsNull(nameof(Remove), entity, _logger);
+		ExceptionsService.WhenModelIsNullThrowError(nameof(Remove), entity, _logger);
 
 		_dbSet.Remove(entity);
 	}
@@ -68,7 +68,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	///<inheritdoc />
 	public void Update(TEntity entity)
 	{
-		ExceptionsService.ThrowWhenModelIsNull(nameof(Update), entity, _logger);
+		ExceptionsService.WhenModelIsNullThrowError(nameof(Update), entity, _logger);
 
 		_dbSet.Update(entity);
 	}
@@ -76,7 +76,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	///<inheritdoc />
 	public async Task AddRangeAsync(ICollection<TEntity> range)
 	{
-		ExceptionsService.ThrowWhenModelIsNull(nameof(AddRangeAsync), range, _logger);
+		ExceptionsService.WhenModelIsNullThrowError(nameof(AddRangeAsync), range, _logger);
 
 		await _dbSet.AddRangeAsync(range, default);
 	}

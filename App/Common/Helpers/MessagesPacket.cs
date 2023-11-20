@@ -7,9 +7,9 @@ public static class MessagesPacket
 {
 	#region MESSAGES FOR EXCEPTIONS
 
-	public static string ExceptionErrorNullObjectOnAction(string operationName, string objectTypeName)
+	public static string ExceptionErrorNullObject(string operationName, string objectTypeName)
 	{
-		return $"Error occured on attempt to {operationName}. Details: Object {objectTypeName} cannot be null.";
+		return $"Error occured on attempt to {operationName}. Details: object {objectTypeName} cannot be null.";
 	}
 
 	public static string ArgumentOutOfRange(string operationName, string argumentName, int argumentValue)
@@ -60,13 +60,14 @@ public static class MessagesPacket
 	public const string LogConflictBetweenTodoListIdsFromTodoListModelAndTaskModel = "{operationName} | Conflict occured! To Do List id ( {taskModelTodoListId} ) from Task object and target To Do List id ( {todoListId} ) in To Do List object are not equal!";
 	public const string LogErrorOnMethod = "Error errors occured on method: {methodName}";
 	public const string LogTransactionFailed = "{operationName} | Transaction failed! - entity id {idValue}";
-	public const string LogEntityNotFoundInDbSet = "{actionName} | {entityTypeName} Entity with given id ( {entityId} ) not found in DbSet.";
-	public const string LogGroupOfEntitiesNotFoundInDbSet = "{actionName} | Group of {entityTypeName} Entities not found in DbSet.";
-	public const string LogOutOfRange = "{actionName} | Given param {paramName} with value ( {paramValue} ) is out of range!";
-	public const string LogInvalidArgumentType = "{actionName} | Given param {paramName} has invalid type!";
-	public const string LogBuildingSucceed = "{typeName} - {actionName} succeed!";
-	public const string LogArgumentNullOrEmpty = "{actionName} | Provided argument ( name: {objectName} ) cannot be null, nor empty!";
+	public const string LogEntityNotFoundInDbSet = "{operationName} | {entityTypeName} Entity with given id ( {entityId} ) not found in DbSet.";
+	public const string LogGroupOfEntitiesNotFoundInDbSet = "{operationName} | Group of {entityTypeName} Entities not found in DbSet.";
+	public const string LogOutOfRange = "{operationName} | Given param {paramName} with value ( {paramValue} ) is out of range!";
+	public const string LogInvalidArgumentType = "{operationName} | Given param {paramName} has invalid type!";
+	public const string LogBuildingSucceed = "{typeName} - {operationName} succeed!";
+	public const string LogArgumentIsNullOrEmpty = "{operationName} | Provided argument ( name: {objectName} ) cannot be null, nor empty!";
 	public const string LogDbSetNull = "{actionName} | DbSet - {dbSetName} cannot be null!";
+	public const string LogDbSetNull = "{operationName} | DbSet - {dbSetName} cannot be null!";
 	public const string LogErrorDbContextIsNull = "Critical Error occured! DbContext object is null - {DbContextName}";
 	public const string LogNotAnyTodoListInDb = "{operationName} | There's not any To Do List in Database.";
 	public const string LogCreatingUserIdentityFailed = "{operationName} | Creating new User Identity failed!";

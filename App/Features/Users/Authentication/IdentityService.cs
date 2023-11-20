@@ -18,7 +18,7 @@ public class IdentityService : IIdentityService
 
 	public UserDto CreateUser(ClaimsIdentity? identity, Claim authSchemeClaimWithProviderName)
     {
-		ExceptionsService.ThrowWhenIdentityIsNull(identity, _logger);
+		ExceptionsService.WhenIdentityIsNullThrowCritical(identity, _logger);
 
 		identity!.AddClaim(authSchemeClaimWithProviderName);
         var identityClaims = identity.Claims;

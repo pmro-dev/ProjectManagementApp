@@ -51,7 +51,7 @@ public class CookieEventsService : ICookieEventsService
 	private Claim GetAuthenticationClaim(CookieSigningInContext cookieSigningInContext)
 	{
 		var authSchemeValuePair = cookieSigningInContext.Properties.Items.SingleOrDefault(authProperty => authProperty.Key == AuthenticationConsts.AuthSchemeClaimKey);
-		ExceptionsService.ThrowExceptionWhenArgumentIsNullOrEmpty(nameof(GetAuthenticationClaim), authSchemeValuePair.Value, nameof(authSchemeValuePair.Value), _logger);
+		ExceptionsService.WhenArgumentIsNullOrEmptyThrowError(nameof(GetAuthenticationClaim), authSchemeValuePair.Value, nameof(authSchemeValuePair.Value), _logger);
 
 		return new Claim(authSchemeValuePair.Key, authSchemeValuePair.Value!);
 	}
@@ -59,7 +59,7 @@ public class CookieEventsService : ICookieEventsService
 	private ClaimsIdentity GetUserIdentity(CookieSigningInContext cookieSigningInContext)
 	{
 		ClaimsIdentity? identity = cookieSigningInContext.Principal?.Identity as ClaimsIdentity;
-		ExceptionsService.ThrowWhenIdentityIsNull(identity, _logger);
+		ExceptionsService.WhenIdentityIsNullThrowCritical(identity, _logger);
 
 		return identity!;
 	}

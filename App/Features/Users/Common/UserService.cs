@@ -73,9 +73,9 @@ public class UserService : IUserService
 
 	private void SetNewDataForUser(UserModel? userFromDb, UserDto? userBasedOnProviderDataDto, string providerName)
 	{
-		ExceptionsService.ThrowWhenModelIsNull(nameof(UpdateUserInDbAsync), userFromDb, _logger);
-		ExceptionsService.ThrowWhenModelIsNull(nameof(UpdateUserInDbAsync), userBasedOnProviderDataDto, _logger);
-		ExceptionsService.ThrowExceptionWhenArgumentIsNullOrEmpty(nameof(UpdateUserInDbAsync), providerName, nameof(providerName), _logger);
+		ExceptionsService.WhenModelIsNullThrowError(nameof(UpdateUserInDbAsync), userFromDb, _logger);
+		ExceptionsService.WhenModelIsNullThrowError(nameof(UpdateUserInDbAsync), userBasedOnProviderDataDto, _logger);
+		ExceptionsService.WhenArgumentIsNullOrEmptyThrowError(nameof(UpdateUserInDbAsync), providerName, nameof(providerName), _logger);
 
 		userFromDb!.FirstName = userBasedOnProviderDataDto!.FirstName;
 		userFromDb.LastName = userBasedOnProviderDataDto.LastName;
@@ -88,8 +88,8 @@ public class UserService : IUserService
 
 	public async Task SetRolesForUserPrincipleAsync(string userId, ClaimsIdentity? identity)
 	{
-		ExceptionsService.ThrowWhenArgumentIsInvalid(nameof(SetRolesForUserPrincipleAsync), userId, nameof(userId), _logger);
-		ExceptionsService.ThrowWhenIdentityIsNull(identity, _logger);
+		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(SetRolesForUserPrincipleAsync), userId, nameof(userId), _logger);
+		ExceptionsService.WhenIdentityIsNullThrowCritical(identity, _logger);
 
 		IEnumerable<RoleModel> userRoles = await _userRepository.GetRolesAsync(userId);
 		IEnumerable<string> userRolesNames = userRoles.Select(userRole => userRole.Name).ToList();

@@ -13,24 +13,7 @@ public static class ExceptionsService
 {
 	public const int _IdBottomBoundry = 0;
 
-	/// <summary>
-	/// Throws and Logs exception when model object is null.
-	/// </summary>
-	/// <typeparam name="T">Model data type.</typeparam>
-	/// <param name="operationName">Name of operation during exception could occured.</param>
-	/// <param name="model">Object of model data.</param>
-	/// <param name="modelName">Model name.</param>
-	/// <param name="logger">Logger from class that invokes method.</param>
-	/// <exception cref="ArgumentNullException">Occurs when model is null.</exception>
-	public static void ThrowWhenModelIsNull<T>(string operationName, T? model, ILogger logger) where T : class
-	{
-		if (model == null)
-		{
-			string modelTypeName = typeof(T).Name;
-			logger.LogError(MessagesPacket.LogArgumentNullOrEmpty, operationName, modelTypeName);
-			throw new ArgumentNullException(modelTypeName, MessagesPacket.ProvidedObjectIsNull);
-		}
-	}
+	#region JUST THROW
 
 	/// <summary>
 	/// Check is the model a null object? if it is then log and throw ArgumentNullException.
@@ -52,6 +35,57 @@ public static class ExceptionsService
 		logger.LogError(MessagesPacket.LogGroupOfEntitiesNotFoundInDbSet, operationName, dataTypeName);
 	}
 
+	public static void ThrowErrorFilterExpressionIsNull<TEntity>(Expression<Func<TEntity, bool>> filter, string operationName, ILogger logger)
+	{
+		if (filter == null)
+		{
+			logger.LogError(MessagesPacket.LogFilterExpressionIsNull, operationName);
+			throw new ArgumentNullException(nameof(filter), MessagesPacket.LogFilterExpressionIsNull);
+		}
+	}
+
+	public static void ThrowWhenRoleNotFoundInDb(string operationName, IRoleModel? roleModel, string roleName, ILogger logger)
+	{
+		if (roleModel is null)
+		{
+			logger.LogCritical(MessagesPacket.LogCriticalErrorRoleNotFoundInDb, operationName, roleName);
+			throw new InvalidOperationException(MessagesPacket.RoleNotFoundInDb(operationName, roleName));
+		}
+	}
+
+	public static void ThrowWhenAuthOptionsObjectIsNull(string operationName, AuthenticationSchemeOptions? options, string optionsTypeName, ILogger logger)
+	{
+		if (options is null)
+		{
+			logger.LogCritical(MessagesPacket.LogOptionsObjectIsNull, operationName, optionsTypeName);
+			throw new InvalidOperationException(MessagesPacket.ExceptionErrorNullObject(operationName, optionsTypeName));
+		}
+	}
+
+	#endregion
+
+
+	#region VALID THEN THROW WHEN INVALID
+
+	/// <summary>
+	/// Throws and Logs exception when model object is null.
+	/// </summary>
+	/// <typeparam name="T">Model data type.</typeparam>
+	/// <param name="operationName">Name of operation during exception could occured.</param>
+	/// <param name="model">Object of model data.</param>
+	/// <param name="modelName">Model name.</param>
+	/// <param name="logger">Logger from class that invokes method.</param>
+	/// <exception cref="ArgumentNullException">Occurs when model is null.</exception>
+	public static void WhenModelIsNullThrowError<T>(string operationName, T? model, ILogger logger) where T : class
+	{
+		if (model == null)
+		{
+			string modelTypeName = typeof(T).Name;
+			logger.LogError(MessagesPacket.LogArgumentIsNullOrEmpty, operationName, modelTypeName);
+			throw new ArgumentNullException(modelTypeName, MessagesPacket.ProvidedObjectIsNull);
+		}
+	}
+
 	/// <summary>
 	/// Throws and Logs exception when method's argument is null.
 	/// </summary>
@@ -62,11 +96,11 @@ public static class ExceptionsService
 	/// <exception cref="ArgumentNullException"></exception>
 	/// <exception cref="ArgumentOutOfRangeException"></exception>
 	/// <exception cref="ArgumentException"></exception>
-	public static void ThrowWhenArgumentIsInvalid(string operationName, object argument, string argumentName, ILogger logger)
+	public static void WhenArgumentIsInvalidThrowError(string operationName, object argument, string argumentName, ILogger logger)
 	{
 		if (argument is null)
 		{
-			logger.LogError(MessagesPacket.LogArgumentNullOrEmpty, operationName, argumentName);
+			logger.LogError(MessagesPacket.LogArgumentIsNullOrEmpty, operationName, argumentName);
 			throw new ArgumentNullException(argumentName, MessagesPacket.ProvidedObjectIsNull);
 		}
 
@@ -74,7 +108,7 @@ public static class ExceptionsService
 		{
 			if (string.IsNullOrEmpty(idString))
 			{
-				logger.LogError(MessagesPacket.LogArgumentNullOrEmpty, operationName, argumentName);
+				logger.LogError(MessagesPacket.LogArgumentIsNullOrEmpty, operationName, argumentName);
 				throw new ArgumentNullException(argumentName, MessagesPacket.ProvidedArgumentIsNullOrEmpty);
 			}
 		}
@@ -100,12 +134,12 @@ public static class ExceptionsService
 	/// <param name="logger">Logger from class that invokes method.</param>
 	/// <param name="argument">String argument.</param>
 	/// <exception cref="ArgumentOutOfRangeException">Occurs when User Id is null.</exception>
-	public static void ThrowExceptionWhenArgumentIsNullOrEmpty(string operationName, string? argument, string argumentName, ILogger logger)
+	public static void WhenArgumentIsNullOrEmptyThrowError(string operationName, string? argument, string argumentOrTypeName, ILogger logger)
 	{
 		if (string.IsNullOrEmpty(argument))
 		{
-			logger.LogError(MessagesPacket.LogArgumentNullOrEmpty, operationName, argumentName);
-			throw new ArgumentNullException(MessagesPacket.ExceptionErrorNullObjectOnAction(operationName, argumentName));
+			logger.LogError(MessagesPacket.LogArgumentIsNullOrEmpty, operationName, argumentOrTypeName);
+			throw new ArgumentNullException(MessagesPacket.ExceptionErrorNullObject(operationName, argumentOrTypeName));
 		}
 	}
 
@@ -118,7 +152,7 @@ public static class ExceptionsService
 	/// <param name="bottomBoundry">The Lower allowed value for id.</param>
 	/// <param name="logger">Logger from class that invokes method.</param>
 	/// <exception cref="ArgumentOutOfRangeException">Occured when id is lower than bottom boundry.</exception>
-	public static void ThrowExceptionWhenIdLowerThanBottomBoundry(string operationName, int id, string paramName, ILogger logger)
+	public static void WhenIdLowerThanBottomBoundryThrowError(string operationName, int id, string paramName, ILogger logger)
 	{
 		if (id < _IdBottomBoundry)
 		{
@@ -127,16 +161,7 @@ public static class ExceptionsService
 		}
 	}
 
-	public static void ThrowWhenFilterExpressionIsNull<TEntity>(Expression<Func<TEntity, bool>> filter, string operationName, ILogger logger)
-	{
-		if (filter == null)
-		{
-			logger.LogError(MessagesPacket.LogFilterExpressionIsNull, operationName);
-			throw new ArgumentNullException(nameof(filter), MessagesPacket.LogFilterExpressionIsNull);
-		}
-	}
-
-	public static void ThrowWhenIdentityIsNull(ClaimsIdentity? identity, ILogger _logger)
+	public static void WhenIdentityIsNullThrowCritical(ClaimsIdentity? identity, ILogger _logger)
 	{
 		if (identity == null)
 		{
@@ -145,42 +170,26 @@ public static class ExceptionsService
 		}
 	}
 
-	public static void ThrowWhenIdsAreNotEqual(string operationName, object firstId, string firstIdName, object secondId, string secondIdName, ILogger logger)
+	public static void WhenIdsAreNotEqualThrowCritical(string operationName, object firstId, string firstIdName, object secondId, string secondIdName, ILogger logger)
 	{
 		if (firstId is null)
 		{
-			logger.LogCritical(MessagesPacket.LogArgumentNullOrEmpty, nameof(ThrowWhenIdsAreNotEqual), nameof(firstId));
+			logger.LogCritical(MessagesPacket.LogArgumentIsNullOrEmpty, nameof(WhenIdsAreNotEqualThrowCritical), nameof(firstId));
 			throw new ArgumentNullException(nameof(firstId), MessagesPacket.ProvidedArgumentIsNullOrEmpty);
 		}
 
 		if (secondId is null)
 		{
-			logger.LogCritical(MessagesPacket.LogArgumentNullOrEmpty, nameof(ThrowWhenIdsAreNotEqual), nameof(secondId));
+			logger.LogCritical(MessagesPacket.LogArgumentIsNullOrEmpty, nameof(WhenIdsAreNotEqualThrowCritical), nameof(secondId));
 			throw new ArgumentNullException(nameof(secondId), MessagesPacket.ProvidedArgumentIsNullOrEmpty);
 		}
 
 		if (firstId.ToString() != secondId.ToString())
 		{
-			logger.LogError(MessagesPacket.LogConflictBetweenEntitiesIds, operationName, firstId, firstIdName, secondId, secondIdName);
+			logger.LogCritical(MessagesPacket.LogConflictBetweenEntitiesIds, operationName, firstId, firstIdName, secondId, secondIdName);
 			throw new InvalidOperationException(MessagesPacket.ConflictBetweenEntitiesIds(operationName, firstId, firstIdName, secondId, secondIdName));
 		}
 	}
 
-	public static void ThrowWhenRoleNotFoundInDb(string operationName, IRoleModel? roleModel, string roleName, ILogger logger)
-	{
-		if (roleModel is null)
-		{
-			logger.LogCritical(MessagesPacket.LogCriticalErrorRoleNotFoundInDb, operationName, roleName);
-			throw new InvalidOperationException(MessagesPacket.RoleNotFoundInDb(operationName, roleName));
-		}
-	}
-
-	public static void ThrowWhenAuthOptionsObjectIsNull(string operationName, AuthenticationSchemeOptions? options, string optionsTypeName, ILogger logger)
-	{
-		if (options is null)
-		{
-			logger.LogCritical(MessagesPacket.LogOptionsObjectIsNull, operationName, optionsTypeName);
-			throw new InvalidOperationException(MessagesPacket.ExceptionErrorNullObjectOnAction(operationName, optionsTypeName));
-		}
-	}
+	#endregion
 }

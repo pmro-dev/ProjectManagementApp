@@ -31,7 +31,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	///<inheritdoc />
 	public async Task<bool> CheckThatAnyWithSameNameExistAsync(string todoListName)
 	{
-		ExceptionsService.ThrowWhenArgumentIsInvalid(nameof(CheckThatAnyWithSameNameExistAsync), todoListName, nameof(todoListName), _logger);
+		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(CheckThatAnyWithSameNameExistAsync), todoListName, nameof(todoListName), _logger);
 
 		return await _dbContext.Set<TodoListModel>()
 			.AnyAsync(todoList => todoList.Title == todoListName);
@@ -40,7 +40,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	///<inheritdoc />
 	public async Task DuplicateWithDetailsAsync(int todoListId)
 	{
-		ExceptionsService.ThrowExceptionWhenIdLowerThanBottomBoundry(nameof(DuplicateWithDetailsAsync), todoListId, nameof(todoListId), _logger);
+		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(DuplicateWithDetailsAsync), todoListId, nameof(todoListId), _logger);
 
 		TodoListModel? todoListWithDetails = await _dbContext
 			.Set<TodoListModel>()
@@ -100,7 +100,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	///<inheritdoc />
 	public async Task<ICollection<TodoListModel>> GetAllWithDetailsAsync(string userId)
 	{
-		ExceptionsService.ThrowExceptionWhenArgumentIsNullOrEmpty(nameof(GetAllWithDetailsAsync), userId, nameof(userId), _logger);
+		ExceptionsService.WhenArgumentIsNullOrEmptyThrowError(nameof(GetAllWithDetailsAsync), userId, nameof(userId), _logger);
 
 		ICollection<TodoListModel> allTodoListsWithDetails = await _dbContext
 			.Set<TodoListModel>()
@@ -114,7 +114,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	///<inheritdoc />
 	public async Task<ICollection<TodoListModel>> GetAllWithDetailsByFilterAsync(Expression<Func<TodoListModel, bool>> filter)
 	{
-		ExceptionsService.ThrowWhenFilterExpressionIsNull(filter, nameof(GetAllWithDetailsByFilterAsync), _logger);
+		ExceptionsService.ThrowErrorFilterExpressionIsNull(filter, nameof(GetAllWithDetailsByFilterAsync), _logger);
 
 		ICollection<TodoListModel> entities = await _dbContext
 			.Set<TodoListModel>()
@@ -128,7 +128,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	///<inheritdoc />
 	public async Task<TodoListModel?> GetWithDetailsAsync(int todoListId)
 	{
-		ExceptionsService.ThrowWhenArgumentIsInvalid(nameof(GetWithDetailsAsync), todoListId, nameof(todoListId), _logger);
+		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetWithDetailsAsync), todoListId, nameof(todoListId), _logger);
 
 		TodoListModel? todoListFromDb = await _dbContext
 			.Set<TodoListModel>()
