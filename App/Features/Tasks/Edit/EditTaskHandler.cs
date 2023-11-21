@@ -7,10 +7,12 @@ using MediatR;
 using App.Features.Tasks.Common.Interfaces;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Infrastructure.Databases.App.Interfaces;
+using App.Features.Tasks.Edit.Interfaces;
+using static App.Common.ControllersConsts;
 
 namespace App.Features.Tasks.Edit;
 
-public class EditTaskHandler : IRequestHandler<EditTaskQuery, WrapperViewModel<TaskEditInputVM, TaskEditOutputVM>>
+public class EditTaskHandler : IRequestHandler<EditTaskQuery, WrapperViewModel<TaskEditInputVM, TaskEditOutputVM>>, IRequestHandler<EditTaskCommand, object>
 {
 	private readonly IDataUnitOfWork _dataUnitOfWork;
 	private readonly ITaskRepository _taskRepository;
@@ -20,8 +22,8 @@ public class EditTaskHandler : IRequestHandler<EditTaskQuery, WrapperViewModel<T
 	private readonly ITodoListMapper _todoListMapper;
 	private readonly ITaskViewModelsFactory _taskViewModelsFactory;
 
-	public EditTaskHandler(IDataUnitOfWork dataUnitOfWork, ITaskRepository taskRepository, ITodoListRepository todoListRepository, 
-		ILogger<TaskController> logger, ITaskEntityMapper taskEntityMapper, ITodoListMapper todoListMapper, 
+	public EditTaskHandler(IDataUnitOfWork dataUnitOfWork, ITaskRepository taskRepository, ITodoListRepository todoListRepository,
+		ILogger<TaskController> logger, ITaskEntityMapper taskEntityMapper, ITodoListMapper todoListMapper,
 		ITaskViewModelsFactory taskViewModelsFactory)
 	{
 		_dataUnitOfWork = dataUnitOfWork;
@@ -73,5 +75,22 @@ public class EditTaskHandler : IRequestHandler<EditTaskQuery, WrapperViewModel<T
 		editWrapperVM.OutputVM = editOutputVM;
 
 		return editWrapperVM;
+	}
+
+	public async Task<object> Handle(EditTaskCommand request, CancellationToken cancellationToken)
+	{
+		TaskEditInputDto taskEditInputDto = _taskEntityMapper.TransferToDto(request.InputVM);
+		TaskModel? taskDbModel = await _taskRepository.GetAsync(taskEditInputDto.Id);
+
+		ExceptionsService.WhenModelIsNullThrowCritical(nameof(EditTaskCommand), taskDbModel, _logger);
+		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(EditTaskCommand), taskDbModel!.Id, nameof(taskDbModel.Id), taskEditInputDto.Id, nameof(taskEditInputDto.Id), _logger);
+
+		_taskEntityMapper.UpdateModel(taskDbModel, taskEditInputDto);
+		_taskRepository.Update(taskDbModel);
+		await _dataUnitOfWork.SaveChangesAsync();
+
+		object resultAsRouteValue = new { id = taskEditInputDto.TodoListId };
+
+		return resultAsRouteValue;
 	}
 }

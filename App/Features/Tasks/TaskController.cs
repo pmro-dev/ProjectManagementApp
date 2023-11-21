@@ -1,20 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿#region USINGS
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using static App.Common.Views.ViewsConsts;
 using static App.Common.ControllersConsts;
-using App.Features.Tasks.Common.Interfaces;
-using App.Features.Tasks.Common;
-using App.Infrastructure.Databases.App.Interfaces;
 using App.Features.Tasks.Edit;
 using App.Features.Tasks.Create;
 using App.Features.Tasks.Delete;
 using App.Infrastructure;
 using App.Infrastructure.Helpers;
-using App.Common.Helpers;
 using App.Common.ViewModels;
 using MediatR;
 using App.Features.Tasks.Show;
+
+#endregion
 
 namespace App.Features.Tasks;
 
@@ -24,11 +24,7 @@ namespace App.Features.Tasks;
 [Authorize]
 public class TaskController : Controller
 {
-	private readonly IDataUnitOfWork _dataUnitOfWork;
-	private readonly ITaskRepository _taskRepository;
 	private readonly ILogger<TaskController> _logger;
-	private readonly ITaskEntityMapper _taskEntityMapper;
-	private readonly ITaskViewModelsFactory _taskViewModelsFactory;
 	private readonly IMediator _mediator;
 
 	/// <summary>
@@ -36,13 +32,9 @@ public class TaskController : Controller
 	/// </summary>
 	/// <param name="context">Database context.</param>
 	/// <param name="logger">Logger provider.</param>
-	public TaskController(IDataUnitOfWork dataUnitOfWork, ILogger<TaskController> logger, ITaskEntityMapper taskEntityMapper, ITaskViewModelsFactory taskViewModelsFactory, IMediator mediator)
+	public TaskController(ILogger<TaskController> logger, IMediator mediator)
 	{
-		_dataUnitOfWork = dataUnitOfWork;
-		_taskRepository = _dataUnitOfWork.TaskRepository;
 		_logger = logger;
-		_taskEntityMapper = taskEntityMapper;
-		_taskViewModelsFactory = taskViewModelsFactory;
 		_mediator = mediator;
 	}
 
@@ -154,30 +146,11 @@ public class TaskController : Controller
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(EditPost), taskEditInputVM.TodoListId, nameof(taskEditInputVM.TodoListId), _logger);
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(EditPost), taskEditInputVM.Id, nameof(taskEditInputVM.Id), _logger);
 
-		if (ModelState.IsValid)
-		{
-			TaskEditInputDto taskEditInputDto = _taskEntityMapper.TransferToDto(taskEditInputVM);
-			TaskModel? taskDbModel = await _taskRepository.GetAsync(taskEditInputDto.Id);
+		if (!ModelState.IsValid)
+			return View(editWrapperVM);
 
-			if (taskDbModel is null)
-			{
-				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, nameof(EditPost), nameof(TaskModel), taskEditInputDto.Id);
-				return NotFound();
-			}
-
-			ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(EditPost), taskDbModel.Id, nameof(taskDbModel.Id), taskEditInputDto.Id, nameof(taskEditInputDto.Id), _logger);
-
-			_taskEntityMapper.UpdateModel(taskDbModel, taskEditInputDto);
-
-			_taskRepository.Update(taskDbModel);
-			await _dataUnitOfWork.SaveChangesAsync();
-
-			object routeValue = new { id = taskEditInputDto.TodoListId };
-
-			return RedirectToAction(TodoListCtrl.ShowAction, TodoListCtrl.Name, routeValue);
-		}
-
-		return View(editWrapperVM);
+		var resultAsRouteValue = await _mediator.Send(new EditTaskCommand(taskEditInputVM));
+		return RedirectToAction(TodoListCtrl.ShowAction, TodoListCtrl.Name, resultAsRouteValue);
 	}
 
 	/// <summary>
@@ -197,23 +170,9 @@ public class TaskController : Controller
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Delete), todoListId, nameof(todoListId), _logger);
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Delete), taskId, nameof(taskId), _logger);
 
-		TaskModel? taskToDeleteModel = await _taskRepository.GetAsync(taskId);
+		var result = await _mediator.Send(new DeleteTaskQuery(todoListId, taskId));
 
-		if (taskToDeleteModel == null)
-		{
-			_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, nameof(Delete), nameof(TaskModel), taskId);
-			return NotFound();
-		}
-
-		TaskDto taskToDeleteDto = _taskEntityMapper.TransferToDto(taskToDeleteModel);
-
-		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(Delete), taskToDeleteDto.TodoListId, nameof(taskToDeleteDto.TodoListId), todoListId, nameof(todoListId), _logger);
-
-		var deleteOutputVM = _taskViewModelsFactory.CreateDeleteOutputVM(taskToDeleteDto);
-		var deleteWrapperVM = _taskViewModelsFactory.CreateWrapperDeleteVM();
-		deleteWrapperVM.OutputVM = deleteOutputVM;
-
-		return View(TaskViews.Delete, deleteWrapperVM);
+		return View(TaskViews.Delete, result);
 	}
 
 	/// <summary>
@@ -236,25 +195,17 @@ public class TaskController : Controller
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(DeletePost), deleteInputVM.TodoListId, nameof(deleteInputVM.TodoListId), _logger);
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(DeletePost), deleteInputVM.Id, nameof(deleteInputVM.Id), _logger);
 
-		TaskDeleteInputDto deleteInputDto = _taskEntityMapper.TransferToDto(deleteInputVM);
+		object routeValue;
 
-		if (ModelState.IsValid)
+		if (!ModelState.IsValid)
 		{
-			TaskModel? taskToDeleteModel = await _taskRepository.GetAsync(deleteInputDto.Id);
+			routeValue = new { id = deleteInputVM.TodoListId };
 
-			if (taskToDeleteModel is null)
-			{
-				_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, nameof(DeletePost), nameof(TaskModel), deleteInputDto.Id);
-				return NotFound();
-			}
-
-			ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(DeletePost), taskToDeleteModel.TodoListId, nameof(taskToDeleteModel.TodoListId), deleteInputDto.TodoListId, nameof(deleteInputDto.TodoListId), _logger);
-
-			_taskRepository.Remove(taskToDeleteModel);
-			await _dataUnitOfWork.SaveChangesAsync();
+			return RedirectToAction(TodoListCtrl.ShowAction, TodoListCtrl.Name, routeValue);
 		}
 
-		object routeValue = new { id = deleteInputDto.TodoListId };
+		var result = await _mediator.Send(new DeleteTaskCommand(deleteInputVM));
+		routeValue = result;
 
 		return RedirectToAction(TodoListCtrl.ShowAction, TodoListCtrl.Name, routeValue);
 	}
