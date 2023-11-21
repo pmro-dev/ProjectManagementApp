@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using static App.Common.ControllersConsts;
-using App.Features.Users.Register;
 using App.Features.Users.Common.Models;
 using App.Features.Users.Login;
 using App.Features.Users.Common;
@@ -13,6 +12,8 @@ using App.Common.Helpers;
 using App.Features.Users.Register.Interfaces;
 using AutoMapper;
 using App.Features.Users.Authentication.Interfaces;
+using App.Features.Users.Login.Models;
+using App.Features.Users.Register.Models;
 
 namespace App.Features.Users;
 

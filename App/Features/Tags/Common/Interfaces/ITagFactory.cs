@@ -1,4 +1,4 @@
-﻿using App.Features.Tags.Common;
+﻿using App.Features.Tags.Common.Models;
 
 namespace App.Features.Tags.Common.Interfaces;
 

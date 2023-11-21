@@ -1,4 +1,5 @@
 ﻿using App.Infrastructure.Databases.App.Interfaces;
+using App.Infrastructure.Databases.App.Seeds.Interfaces;
 
 namespace App.Infrastructure.Databases.App.Seeds;
 

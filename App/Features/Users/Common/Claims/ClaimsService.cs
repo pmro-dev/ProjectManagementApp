@@ -1,5 +1,5 @@
 ﻿using App.Features.Users.Common.Models;
-using App.Features.Users.Common.Roles;
+using App.Features.Users.Common.Roles.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 

@@ -3,6 +3,7 @@ using App.Features.Users.Authentication.Interfaces;
 using App.Features.Users.Common.Claims;
 using App.Features.Users.Common.Models;
 using App.Features.Users.Login.Interfaces;
+using App.Features.Users.Login.Models;
 using App.Infrastructure.Databases.Identity.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication;

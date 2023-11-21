@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using App.Features.TodoLists.Show.Models;
+using MediatR;
 
 namespace App.Features.TodoLists.Show;
 

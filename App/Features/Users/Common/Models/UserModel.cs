@@ -1,5 +1,6 @@
-﻿using App.Features.Users.Common.Roles;
-using App.Features.Users.Interfaces;
+﻿using App.Features.Users.Common.Helpers;
+using App.Features.Users.Common.Models.Interfaces;
+using App.Features.Users.Common.Roles.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace App.Features.Users.Common.Models;

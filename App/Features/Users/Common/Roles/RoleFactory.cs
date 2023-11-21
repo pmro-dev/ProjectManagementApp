@@ -1,4 +1,7 @@
-﻿namespace App.Features.Users.Common.Roles;
+﻿using App.Features.Users.Common.Roles.Interfaces;
+using App.Features.Users.Common.Roles.Models;
+
+namespace App.Features.Users.Common.Roles;
 
 public class RoleFactory : IRoleFactory
 {

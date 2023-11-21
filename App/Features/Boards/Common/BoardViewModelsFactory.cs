@@ -1,5 +1,6 @@
-﻿using App.Features.Boards.ShowAll;
-using App.Features.Boards.ShowBriefly;
+﻿using App.Features.Boards.All.Models;
+using App.Features.Boards.Briefly.Models;
+using App.Features.Boards.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
 
 namespace App.Features.Boards.Common;

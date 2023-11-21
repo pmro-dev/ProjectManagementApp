@@ -38,10 +38,4 @@
     <PackageReference Include="MockQueryable.Moq" Version="6.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Boards\Queries\" />
-    <Folder Include="Features\Tasks\Commands\" />
-    <Folder Include="Features\Tasks\Queries\" />
-  </ItemGroup>
-
 </Project>

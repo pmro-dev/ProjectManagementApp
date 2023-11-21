@@ -19,7 +19,6 @@ using App.Features.Users.Common.Interfaces;
 using App.Infrastructure.Databases.App.Seeds;
 using App.Features.Users.Logout.Interfaces;
 using App.Features.Boards.Common;
-using App.Features.Users.Interfaces;
 using App.Features.Users.Register.Interfaces;
 using Microsoft.AspNetCore.Mvc.Razor;
 using App.Common.Views;
@@ -28,6 +27,9 @@ using App.Common;
 using App.Infrastructure.Databases.App.Interfaces;
 using App.Infrastructure.Databases.Identity.Interfaces;
 using App.Features.Users.Authentication.Interfaces;
+using App.Features.Boards.Common.Interfaces;
+using App.Features.Users.Common.Roles.Interfaces;
+using App.Infrastructure.Databases.App.Seeds.Interfaces;
 
 
 
@@ -35,7 +37,7 @@ using App.Features.Users.Authentication.Interfaces;
 
 namespace App
 {
-    public static class Program
+	public static class Program
 	{
 		public static async Task Main(string[] args)
 		{

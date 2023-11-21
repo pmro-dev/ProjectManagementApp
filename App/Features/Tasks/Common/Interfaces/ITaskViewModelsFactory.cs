@@ -2,10 +2,10 @@
 
 using App.Common.ViewModels;
 using App.Features.Tasks.Common.Models;
-using App.Features.Tasks.Create;
-using App.Features.Tasks.Delete;
-using App.Features.Tasks.Edit;
-using App.Features.Tasks.Show;
+using App.Features.Tasks.Create.Models;
+using App.Features.Tasks.Delete.Models;
+using App.Features.Tasks.Edit.Models;
+using App.Features.Tasks.Show.Models;
 using App.Features.TodoLists.Common.Models;
 
 #endregion

@@ -1,5 +1,5 @@
 ﻿using App.Common.Helpers;
-using App.Features.Users.Common.Roles;
+using App.Features.Users.Common.Roles.Models.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using System.Linq.Expressions;
 using System.Security.Claims;

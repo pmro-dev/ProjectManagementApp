@@ -1,6 +1,6 @@
 ﻿using App.Common.Helpers;
 using App.Features.Users.Common.Models;
-using App.Features.Users.Common.Roles;
+using App.Features.Users.Common.Roles.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace App.Infrastructure.Databases.Identity;

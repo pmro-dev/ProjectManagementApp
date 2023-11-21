@@ -1,9 +1,10 @@
 ﻿using App.Features.Users.Common.Models;
-using App.Features.Users.Common.Roles;
-using App.Features.Users.Interfaces;
-using App.Features.Users.Login;
-using App.Features.Users.Login.Interfaces;
-using App.Features.Users.Register;
+using App.Features.Users.Common.Models.Interfaces;
+using App.Features.Users.Common.Roles.Models;
+using App.Features.Users.Common.Roles.Models.Interfaces;
+using App.Features.Users.Login.Models;
+using App.Features.Users.Login.Models.Interfaces;
+using App.Features.Users.Register.Models;
 using AutoMapper;
 
 namespace App.Common;

@@ -1,10 +1,10 @@
-﻿using App.Features.Tags.Common;
+﻿using App.Features.Tags.Common.Models;
 using App.Features.Tasks.Common.Interfaces;
 using App.Features.Tasks.Common.Models;
 using App.Features.Tasks.Common.TaskTags.Common;
-using App.Features.Tasks.Create;
-using App.Features.Tasks.Delete;
-using App.Features.Tasks.Edit;
+using App.Features.Tasks.Create.Models;
+using App.Features.Tasks.Delete.Models;
+using App.Features.Tasks.Edit.Models;
 using App.Features.TodoLists.Common.Interfaces;
 
 namespace App.Features.Tasks.Common;

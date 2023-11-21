@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using App.Features.Boards.All.Interfaces;
+using MediatR;
 
 namespace App.Features.Boards.All;
 

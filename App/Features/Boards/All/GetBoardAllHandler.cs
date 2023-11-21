@@ -1,4 +1,5 @@
-﻿using App.Features.Boards.Common;
+﻿using App.Features.Boards.All.Interfaces;
+using App.Features.Boards.Common.Interfaces;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.Users.Common.Interfaces;
 using App.Infrastructure.Databases.App.Interfaces;

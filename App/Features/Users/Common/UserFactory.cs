@@ -1,6 +1,7 @@
-﻿using App.Features.Users.Common.Models;
-using App.Features.Users.Common.Roles;
-using App.Features.Users.Interfaces;
+﻿using App.Features.Users.Common.Interfaces;
+using App.Features.Users.Common.Models;
+using App.Features.Users.Common.Roles.Interfaces;
+using App.Features.Users.Common.Roles.Models;
 
 namespace App.Features.Users.Common;
 

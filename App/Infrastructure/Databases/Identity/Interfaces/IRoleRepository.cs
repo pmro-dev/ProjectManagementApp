@@ -1,4 +1,4 @@
-﻿using App.Features.Users.Common.Roles;
+﻿using App.Features.Users.Common.Roles.Models;
 using App.Infrastructure.Databases.Common.Interfaces;
 
 namespace App.Infrastructure.Databases.Identity.Interfaces;

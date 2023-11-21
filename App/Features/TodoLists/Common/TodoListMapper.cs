@@ -2,8 +2,8 @@
 using App.Features.Tasks.Common.Models;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
-using App.Features.TodoLists.Create;
-using App.Features.TodoLists.Edit;
+using App.Features.TodoLists.Create.Models;
+using App.Features.TodoLists.Edit.Models;
 
 namespace App.Features.TodoLists.Common;
 

@@ -1,6 +1,6 @@
 ﻿using App.Features.Users.Authentication;
 using App.Features.Users.Common.Models;
-using App.Features.Users.Common.Roles;
+using App.Features.Users.Common.Roles.Models;
 using App.Infrastructure.Databases.Identity.Interfaces;
 using MethodTimer;
 using System.Text;

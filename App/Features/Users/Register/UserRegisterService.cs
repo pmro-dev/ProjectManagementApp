@@ -1,8 +1,8 @@
 ﻿using App.Common.Helpers;
 using App.Features.Users.Authentication;
+using App.Features.Users.Common.Interfaces;
 using App.Features.Users.Common.Models;
-using App.Features.Users.Common.Roles;
-using App.Features.Users.Interfaces;
+using App.Features.Users.Common.Roles.Models;
 using App.Features.Users.Register.Interfaces;
 using App.Infrastructure.Databases.Identity.Interfaces;
 using App.Infrastructure.Databases.Identity.Seeds;

@@ -1,9 +1,9 @@
 ﻿using App.Common.ViewModels;
 using App.Features.TodoLists.Common.Models;
-using App.Features.TodoLists.Create;
-using App.Features.TodoLists.Delete;
-using App.Features.TodoLists.Edit;
-using App.Features.TodoLists.Show;
+using App.Features.TodoLists.Create.Models;
+using App.Features.TodoLists.Delete.Models;
+using App.Features.TodoLists.Edit.Models;
+using App.Features.TodoLists.Show.Models;
 
 namespace App.Features.TodoLists.Common.Interfaces;
 
