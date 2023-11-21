@@ -24,9 +24,9 @@ public static class ExceptionsService
 	/// <param name="logger">Logger object of class that checks for exceptions.</param>
 	/// <param name="message">Message must to contain two arguments as {operationName} and {modelTypeName}.</param>
 	/// <exception cref="ArgumentNullException"></exception>
-	public static void ThrowEntityNotFoundInDb(string operationName, string dataTypeName, string id, ILogger logger)
+	public static void ThrowCriticalEntityNotFoundInDb(string operationName, string dataTypeName, string id, ILogger logger)
 	{
-		logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, operationName, dataTypeName, id);
+		logger.LogCritical(MessagesPacket.LogEntityNotFoundInDbSet, operationName, dataTypeName, id);
 		throw new InvalidOperationException(MessagesPacket.EntityNotFoundInDb(operationName, dataTypeName, id));
 	}
 
@@ -58,7 +58,7 @@ public static class ExceptionsService
 		if (options is null)
 		{
 			logger.LogCritical(MessagesPacket.LogOptionsObjectIsNull, operationName, optionsTypeName);
-			throw new InvalidOperationException(MessagesPacket.ExceptionErrorNullObject(operationName, optionsTypeName));
+			throw new InvalidOperationException(MessagesPacket.ExceptionCriticalNullObject(operationName, optionsTypeName));
 		}
 	}
 
@@ -76,13 +76,13 @@ public static class ExceptionsService
 	/// <param name="modelName">Model name.</param>
 	/// <param name="logger">Logger from class that invokes method.</param>
 	/// <exception cref="ArgumentNullException">Occurs when model is null.</exception>
-	public static void WhenModelIsNullThrowError<T>(string operationName, T? model, ILogger logger) where T : class
+	public static void WhenModelIsNullThrowCritical<T>(string operationName, T? model, ILogger logger) where T : class
 	{
 		if (model == null)
 		{
 			string modelTypeName = typeof(T).Name;
-			logger.LogError(MessagesPacket.LogArgumentIsNullOrEmpty, operationName, modelTypeName);
-			throw new ArgumentNullException(modelTypeName, MessagesPacket.ProvidedObjectIsNull);
+			logger.LogCritical(MessagesPacket.LogCriticalModelObjectIsNull, operationName, modelTypeName);
+			throw new InvalidOperationException(MessagesPacket.ExceptionCriticalNullObject(operationName, modelTypeName));
 		}
 	}
 
@@ -139,7 +139,7 @@ public static class ExceptionsService
 		if (string.IsNullOrEmpty(argument))
 		{
 			logger.LogError(MessagesPacket.LogArgumentIsNullOrEmpty, operationName, argumentOrTypeName);
-			throw new ArgumentNullException(MessagesPacket.ExceptionErrorNullObject(operationName, argumentOrTypeName));
+			throw new ArgumentNullException(MessagesPacket.ExceptionCriticalNullObject(operationName, argumentOrTypeName));
 		}
 	}
 
@@ -174,8 +174,8 @@ public static class ExceptionsService
 	{
 		if (identity == null)
 		{
-			_logger.LogCritical(MessagesPacket.ClaimsIdentityIsNull);
-			throw new InvalidOperationException(MessagesPacket.ClaimsIdentityIsNull);
+			_logger.LogCritical(MessagesPacket.LogClaimsIdentityIsNull);
+			throw new InvalidOperationException(MessagesPacket.LogClaimsIdentityIsNull);
 		}
 	}
 

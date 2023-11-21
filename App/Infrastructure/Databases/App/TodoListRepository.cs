@@ -49,7 +49,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 			.SingleOrDefaultAsync();
 
 		if (todoListWithDetails is null)
-			ExceptionsService.ThrowEntityNotFoundInDb(nameof(DuplicateWithDetailsAsync), typeof(TodoListModel).Name, todoListId.ToString(), _logger);
+			ExceptionsService.ThrowCriticalEntityNotFoundInDb(nameof(DuplicateWithDetailsAsync), typeof(TodoListModel).Name, todoListId.ToString(), _logger);
 
 		var duplicatedTasks = todoListWithDetails!.Tasks.Select(originTask => CreateNewTaskObject(originTask)).ToList();
 		var duplicatedTodoList = CreateNewTodoListObject(todoListWithDetails, duplicatedTasks);

@@ -46,8 +46,8 @@ public class SeedData : ISeedData
 
 		if (AllTasks is null || TodoLists is null || TasksUX is null || TasksBackend is null || TasksTesting is null || TasksProjectManagement is null)
 		{
-			_logger.LogCritical(MessagesPacket.SeedCollectionsAreEmpty);
-			throw new InvalidOperationException(MessagesPacket.SeedCollectionsAreEmpty);
+			_logger.LogCritical(MessagesPacket.LogSeedCollectionsAreEmpty);
+			throw new InvalidOperationException(MessagesPacket.LogSeedCollectionsAreEmpty);
 		}
 	}
 

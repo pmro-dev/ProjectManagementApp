@@ -1,5 +1,4 @@
-﻿using App.Common.Helpers;
-using App.Features.Tasks.Common;
+﻿using App.Features.Tasks.Common;
 using App.Features.Tasks.Common.Interfaces;
 using App.Features.Tasks.Show.Interfaces;
 using App.Infrastructure.Databases.App.Interfaces;
@@ -31,19 +30,12 @@ public class ShowTaskHandler : IRequestHandler<ShowTaskQuery, IShowTaskOutputVM>
 
 		TaskModel? taskModel = await _taskRepository.GetAsync(request.TaskId);
 
-		if (taskModel is null)
-		{
-			_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, nameof(ShowTaskQuery), nameof(TaskModel), request.TaskId);
-			
-			//TODO implement failure result
-			//return NotFound();
-		}
-
-		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(ShowTaskQuery), request.TodoListId, nameof(request.TodoListId), taskModel.TodoListId, nameof(taskModel.TodoListId), _logger);
+		ExceptionsService.WhenModelIsNullThrowCritical(nameof(ShowTaskQuery), taskModel, _logger);
+		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(ShowTaskQuery), request.TodoListId, nameof(request.TodoListId), taskModel!.TodoListId, nameof(taskModel.TodoListId), _logger);
 
 		TaskDto taskDto = _taskEntityMapper.TransferToDto(taskModel);
-		var resultAsDetailsOutputVM = _taskViewModelsFactory.CreateDetailsOutputVM(taskDto);
+		var result = _taskViewModelsFactory.CreateDetailsOutputVM(taskDto);
 
-		return resultAsDetailsOutputVM;
+		return result;
 	}
 }

@@ -207,7 +207,7 @@ namespace App.Features.TodoLists
 
 				if (todoListDbModel is null)
 				{
-					ExceptionsService.ThrowEntityNotFoundInDb(nameof(DeletePost), nameof(TodoListModel), id.ToString(), _logger);
+					ExceptionsService.ThrowCriticalEntityNotFoundInDb(nameof(DeletePost), nameof(TodoListModel), id.ToString(), _logger);
 				}
 
 				ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(DeletePost), todoListDbModel!.Id, nameof(todoListDbModel.Id), id, nameof(id), _logger);

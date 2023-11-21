@@ -46,7 +46,7 @@ public class UserAuthenticationService : IUserAuthenticationService
 	{
 		if (userPrincipal is null)
 		{
-			_logger.LogError(MessagesPacket.UnableToAuthenticateUserPrincipal, nameof(AuthenticateUser), nameof(UserAuthenticationService));
+			_logger.LogError(MessagesPacket.LogUnableToAuthenticateUserPrincipal, nameof(AuthenticateUser), nameof(UserAuthenticationService));
 			return false;
 		}
 

@@ -7,9 +7,9 @@ public static class MessagesPacket
 {
 	#region MESSAGES FOR EXCEPTIONS
 
-	public static string ExceptionErrorNullObject(string operationName, string objectTypeName)
+	public static string ExceptionCriticalNullObject(string operationName, string objectTypeName)
 	{
-		return $"Error occured on attempt to {operationName}. Details: object {objectTypeName} cannot be null.";
+		return $"Critical Error occured on attempt to {operationName}. Details: object {objectTypeName} cannot be null!";
 	}
 
 	public static string ExceptionCriticalPropertyNullOrEmpty(string operationName, string objectTypeOrPropertyName)
@@ -78,15 +78,16 @@ public static class MessagesPacket
 	public const string LogCreatingUserIdentityFailed = "{operationName} | Creating new User Identity failed!";
 	public const string LogCriticalErrorRoleNotFoundInDb = "{operationName} | Role ( {roleName} ) not found in a database.";
 	public const string LoginFailedForRegisteredUser = "{operationName} | Attempt to login registered user failed! User: {username}";
-	public const string UnableToAuthenticateUserPrincipal = "{operationName} | User Claims Principal is null when authenticating in {serviceName}!";
+	public const string LogUnableToAuthenticateUserPrincipal = "{operationName} | User Claims Principal is null when authenticating in {serviceName}!";
 	public const string LogHttpContextObjectIsNull = "{operationName} | Unable to get HttpContext - accessor returned null object.";
 	public const string LogFilterExpressionIsNull = "{operationName} | Given filter expression is set to null which does not allow to proceed operation.";
 	public const string LogExceptionOccuredOnSavingDataToDataBase = "{operationName} | Exception occured on attempt to save data to database!";
 	public const string LogRollbackProceed = "Rollback proceed!";
 	public const string LogExceptionOccuredOnCommitingTransaction = "{operationName} | Exception occured on attempt to commit transaction to database!";
-	public const string SeedCollectionsAreEmpty = "Some Seed collections are empty!";
-	public const string ClaimsIdentityIsNull = "Unable to proceed with signing in user because of null value of claims identity!";
+	public const string LogSeedCollectionsAreEmpty = "Some Seed collections are empty!";
+	public const string LogClaimsIdentityIsNull = "Unable to proceed with signing in user because of null value of claims identity!";
 	public const string LogOptionsObjectIsNull = "{operationName} | Used options ( {optionsTypeName} ) object was null!";
+	public const string LogCriticalModelObjectIsNull = "{operationName} | Object of given model ( {modelTypeName} ) is null!";
 
 	#endregion
 }

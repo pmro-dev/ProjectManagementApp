@@ -62,7 +62,7 @@ public class UserService : IUserService
 		UserModel? userFromDb = await _userRepository.GetAsync(userBasedOnProviderDataDto.NameIdentifier);
 
 		if (userFromDb is null)
-			ExceptionsService.ThrowEntityNotFoundInDb(nameof(UpdateUserInDbAsync), nameof(UserModel), userBasedOnProviderDataDto.NameIdentifier, _logger);
+			ExceptionsService.ThrowCriticalEntityNotFoundInDb(nameof(UpdateUserInDbAsync), nameof(UserModel), userBasedOnProviderDataDto.NameIdentifier, _logger);
 
 		bool IsUserUsedExternalAuthProvider = userBasedOnProviderDataDto.Provider != CookieAuthenticationDefaults.AuthenticationScheme;
 		bool IsNotUserDataTheSame = !userBasedOnProviderDataDto.Equals(userFromDb);
@@ -73,8 +73,8 @@ public class UserService : IUserService
 
 	private void SetNewDataForUser(UserModel? userFromDb, UserDto? userBasedOnProviderDataDto, string providerName)
 	{
-		ExceptionsService.WhenModelIsNullThrowError(nameof(UpdateUserInDbAsync), userFromDb, _logger);
-		ExceptionsService.WhenModelIsNullThrowError(nameof(UpdateUserInDbAsync), userBasedOnProviderDataDto, _logger);
+		ExceptionsService.WhenModelIsNullThrowCritical(nameof(UpdateUserInDbAsync), userFromDb, _logger);
+		ExceptionsService.WhenModelIsNullThrowCritical(nameof(UpdateUserInDbAsync), userBasedOnProviderDataDto, _logger);
 		ExceptionsService.WhenArgumentIsNullOrEmptyThrowError(nameof(UpdateUserInDbAsync), providerName, nameof(providerName), _logger);
 
 		userFromDb!.FirstName = userBasedOnProviderDataDto!.FirstName;
