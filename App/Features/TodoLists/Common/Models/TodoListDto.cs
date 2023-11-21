@@ -1,4 +1,4 @@
-﻿using App.Features.Tasks.Common;
+﻿using App.Features.Tasks.Common.Models;
 using App.Features.TodoLists.Common.Interfaces;
 
 namespace App.Features.TodoLists.Common.Models;
