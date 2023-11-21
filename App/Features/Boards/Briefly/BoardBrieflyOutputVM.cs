@@ -1,5 +1,6 @@
 ﻿using App.Features.Boards.Briefly;
-using App.Features.Tasks.Common;
+using App.Features.Tasks.Common.Helpers;
+using App.Features.Tasks.Common.Models;
 using App.Features.TodoLists.Common.Models;
 
 namespace App.Features.Boards.ShowBriefly;

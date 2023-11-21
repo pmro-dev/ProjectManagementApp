@@ -1,4 +1,6 @@
 ﻿using App.Common.Helpers;
+using App.Features.Tasks.Common.Helpers;
+using App.Features.Tasks.Common.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace App.Features.Tasks.Common;

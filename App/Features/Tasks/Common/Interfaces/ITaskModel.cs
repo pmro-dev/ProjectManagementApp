@@ -3,7 +3,7 @@ using App.Common.Interfaces;
 using App.Features.Tasks.Common.TaskTags.Common;
 using App.Features.TodoLists.Common.Models;
 using System.ComponentModel.DataAnnotations;
-using static App.Features.Tasks.Common.TaskStatusHelper;
+using static App.Features.Tasks.Common.Helpers.TaskStatusHelper;
 
 namespace App.Features.Tasks.Common.Interfaces;
 

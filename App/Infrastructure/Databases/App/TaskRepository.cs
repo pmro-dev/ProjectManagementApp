@@ -1,4 +1,4 @@
-﻿using App.Features.Tasks.Common;
+﻿using App.Features.Tasks.Common.Models;
 using App.Infrastructure.Databases.App.Interfaces;
 using App.Infrastructure.Databases.Common;
 

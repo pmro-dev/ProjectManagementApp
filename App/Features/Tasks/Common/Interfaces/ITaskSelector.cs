@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using App.Features.Tasks.Common.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace App.Features.Tasks.Common.Interfaces;
 

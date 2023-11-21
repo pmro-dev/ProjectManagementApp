@@ -2,7 +2,7 @@
 using App.Features.Tasks.Edit.Interfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
-using static App.Features.Tasks.Common.TaskStatusHelper;
+using static App.Features.Tasks.Common.Helpers.TaskStatusHelper;
 
 namespace App.Features.Tasks.Edit;
 

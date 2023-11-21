@@ -1,5 +1,5 @@
-﻿using App.Features.Tasks.Common;
-using App.Features.Tasks.Common.Interfaces;
+﻿using App.Features.Tasks.Common.Interfaces;
+using App.Features.Tasks.Common.Models;
 using App.Features.Tasks.Common.TaskTags.Common;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;

@@ -1,7 +1,7 @@
 ﻿using App.Common.Helpers;
 using App.Features.Tasks.Delete.Interfaces;
 using System.ComponentModel.DataAnnotations;
-using static App.Features.Tasks.Common.TaskStatusHelper;
+using static App.Features.Tasks.Common.Helpers.TaskStatusHelper;
 
 namespace App.Features.Tasks.Delete;
 

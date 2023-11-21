@@ -1,5 +1,6 @@
 ﻿using App.Common.Interfaces;
 using App.Features.Tags.Common.Interfaces;
+using App.Features.Tasks.Common.Models;
 using App.Features.Tasks.Common.TaskTags.Common.Interfaces;
 using App.Features.Tasks.Delete;
 using App.Features.Tasks.Edit;

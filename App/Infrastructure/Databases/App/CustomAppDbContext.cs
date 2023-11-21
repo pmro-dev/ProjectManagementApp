@@ -1,11 +1,11 @@
 ﻿using App.Common.Helpers;
 using App.Features.Tags.Common;
-using App.Features.Tasks.Common;
+using App.Features.Tasks.Common.Models;
 using App.Features.Tasks.Common.TaskTags.Common;
 using App.Features.TodoLists.Common.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using static App.Features.Tasks.Common.TaskStatusHelper;
+using static App.Features.Tasks.Common.Helpers.TaskStatusHelper;
 
 namespace App.Infrastructure.Databases.App;
 

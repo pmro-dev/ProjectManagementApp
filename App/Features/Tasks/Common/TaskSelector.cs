@@ -1,6 +1,7 @@
 ﻿using App.Features.Tasks.Common.Interfaces;
+using App.Features.Tasks.Common.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using static App.Features.Tasks.Common.TaskStatusHelper;
+using static App.Features.Tasks.Common.Helpers.TaskStatusHelper;
 
 namespace App.Features.Tasks.Common;
 

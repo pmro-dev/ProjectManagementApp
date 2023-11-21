@@ -8,12 +8,12 @@ using Autofac;
 using Project_UnitTests.Services;
 using Project_UnitTests.Data;
 using App.Infrastructure.Databases.App;
-using App.Features.Tasks.Common;
 using App.Infrastructure.Databases.App.Interfaces;
 using App.Features.TodoLists.Common.Models;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Infrastructure.Databases.App.Seeds;
 using App.Features.Tasks.Common.Interfaces;
+using App.Features.Tasks.Common.Models;
 
 namespace Project_UnitTests;
 
