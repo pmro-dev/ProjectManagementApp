@@ -32,7 +32,7 @@ public class LogoutService : ILogoutService
 		//TODO error logging
 		string userAuthenticationScheme = httpContext.User.Claims.Single(claim => claim.Type == ".AuthScheme").Value ?? throw new InvalidOperationException();
 
-		IActionResult actionResult = userAuthenticationScheme switch
+		IActionResult result = userAuthenticationScheme switch
 		{
 			AuthenticationConsts.GoogleOpenIDScheme => new RedirectResult(AuthenticationConsts.GoogleUrlToLogout),
 			CookieAuthenticationDefaults.AuthenticationScheme => new RedirectToActionResult(UserCtrl.LoginAction, UserCtrl.Name, null),
@@ -40,6 +40,6 @@ public class LogoutService : ILogoutService
 		};
 
 		await httpContext.SignOutAsync();
-		return actionResult;
+		return result;
 	}
 }
