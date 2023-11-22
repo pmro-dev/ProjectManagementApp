@@ -1,5 +1,6 @@
 ﻿using App.Features.Users.Common.Interfaces;
 using App.Features.Users.Common.Models;
+using App.Features.Users.Common.Roles.Interfaces;
 using App.Features.Users.Common.Roles.Models;
 using App.Infrastructure.Databases.Identity.Interfaces;
 using App.Infrastructure.Databases.Identity.Seeds;
@@ -15,34 +16,24 @@ public class UserService : IUserService
 	private readonly IHttpContextAccessor _httpContextAccessor;
 	private readonly IIdentityUnitOfWork _identityUnitOfWork;
 	private readonly IUserRepository _userRepository;
-	private readonly IRoleRepository _roleRepository;
-	private readonly IUserFactory _userFactory;
+	private readonly IRoleService _roleService;
 	private readonly IMapper _mapper;
 	private readonly ILogger<UserService> _logger;
 
 	public UserService(IHttpContextAccessor httpContextAccessor, IIdentityUnitOfWork identityUnitOfWork,
-		ILogger<UserService> logger, IUserFactory userFactory, IMapper mapper)
+		ILogger<UserService> logger, IMapper mapper, IRoleService roleService)
 	{
 		_httpContextAccessor = httpContextAccessor;
 		_identityUnitOfWork = identityUnitOfWork;
 		_userRepository = _identityUnitOfWork.UserRepository;
-		_roleRepository = _identityUnitOfWork.RoleRepository;
 		_logger = logger;
-		_userFactory = userFactory;
 		_mapper = mapper;
+		_roleService = roleService;
 	}
 
-	public async Task AddNewUserToDbAsync(UserDto userDto)
+	public async Task AddNewUserAsync(UserDto userDto)
 	{
-		RoleModel? roleModel = await _roleRepository.GetByFilterAsync(r => r.Name == IdentitySeedData.DefaultRole);
-		ExceptionsService.ThrowWhenRoleNotFoundInDb(nameof(AddNewUserToDbAsync), roleModel, IdentitySeedData.DefaultRole, _logger);
-
-		RoleDto? roleDto = _mapper.Map<RoleDto>(roleModel);
-
-		var userRoleDto = _userFactory.CreateUserRoleDto();
-		userRoleDto.UserId = userDto.UserId;
-		userRoleDto.RoleId = roleDto.Id;
-		userDto.UserRoles.Add(userRoleDto);
+		await _roleService.AddDefaultRoleToUserAsync(userDto);
 
 		UserModel userModel = _mapper.Map<UserModel>(userDto);
 

@@ -10,7 +10,6 @@ using App.Features.TodoLists.Common;
 using App.Features.Users.Logout;
 using App.Features.Tasks.Common;
 using App.Features.Users.Common;
-using App.Features.Users.Common.Claims;
 using App.Infrastructure;
 using App.Features.Users.Login;
 using App.Features.Users.Register;
@@ -70,6 +69,7 @@ namespace App
 			builder.Services.AddScoped<IUserRegisterService, UserRegisterService>();
 			builder.Services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
 			builder.Services.AddScoped<IClaimsService, ClaimsService>();
+			builder.Services.AddScoped<IRoleService, RoleService>();
 			builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ICookieEventsService, CookieEventsService>();
 			builder.Services.AddScoped<IIdentityService, IdentityService>();

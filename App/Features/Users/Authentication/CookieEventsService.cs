@@ -38,7 +38,7 @@ public class CookieEventsService : ICookieEventsService
 		}
 		else
 		{
-			await _userService.AddNewUserToDbAsync(signingUser);
+			await _userService.AddNewUserAsync(signingUser);
 		}
 
 		await _identityUnitOfWork.SaveChangesAsync();

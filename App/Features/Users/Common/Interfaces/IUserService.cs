@@ -9,7 +9,7 @@ public interface IUserService
 
     Task UpdateUserInDbAsync(UserDto userBasedOnProviderDataDto, Claim authenticationSchemeClaim);
 
-    Task AddNewUserToDbAsync(UserDto userDto);
+    Task AddNewUserAsync(UserDto userDto);
 
     Task SetRolesForUserPrincipleAsync(string userId, ClaimsIdentity identity);
 }
