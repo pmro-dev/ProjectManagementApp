@@ -22,13 +22,13 @@ using App.Features.Users.Register.Interfaces;
 using Microsoft.AspNetCore.Mvc.Razor;
 using App.Common.Views;
 using App.Features.Users.Common.Roles;
-using App.Common;
 using App.Infrastructure.Databases.App.Interfaces;
 using App.Infrastructure.Databases.Identity.Interfaces;
 using App.Features.Users.Authentication.Interfaces;
 using App.Features.Boards.Common.Interfaces;
 using App.Features.Users.Common.Roles.Interfaces;
 using App.Infrastructure.Databases.App.Seeds.Interfaces;
+using App.Common;
 
 
 
@@ -67,7 +67,7 @@ namespace App
 			builder.Services.AddScoped<ILoginService, LoginService>();
 			builder.Services.AddScoped<ILogoutService, LogoutService>();
 			builder.Services.AddScoped<IUserRegisterService, UserRegisterService>();
-			builder.Services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
+			builder.Services.AddScoped<IAuthenticationCustomService, AuthenticationCustomService>();
 			builder.Services.AddScoped<IClaimsService, ClaimsService>();
 			builder.Services.AddScoped<IRoleService, RoleService>();
 			builder.Services.AddScoped<IUserService, UserService>();

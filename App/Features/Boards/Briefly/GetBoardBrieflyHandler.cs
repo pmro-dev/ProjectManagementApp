@@ -1,10 +1,10 @@
-﻿using App.Features.Boards.Briefly.Interfaces;
+﻿using App.Common.Helpers;
+using App.Features.Boards.Briefly.Interfaces;
 using App.Features.Boards.Common.Interfaces;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Interfaces;
 using App.Infrastructure.Databases.App.Interfaces;
-using App.Infrastructure.Helpers;
 using MediatR;
 
 namespace App.Features.Boards.Briefly;

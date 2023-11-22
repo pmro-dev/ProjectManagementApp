@@ -1,8 +1,8 @@
-﻿using App.Features.Users.Authentication.Interfaces;
+﻿using App.Common.Helpers;
+using App.Features.Users.Authentication.Interfaces;
 using App.Features.Users.Common.Interfaces;
 using App.Features.Users.Common.Models;
 using App.Infrastructure.Databases.Identity.Interfaces;
-using App.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 
@@ -30,19 +30,19 @@ public class CookieEventsService : ICookieEventsService
 		Claim authenticationClaim = GetAuthenticationClaim(cookieSigningInContext);
 		ClaimsIdentity identity = GetUserIdentity(cookieSigningInContext);
 
-		UserDto signingUser = _identityService.CreateUser(identity, authenticationClaim);
+		UserDto signingUserDto = _identityService.CreateUser(identity, authenticationClaim);
 
-		if (await _userRepository.IsAccountExistedAsync(signingUser.Email))
+		if (await _userRepository.IsAccountExistedAsync(signingUserDto.Email))
 		{
-			await _userService.UpdateUserModelAsync(signingUser, authenticationClaim);
+			await _userService.UpdateUserModelAsync(signingUserDto, authenticationClaim);
 		}
 		else
 		{
-			await _userService.AddNewUserAsync(signingUser);
+			await _userService.AddNewUserAsync(signingUserDto);
 		}
 
 		await _identityUnitOfWork.SaveChangesAsync();
-		await _userService.SetRolesForUserPrincipleAsync(signingUser.UserId, identity);
+		await _userService.SetRolesForUserPrincipleAsync(signingUserDto.UserId, identity);
 	}
 
 

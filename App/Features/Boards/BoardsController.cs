@@ -1,6 +1,6 @@
-﻿using App.Features.Boards.All;
+﻿using App.Common;
+using App.Features.Boards.All;
 using App.Features.Boards.Briefly;
-using App.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

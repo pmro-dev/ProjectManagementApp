@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace App.Features.Users.Authentication.Interfaces;
 
-public interface IUserAuthenticationService
+public interface IAuthenticationCustomService
 {
     ChallengeResult ChallengeProviderToLogin(string provider);
 

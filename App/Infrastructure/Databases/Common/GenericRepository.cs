@@ -1,5 +1,5 @@
-﻿using App.Infrastructure.Databases.Common.Interfaces;
-using App.Infrastructure.Helpers;
+﻿using App.Common.Helpers;
+using App.Infrastructure.Databases.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

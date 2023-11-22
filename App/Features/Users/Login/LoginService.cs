@@ -15,7 +15,7 @@ public class LoginService : ILoginService
 	private readonly IUserRepository _userRepository;
 	private readonly IHttpContextAccessor _httpContextAccessor;
 	private readonly IClaimsService _claimsService;
-	private readonly IUserAuthenticationService _userAuthenticationService;
+	private readonly IAuthenticationCustomService _authenticationService;
 	private readonly ILogger<LoginService> _logger;
 	private readonly IMapper _mapper;
 
@@ -23,14 +23,14 @@ public class LoginService : ILoginService
 	IIdentityUnitOfWork identityUnitOfWork,
 	IHttpContextAccessor httpContextAccessor,
 	IClaimsService claimsService,
-	IUserAuthenticationService userAuthenticationService,
+    IAuthenticationCustomService authenticationService,
 		ILogger<LoginService> logger,
 		IMapper mapper)
 	{
 		_userRepository = identityUnitOfWork.UserRepository;
 		_httpContextAccessor = httpContextAccessor;
 		_claimsService = claimsService;
-		_userAuthenticationService = userAuthenticationService;
+		_authenticationService = authenticationService;
 		_logger = logger;
 		_mapper = mapper;
 	}
@@ -49,7 +49,7 @@ public class LoginService : ILoginService
 		UserDto userDto = _mapper.Map<UserDto>(loggingUserModel);
 
 		ClaimsPrincipal userPrincipal = _claimsService.CreateUserClaimsPrincipal(userDto);
-		AuthenticationProperties authProperties = _userAuthenticationService.CreateDefaultAuthProperties();
+		AuthenticationProperties authProperties = _authenticationService.CreateDefaultAuthProperties();
 
 		//TODO write logging
 		HttpContext? httpContext = _httpContextAccessor.HttpContext;

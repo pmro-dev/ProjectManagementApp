@@ -1,8 +1,8 @@
-﻿using App.Features.Users.Authentication.Interfaces;
+﻿using App.Common.Helpers;
+using App.Features.Users.Authentication.Interfaces;
 using App.Features.Users.Common.Interfaces;
 using App.Features.Users.Login.Interfaces;
 using App.Features.Users.Login.Models;
-using App.Infrastructure.Helpers;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -15,16 +15,16 @@ public class LoginUserHandler : IRequestHandler<LoginUserQuery, bool>, IRequestH
 {
 	private readonly ILogger<LoginUserHandler> _logger;
 	private readonly ILoginService _loginService;
-	private readonly IUserAuthenticationService _userAuthenticationService;
+	private readonly IAuthenticationCustomService _authenticationService;
 	private readonly IUserService _userService;
 	private readonly IMapper _mapper;
 
 	public LoginUserHandler(ILogger<LoginUserHandler> logger, ILoginService loginService,
-		IUserAuthenticationService userAuthenticationService, IMapper mapper, IUserService userService)
+		IAuthenticationCustomService authenticationService, IMapper mapper, IUserService userService)
 	{
 		_logger = logger;
 		_loginService = loginService;
-		_userAuthenticationService = userAuthenticationService;
+		_authenticationService = authenticationService;
 		_mapper = mapper;
 		_userService = userService;
 	}
@@ -81,12 +81,12 @@ public class LoginUserHandler : IRequestHandler<LoginUserQuery, bool>, IRequestH
 		return Task<IActionResult>.Factory.StartNew(() =>
 		{
 			ClaimsPrincipal userPrincipal = _userService.GetSignedInUser();
-			var isUserAuthenticated = _userAuthenticationService.AuthenticateUser(userPrincipal);
+			var isUserAuthenticated = _authenticationService.AuthenticateUser(userPrincipal);
 
 			if (isUserAuthenticated)
 				return new RedirectToActionResult(BoardsCtrl.BrieflyAction, BoardsCtrl.Name, null);
 			else
-				return _userAuthenticationService.ChallengeProviderToLogin(request.Provider);
+				return _authenticationService.ChallengeProviderToLogin(request.Provider);
 		}, 
 		cancellationToken);
 	}

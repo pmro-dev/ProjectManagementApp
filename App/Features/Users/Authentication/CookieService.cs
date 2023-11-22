@@ -1,6 +1,6 @@
-﻿using App.Features.Users.Authentication.Interfaces;
-using App.Infrastructure;
-using App.Infrastructure.Helpers;
+﻿using App.Common;
+using App.Common.Helpers;
+using App.Features.Users.Authentication.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace App.Features.Users.Authentication;

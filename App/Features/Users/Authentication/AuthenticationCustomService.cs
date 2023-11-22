@@ -1,6 +1,6 @@
-﻿using App.Common.Helpers;
+﻿using App.Common;
+using App.Common.Helpers;
 using App.Features.Users.Authentication.Interfaces;
-using App.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -8,11 +8,11 @@ using System.Security.Claims;
 
 namespace App.Features.Users.Authentication;
 
-public class UserAuthenticationService : IUserAuthenticationService
+public class AuthenticationCustomService : IAuthenticationCustomService
 {
-	private readonly ILogger<UserAuthenticationService> _logger;
+	private readonly ILogger<AuthenticationCustomService> _logger;
 
-	public UserAuthenticationService(ILogger<UserAuthenticationService> logger)
+	public AuthenticationCustomService(ILogger<AuthenticationCustomService> logger)
 	{
 		_logger = logger;
 	}
@@ -46,7 +46,7 @@ public class UserAuthenticationService : IUserAuthenticationService
 	{
 		if (userPrincipal is null)
 		{
-			_logger.LogError(MessagesPacket.LogUnableToAuthenticateUserPrincipal, nameof(AuthenticateUser), nameof(UserAuthenticationService));
+			_logger.LogError(MessagesPacket.LogUnableToAuthenticateUserPrincipal, nameof(AuthenticateUser), nameof(AuthenticationCustomService));
 			return false;
 		}
 

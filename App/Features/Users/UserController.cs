@@ -3,14 +3,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using static App.Common.ControllersConsts;
-using App.Infrastructure;
-using App.Infrastructure.Helpers;
 using App.Features.Users.Login.Models;
 using App.Features.Users.Register.Models;
 using MediatR;
 using App.Features.Users.Login;
 using App.Features.Users.Logout;
 using App.Features.Users.Register;
+using App.Common.Helpers;
+using App.Common;
 
 #endregion
 

@@ -1,9 +1,9 @@
-﻿using App.Common.ViewModels;
+﻿using App.Common.Helpers;
+using App.Common.ViewModels;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
 using App.Features.TodoLists.Edit.Models;
 using App.Infrastructure.Databases.App.Interfaces;
-using App.Infrastructure.Helpers;
 using MediatR;
 
 namespace App.Features.TodoLists.Edit;
