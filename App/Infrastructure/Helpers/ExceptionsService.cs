@@ -179,6 +179,15 @@ public static class ExceptionsService
 		}
 	}
 
+	public static void WhenPrincipalIsNullThrowCritical(string operationName, ClaimsPrincipal? principal, ILogger _logger)
+	{
+		if (principal == null)
+		{
+			_logger.LogCritical(MessagesPacket.LogCriticalUserPrincipalIsNull, operationName);
+			throw new InvalidOperationException(MessagesPacket.CriticalUserPrincipalIsNull(operationName));
+		}
+	}
+
 	public static void WhenIdsAreNotEqualThrowCritical(string operationName, object firstId, string firstIdName, object secondId, string secondIdName, ILogger logger)
 	{
 		if (firstId is null)

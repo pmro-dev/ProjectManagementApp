@@ -73,7 +73,7 @@ public class UserController : Controller
 	{
 		ExceptionsService.WhenArgumentIsNullOrEmptyThrowError(nameof(LoginByProvider), provider, nameof(provider), _logger);
 
-		var result = await _mediator.Send(new LoginUserByProviderQuery(provider, User));
+		var result = await _mediator.Send(new LoginUserByProviderQuery(provider));
 
 		return result;
 	}

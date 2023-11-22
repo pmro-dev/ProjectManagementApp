@@ -42,6 +42,11 @@ public static class MessagesPacket
 		return $"{operationName} | Entities Ids Conflict! Given id ( {firstId} ) for {firstIdName} and ( {secondId} ) for {secondIdName} are not equal!";
 	}
 
+	public static string CriticalUserPrincipalIsNull(string operationName)
+	{
+		return $"{operationName} | Unable to proceed because User Principal is null!";
+	}
+
 	public const string ProvidedObjectIsNull = "Critical error! Provided object cannot be null!";
 	public const string ProvidedArgumentIsNullOrEmpty = "Passed argument cannot be null or empty!";
 	public const string ProvidedArgumentIsOutOfRange = "Passed argument is out of range!";
@@ -86,6 +91,7 @@ public static class MessagesPacket
 	public const string LogExceptionOccuredOnCommitingTransaction = "{operationName} | Exception occured on attempt to commit transaction to database!";
 	public const string LogSeedCollectionsAreEmpty = "Some Seed collections are empty!";
 	public const string LogClaimsIdentityIsNull = "Unable to proceed with signing in user because of null value of claims identity!";
+	public const string LogCriticalUserPrincipalIsNull = "{operationName} | Unable to proceed because User Principal is null!";
 	public const string LogOptionsObjectIsNull = "{operationName} | Used options ( {optionsTypeName} ) object was null!";
 	public const string LogCriticalModelObjectIsNull = "{operationName} | Object of given model ( {modelTypeName} ) is null!";
 
