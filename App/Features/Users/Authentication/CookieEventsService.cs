@@ -34,7 +34,7 @@ public class CookieEventsService : ICookieEventsService
 
 		if (await _userRepository.IsAccountExistedAsync(signingUser.Email))
 		{
-			await _userService.UpdateUserInDbAsync(signingUser, authenticationClaim);
+			await _userService.UpdateUserModelAsync(signingUser, authenticationClaim);
 		}
 		else
 		{

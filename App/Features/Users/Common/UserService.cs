@@ -3,7 +3,6 @@ using App.Features.Users.Common.Models;
 using App.Features.Users.Common.Roles.Interfaces;
 using App.Features.Users.Common.Roles.Models;
 using App.Infrastructure.Databases.Identity.Interfaces;
-using App.Infrastructure.Databases.Identity.Seeds;
 using App.Infrastructure.Helpers;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -42,30 +41,38 @@ public class UserService : IUserService
 
 	public string GetSignedInUserId()
 	{
-		var httpContext = _httpContextAccessor.HttpContext ?? throw new ArgumentException("Unable to get current HttpContext - accessor returned null HttpContext object.");
-
-		return httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? throw new InvalidOperationException("Error with signed In User");
+		return GetSignedInUser().FindFirst(ClaimTypes.NameIdentifier)?.Value ?? throw new InvalidOperationException("Error with signed In User");
 	}
 
-	public async Task UpdateUserInDbAsync(UserDto userBasedOnProviderDataDto, Claim authenticationSchemeClaim)
+	public ClaimsPrincipal GetSignedInUser()
+	{
+		var httpContext = _httpContextAccessor.HttpContext ?? throw new ArgumentException("Unable to get current HttpContext - accessor returned null HttpContext object!");
+
+		ClaimsPrincipal? user = httpContext.User;
+		ExceptionsService.WhenPrincipalIsNullThrowCritical(nameof(GetSignedInUser), user, _logger);
+
+		return user;
+	}
+
+	public async Task UpdateUserModelAsync(UserDto userBasedOnProviderDataDto, Claim authenticationSchemeClaim)
 	{
 		UserModel? userFromDb = await _userRepository.GetAsync(userBasedOnProviderDataDto.NameIdentifier);
 
 		if (userFromDb is null)
-			ExceptionsService.ThrowCriticalEntityNotFoundInDb(nameof(UpdateUserInDbAsync), nameof(UserModel), userBasedOnProviderDataDto.NameIdentifier, _logger);
+			ExceptionsService.ThrowCriticalEntityNotFoundInDb(nameof(UpdateUserModelAsync), nameof(UserModel), userBasedOnProviderDataDto.NameIdentifier, _logger);
 
 		bool IsUserUsedExternalAuthProvider = userBasedOnProviderDataDto.Provider != CookieAuthenticationDefaults.AuthenticationScheme;
-		bool IsNotUserDataTheSame = !userBasedOnProviderDataDto.Equals(userFromDb);
+		bool IsUserDataNotTheSame = !userBasedOnProviderDataDto.Equals(userFromDb);
 
-		if (IsUserUsedExternalAuthProvider && IsNotUserDataTheSame)
+		if (IsUserUsedExternalAuthProvider && IsUserDataNotTheSame)
 			SetNewDataForUser(userFromDb, userBasedOnProviderDataDto, authenticationSchemeClaim.Value);
 	}
 
 	private void SetNewDataForUser(UserModel? userFromDb, UserDto? userBasedOnProviderDataDto, string providerName)
 	{
-		ExceptionsService.WhenModelIsNullThrowCritical(nameof(UpdateUserInDbAsync), userFromDb, _logger);
-		ExceptionsService.WhenModelIsNullThrowCritical(nameof(UpdateUserInDbAsync), userBasedOnProviderDataDto, _logger);
-		ExceptionsService.WhenArgumentIsNullOrEmptyThrowError(nameof(UpdateUserInDbAsync), providerName, nameof(providerName), _logger);
+		ExceptionsService.WhenModelIsNullThrowCritical(nameof(UpdateUserModelAsync), userFromDb, _logger);
+		ExceptionsService.WhenModelIsNullThrowCritical(nameof(UpdateUserModelAsync), userBasedOnProviderDataDto, _logger);
+		ExceptionsService.WhenArgumentIsNullOrEmptyThrowError(nameof(UpdateUserModelAsync), providerName, nameof(providerName), _logger);
 
 		userFromDb!.FirstName = userBasedOnProviderDataDto!.FirstName;
 		userFromDb.LastName = userBasedOnProviderDataDto.LastName;

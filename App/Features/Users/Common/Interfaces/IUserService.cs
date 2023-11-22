@@ -6,8 +6,10 @@ namespace App.Features.Users.Common.Interfaces;
 public interface IUserService
 {
 	string GetSignedInUserId();
+	
+	ClaimsPrincipal GetSignedInUser();
 
-    Task UpdateUserInDbAsync(UserDto userBasedOnProviderDataDto, Claim authenticationSchemeClaim);
+	Task UpdateUserModelAsync(UserDto userBasedOnProviderDataDto, Claim authenticationSchemeClaim);
 
     Task AddNewUserAsync(UserDto userDto);
 
