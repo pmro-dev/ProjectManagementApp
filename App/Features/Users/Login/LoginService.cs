@@ -1,6 +1,5 @@
 ﻿using App.Common.Helpers;
 using App.Features.Users.Authentication.Interfaces;
-using App.Features.Users.Common.Claims;
 using App.Features.Users.Common.Models;
 using App.Features.Users.Login.Interfaces;
 using App.Features.Users.Login.Models;

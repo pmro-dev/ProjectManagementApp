@@ -36,7 +36,7 @@ using App.Infrastructure.Databases.App.Seeds.Interfaces;
 
 namespace App
 {
-	public static class Program
+    public static class Program
 	{
 		public static async Task Main(string[] args)
 		{
@@ -71,7 +71,7 @@ namespace App
 			builder.Services.AddScoped<IClaimsService, ClaimsService>();
 			builder.Services.AddScoped<IRoleService, RoleService>();
 			builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<ICookieEventsService, CookieEventsService>();
+			builder.Services.AddScoped<ICookieEventsService, CookieEventsService>();
 			builder.Services.AddScoped<IIdentityService, IdentityService>();
             builder.Services.AddScoped<ICookieService, CookieService>();
 
