@@ -16,6 +16,11 @@ using App.Features.Tasks.Create;
 using App.Features.Tasks.Delete;
 using App.Common.Helpers;
 using App.Common;
+using Microsoft.AspNetCore.Identity;
+using App.Infrastructure.Databases.Identity.Seeds;
+using Azure;
+
+
 
 #endregion
 
@@ -57,9 +62,12 @@ public class TaskController : Controller
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Show), routeTodoListId, nameof(routeTodoListId), _logger);
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Show), routeTaskId, nameof(routeTaskId), _logger);
 
-		var result = await _mediator.Send(new ShowTaskQuery(routeTodoListId, routeTaskId));
+		var response = await _mediator.Send(new ShowTaskQuery(routeTodoListId, routeTaskId));
 
-		return View(result);
+		if (response.StatusCode == StatusCodes.Status200OK)
+			return View(response.Data);
+
+		return BadRequest();
 	}
 
 	/// <summary>
@@ -77,12 +85,12 @@ public class TaskController : Controller
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Create), id, nameof(id), _logger);
 
-		if (!ModelState.IsValid)
-			return View();
+		var respond = await _mediator.Send(new CreateTaskQuery(id));
 
-		var result = await _mediator.Send(new CreateTaskQuery(id));
+		if (respond.StatusCode == StatusCodes.Status200OK)
+			return View(respond.Data);
 
-		return View(result);
+		return BadRequest();
 	}
 
 	/// <summary>
@@ -102,12 +110,12 @@ public class TaskController : Controller
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Create), todoListId, nameof(todoListId), _logger);
 
-		if (!ModelState.IsValid)
-			return View(taskCreateWrapperVM);
+		var respond = await _mediator.Send(new CreateTaskCommand(taskCreateWrapperVM.InputVM, todoListId));
 
-		var result = await _mediator.Send(new CreateTaskCommand(taskCreateWrapperVM.InputVM, todoListId));
+		if (respond.StatusCode == StatusCodes.Status201Created)
+			return RedirectToAction(TodoListCtrl.ShowAction, TodoListCtrl.Name, respond.Data);
 
-		return RedirectToAction(TodoListCtrl.ShowAction, TodoListCtrl.Name, result);
+		return BadRequest();
 	}
 
 	/// <summary>
@@ -126,9 +134,12 @@ public class TaskController : Controller
 
 		var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-		var result = await _mediator.Send(new EditTaskQuery(todoListId, taskId, signedInUserId));
+		var respond = await _mediator.Send(new EditTaskQuery(todoListId, taskId, signedInUserId));
 
-		return View(TaskViews.Edit, result);
+		if (respond.StatusCode == StatusCodes.Status200OK)
+			return View(TaskViews.Edit, respond.Data);
+
+		return BadRequest();
 	}
 
 	/// <summary>
@@ -149,11 +160,12 @@ public class TaskController : Controller
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(EditPost), taskEditInputVM.TodoListId, nameof(taskEditInputVM.TodoListId), _logger);
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(EditPost), taskEditInputVM.Id, nameof(taskEditInputVM.Id), _logger);
 
-		if (!ModelState.IsValid)
-			return View(editWrapperVM);
+		var respond = await _mediator.Send(new EditTaskCommand(taskEditInputVM));
 
-		var resultAsRouteValue = await _mediator.Send(new EditTaskCommand(taskEditInputVM));
-		return RedirectToAction(TodoListCtrl.ShowAction, TodoListCtrl.Name, resultAsRouteValue);
+		if (respond.StatusCode == StatusCodes.Status201Created)
+			return RedirectToAction(TodoListCtrl.ShowAction, TodoListCtrl.Name, respond.Data);
+
+		return BadRequest();
 	}
 
 	/// <summary>
@@ -173,9 +185,12 @@ public class TaskController : Controller
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Delete), todoListId, nameof(todoListId), _logger);
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Delete), taskId, nameof(taskId), _logger);
 
-		var result = await _mediator.Send(new DeleteTaskQuery(todoListId, taskId));
+		var response = await _mediator.Send(new DeleteTaskQuery(todoListId, taskId));
 
-		return View(TaskViews.Delete, result);
+		if (response.StatusCode == StatusCodes.Status200OK)
+			return View(TaskViews.Delete, response.Data);
+
+		return BadRequest();
 	}
 
 	/// <summary>
@@ -198,18 +213,11 @@ public class TaskController : Controller
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(DeletePost), deleteInputVM.TodoListId, nameof(deleteInputVM.TodoListId), _logger);
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(DeletePost), deleteInputVM.Id, nameof(deleteInputVM.Id), _logger);
 
-		object routeValue;
+		var response = await _mediator.Send(new DeleteTaskCommand(deleteInputVM));
 
-		if (!ModelState.IsValid)
-		{
-			routeValue = new { id = deleteInputVM.TodoListId };
+		if (response.StatusCode == StatusCodes.Status200OK)
+			return RedirectToAction(TodoListCtrl.ShowAction, TodoListCtrl.Name, response.Data);
 
-			return RedirectToAction(TodoListCtrl.ShowAction, TodoListCtrl.Name, routeValue);
-		}
-
-		var result = await _mediator.Send(new DeleteTaskCommand(deleteInputVM));
-		routeValue = result;
-
-		return RedirectToAction(TodoListCtrl.ShowAction, TodoListCtrl.Name, routeValue);
+		return BadRequest();
 	}
 }

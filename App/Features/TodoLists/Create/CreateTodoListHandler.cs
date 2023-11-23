@@ -1,12 +1,14 @@
-﻿using App.Common.ViewModels;
-using MediatR;
+﻿using MediatR;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Infrastructure.Databases.App.Interfaces;
 using App.Features.TodoLists.Create.Models;
+using App.Common.Helpers;
 
 namespace App.Features.TodoLists.Create;
 
-public class CreateTodoListHandler : IRequestHandler<CreateTodoListQuery, WrapperViewModel<TodoListCreateInputVM, TodoListCreateOutputVM>>, IRequestHandler<CreateTodoListCommand, bool>
+public class CreateTodoListHandler : 
+	IRequestHandler<CreateTodoListQuery, CreateTodoListQueryResponse>, 
+	IRequestHandler<CreateTodoListCommand, CreateTodoListCommandResponse>
 {
 	private readonly IDataUnitOfWork _dataUnitOfWork;
 	private readonly ITodoListRepository _todoListRepository;
@@ -24,30 +26,24 @@ public class CreateTodoListHandler : IRequestHandler<CreateTodoListQuery, Wrappe
 		_todoListViewModelsFactory = todoListViewModelsFactory;
 	}
 
-	public Task<WrapperViewModel<TodoListCreateInputVM, TodoListCreateOutputVM>> Handle(CreateTodoListQuery request, CancellationToken cancellationToken)
+	public Task<CreateTodoListQueryResponse> Handle(CreateTodoListQuery request, CancellationToken cancellationToken)
 	{
 		return Task.Factory.StartNew(() =>
 		{
 			TodoListCreateOutputVM createOutputVM = _todoListViewModelsFactory.CreateCreateOutputVM(request.UserId);
-			var createWrapperVM = _todoListViewModelsFactory.CreateWrapperCreateVM();
-			createWrapperVM.OutputVM = createOutputVM;
+			var data = _todoListViewModelsFactory.CreateWrapperCreateVM();
+			data.OutputVM = createOutputVM;
 
-			return createWrapperVM;
+			return new CreateTodoListQueryResponse(data);
 		});
 	}
 
-	public async Task<bool> Handle(CreateTodoListCommand request, CancellationToken cancellationToken)
+	public async Task<CreateTodoListCommandResponse> Handle(CreateTodoListCommand request, CancellationToken cancellationToken)
 	{
 		var todoListDto = _todoListMapper.TransferToDto(request.WrapperVM.InputVM);
 
 		if (await _todoListRepository.CheckThatAnyWithSameNameExistAsync(todoListDto.Title))
-		{
-			return false;
-			//TODO currently this code is in a controller under Create action, need to change it and return
-			// some error to a new result oobject
-			//ModelState.AddModelError(string.Empty, MessagesPacket.NameTaken);
-			//return View(createWrapperVM);
-		}
+			return new CreateTodoListCommandResponse(MessagesPacket.NameTaken, StatusCodes.Status400BadRequest);
 
 		todoListDto.UserId = request.UserId;
 
@@ -55,6 +51,6 @@ public class CreateTodoListHandler : IRequestHandler<CreateTodoListQuery, Wrappe
 		await _todoListRepository.AddAsync(todoListModel);
 		await _dataUnitOfWork.SaveChangesAsync();
 
-		return true;
+		return new CreateTodoListCommandResponse();
 	}
 }

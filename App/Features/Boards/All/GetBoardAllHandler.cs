@@ -1,5 +1,5 @@
 ﻿using App.Common.Helpers;
-using App.Features.Boards.All.Interfaces;
+using App.Features.Boards.All.Models;
 using App.Features.Boards.Common.Interfaces;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.Users.Common.Interfaces;
@@ -8,7 +8,7 @@ using MediatR;
 
 namespace App.Features.Boards.All;
 
-public class GetBoardAllHandler : IRequestHandler<GetBoardAllQuery, IBoardAllOutputVM>
+public class GetBoardAllHandler : IRequestHandler<GetBoardAllQuery, GetBoardAllQueryResponse>
 {
 	private readonly ILogger<GetBoardAllHandler> _logger;
 	private readonly IBoardViewModelsFactory _boardsVMFactory;
@@ -27,12 +27,12 @@ public class GetBoardAllHandler : IRequestHandler<GetBoardAllQuery, IBoardAllOut
 		ExceptionsService.WhenPropertyIsNullOrEmptyThrowCritical("Constructing " + nameof(GetBoardAllHandler), _signedInUserId, nameof(_signedInUserId), _logger);
 	}
 
-	public async Task<IBoardAllOutputVM> Handle(GetBoardAllQuery request, CancellationToken cancellationToken)
+	public async Task<GetBoardAllQueryResponse> Handle(GetBoardAllQuery request, CancellationToken cancellationToken)
 	{
 		var todoListModels = await _todoListRepository.GetAllWithDetailsAsync(_signedInUserId);
 		var todoListDtos = _todoListMapper.TransferToDto(todoListModels);
-		IBoardAllOutputVM allOutputVM = _boardsVMFactory.CreateAllOutputVM(todoListDtos);
+		BoardAllOutputVM data = _boardsVMFactory.CreateAllOutputVM(todoListDtos);
 
-		return allOutputVM;
+		return new GetBoardAllQueryResponse(data);
 	}
 }

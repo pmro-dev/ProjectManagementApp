@@ -1,5 +1,6 @@
 ﻿#region USINGS
 
+using App.Common;
 using App.Common.Helpers;
 using App.Common.ViewModels;
 using App.Features.Tasks.Common.Interfaces;
@@ -12,7 +13,9 @@ using MediatR;
 
 namespace App.Features.Tasks.Delete;
 
-public class DeleteTaskHandler : IRequestHandler<DeleteTaskQuery, WrapperViewModel<TaskDeleteInputVM, TaskDeleteOutputVM>>, IRequestHandler<DeleteTaskCommand, object>
+public class DeleteTaskHandler : 
+	IRequestHandler<DeleteTaskQuery, DeleteTaskQueryResponse>, 
+	IRequestHandler<DeleteTaskCommand, DeleteTaskCommandResponse>
 {
 	private readonly ILogger<DeleteTaskHandler> _logger;
 	private readonly IDataUnitOfWork _dataUnitOfWork;
@@ -29,26 +32,26 @@ public class DeleteTaskHandler : IRequestHandler<DeleteTaskQuery, WrapperViewMod
 		_taskViewModelsFactory = taskViewModelsFactory;
 	}
 
-	public async Task<WrapperViewModel<TaskDeleteInputVM, TaskDeleteOutputVM>> Handle(DeleteTaskQuery request, CancellationToken cancellationToken)
+	public async Task<DeleteTaskQueryResponse> Handle(DeleteTaskQuery request, CancellationToken cancellationToken)
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Delete), request.TodoListId, nameof(request.TodoListId), _logger);
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Delete), request.TaskId, nameof(request.TaskId), _logger);
 
 		TaskModel? taskToDeleteModel = await _taskRepository.GetAsync(request.TaskId);
-		ExceptionsService.WhenModelIsNullThrowCritical(nameof(DeleteTaskQuery), taskToDeleteModel, _logger);
+		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(DeleteTaskQuery), taskToDeleteModel, _logger, request.TaskId.ToString());
 
 		TaskDto taskToDeleteDto = _taskEntityMapper.TransferToDto(taskToDeleteModel!);
 
 		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(Delete), taskToDeleteDto.TodoListId, nameof(taskToDeleteDto.TodoListId), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		var deleteOutputVM = _taskViewModelsFactory.CreateDeleteOutputVM(taskToDeleteDto);
-		var result = _taskViewModelsFactory.CreateWrapperDeleteVM();
-		result.OutputVM = deleteOutputVM;
+		var data = _taskViewModelsFactory.CreateWrapperDeleteVM();
+		data.OutputVM = deleteOutputVM;
 
-		return result;
+		return new DeleteTaskQueryResponse(data);
 	}
 
-	public async Task<object> Handle(DeleteTaskCommand request, CancellationToken cancellationToken)
+	public async Task<DeleteTaskCommandResponse> Handle(DeleteTaskCommand request, CancellationToken cancellationToken)
 	{
 		TaskDeleteInputVM inputVM = request.InputVM;
 
@@ -58,15 +61,15 @@ public class DeleteTaskHandler : IRequestHandler<DeleteTaskQuery, WrapperViewMod
 		TaskDeleteInputDto taskInputDto = _taskEntityMapper.TransferToDto(inputVM);
 
 		TaskModel? taskModel = await _taskRepository.GetAsync(taskInputDto.Id);
-		ExceptionsService.WhenModelIsNullThrowCritical(nameof(DeleteTaskCommand), taskModel, _logger);
+		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(DeleteTaskCommand), taskModel, _logger, taskInputDto.Id);
 
 		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(DeleteTaskCommand), taskModel!.TodoListId, nameof(taskModel.TodoListId), taskInputDto.TodoListId, nameof(taskInputDto.TodoListId), _logger);
 
 		_taskRepository.Remove(taskModel);
 		await _dataUnitOfWork.SaveChangesAsync();
 
-		object resultAsRouteValue = new { id = taskInputDto.TodoListId };
+		CustomRouteValues data = new() { Id = taskInputDto.TodoListId };
 
-		return resultAsRouteValue;
+		return new DeleteTaskCommandResponse(data);
 	}
 }

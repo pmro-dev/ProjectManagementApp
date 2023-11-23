@@ -1,9 +1,10 @@
-﻿using App.Features.Tasks.Delete.Models;
+﻿using App.Common;
+using App.Features.Tasks.Delete.Models;
 using MediatR;
 
 namespace App.Features.Tasks.Delete;
 
-public class DeleteTaskCommand : IRequest<object>
+public class DeleteTaskCommand : IRequest<DeleteTaskCommandResponse>
 {
     public TaskDeleteInputVM InputVM { get; }
 
@@ -12,3 +13,5 @@ public class DeleteTaskCommand : IRequest<object>
         InputVM = inputVM;
     }
 }
+
+public record DeleteTaskCommandResponse(CustomRouteValues? Data, string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }

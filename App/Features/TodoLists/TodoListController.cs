@@ -20,6 +20,8 @@ using App.Features.TodoLists.Delete;
 using App.Features.TodoLists.Create.Models;
 using App.Features.TodoLists.Edit.Models;
 using App.Common;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+
 
 #endregion
 
@@ -55,41 +57,47 @@ public class TodoListController : Controller
 	{
 		var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-		var result = await _mediator.Send(new CreateTodoListQuery(userId));
+		var response = await _mediator.Send(new CreateTodoListQuery(userId));
 
-		return View(TodoListViews.Create, result);
+		if (response.StatusCode == StatusCodes.Status200OK)
+			return View(TodoListViews.Create, response.Data);
+
+		return BadRequest();
 	}
 
 	/// <summary>
 	/// Action POST to create To Do List.
 	/// </summary>
 	/// <param name="todoListModel">Model with form's data.</param>
-	/// <returns>Return different view based on the final result. Redirect to Briefly or to view with form.</returns>
+	/// <returns>Return different view based on the final response. Redirect to Briefly or to view with form.</returns>
 	[HttpPost]
 	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> Create(WrapperViewModel<TodoListCreateInputVM, TodoListCreateOutputVM> createWrapperVM)
+	public async Task<IActionResult> Create(WrapperViewModel<TodoListCreateInputVM, TodoListCreateOutputVM> wrapperVM)
 	{
-		if (!ModelState.IsValid) return View(TodoListViews.Create, createWrapperVM);
+		if (!ModelState.IsValid) return View(TodoListViews.Create, wrapperVM);
 
 		string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 		ExceptionsService.WhenPropertyIsNullOrEmptyThrowCritical(nameof(Create), userId, nameof(userId), _logger);
 
-		var result = await _mediator.Send(new CreateTodoListCommand(createWrapperVM, userId));
+		var response = await _mediator.Send(new CreateTodoListCommand(wrapperVM, userId));
 
-		if (!result)
+		if (response.StatusCode == StatusCodes.Status400BadRequest)
 		{
-			ModelState.AddModelError(string.Empty, MessagesPacket.NameTaken);
-			return View(createWrapperVM);
+			ModelState.AddModelError(string.Empty, response.ErrorMessage!);
+			return View(wrapperVM);
 		}
 
-		return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
+		if (response.StatusCode == StatusCodes.Status201Created)
+			return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
+
+		return BadRequest();
 	}
 
 	/// <summary>
 	/// Action GET to EDIT To Do List.
 	/// </summary>
 	/// <param name="id">Target To Do List id.</param>
-	/// <returns>Return different view based on the final result. Return Bad Request when given id is invalid, Return Not Found when there isn't such To Do List in Db or return edit view.</returns>
+	/// <returns>Return different view based on the final response. Return Bad Request when given id is invalid, Return Not Found when there isn't such To Do List in Db or return edit view.</returns>
 	/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
 	[HttpGet]
 	[Route(CustomRoutes.TodoListEditRoute)]
@@ -97,9 +105,12 @@ public class TodoListController : Controller
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), id, nameof(id), _logger);
 
-		var result = await _mediator.Send(new EditTodoListQuery(id));
+		var response = await _mediator.Send(new EditTodoListQuery(id));
 
-		return View(TodoListViews.Edit, result);
+		if (response.StatusCode == StatusCodes.Status200OK)
+			return View(TodoListViews.Edit, response.Data);
+
+		return BadRequest();
 	}
 
 	/// <summary>
@@ -108,7 +119,7 @@ public class TodoListController : Controller
 	/// <param name="id">Target To Do List id.</param>
 	/// <param name="todoListModel">Model with form's data.</param>
 	/// <returns>
-	/// Return different view based on the final result. Return Bad Request when given id is invalid or id is not equal to model id, 
+	/// Return different view based on the final response. Return Bad Request when given id is invalid or id is not equal to model id, 
 	/// Redirect to index view when updating operation succeed.
 	/// </returns>
 	/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
@@ -117,17 +128,14 @@ public class TodoListController : Controller
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> Edit(int id, [FromForm] WrapperViewModel<TodoListEditInputVM, TodoListEditOutputVM> editWrapperVM)
 	{
-		if (!ModelState.IsValid) return View(TodoListViews.Edit, editWrapperVM);
-
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), id, nameof(id), _logger);
-		var result = await _mediator.Send(new EditTodoListCommand(editWrapperVM.OutputVM.Id, editWrapperVM, id));
 
-		if (!result)
-		{
-			return BadRequest();
-		}
+		var response = await _mediator.Send(new EditTodoListCommand(editWrapperVM.OutputVM.Id, editWrapperVM, id));
 
-		return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
+		if (response.StatusCode == StatusCodes.Status201Created)
+			return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
+
+		return BadRequest();
 	}
 
 	/// <summary>
@@ -135,7 +143,7 @@ public class TodoListController : Controller
 	/// </summary>
 	/// <param name="id">Target To Do List id.</param>
 	/// <returns>
-	/// Return different view based on the final result. 
+	/// Return different view based on the final response. 
 	/// Not Found when there isn't such To Do List in Db or return view when delete operation succeed.
 	/// </returns>
 	/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
@@ -145,9 +153,12 @@ public class TodoListController : Controller
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Delete), id, nameof(id), _logger);
 
-		var result = await _mediator.Send(new DeleteTodoListQuery(id));
+		var response = await _mediator.Send(new DeleteTodoListQuery(id));
 
-		return View(TodoListViews.Delete, result);
+		if (response.StatusCode == StatusCodes.Status200OK)
+			return View(TodoListViews.Delete, response.Data);
+
+		return BadRequest();
 	}
 
 	/// <summary>
@@ -155,7 +166,7 @@ public class TodoListController : Controller
 	/// </summary>
 	/// <param name="id">Target To Do List id.</param>
 	/// <returns>
-	/// Return different view based on the final result. 
+	/// Return different view based on the final response. 
 	/// Return Conflict when given id and To Do List id of object from Database are not equal, 
 	/// </returns>
 	/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
@@ -166,16 +177,12 @@ public class TodoListController : Controller
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(DeletePost), id, nameof(id), _logger);
 
-		if (!ModelState.IsValid)
-		{
-			return View(TodoListCtrl.DeleteAction);
-		}
+		var response = await _mediator.Send(new DeleteTodoListCommand(id));
 
-		var result = await _mediator.Send(new DeleteTodoListCommand(id));
+		if (response.StatusCode == StatusCodes.Status200OK)
+			return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
 
-		if (!result) return BadRequest();
-		
-		return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
+		return BadRequest();
 	}
 
 	/// <summary>
@@ -189,9 +196,9 @@ public class TodoListController : Controller
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Duplicate), todoListId, nameof(todoListId), _logger);
 
-		var result = await _mediator.Send(new DuplicateTodoListCommand(todoListId));
+		var response = await _mediator.Send(new DuplicateTodoListCommand(todoListId));
 
-		if (result)
+		if (response.StatusCode == StatusCodes.Status201Created)
 			return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
 
 		return BadRequest();
@@ -210,8 +217,11 @@ public class TodoListController : Controller
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Show), id, nameof(id), _logger);
 
-		var result = await _mediator.Send(new ShowTodoListQuery(id, filterDueDate));
+		var response = await _mediator.Send(new ShowTodoListQuery(id, filterDueDate));
 
-		return View(TodoListViews.Show, result);
+		if (response.StatusCode == StatusCodes.Status200OK)
+			return View(TodoListViews.Show, response.Data);
+
+		return BadRequest();
 	}
 }

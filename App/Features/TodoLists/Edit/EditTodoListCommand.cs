@@ -4,7 +4,7 @@ using MediatR;
 
 namespace App.Features.TodoLists.Edit;
 
-public class EditTodoListCommand : IRequest<bool>
+public class EditTodoListCommand : IRequest<EditTodoListCommandResponse>
 {
 	public int TodoListId { get; }
 	public int RouteTodoListId { get; }
@@ -18,3 +18,5 @@ public class EditTodoListCommand : IRequest<bool>
 		RouteTodoListId = routeTodoListId;
 	}
 }
+
+public record EditTodoListCommandResponse(string? ErrorMessage = null, int StatusCode = StatusCodes.Status201Created) { }

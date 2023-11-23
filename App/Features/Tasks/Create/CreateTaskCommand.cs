@@ -1,11 +1,10 @@
-﻿using App.Features.Tasks.Create.Models;
+﻿using App.Common;
+using App.Features.Tasks.Create.Models;
 using MediatR;
 
 namespace App.Features.Tasks.Create;
 
-
-//TODO create specific result type with routeValue object etc...
-public class CreateTaskCommand : IRequest<object>
+public class CreateTaskCommand : IRequest<CreateTaskCommandResponse>
 {
     public int TodoListId { get; }
 
@@ -17,3 +16,6 @@ public class CreateTaskCommand : IRequest<object>
         TaskCreateInputVM = taskCreateInputVM;
     }
 }
+
+public record CreateTaskCommandResponse(CustomRouteValues? Data, string? ErrorMessage = null, int StatusCode = StatusCodes.Status201Created) { }
+

@@ -1,5 +1,4 @@
 ﻿using App.Common.Helpers;
-using App.Features.Boards.Briefly.Interfaces;
 using App.Features.Boards.Common.Interfaces;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
@@ -9,7 +8,7 @@ using MediatR;
 
 namespace App.Features.Boards.Briefly;
 
-public class GetBoardBrieflyHandler : IRequestHandler<GetBoardBrieflyQuery, IBoardBrieflyOutputVM>
+public class GetBoardBrieflyHandler : IRequestHandler<GetBoardBrieflyQuery, GetBoardBrieflyQueryResponse>
 {
 	private readonly ILogger<GetBoardBrieflyHandler> _logger;
 	private readonly IBoardViewModelsFactory _boardsVMFactory;
@@ -17,7 +16,8 @@ public class GetBoardBrieflyHandler : IRequestHandler<GetBoardBrieflyQuery, IBoa
 	private readonly ITodoListRepository _todoListRepository;
 	private readonly string _signedInUserId;
 
-	public GetBoardBrieflyHandler(IBoardViewModelsFactory boardsVMFactory, ITodoListMapper todoListMapper, ITodoListRepository todoListRepository, IUserService userService, ILogger<GetBoardBrieflyHandler> logger)
+	public GetBoardBrieflyHandler(IBoardViewModelsFactory boardsVMFactory, ITodoListMapper todoListMapper, ITodoListRepository todoListRepository, 
+		IUserService userService, ILogger<GetBoardBrieflyHandler> logger)
 	{
 		_logger = logger;
 		_boardsVMFactory = boardsVMFactory;
@@ -28,12 +28,12 @@ public class GetBoardBrieflyHandler : IRequestHandler<GetBoardBrieflyQuery, IBoa
 		ExceptionsService.WhenPropertyIsNullOrEmptyThrowCritical("Constructing " + nameof(GetBoardBrieflyHandler), _signedInUserId, nameof(_signedInUserId), _logger);
 	}
 
-	public async Task<IBoardBrieflyOutputVM> Handle(GetBoardBrieflyQuery request, CancellationToken cancellationToken)
+	public async Task<GetBoardBrieflyQueryResponse> Handle(GetBoardBrieflyQuery request, CancellationToken cancellationToken)
 	{
 		ICollection<TodoListModel> todoListModels = await _todoListRepository.GetAllWithDetailsByFilterAsync(todoList => todoList.UserId == _signedInUserId);
 		var todoListDtos = _todoListMapper.TransferToDto(todoListModels);
-		IBoardBrieflyOutputVM boardBrieflyOutputVM = _boardsVMFactory.CreateBrieflyOutputVM(todoListDtos);
+		var data = _boardsVMFactory.CreateBrieflyOutputVM(todoListDtos);
 
-		return boardBrieflyOutputVM;
+		return new GetBoardBrieflyQueryResponse(data);
 	}
 }

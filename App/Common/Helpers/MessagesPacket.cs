@@ -47,6 +47,16 @@ public static class MessagesPacket
 		return $"{operationName} | Unable to proceed because User Principal is null!";
 	}
 
+	public static string InvalidEntityIdCast(string operationName, string innerOperationName)
+	{
+		return $"{operationName} - {innerOperationName} | Unable to cast provided Entity Id to a string representation!";
+	}
+
+	public static string GroupOfEntitiesNotFoundInDbSet(string operationName, string entityTypeName)
+	{
+		return $"{operationName} | Group of {entityTypeName} Entities not found in DbSet!";
+	}
+
 	public const string ProvidedObjectIsNull = "Critical error! Provided object cannot be null!";
 	public const string ProvidedArgumentIsNullOrEmpty = "Passed argument cannot be null or empty!";
 	public const string ProvidedArgumentIsOutOfRange = "Passed argument is out of range!";
@@ -94,6 +104,8 @@ public static class MessagesPacket
 	public const string LogCriticalUserPrincipalIsNull = "{operationName} | Unable to proceed because User Principal is null!";
 	public const string LogOptionsObjectIsNull = "{operationName} | Used options ( {optionsTypeName} ) object was null!";
 	public const string LogCriticalModelObjectIsNull = "{operationName} | Object of given model ( {modelTypeName} ) is null!";
+	public const string LogInvalidEntityIdCast = "{operationName} - {innerOperationName} | Unable to cast provided Entity Id to a string representation!";
+
 
 	#endregion
 }

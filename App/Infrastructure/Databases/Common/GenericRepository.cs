@@ -22,7 +22,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	///<inheritdoc />
 	public async Task AddAsync(TEntity entity)
 	{
-		ExceptionsService.WhenModelIsNullThrowCritical(nameof(AddAsync), entity, _logger);
+		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(AddAsync), entity, _logger);
 
 		await _dbSet.AddAsync(entity);
 	}
@@ -60,7 +60,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	///<inheritdoc />
 	public void Remove(TEntity entity)
 	{
-		ExceptionsService.WhenModelIsNullThrowCritical(nameof(Remove), entity, _logger);
+		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(Remove), entity, _logger);
 
 		_dbSet.Remove(entity);
 	}
@@ -68,7 +68,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	///<inheritdoc />
 	public void Update(TEntity entity)
 	{
-		ExceptionsService.WhenModelIsNullThrowCritical(nameof(Update), entity, _logger);
+		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(Update), entity, _logger);
 
 		_dbSet.Update(entity);
 	}
@@ -76,7 +76,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	///<inheritdoc />
 	public async Task AddRangeAsync(ICollection<TEntity> range)
 	{
-		ExceptionsService.WhenModelIsNullThrowCritical(nameof(AddRangeAsync), range, _logger);
+		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(AddRangeAsync), range, _logger);
 
 		await _dbSet.AddRangeAsync(range, default);
 	}

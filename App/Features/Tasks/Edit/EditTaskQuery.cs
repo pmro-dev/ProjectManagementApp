@@ -4,7 +4,7 @@ using MediatR;
 
 namespace App.Features.Tasks.Edit;
 
-public class EditTaskQuery : IRequest<WrapperViewModel<TaskEditInputVM, TaskEditOutputVM>>
+public class EditTaskQuery : IRequest<EditTaskQueryResponse>
 {
 	public int TodoListId { get; }
 	public int TaskId { get; }
@@ -18,3 +18,5 @@ public class EditTaskQuery : IRequest<WrapperViewModel<TaskEditInputVM, TaskEdit
 		SignedInUserId = signedInUserId;
 	}
 }
+
+public record EditTaskQueryResponse(WrapperViewModel<TaskEditInputVM, TaskEditOutputVM>? Data, string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK){}

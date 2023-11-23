@@ -4,7 +4,7 @@ using MediatR;
 
 namespace App.Features.TodoLists.Create;
 
-public class CreateTodoListQuery : IRequest<WrapperViewModel<TodoListCreateInputVM, TodoListCreateOutputVM>>
+public class CreateTodoListQuery : IRequest<CreateTodoListQueryResponse>
 {
 	public string UserId { get; }
 
@@ -13,3 +13,5 @@ public class CreateTodoListQuery : IRequest<WrapperViewModel<TodoListCreateInput
 		UserId = userId;
 	}
 }
+
+public record CreateTodoListQueryResponse(WrapperViewModel<TodoListCreateInputVM, TodoListCreateOutputVM>? Data, string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }

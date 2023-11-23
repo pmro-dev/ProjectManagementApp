@@ -4,7 +4,7 @@ using MediatR;
 
 namespace App.Features.TodoLists.Edit;
 
-public class EditTodoListQuery : IRequest<WrapperViewModel<TodoListEditInputVM, TodoListEditOutputVM>>
+public class EditTodoListQuery : IRequest<EditTodoListQueryResponse>
 {
 	public int TodoListId { get; }
 
@@ -13,3 +13,5 @@ public class EditTodoListQuery : IRequest<WrapperViewModel<TodoListEditInputVM, 
 		TodoListId = todoListId;
 	}
 }
+
+public record EditTodoListQueryResponse(WrapperViewModel<TodoListEditInputVM, TodoListEditOutputVM>? Data, string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }

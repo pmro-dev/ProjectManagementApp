@@ -4,7 +4,7 @@ using MediatR;
 
 namespace App.Features.Tasks.Delete;
 
-public class DeleteTaskQuery : IRequest<WrapperViewModel<TaskDeleteInputVM, TaskDeleteOutputVM>>
+public class DeleteTaskQuery : IRequest<DeleteTaskQueryResponse>
 {
     public int TodoListId { get; }
     public int TaskId { get; }
@@ -15,3 +15,5 @@ public class DeleteTaskQuery : IRequest<WrapperViewModel<TaskDeleteInputVM, Task
         TaskId = taskId;
     }
 }
+
+public record DeleteTaskQueryResponse(WrapperViewModel<TaskDeleteInputVM, TaskDeleteOutputVM>? Data, string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }

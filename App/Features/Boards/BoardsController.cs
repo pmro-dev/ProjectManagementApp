@@ -27,7 +27,10 @@ public class BoardsController : Controller
 	{
 		var result = await _mediator.Send(new GetBoardBrieflyQuery());
 
-		return View(result);
+		if (result.StatusCode is StatusCodes.Status200OK)
+			return View(result.Data);
+			
+		return BadRequest();
 	}
 
 	/// <summary>
@@ -44,6 +47,9 @@ public class BoardsController : Controller
 	{
 		var result = await _mediator.Send(new GetBoardAllQuery());
 
-		return View(result);
+		if (result.StatusCode is StatusCodes.Status200OK)
+			return View(result.Data);
+			
+		return BadRequest();
 	}
 }

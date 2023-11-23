@@ -4,7 +4,7 @@ using MediatR;
 
 namespace App.Features.TodoLists.Duplicate;
 
-public class DuplicateTodoListHandler : IRequestHandler<DuplicateTodoListCommand, bool>
+public class DuplicateTodoListHandler : IRequestHandler<DuplicateTodoListCommand, DuplicateTodoListCommandResponse>
 {
 	private readonly IDataUnitOfWork _dataUnitOfWork;
 	private readonly ITodoListRepository _todoListRepository;
@@ -17,13 +17,13 @@ public class DuplicateTodoListHandler : IRequestHandler<DuplicateTodoListCommand
 		_logger = logger;
 	}
 
-	public async Task<bool> Handle(DuplicateTodoListCommand request, CancellationToken cancellationToken)
+	public async Task<DuplicateTodoListCommandResponse> Handle(DuplicateTodoListCommand request, CancellationToken cancellationToken)
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Duplicate), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		await _todoListRepository.DuplicateWithDetailsAsync(request.TodoListId);
 		await _dataUnitOfWork.SaveChangesAsync();
 
-		return true;
+		return new DuplicateTodoListCommandResponse();
 	}
 }

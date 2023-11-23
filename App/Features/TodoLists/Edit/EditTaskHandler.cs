@@ -1,14 +1,14 @@
 ﻿using App.Common.Helpers;
-using App.Common.ViewModels;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
-using App.Features.TodoLists.Edit.Models;
 using App.Infrastructure.Databases.App.Interfaces;
 using MediatR;
 
 namespace App.Features.TodoLists.Edit;
 
-public class EditTaskHandler : IRequestHandler<EditTodoListQuery, WrapperViewModel<TodoListEditInputVM, TodoListEditOutputVM>>, IRequestHandler<EditTodoListCommand, bool>
+public class EditTaskHandler : 
+	IRequestHandler<EditTodoListQuery, EditTodoListQueryResponse>, 
+	IRequestHandler<EditTodoListCommand, EditTodoListCommandResponse>
 {
 	private readonly ILogger<EditTaskHandler> _logger;
 	private readonly IDataUnitOfWork _dataUnitOfWork;
@@ -25,28 +25,28 @@ public class EditTaskHandler : IRequestHandler<EditTodoListQuery, WrapperViewMod
 		_todoListViewModelsFactory = todoListViewModelsFactory;
 	}
 
-	public async Task<WrapperViewModel<TodoListEditInputVM, TodoListEditOutputVM>> Handle(EditTodoListQuery request, CancellationToken cancellationToken)
+	public async Task<EditTodoListQueryResponse> Handle(EditTodoListQuery request, CancellationToken cancellationToken)
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		TodoListModel? todoListModel = await _todoListRepository.GetAsync(request.TodoListId);
-		ExceptionsService.WhenModelIsNullThrowCritical(nameof(EditTodoListQuery), todoListModel, _logger);
+		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(EditTodoListQuery), todoListModel, _logger, request.TodoListId);
 
 		var todoListDto = _todoListMapper.TransferToDto(todoListModel!);
 		var editOutputVM = _todoListViewModelsFactory.CreateEditOutputVM(todoListDto);
-		var editWrapperVM = _todoListViewModelsFactory.CreateWrapperEditVM();
-		editWrapperVM.OutputVM = editOutputVM;
+		var data = _todoListViewModelsFactory.CreateWrapperEditVM();
+		data.OutputVM = editOutputVM;
 
-		return editWrapperVM;
+		return new EditTodoListQueryResponse(data);
 	}
 
-	public async Task<bool> Handle(EditTodoListCommand request, CancellationToken cancellationToken)
+	public async Task<EditTodoListCommandResponse> Handle(EditTodoListCommand request, CancellationToken cancellationToken)
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), request.TodoListId, nameof(request.TodoListId), _logger);
 		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(Edit), request.RouteTodoListId, nameof(request.RouteTodoListId), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		TodoListModel? todoListDbModel = await _todoListRepository.GetAsync(request.TodoListId);
-		ExceptionsService.WhenModelIsNullThrowCritical(nameof(EditTodoListCommand), todoListDbModel, _logger);
+		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(EditTodoListCommand), todoListDbModel, _logger, request.TodoListId);
 
 		var editInputDto = _todoListMapper.TransferToDto(request.WrapperVM.InputVM);
 		_todoListMapper.UpdateModel(todoListDbModel!, editInputDto);
@@ -54,6 +54,6 @@ public class EditTaskHandler : IRequestHandler<EditTodoListQuery, WrapperViewMod
 		_todoListRepository.Update(todoListDbModel!);
 		await _dataUnitOfWork.SaveChangesAsync();
 
-		return true;
+		return new EditTodoListCommandResponse();
 	}
 }

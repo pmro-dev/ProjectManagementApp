@@ -3,7 +3,7 @@ using MediatR;
 
 namespace App.Features.TodoLists.Delete;
 
-public class DeleteTodoListQuery : IRequest<TodoListDeleteOutputVM>
+public class DeleteTodoListQuery : IRequest<DeleteTodoListQueryResponse>
 {
 	public int RouteTodoListId { get; }
 
@@ -12,3 +12,5 @@ public class DeleteTodoListQuery : IRequest<TodoListDeleteOutputVM>
 		RouteTodoListId = routeTodoListId;
 	}
 }
+
+public record DeleteTodoListQueryResponse(TodoListDeleteOutputVM? Data, string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }

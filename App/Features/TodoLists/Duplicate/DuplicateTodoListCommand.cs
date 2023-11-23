@@ -2,7 +2,7 @@
 
 namespace App.Features.TodoLists.Duplicate;
 
-public class DuplicateTodoListCommand : IRequest<bool>
+public class DuplicateTodoListCommand : IRequest<DuplicateTodoListCommandResponse>
 {
 	public int TodoListId { get; }
 
@@ -11,3 +11,5 @@ public class DuplicateTodoListCommand : IRequest<bool>
 		TodoListId = todoListId;
 	}
 }
+
+public record DuplicateTodoListCommandResponse(string? ErrorMessage = null, int StatusCode = StatusCodes.Status201Created) { }

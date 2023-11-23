@@ -57,9 +57,7 @@ public class UserService : IUserService
 	public async Task UpdateUserModelAsync(UserDto userBasedOnProviderDataDto, Claim authenticationSchemeClaim)
 	{
 		UserModel? userFromDb = await _userRepository.GetAsync(userBasedOnProviderDataDto.NameIdentifier);
-
-		if (userFromDb is null)
-			ExceptionsService.ThrowCriticalEntityNotFoundInDb(nameof(UpdateUserModelAsync), nameof(UserModel), userBasedOnProviderDataDto.NameIdentifier, _logger);
+		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(UpdateUserModelAsync), userFromDb, _logger, userBasedOnProviderDataDto.NameIdentifier);
 
 		bool IsUserUsedExternalAuthProvider = userBasedOnProviderDataDto.Provider != CookieAuthenticationDefaults.AuthenticationScheme;
 		bool IsUserDataNotTheSame = !userBasedOnProviderDataDto.Equals(userFromDb);
@@ -70,8 +68,8 @@ public class UserService : IUserService
 
 	private void SetNewDataForUser(UserModel? userFromDb, UserDto? userBasedOnProviderDataDto, string providerName)
 	{
-		ExceptionsService.WhenModelIsNullThrowCritical(nameof(UpdateUserModelAsync), userFromDb, _logger);
-		ExceptionsService.WhenModelIsNullThrowCritical(nameof(UpdateUserModelAsync), userBasedOnProviderDataDto, _logger);
+		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(UpdateUserModelAsync), userFromDb, _logger);
+		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(UpdateUserModelAsync), userBasedOnProviderDataDto, _logger);
 		ExceptionsService.WhenArgumentIsNullOrEmptyThrowError(nameof(UpdateUserModelAsync), providerName, nameof(providerName), _logger);
 
 		userFromDb!.FirstName = userBasedOnProviderDataDto!.FirstName;

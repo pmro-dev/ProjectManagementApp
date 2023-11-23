@@ -19,7 +19,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	private readonly ITaskEntityFactory _taskEntityFactory;
 	private readonly ITodoListFactory _todoListFactory;
 
-	public TodoListRepository(CustomAppDbContext dbContext, ILogger<TodoListRepository> logger, ITaskEntityFactory taskEntityFactory, ITodoListFactory todoListFactory) 
+	public TodoListRepository(CustomAppDbContext dbContext, ILogger<TodoListRepository> logger, ITaskEntityFactory taskEntityFactory, ITodoListFactory todoListFactory)
 		: base(dbContext, logger)
 	{
 		_dbContext = dbContext;
@@ -47,13 +47,11 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 			.Where(todoList => todoList.Id == todoListId)
 			.Include(todoList => todoList.Tasks)
 			.SingleOrDefaultAsync();
-
-		if (todoListWithDetails is null)
-			ExceptionsService.ThrowCriticalEntityNotFoundInDb(nameof(DuplicateWithDetailsAsync), typeof(TodoListModel).Name, todoListId.ToString(), _logger);
+		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(DuplicateWithDetailsAsync), todoListWithDetails, _logger, todoListId);
 
 		var duplicatedTasks = todoListWithDetails!.Tasks.Select(originTask => CreateNewTaskObject(originTask)).ToList();
 		var duplicatedTodoList = CreateNewTodoListObject(todoListWithDetails, duplicatedTasks);
-		
+
 		await AddAsync(duplicatedTodoList);
 	}
 

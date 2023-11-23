@@ -2,7 +2,7 @@
 
 namespace App.Features.TodoLists.Delete;
 
-public class DeleteTodoListCommand : IRequest<bool>
+public class DeleteTodoListCommand : IRequest<DeleteTodoListCommandResponse>
 {
 	public int TodoListId { get; }
 
@@ -11,3 +11,5 @@ public class DeleteTodoListCommand : IRequest<bool>
 		TodoListId = todoListId;
 	}
 }
+
+public record DeleteTodoListCommandResponse(string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }

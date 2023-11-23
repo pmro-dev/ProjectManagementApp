@@ -4,12 +4,14 @@ using MediatR;
 
 namespace App.Features.Tasks.Create;
 
-public class CreateTaskQuery : IRequest<WrapperViewModel<TaskCreateInputVM, TaskCreateOutputVM>>
+public class CreateTaskQuery : IRequest<CreateTaskQueryResponse>
 {
-    public int TaskId { get; }
+    public int TodoListId { get; }
 
-    public CreateTaskQuery(int taskId)
+    public CreateTaskQuery(int todoListId)
     {
-        TaskId = taskId;
+        TodoListId = todoListId;
     }
 }
+
+public record CreateTaskQueryResponse(WrapperViewModel<TaskCreateInputVM, TaskCreateOutputVM>? Data, string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }

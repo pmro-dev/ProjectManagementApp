@@ -1,5 +1,5 @@
-﻿using App.Common.Helpers;
-using App.Common.ViewModels;
+﻿using App.Common;
+using App.Common.Helpers;
 using App.Features.Tasks.Common.Interfaces;
 using App.Features.Tasks.Common.Models;
 using App.Features.Tasks.Create.Models;
@@ -10,7 +10,9 @@ using MediatR;
 
 namespace App.Features.Tasks.Create;
 
-public class CreateTaskHandler : IRequestHandler<CreateTaskQuery, WrapperViewModel<TaskCreateInputVM, TaskCreateOutputVM>>, IRequestHandler<CreateTaskCommand, object>
+public class CreateTaskHandler : 
+	IRequestHandler<CreateTaskQuery, CreateTaskQueryResponse>, 
+	IRequestHandler<CreateTaskCommand, CreateTaskCommandResponse>
 {
 	private readonly ILogger<CreateTaskHandler> _logger;
 	private readonly IDataUnitOfWork _dataUnitOfWork;
@@ -20,8 +22,8 @@ public class CreateTaskHandler : IRequestHandler<CreateTaskQuery, WrapperViewMod
 	private readonly ITaskEntityMapper _taskEntityMapper;
 	private readonly ITaskViewModelsFactory _taskViewModelsFactory;
 
-	public CreateTaskHandler(ILogger<CreateTaskHandler> logger, ITodoListRepository todoListRepository, ITodoListMapper todoListMapper, 
-		ITaskViewModelsFactory taskViewModelsFactory, IDataUnitOfWork dataUnitOfWork, ITaskRepository taskRepository, 
+	public CreateTaskHandler(ILogger<CreateTaskHandler> logger, ITodoListRepository todoListRepository, ITodoListMapper todoListMapper,
+		ITaskViewModelsFactory taskViewModelsFactory, IDataUnitOfWork dataUnitOfWork, ITaskRepository taskRepository,
 		ITaskEntityMapper taskEntityMapper)
 	{
 		_logger = logger;
@@ -33,29 +35,22 @@ public class CreateTaskHandler : IRequestHandler<CreateTaskQuery, WrapperViewMod
 		_taskEntityMapper = taskEntityMapper;
 	}
 
-	public async Task<WrapperViewModel<TaskCreateInputVM, TaskCreateOutputVM>> Handle(CreateTaskQuery request, CancellationToken cancellationToken)
+	public async Task<CreateTaskQueryResponse> Handle(CreateTaskQuery request, CancellationToken cancellationToken)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Create), request.TaskId, nameof(request.TaskId), _logger);
+		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(CreateTaskQuery), request.TodoListId, nameof(request.TodoListId), _logger);
 
-		TodoListModel? todoListModel = await _todoListRepository.GetAsync(request.TaskId);
+		TodoListModel? todoListModel = await _todoListRepository.GetAsync(request.TodoListId);
+		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(CreateTaskQuery), todoListModel, _logger, request.TodoListId);
 
-		if (todoListModel is null)
-		{
-			//TODO implement failure for result
-			_logger.LogError(MessagesPacket.LogEntityNotFoundInDbSet, "Constructing" + nameof(CreateTaskHandler), nameof(TodoListModel), request.TaskId);
-			throw new InvalidOperationException("Task creation for todolist failed because there is no such Todolist in Database!");
-			//return NotFound();
-		}
-
-		TodoListDto todoListDto = _todoListMapper.TransferToDto(todoListModel);
+		TodoListDto todoListDto = _todoListMapper.TransferToDto(todoListModel!);
 		var taskCreateOutputVM = _taskViewModelsFactory.CreateCreateOutputVM(todoListDto);
 		var taskCreateWrapperVM = _taskViewModelsFactory.CreateWrapperCreateVM();
 		taskCreateWrapperVM.OutputVM = taskCreateOutputVM;
 
-		return taskCreateWrapperVM;
+		return new CreateTaskQueryResponse(taskCreateWrapperVM);
 	}
 
-	public async Task<object> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
+	public async Task<CreateTaskCommandResponse> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
 	{
 		TaskCreateInputVM inputVM = request.TaskCreateInputVM;
 		TaskDto taskDto = _taskEntityMapper.TransferToDto(inputVM);
@@ -64,8 +59,8 @@ public class CreateTaskHandler : IRequestHandler<CreateTaskQuery, WrapperViewMod
 		await _taskRepository.AddAsync(taskModel);
 		await _dataUnitOfWork.SaveChangesAsync();
 
-		object routeValue = new { id = taskDto.TodoListId };
+		CustomRouteValues data = new () { Id = taskDto.TodoListId };
 
-		return routeValue;
+		return new CreateTaskCommandResponse(data);
 	}
 }
