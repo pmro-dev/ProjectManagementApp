@@ -5,6 +5,7 @@
 @{
 	ViewData["Title"] = "Create";
 	Layout = SharedViews.DefaultLayout;
+
 	TodoListCreateInputVM inputVM = Model.InputVM;
 	TodoListCreateOutputVM outputVM = Model.OutputVM;
 }
@@ -14,12 +15,12 @@
 <div class="row">
 	<div class="col-md-4">
 		<form asp-action=@TodoListCtrl.CreateAction method="post">
-			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<div class="form-group">
 				<input asp-for="@inputVM.UserId" type="hidden" value="@outputVM.UserId" />
 				<label asp-for="@inputVM.Title" class="control-label"></label>
 				<input asp-for="@inputVM.Title" class="form-control" />
 				<span asp-validation-for="@inputVM.Title" class="text-danger"></span>
+				<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			</div>
 			<div class="form-group">
 				<input type="submit" value="Create" class="btn" style="background-color: #671dff; color: white; font-weight: 500;" />

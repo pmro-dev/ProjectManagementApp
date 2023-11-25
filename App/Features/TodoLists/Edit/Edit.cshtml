@@ -15,8 +15,8 @@
     <div class="col-md-4">
         <form asp-action=@TodoListCtrl.EditAction method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="@outputVM.Id" />
-            <input asp-for="@outputVM.UserId" type="hidden" value="@outputVM.UserId" />
+            <input type="hidden" asp-for="@inputVM.Id" value="@outputVM.Id" />
+            <input asp-for="@inputVM.UserId" type="hidden" value="@outputVM.UserId" />
             <div class="form-group">
                 <label asp-for="@inputVM.Title" class="control-label"></label>
                 <input asp-for="@inputVM.Title" class="form-control" value="@outputVM.Title" />

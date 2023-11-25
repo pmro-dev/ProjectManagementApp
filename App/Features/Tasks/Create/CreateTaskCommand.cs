@@ -8,14 +8,14 @@ public class CreateTaskCommand : IRequest<CreateTaskCommandResponse>
 {
     public int TodoListId { get; }
 
-    public TaskCreateInputVM TaskCreateInputVM { get; }
+    public TaskCreateInputVM InputVM { get; }
 
-    public CreateTaskCommand(TaskCreateInputVM taskCreateInputVM, int todoListId)
+    public CreateTaskCommand(TaskCreateInputVM inputVM, int todoListId)
     {
         TodoListId = todoListId;
-        TaskCreateInputVM = taskCreateInputVM;
+        InputVM = inputVM;
     }
 }
 
-public record CreateTaskCommandResponse(CustomRouteValues? Data, string? ErrorMessage = null, int StatusCode = StatusCodes.Status201Created) { }
+public record CreateTaskCommandResponse(CustomRouteValues? Data = null, string? ErrorMessage = null, int StatusCode = StatusCodes.Status201Created) { }
 

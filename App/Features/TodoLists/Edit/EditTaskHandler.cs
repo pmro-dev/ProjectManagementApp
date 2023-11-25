@@ -48,7 +48,7 @@ public class EditTaskHandler :
 		TodoListModel? todoListDbModel = await _todoListRepository.GetAsync(request.TodoListId);
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(EditTodoListCommand), todoListDbModel, _logger, request.TodoListId);
 
-		var editInputDto = _todoListMapper.TransferToDto(request.WrapperVM.InputVM);
+		var editInputDto = _todoListMapper.TransferToDto(request.InputVM);
 		_todoListMapper.UpdateModel(todoListDbModel!, editInputDto);
 
 		_todoListRepository.Update(todoListDbModel!);

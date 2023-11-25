@@ -5,6 +5,7 @@ using App.Features.Tasks.Common.Models;
 using App.Features.Tasks.Create.Models;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
+using App.Features.TodoLists.Create;
 using App.Infrastructure.Databases.App.Interfaces;
 using MediatR;
 
@@ -52,8 +53,11 @@ public class CreateTaskHandler :
 
 	public async Task<CreateTaskCommandResponse> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
 	{
-		TaskCreateInputVM inputVM = request.TaskCreateInputVM;
-		TaskDto taskDto = _taskEntityMapper.TransferToDto(inputVM);
+		TaskDto taskDto = _taskEntityMapper.TransferToDto(request.InputVM);
+
+        if (await _taskRepository.ContainsAny(task => task.Title == taskDto.Title && task.UserId == taskDto.UserId))
+            return new CreateTaskCommandResponse(null, MessagesPacket.NameTaken, StatusCodes.Status400BadRequest);
+
 		TaskModel taskModel = _taskEntityMapper.TransferToModel(taskDto);
 
 		await _taskRepository.AddAsync(taskModel);

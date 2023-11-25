@@ -29,15 +29,6 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	}
 
 	///<inheritdoc />
-	public async Task<bool> CheckThatAnyWithSameNameExistAsync(string todoListName)
-	{
-		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(CheckThatAnyWithSameNameExistAsync), todoListName, nameof(todoListName), _logger);
-
-		return await _dbContext.Set<TodoListModel>()
-			.AnyAsync(todoList => todoList.Title == todoListName);
-	}
-
-	///<inheritdoc />
 	public async Task DuplicateWithDetailsAsync(int todoListId)
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(DuplicateWithDetailsAsync), todoListId, nameof(todoListId), _logger);

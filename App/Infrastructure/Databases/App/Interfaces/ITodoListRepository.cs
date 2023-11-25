@@ -34,11 +34,4 @@ public interface ITodoListRepository : IGenericRepository<TodoListModel>
 	/// <param name="todoListId">Targeted list id.</param>
 	/// <returns></returns>
 	Task DuplicateWithDetailsAsync(int todoListId);
-
-	/// <summary>
-	/// Check that any ToDoList with the same name already exists.
-	/// </summary>
-	/// <param name="todoListName">Targeted name to check.</param>
-	/// <returns>True when ToDoList with specified name already exists, otherwise false.</returns>
-	Task<bool> CheckThatAnyWithSameNameExistAsync(string todoListName);
 }

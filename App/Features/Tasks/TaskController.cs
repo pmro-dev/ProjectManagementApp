@@ -19,6 +19,7 @@ using App.Common;
 using Microsoft.AspNetCore.Identity;
 using App.Infrastructure.Databases.Identity.Seeds;
 using Azure;
+using App.Features.TodoLists.Create;
 
 
 
@@ -106,16 +107,27 @@ public class TaskController : Controller
 	[HttpPost]
 	[Route(CustomRoutes.CreateTaskPostRoute)]
 	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> Create(int todoListId, WrapperViewModel<TaskCreateInputVM, TaskCreateOutputVM> taskCreateWrapperVM)
+	public async Task<IActionResult> Create(int todoListId, TaskCreateInputVM inputVM)
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Create), todoListId, nameof(todoListId), _logger);
 
-		var respond = await _mediator.Send(new CreateTaskCommand(taskCreateWrapperVM.InputVM, todoListId));
+		var response = await _mediator.Send(new CreateTaskCommand(inputVM, todoListId));
 
-		if (respond.StatusCode == StatusCodes.Status201Created)
-			return RedirectToAction(TodoListCtrl.ShowAction, TodoListCtrl.Name, respond.Data);
+		if (response.StatusCode == StatusCodes.Status201Created)
+			return RedirectToAction(TodoListCtrl.ShowAction, TodoListCtrl.Name, response.Data);
 
-		return BadRequest();
+        if (response.StatusCode == StatusCodes.Status400BadRequest)
+        {
+            var responseOnNameTaken = await _mediator.Send(new CreateTaskQuery(inputVM.TodoListId));
+
+            if (responseOnNameTaken.StatusCode == StatusCodes.Status200OK)
+            {
+                ModelState.AddModelError(string.Empty, response.ErrorMessage!);
+                return View(responseOnNameTaken.Data);
+            }
+        }
+
+        return BadRequest();
 	}
 
 	/// <summary>
@@ -153,32 +165,46 @@ public class TaskController : Controller
 	[HttpPost]
 	[Route(CustomRoutes.TaskEditPostRoute)]
 	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> EditPost([FromForm] WrapperViewModel<TaskEditInputVM, TaskEditOutputVM> editWrapperVM)
+	public async Task<IActionResult> EditPost([FromForm] TaskEditInputVM inputVM)
 	{
-		var taskEditInputVM = editWrapperVM.InputVM;
+		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(EditPost), inputVM.TodoListId, nameof(inputVM.TodoListId), _logger);
+		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(EditPost), inputVM.Id, nameof(inputVM.Id), _logger);
 
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(EditPost), taskEditInputVM.TodoListId, nameof(taskEditInputVM.TodoListId), _logger);
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(EditPost), taskEditInputVM.Id, nameof(taskEditInputVM.Id), _logger);
+		var response = await _mediator.Send(new EditTaskCommand(inputVM));
 
-		var respond = await _mediator.Send(new EditTaskCommand(taskEditInputVM));
+		if (response.StatusCode == StatusCodes.Status201Created)
+			return RedirectToAction(TodoListCtrl.ShowAction, TodoListCtrl.Name, response.Data);
 
-		if (respond.StatusCode == StatusCodes.Status201Created)
-			return RedirectToAction(TodoListCtrl.ShowAction, TodoListCtrl.Name, respond.Data);
+        if (response.StatusCode == StatusCodes.Status400BadRequest)
+            return await TryAgainWhenNameTakenAsync(inputVM.TodoListId, inputVM.Id, inputVM.UserId, response.ErrorMessage!);
 
-		return BadRequest();
+        return BadRequest();
 	}
 
-	/// <summary>
-	/// Action GET to DELETE To Do List.
-	/// </summary>
-	/// <param name="todoListId">Target To Do List id for which Task was assigned.</param>
-	/// <param name="taskId">Target Task id.</param>
-	/// <returns>Return different respond / view based on the final result. 
-	/// Return Bad Request when given To Do List id is not equal to To Do List Id in Task property, 
-	/// Not Found when there isn't such Task in Db or return view to further operations.
-	/// </returns>
-	/// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
-	[HttpGet]
+    private async Task<IActionResult> TryAgainWhenNameTakenAsync(int todoListId, int taskId, string userId, string errorMessage)
+    {
+        var responseOnNameTaken = await _mediator.Send(new EditTaskQuery(todoListId, taskId, userId));
+
+        if (responseOnNameTaken.StatusCode == StatusCodes.Status200OK)
+        {
+            ModelState.AddModelError(string.Empty, errorMessage);
+            return View(responseOnNameTaken.Data);
+        }
+
+        return BadRequest();
+    }
+
+    /// <summary>
+    /// Action GET to DELETE To Do List.
+    /// </summary>
+    /// <param name="todoListId">Target To Do List id for which Task was assigned.</param>
+    /// <param name="taskId">Target Task id.</param>
+    /// <returns>Return different respond / view based on the final result. 
+    /// Return Bad Request when given To Do List id is not equal to To Do List Id in Task property, 
+    /// Not Found when there isn't such Task in Db or return view to further operations.
+    /// </returns>
+    /// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
+    [HttpGet]
 	[Route(CustomRoutes.TaskDeleteGetRoute)]
 	public async Task<IActionResult> Delete(int todoListId, int taskId)
 	{

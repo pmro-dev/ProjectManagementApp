@@ -21,6 +21,7 @@ using App.Features.TodoLists.Create.Models;
 using App.Features.TodoLists.Edit.Models;
 using App.Common;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Azure;
 
 
 #endregion
@@ -72,26 +73,31 @@ public class TodoListController : Controller
 	/// <returns>Return different view based on the final response. Redirect to Briefly or to view with form.</returns>
 	[HttpPost]
 	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> Create(WrapperViewModel<TodoListCreateInputVM, TodoListCreateOutputVM> wrapperVM)
+	public async Task<IActionResult> Create(TodoListCreateInputVM inputVM)
 	{
-		if (!ModelState.IsValid) return View(TodoListViews.Create, wrapperVM);
-
-		string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-		ExceptionsService.WhenPropertyIsNullOrEmptyThrowCritical(nameof(Create), userId, nameof(userId), _logger);
-
-		var response = await _mediator.Send(new CreateTodoListCommand(wrapperVM, userId));
-
-		if (response.StatusCode == StatusCodes.Status400BadRequest)
-		{
-			ModelState.AddModelError(string.Empty, response.ErrorMessage!);
-			return View(wrapperVM);
-		}
+		var response = await _mediator.Send(new CreateTodoListCommand(inputVM));
 
 		if (response.StatusCode == StatusCodes.Status201Created)
 			return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
 
+		if (response.StatusCode == StatusCodes.Status400BadRequest)
+			return await TryAgainWhenNameTakenAsync(inputVM.UserId, response.ErrorMessage!);
+
 		return BadRequest();
 	}
+
+	private async Task<IActionResult> TryAgainWhenNameTakenAsync(string userId, string errorMessage)
+	{
+        var responseOnNameTaken = await _mediator.Send(new CreateTodoListQuery(userId));
+
+        if (responseOnNameTaken.StatusCode == StatusCodes.Status200OK)
+        {
+            ModelState.AddModelError(string.Empty, errorMessage);
+            return View(responseOnNameTaken.Data);
+        }
+
+		return BadRequest();
+    }
 
 	/// <summary>
 	/// Action GET to EDIT To Do List.
@@ -126,11 +132,12 @@ public class TodoListController : Controller
 	[HttpPost]
 	[Route(CustomRoutes.TodoListEditRoute)]
 	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> Edit(int id, [FromForm] WrapperViewModel<TodoListEditInputVM, TodoListEditOutputVM> editWrapperVM)
+	public async Task<IActionResult> Edit(int id, [FromForm] TodoListEditInputVM inputVM)
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), id, nameof(id), _logger);
+		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), inputVM.Id, nameof(inputVM.Id), _logger);
 
-		var response = await _mediator.Send(new EditTodoListCommand(editWrapperVM.OutputVM.Id, editWrapperVM, id));
+		var response = await _mediator.Send(new EditTodoListCommand(inputVM, id));
 
 		if (response.StatusCode == StatusCodes.Status201Created)
 			return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
