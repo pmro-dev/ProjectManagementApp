@@ -41,7 +41,7 @@ public class UserService : IUserService
 
 	public string GetSignedInUserId()
 	{
-		return GetSignedInUser().FindFirst(ClaimTypes.NameIdentifier)?.Value ?? throw new InvalidOperationException("Error with signed In User");
+		return GetSignedInUser().FindFirstValue(ClaimTypes.NameIdentifier);
 	}
 
 	public ClaimsPrincipal GetSignedInUser()

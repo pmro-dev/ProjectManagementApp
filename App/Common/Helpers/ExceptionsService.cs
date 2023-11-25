@@ -1,5 +1,7 @@
 ﻿using App.Features.Users.Common.Roles.Models.Interfaces;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.Linq.Expressions;
 using System.Security.Claims;
 
@@ -209,6 +211,22 @@ public static class ExceptionsService
 		{
 			logger.LogCritical(MessagesPacket.LogConflictBetweenEntitiesIds, operationName, firstId, firstIdName, secondId, secondIdName);
 			throw new InvalidOperationException(MessagesPacket.ConflictBetweenEntitiesIds(operationName, firstId, firstIdName, secondId, secondIdName));
+		}
+	}
+
+	#endregion
+
+
+	#region MODEL STATE HELPERS
+
+	public const string ModelStateMessageKey = "ModelStateErrorMessage";
+
+	public static void CheckForModelStateErrorMessageFromPost(ModelStateDictionary modelState, ITempDataDictionary tempData)
+	{
+		if (tempData.TryGetValue(ModelStateMessageKey, out var modelErrorMessage) && modelErrorMessage != null)
+		{
+			string errorMessage = (string)modelErrorMessage;
+			modelState.AddModelError(string.Empty, errorMessage);
 		}
 	}
 

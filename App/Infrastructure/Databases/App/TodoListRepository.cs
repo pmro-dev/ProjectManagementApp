@@ -76,7 +76,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	private TodoListModel CreateNewTodoListObject(TodoListModel originTodoList, ICollection<TaskModel> newTasks)
 	{
 		TodoListModel newTodoList = _todoListFactory.CreateModel();
-		newTodoList.Title = originTodoList.Title;
+		newTodoList.Title = originTodoList.Title + "###";
 		newTodoList.Tasks = newTasks;
 		newTodoList.UserId = originTodoList.UserId;
 

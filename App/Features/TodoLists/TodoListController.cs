@@ -56,6 +56,8 @@ public class TodoListController : Controller
 	[Route(CustomRoutes.TodoListCreateRoute)]
 	public async Task<IActionResult> Create()
 	{
+		ExceptionsService.CheckForModelStateErrorMessageFromPost(ModelState, TempData);
+
 		var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
 		var response = await _mediator.Send(new CreateTodoListQuery(userId));
@@ -80,24 +82,17 @@ public class TodoListController : Controller
 		if (response.StatusCode == StatusCodes.Status201Created)
 			return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
 
-		if (response.StatusCode == StatusCodes.Status400BadRequest)
-			return await TryAgainWhenNameTakenAsync(inputVM.UserId, response.ErrorMessage!);
+		if (response.StatusCode == StatusCodesExtension.EntityNameTaken)
+		{
+			ModelState.AddModelError(string.Empty, response.ErrorMessage!);
+			TempData[ExceptionsService.ModelStateMessageKey] = response.ErrorMessage!;
+
+			return RedirectToAction(TodoListCtrl.CreateAction);
+		}
 
 		return BadRequest();
 	}
 
-	private async Task<IActionResult> TryAgainWhenNameTakenAsync(string userId, string errorMessage)
-	{
-        var responseOnNameTaken = await _mediator.Send(new CreateTodoListQuery(userId));
-
-        if (responseOnNameTaken.StatusCode == StatusCodes.Status200OK)
-        {
-            ModelState.AddModelError(string.Empty, errorMessage);
-            return View(responseOnNameTaken.Data);
-        }
-
-		return BadRequest();
-    }
 
 	/// <summary>
 	/// Action GET to EDIT To Do List.
@@ -110,6 +105,7 @@ public class TodoListController : Controller
 	public async Task<IActionResult> Edit(int id)
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), id, nameof(id), _logger);
+		ExceptionsService.CheckForModelStateErrorMessageFromPost(ModelState, TempData);
 
 		var response = await _mediator.Send(new EditTodoListQuery(id));
 
@@ -141,6 +137,15 @@ public class TodoListController : Controller
 
 		if (response.StatusCode == StatusCodes.Status201Created)
 			return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
+
+		if (response.StatusCode == StatusCodesExtension.EntityNameTaken)
+		{
+			ModelState.AddModelError(string.Empty, response.ErrorMessage!);
+			TempData[ExceptionsService.ModelStateMessageKey] = response.ErrorMessage!;
+
+			object routeValues = new { Id = id };
+			return RedirectToAction(TodoListCtrl.EditAction, routeValues);
+		}
 
 		return BadRequest();
 	}

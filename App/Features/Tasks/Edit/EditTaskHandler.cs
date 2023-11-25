@@ -68,6 +68,10 @@ public class EditTaskHandler :
 	public async Task<EditTaskCommandResponse> Handle(EditTaskCommand request, CancellationToken cancellationToken)
 	{
 		TaskEditInputDto taskEditInputDto = _taskEntityMapper.TransferToDto(request.InputVM);
+
+		if (await _taskRepository.ContainsAny(task => task.Title == taskEditInputDto.Title && task.UserId == taskEditInputDto.UserId))
+			return new EditTaskCommandResponse(null, MessagesPacket.NameTaken, StatusCodesExtension.EntityNameTaken);
+
 		TaskModel? taskDbModel = await _taskRepository.GetAsync(taskEditInputDto.Id);
 
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(EditTaskCommand), taskDbModel, _logger, taskEditInputDto.Id);

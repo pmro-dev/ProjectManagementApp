@@ -14,4 +14,4 @@ public class EditTaskCommand : IRequest<EditTaskCommandResponse>
 	}
 }
 
-public record EditTaskCommandResponse(CustomRouteValues? Data, string? ErrorMessage = null, int StatusCode = StatusCodes.Status201Created) { }
+public record EditTaskCommandResponse(CustomRouteValues? Data = null, string? ErrorMessage = null, int StatusCode = StatusCodes.Status201Created) { }
