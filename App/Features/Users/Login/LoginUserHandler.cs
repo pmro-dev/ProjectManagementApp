@@ -1,4 +1,4 @@
-﻿using App.Common.Helpers;
+﻿using App.Features.Exceptions.Throw;
 using App.Features.Users.Authentication.Interfaces;
 using App.Features.Users.Common.Interfaces;
 using App.Features.Users.Login.Interfaces;
@@ -76,7 +76,7 @@ public class LoginUserHandler : IRequestHandler<LoginUserQuery, bool>, IRequestH
 
 	public Task<IActionResult> Handle(LoginUserByProviderQuery request, CancellationToken cancellationToken)
 	{
-		ExceptionsService.WhenArgumentIsNullOrEmptyThrowError(nameof(LoginUserByProviderQuery), request.Provider, nameof(request.Provider), _logger);
+		ExceptionsService.WhenArgumentIsNullOrEmptyThrow(nameof(LoginUserByProviderQuery), request.Provider, nameof(request.Provider), _logger);
 
 		return Task<IActionResult>.Factory.StartNew(() =>
 		{

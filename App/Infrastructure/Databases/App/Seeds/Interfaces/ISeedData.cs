@@ -8,32 +8,32 @@ namespace App.Infrastructure.Databases.App.Seeds.Interfaces;
 /// </summary>
 public interface ISeedData
 {
-	public ICollection<TaskModel> AllTasks { get; set; }
+	public ICollection<TaskModel> AllTasks { get; }
 
 	/// <summary>
 	/// All Todolists for Database Set.
 	/// </summary>
-	public ICollection<TodoListModel> TodoLists { get; set; }
+	public ICollection<TodoListModel> TodoLists { get; }
 
 	/// <summary>
 	/// Specific 'UX' Tasks for a list.
 	/// </summary>
-	public ICollection<TaskModel> TasksUX { get; set; }
+	public ICollection<TaskModel> TasksUX { get;}
 
 	/// <summary>
 	/// Specific 'Backend' Tasks for a list.
 	/// </summary>
-	public ICollection<TaskModel> TasksBackend { get; set; }
+	public ICollection<TaskModel> TasksBackend { get; }
 
 	/// <summary>
 	/// Specific 'Testing' Tasks for a list.
 	/// 
 	/// </summary>
-	public ICollection<TaskModel> TasksTesting { get; set; }
+	public ICollection<TaskModel> TasksTesting { get; }
 
 	/// <summary>
 	/// Specific 'Project Management' Tasks for a list.
 	/// 
 	/// </summary>
-	public ICollection<TaskModel> TasksProjectManagement { get; set; }
+	public ICollection<TaskModel> TasksProjectManagement { get; }
 }

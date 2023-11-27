@@ -1,4 +1,4 @@
-﻿using App.Common.Helpers;
+﻿using App.Features.Exceptions.Throw;
 using App.Features.Users.Common.Models;
 using App.Features.Users.Common.Roles.Models;
 using App.Infrastructure.Databases.Common;
@@ -37,8 +37,8 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 	///<inheritdoc />
 	public async Task<UserModel?> GetByNameAndPasswordAsync(string userLogin, string userPassword)
 	{
-		ExceptionsService.WhenArgumentIsNullOrEmptyThrowError(nameof(GetByNameAndPasswordAsync), userLogin, nameof(userLogin), _logger);
-		ExceptionsService.WhenArgumentIsNullOrEmptyThrowError(nameof(GetByNameAndPasswordAsync), userPassword, nameof(userPassword), _logger);
+		ExceptionsService.WhenArgumentIsNullOrEmptyThrow(nameof(GetByNameAndPasswordAsync), userLogin, nameof(userLogin), _logger);
+		ExceptionsService.WhenArgumentIsNullOrEmptyThrow(nameof(GetByNameAndPasswordAsync), userPassword, nameof(userPassword), _logger);
 
 		Expression<Func<UserModel, bool>> userDataPredicateExpression = (UserModel user) => user.Username == userLogin && user.Password == userPassword;
 

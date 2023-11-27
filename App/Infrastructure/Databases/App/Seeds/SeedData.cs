@@ -3,35 +3,36 @@ using App.Features.TodoLists.Common.Models;
 using App.Common.Helpers;
 using App.Features.Tasks.Common.Models;
 using App.Infrastructure.Databases.App.Seeds.Interfaces;
+using App.Features.Exceptions.Throw;
 
 namespace App.Infrastructure.Databases.App.Seeds;
 
 ///<inheritdoc />
 public class SeedData : ISeedData
 {
-	protected const string DueDateFormat = AttributesHelper.DataFormat;
-	protected readonly IFormatProvider formatProvider = CultureInfo.InvariantCulture;
-	private readonly ILogger<SeedData> _logger;
+	private const string DueDateFormat = AttributesHelper.DataFormat;
+	private static IFormatProvider formatProvider = CultureInfo.InvariantCulture;
+	private static ILogger<SeedData>? _logger;
 
-	public string AdminId { get; } = "adminId";
-
-	///<inheritdoc />
-	public ICollection<TaskModel> AllTasks { get; set; }
+	public const string AdminId = "adminId";
 
 	///<inheritdoc />
-	public ICollection<TodoListModel> TodoLists { get; set; }
+	public ICollection<TaskModel> AllTasks { get; private set; }
 
 	///<inheritdoc />
-	public ICollection<TaskModel> TasksUX { get; set; }
+	public ICollection<TodoListModel> TodoLists { get; private set; }
 
 	///<inheritdoc />
-	public ICollection<TaskModel> TasksBackend { get; set; }
+	public ICollection<TaskModel> TasksUX { get; private set; }
 
 	///<inheritdoc />
-	public ICollection<TaskModel> TasksTesting { get; set; }
+	public ICollection<TaskModel> TasksBackend { get; private set; }
 
 	///<inheritdoc />
-	public ICollection<TaskModel> TasksProjectManagement { get; set; }
+	public ICollection<TaskModel> TasksTesting { get; private set; }
+
+	///<inheritdoc />
+	public ICollection<TaskModel> TasksProjectManagement { get; private set; }
 
 	/// <summary>
 	/// Seeds the data to properties.
@@ -47,8 +48,8 @@ public class SeedData : ISeedData
 
 		if (AllTasks is null || TodoLists is null || TasksUX is null || TasksBackend is null || TasksTesting is null || TasksProjectManagement is null)
 		{
-			_logger.LogCritical(MessagesPacket.LogSeedCollectionsAreEmpty);
-			throw new InvalidOperationException(MessagesPacket.LogSeedCollectionsAreEmpty);
+			_logger.LogCritical(ExceptionsMessages.LogSeedCollectionsAreEmpty);
+			throw new InvalidOperationException(ExceptionsMessages.LogSeedCollectionsAreEmpty);
 		}
 	}
 

@@ -7,6 +7,9 @@
 	Layout = SharedViews.DefaultLayout;
 	var inputVM = Model.InputVM;
 	var outputVM = Model.OutputVM;
+
+	inputVM.UserId = outputVM.UserId;
+	inputVM.TodoListId = outputVM.TodoListId;
 }
 
 <h4>Create Task</h4>
@@ -15,13 +18,13 @@
 	<div class="col-md-4">
 		<form asp-action="@TaskCtrl.CreateAction" asp-controller="@TaskCtrl.Name" method="post">
 			<label asp-for="@outputVM.TodoListId" type="hidden" />
-			<label asp-for="@inputVM.UserId" type="hidden" value="@outputVM.UserId" />
+			<label asp-for="@inputVM.UserId" type="hidden" />
 			<div class="form-group">
 				<label asp-for="@outputVM.TodoListName" class="control-label">To Do List Name</label>
 				<input asp-for="@outputVM.TodoListName" class="form-control" readonly />
 			</div>
-			<input asp-for="@inputVM.TodoListId" type="hidden" value="@outputVM.TodoListId" />
-			<input asp-for="@inputVM.UserId" type="hidden" value="@outputVM.UserId" />
+			<input asp-for="@inputVM.TodoListId" type="hidden" />
+			<input asp-for="@inputVM.UserId" type="hidden" />
 			<div class="form-group">
 				<label asp-for="@inputVM.Title" class="control-label"></label>
 				<input asp-for="@inputVM.Title" class="form-control" />

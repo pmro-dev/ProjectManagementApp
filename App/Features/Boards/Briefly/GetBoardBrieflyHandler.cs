@@ -1,5 +1,5 @@
-﻿using App.Common.Helpers;
-using App.Features.Boards.Common.Interfaces;
+﻿using App.Features.Boards.Common.Interfaces;
+using App.Features.Exceptions.Throw;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Interfaces;
@@ -25,7 +25,7 @@ public class GetBoardBrieflyHandler : IRequestHandler<GetBoardBrieflyQuery, GetB
 		_todoListRepository = todoListRepository;
 		_signedInUserId = userService.GetSignedInUserId();
 
-		ExceptionsService.WhenPropertyIsNullOrEmptyThrowCritical("Constructing " + nameof(GetBoardBrieflyHandler), _signedInUserId, nameof(_signedInUserId), _logger);
+		ExceptionsService.WhenPropertyIsNullOrEmptyThrow("Constructing " + nameof(GetBoardBrieflyHandler), _signedInUserId, nameof(_signedInUserId), _logger);
 	}
 
 	public async Task<GetBoardBrieflyQueryResponse> Handle(GetBoardBrieflyQuery request, CancellationToken cancellationToken)

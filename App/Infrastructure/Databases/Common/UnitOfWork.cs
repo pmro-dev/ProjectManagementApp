@@ -1,4 +1,4 @@
-﻿using App.Common.Helpers;
+﻿using App.Features.Exceptions.Throw;
 using App.Infrastructure.Databases.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -26,8 +26,18 @@ public abstract class UnitOfWork<TContext> : IUnitOfWork where TContext : DbCont
 		}
 		catch
 		{
-			_logger.LogCritical(MessagesPacket.LogExceptionOccuredOnSavingDataToDataBase, nameof(SaveChangesAsync));
-			await RollbackTransactionAsync();
+			if (_context.Database.CurrentTransaction is null)
+			{
+				_logger.LogWarning(ExceptionsMessages.LogExceptionOccuredOnSavingDataToDataBase, nameof(SaveChangesAsync));
+				_context.ChangeTracker.Clear();
+				throw;
+			}
+			else
+			{
+				_logger.LogCritical(ExceptionsMessages.LogExceptionOccuredOnSavingDataToDataBase, nameof(SaveChangesAsync));
+				await RollbackTransactionAsync();
+				throw;
+			}
 		}
 	}
 
@@ -44,14 +54,15 @@ public abstract class UnitOfWork<TContext> : IUnitOfWork where TContext : DbCont
 		}
 		catch
 		{
-			_logger.LogCritical(MessagesPacket.LogExceptionOccuredOnCommitingTransaction, nameof(CommitTransactionAsync));
+			_logger.LogCritical(ExceptionsMessages.LogExceptionOccuredOnCommitingTransaction, nameof(CommitTransactionAsync));
 			await RollbackTransactionAsync();
+			throw;
 		}
 	}
 
 	public async Task RollbackTransactionAsync()
 	{
-		_logger.LogWarning(MessagesPacket.LogRollbackProceed);
+		_logger.LogWarning(ExceptionsMessages.LogRollbackProceed);
 		await _context.Database.RollbackTransactionAsync();
 	}
 

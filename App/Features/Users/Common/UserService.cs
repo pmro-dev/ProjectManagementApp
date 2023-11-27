@@ -1,4 +1,4 @@
-﻿using App.Common.Helpers;
+﻿using App.Features.Exceptions.Throw;
 using App.Features.Users.Common.Interfaces;
 using App.Features.Users.Common.Models;
 using App.Features.Users.Common.Roles.Interfaces;
@@ -70,7 +70,7 @@ public class UserService : IUserService
 	{
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(UpdateUserModelAsync), userFromDb, _logger);
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(UpdateUserModelAsync), userBasedOnProviderDataDto, _logger);
-		ExceptionsService.WhenArgumentIsNullOrEmptyThrowError(nameof(UpdateUserModelAsync), providerName, nameof(providerName), _logger);
+		ExceptionsService.WhenArgumentIsNullOrEmptyThrow(nameof(UpdateUserModelAsync), providerName, nameof(providerName), _logger);
 
 		userFromDb!.FirstName = userBasedOnProviderDataDto!.FirstName;
 		userFromDb.LastName = userBasedOnProviderDataDto.LastName;

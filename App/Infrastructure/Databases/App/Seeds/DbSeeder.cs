@@ -6,63 +6,74 @@ namespace App.Infrastructure.Databases.App.Seeds;
 /// <summary>
 /// Class manages seeding main data to database.
 /// </summary>
-public static class DbSeeder
+public class DbSeeder : IDbSeeder
 {
+	private readonly ISeedData _seedContainer;
+	private readonly IDataUnitOfWork _unitOfWork;
+	private readonly ILogger<DbSeeder> _logger;
+
+	public DbSeeder(ISeedData seedContainer, IDataUnitOfWork unitOfWork, ILogger<DbSeeder> logger)
+	{
+		_seedContainer = seedContainer;
+		_unitOfWork = unitOfWork;
+		_logger = logger;
+	}
+
 	/// <summary>
 	/// Checks that Database is set and populated, if not -> try to create database, applies migrations and seed data to it.
 	/// </summary>
 	/// <param name="app">Application builder.</param>
-	public static async Task EnsurePopulated(IDataUnitOfWork unitOfWork, ISeedData seedContainer, ILogger logger)
+	public async Task EnsurePopulated()
 	{
-		using var transaction = await unitOfWork.BeginTransactionAsync();
+		using var transaction = await _unitOfWork.BeginTransactionAsync();
 
-        try
+		try
 		{
 			await transaction.CreateSavepointAsync("BeforeMigrations");
-			await EnsurePendingMigrationsAppliedAsync(unitOfWork);
+			await EnsurePendingMigrationsAppliedAsync();
 
-            await transaction.CreateSavepointAsync("BeforeRolesAndAdminPopulated");
-            await EnsureTodoListsPopulatedAsync(seedContainer, unitOfWork);
-			await EnsureTasksPopulatedAsync(seedContainer, unitOfWork);
+			await transaction.CreateSavepointAsync("BeforeRolesAndAdminPopulated");
+			await EnsureTodoListsPopulatedAsync();
+			await EnsureTasksPopulatedAsync();
 
-			await unitOfWork.SaveChangesAsync();
-			await unitOfWork.CommitTransactionAsync();
+			await _unitOfWork.SaveChangesAsync();
+			await _unitOfWork.CommitTransactionAsync();
 		}
 		catch (Exception ex)
 		{
-			await unitOfWork.RollbackTransactionAsync();
-			logger.LogCritical(ex, "An error occurred while populating the App database.");
+			await _unitOfWork.RollbackTransactionAsync();
+			_logger.LogCritical(ex, "An error occurred while populating the App database.");
 			throw;
 		}
 	}
 
-	private static async Task EnsurePendingMigrationsAppliedAsync(IDataUnitOfWork unitOfWork)
+	private async Task EnsurePendingMigrationsAppliedAsync()
 	{
-		var migrations = await unitOfWork.GetPendingMigrationsAsync();
+		var migrations = await _unitOfWork.GetPendingMigrationsAsync();
 
 		if (migrations.Any())
 		{
-			await unitOfWork.MigrateAsync();
+			await _unitOfWork.MigrateAsync();
 		}
 	}
 
-	private static async Task EnsureTodoListsPopulatedAsync(ISeedData seedContainer, IDataUnitOfWork unitOfWork)
+	private async Task EnsureTodoListsPopulatedAsync()
 	{
-		ITodoListRepository todoListRepository = unitOfWork.TodoListRepository;
+		ITodoListRepository todoListRepository = _unitOfWork.TodoListRepository;
 
 		if (!await todoListRepository.ContainsAny())
 		{
-			await todoListRepository.AddRangeAsync(seedContainer.TodoLists);
+			await todoListRepository.AddRangeAsync(_seedContainer.TodoLists);
 		}
 	}
 
-	private static async Task EnsureTasksPopulatedAsync(ISeedData seedContainer, IDataUnitOfWork unitOfWork)
+	private async Task EnsureTasksPopulatedAsync()
 	{
-		ITaskRepository taskRepository = unitOfWork.TaskRepository;
+		ITaskRepository taskRepository = _unitOfWork.TaskRepository;
 
 		if (!await taskRepository.ContainsAny())
 		{
-			await taskRepository.AddRangeAsync(seedContainer.AllTasks);
+			await taskRepository.AddRangeAsync(_seedContainer.AllTasks);
 		}
 	}
 }

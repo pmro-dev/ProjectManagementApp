@@ -1,4 +1,4 @@
-﻿using App.Common.Helpers;
+﻿using App.Features.Exceptions.Throw;
 using App.Features.Users.Authentication.Interfaces;
 using App.Features.Users.Common.Models;
 using App.Features.Users.Login.Interfaces;
@@ -56,7 +56,7 @@ public class LoginService : ILoginService
 
 		if (httpContext is null)
 		{
-			_logger.LogCritical(MessagesPacket.LogHttpContextObjectIsNull, nameof(LogInUserAsync));
+			_logger.LogCritical(ExceptionsMessages.LogHttpContextObjectIsNull, nameof(LogInUserAsync));
 			throw new ArgumentException("Unable to get current HttpContext - accessor returned null HttpContext object.");
 		}
 

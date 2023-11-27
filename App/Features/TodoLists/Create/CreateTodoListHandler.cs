@@ -3,6 +3,8 @@ using App.Features.TodoLists.Common.Interfaces;
 using App.Infrastructure.Databases.App.Interfaces;
 using App.Features.TodoLists.Create.Models;
 using App.Common.Helpers;
+using App.Features.Exceptions.Throw;
+using App.Features.TodoLists.Delete;
 
 namespace App.Features.TodoLists.Create;
 
@@ -28,6 +30,8 @@ public class CreateTodoListHandler :
 
     public async Task<CreateTodoListQueryResponse> Handle(CreateTodoListQuery request, CancellationToken cancellationToken)
 	{
+		ExceptionsService.WhenPropertyIsNullOrEmptyThrow(nameof(CreateTodoListQuery), request.UserId, nameof(request.UserId), _logger);
+
 		return await Task.Factory.StartNew(() =>
 		{
 			TodoListCreateOutputVM outputVM = _todoListViewModelsFactory.CreateCreateOutputVM(request.UserId);
@@ -42,7 +46,7 @@ public class CreateTodoListHandler :
 	{
         var todoListDto = _todoListMapper.TransferToDto(request.InputVM);
         if (await _todoListRepository.ContainsAny(todoList => todoList.Title == todoListDto.Title && todoList.UserId == todoListDto.UserId))
-			return new CreateTodoListCommandResponse(MessagesPacket.NameTaken, StatusCodesExtension.EntityNameTaken);
+			return new CreateTodoListCommandResponse(ExceptionsMessages.NameTaken, StatusCodesExtension.EntityNameTaken);
 
         var todoListModel = _todoListMapper.TransferToModel(todoListDto);
 		await _todoListRepository.AddAsync(todoListModel);

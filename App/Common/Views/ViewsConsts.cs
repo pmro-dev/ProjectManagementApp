@@ -39,7 +39,11 @@ public static class ViewsConsts
         public const string TodoListTable = "_TodoListTable";
         public const string TodoListTableDetails = "_TodoListTableDetails";
         public const string ValidationPartial = "_ValidationScriptsPartial";
-        public const string AccessDenied = "AccessDenied";
-        public const string Error = "Error";
     }
+
+    public readonly struct ExceptionViews
+    {
+		public const string AccessDenied = "AccessDenied";
+		public const string Error = "Error";
+	}
 }

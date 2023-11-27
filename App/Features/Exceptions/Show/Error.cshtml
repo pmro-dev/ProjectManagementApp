@@ -1,8 +1,26 @@
-﻿<h1 class="text-danger">Error.</h1>
+﻿@using static App.Common.ControllersConsts;
+@model string
+
+@{
+	Layout = SharedViews.DefaultLayout;
+}
+
+@{
+	string ExceptionMessage = Model;
+}
+
+<h1 class="text-danger">Error.</h1>
 <h2 class="text-danger">An error occurred while processing your request.</h2>
 
 <p>An unexpected error occured on our wesbite. The website administrator has been notified.</p>
 <p>Please go to home page.</p>
+
+@{
+	if (Model is not null)
+	{
+		<span>Details: @ExceptionMessage</span>
+	}
+}
 
 <div>
 	<a class="btn btn-sm btn-primary" asp-controller="@BoardsCtrl.Name" asp-action="@BoardsCtrl.BrieflyAction">HOME</a>

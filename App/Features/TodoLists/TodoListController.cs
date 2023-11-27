@@ -22,6 +22,7 @@ using App.Features.TodoLists.Edit.Models;
 using App.Common;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Azure;
+using App.Features.Exceptions.Throw;
 
 
 #endregion
@@ -56,7 +57,7 @@ public class TodoListController : Controller
 	[Route(CustomRoutes.TodoListCreateRoute)]
 	public async Task<IActionResult> Create()
 	{
-		ExceptionsService.CheckForModelStateErrorMessageFromPost(ModelState, TempData);
+		ModelStateHelper.SetModelStateErrorMessageWhenSomeHappendOnPost(ModelState, TempData);
 
 		var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -85,14 +86,13 @@ public class TodoListController : Controller
 		if (response.StatusCode == StatusCodesExtension.EntityNameTaken)
 		{
 			ModelState.AddModelError(string.Empty, response.ErrorMessage!);
-			TempData[ExceptionsService.ModelStateMessageKey] = response.ErrorMessage!;
+			TempData[ModelStateHelper.ModelStateMessageKey] = response.ErrorMessage!;
 
 			return RedirectToAction(TodoListCtrl.CreateAction);
 		}
 
 		return BadRequest();
 	}
-
 
 	/// <summary>
 	/// Action GET to EDIT To Do List.
@@ -105,7 +105,7 @@ public class TodoListController : Controller
 	public async Task<IActionResult> Edit(int id)
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), id, nameof(id), _logger);
-		ExceptionsService.CheckForModelStateErrorMessageFromPost(ModelState, TempData);
+		ModelStateHelper.SetModelStateErrorMessageWhenSomeHappendOnPost(ModelState, TempData);
 
 		var response = await _mediator.Send(new EditTodoListQuery(id));
 
@@ -141,7 +141,7 @@ public class TodoListController : Controller
 		if (response.StatusCode == StatusCodesExtension.EntityNameTaken)
 		{
 			ModelState.AddModelError(string.Empty, response.ErrorMessage!);
-			TempData[ExceptionsService.ModelStateMessageKey] = response.ErrorMessage!;
+			TempData[ModelStateHelper.ModelStateMessageKey] = response.ErrorMessage!;
 
 			object routeValues = new { Id = id };
 			return RedirectToAction(TodoListCtrl.EditAction, routeValues);

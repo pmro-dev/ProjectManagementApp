@@ -1,6 +1,6 @@
-﻿using App.Common.Helpers;
-using App.Features.Boards.All.Models;
+﻿using App.Features.Boards.All.Models;
 using App.Features.Boards.Common.Interfaces;
+using App.Features.Exceptions.Throw;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.Users.Common.Interfaces;
 using App.Infrastructure.Databases.App.Interfaces;
@@ -24,7 +24,7 @@ public class GetBoardAllHandler : IRequestHandler<GetBoardAllQuery, GetBoardAllQ
 		_todoListRepository = todoListRepository;
 		_signedInUserId = userService.GetSignedInUserId();
 
-		ExceptionsService.WhenPropertyIsNullOrEmptyThrowCritical("Constructing " + nameof(GetBoardAllHandler), _signedInUserId, nameof(_signedInUserId), _logger);
+		ExceptionsService.WhenPropertyIsNullOrEmptyThrow("Constructing " + nameof(GetBoardAllHandler), _signedInUserId, nameof(_signedInUserId), _logger);
 	}
 
 	public async Task<GetBoardAllQueryResponse> Handle(GetBoardAllQuery request, CancellationToken cancellationToken)

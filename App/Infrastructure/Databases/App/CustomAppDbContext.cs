@@ -1,4 +1,4 @@
-﻿using App.Common.Helpers;
+﻿using App.Features.Exceptions.Throw;
 using App.Features.Tags.Common.Models;
 using App.Features.Tasks.Common.Models;
 using App.Features.Tasks.Common.TaskTags.Common;
@@ -79,6 +79,6 @@ public class CustomAppDbContext : DbContext
 		todoItemBuilder.Property(x => x.Status)
 			.HasConversion(new EnumToStringConverter<TaskStatusType>());
 
-		_logger?.LogInformation(MessagesPacket.LogBuildingSucceed, nameof(CustomAppDbContext), nameof(OnModelCreating));
+		_logger?.LogInformation(ExceptionsMessages.LogBuildingSucceed, nameof(CustomAppDbContext), nameof(OnModelCreating));
 	}
 }

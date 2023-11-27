@@ -1,5 +1,6 @@
 ﻿using App.Common;
 using App.Common.Helpers;
+using App.Features.Exceptions.Throw;
 using App.Features.Tasks.Common.Interfaces;
 using App.Features.Tasks.Common.Models;
 using App.Features.TodoLists.Common.Interfaces;
@@ -54,7 +55,7 @@ public class CreateTaskHandler :
 		TaskDto taskDto = _taskEntityMapper.TransferToDto(request.InputVM);
 
         if (await _taskRepository.ContainsAny(task => task.Title == taskDto.Title && task.UserId == taskDto.UserId))
-            return new CreateTaskCommandResponse(null, MessagesPacket.NameTaken, StatusCodesExtension.EntityNameTaken);
+            return new CreateTaskCommandResponse(null, ExceptionsMessages.NameTaken, StatusCodesExtension.EntityNameTaken);
 
 		TaskModel taskModel = _taskEntityMapper.TransferToModel(taskDto);
 

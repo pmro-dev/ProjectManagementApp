@@ -9,8 +9,8 @@ using MediatR;
 using App.Features.Users.Login;
 using App.Features.Users.Logout;
 using App.Features.Users.Register;
-using App.Common.Helpers;
 using App.Common;
+using App.Features.Exceptions.Throw;
 
 #endregion
 
@@ -71,7 +71,7 @@ public class UserController : Controller
 	[Route(CustomRoutes.LoginByProviderRoute)]
 	public async Task<IActionResult> LoginByProvider([FromRoute] string provider)
 	{
-		ExceptionsService.WhenArgumentIsNullOrEmptyThrowError(nameof(LoginByProvider), provider, nameof(provider), _logger);
+		ExceptionsService.WhenArgumentIsNullOrEmptyThrow(nameof(LoginByProvider), provider, nameof(provider), _logger);
 
 		var result = await _mediator.Send(new LoginUserByProviderQuery(provider));
 

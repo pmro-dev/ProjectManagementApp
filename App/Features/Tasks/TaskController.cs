@@ -16,6 +16,7 @@ using App.Features.Tasks.Create;
 using App.Features.Tasks.Delete;
 using App.Common.Helpers;
 using App.Common;
+using App.Features.Exceptions.Throw;
 
 
 
@@ -83,7 +84,7 @@ public class TaskController : Controller
 	public async Task<IActionResult> Create(int id)
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Create), id, nameof(id), _logger);
-		ExceptionsService.CheckForModelStateErrorMessageFromPost(ModelState, TempData);
+		ModelStateHelper.SetModelStateErrorMessageWhenSomeHappendOnPost(ModelState, TempData);
 
 		var respond = await _mediator.Send(new CreateTaskQuery(id));
 
@@ -118,7 +119,7 @@ public class TaskController : Controller
 		if (response.StatusCode == StatusCodesExtension.EntityNameTaken)
 		{
 			ModelState.AddModelError(string.Empty, response.ErrorMessage!);
-			TempData[ExceptionsService.ModelStateMessageKey] = response.ErrorMessage!;
+			TempData[ModelStateHelper.ModelStateMessageKey] = response.ErrorMessage!;
 
 			object routeValues = new { Id = todoListId };
 			return RedirectToAction(TaskCtrl.CreateAction, routeValues);
@@ -140,7 +141,7 @@ public class TaskController : Controller
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), todoListId, nameof(todoListId), _logger);
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), taskId, nameof(taskId), _logger);
-		ExceptionsService.CheckForModelStateErrorMessageFromPost(ModelState, TempData);
+		ModelStateHelper.SetModelStateErrorMessageWhenSomeHappendOnPost(ModelState, TempData);
 
 		var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -176,7 +177,7 @@ public class TaskController : Controller
 		if (response.StatusCode == StatusCodesExtension.EntityNameTaken)
 		{
 			ModelState.AddModelError(string.Empty, response.ErrorMessage!);
-			TempData[ExceptionsService.ModelStateMessageKey] = response.ErrorMessage!;
+			TempData[ModelStateHelper.ModelStateMessageKey] = response.ErrorMessage!;
 
 			object routeValues = new { inputVM.TodoListId, TaskId = inputVM.Id };
 			return RedirectToAction(TaskCtrl.EditGetAction, routeValues);

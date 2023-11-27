@@ -1,4 +1,4 @@
-﻿using App.Common.Helpers;
+﻿using App.Features.Exceptions.Throw;
 using App.Features.Users.Common.Interfaces;
 using App.Features.Users.Common.Models;
 using App.Features.Users.Common.Roles.Interfaces;
@@ -26,8 +26,8 @@ public class RoleService : IRoleService
 
 	public async Task AddDefaultRoleToUserAsync(UserDto userDto)
 	{
-		RoleModel? roleModel = await _roleRepository.GetByFilterAsync(r => r.Name == IdentitySeedData.DefaultRole);
-		ExceptionsService.ThrowWhenRoleNotFoundInDb(nameof(AddDefaultRoleToUserAsync), roleModel, IdentitySeedData.DefaultRole, _logger);
+		RoleModel? roleModel = await _roleRepository.GetByFilterAsync(r => r.Name == IdentityDbSeeder.DefaultRole);
+		ExceptionsService.WhenRoleNotFoundInDbThrow(nameof(AddDefaultRoleToUserAsync), roleModel, IdentityDbSeeder.DefaultRole, _logger);
 
 		RoleDto? roleDto = _mapper.Map<RoleDto>(roleModel);
 

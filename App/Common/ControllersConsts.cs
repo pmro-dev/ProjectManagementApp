@@ -1,4 +1,5 @@
 ﻿using App.Features.Boards;
+using App.Features.Exceptions;
 using App.Features.Tasks;
 using App.Features.TodoLists;
 using App.Features.Users;
@@ -7,6 +8,12 @@ namespace App.Common;
 
 public static class ControllersConsts
 {
+	public readonly struct ExceptionCtrl
+	{
+		public const string Name = "Exception";
+		public const string ShowAction = nameof(ExceptionController.Show);
+	}
+
 	public readonly struct UserCtrl
 	{
 		public const string Name = "User";

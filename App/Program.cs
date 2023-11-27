@@ -29,6 +29,8 @@ using App.Features.Boards.Common.Interfaces;
 using App.Features.Users.Common.Roles.Interfaces;
 using App.Infrastructure.Databases.App.Seeds.Interfaces;
 using App.Common;
+using static App.Common.ControllersConsts;
+
 
 
 
@@ -36,22 +38,15 @@ using App.Common;
 
 namespace App
 {
-    public static class Program
+	public static class Program
 	{
 		public static async Task Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
-			builder.Configuration.AddEnvironmentVariables().AddUserSecrets(Assembly.GetExecutingAssembly(), true);
-
-
-			#region SETUP LOGGERS
-
-			builder.Logging.ClearProviders();
-			builder.Logging.AddConsole();
-
-			#endregion
-
+			builder.Configuration
+				.AddEnvironmentVariables()
+				.AddUserSecrets(Assembly.GetExecutingAssembly(), true);
 
 			builder.SetupEnvironmentSettings();
 
@@ -73,7 +68,7 @@ namespace App
 			builder.Services.AddScoped<IUserService, UserService>();
 			builder.Services.AddScoped<ICookieEventsService, CookieEventsService>();
 			builder.Services.AddScoped<IIdentityService, IdentityService>();
-            builder.Services.AddScoped<ICookieService, CookieService>();
+			builder.Services.AddScoped<ICookieService, CookieService>();
 
 			#endregion
 
@@ -100,9 +95,10 @@ namespace App
 			builder.Services.AddScoped<IRoleFactory, RoleFactory>();
 			builder.Services.AddScoped<IUserFactory, UserFactory>();
 
-            #endregion
+			#endregion
 
-            builder.Services.AddScoped<ITaskSelector, TaskSelector>();
+
+			builder.Services.AddScoped<ITaskSelector, TaskSelector>();
 			builder.Services.AddScoped<ITodoListSelector, TodoListSelector>();
 
 			builder.SetupSeedDataServices();
@@ -115,12 +111,22 @@ namespace App
 
 			#endregion
 
+
 			builder.Services.Configure<RazorViewEngineOptions>(options =>
 			{
 				options.ViewLocationExpanders.Add(new ViewLocationExpander());
 			});
 
-            var app = builder.Build();
+
+			var app = builder.Build();
+
+
+			if (app.Environment.IsDevelopment())
+				app.UseDeveloperExceptionPage();
+			else
+				app.UseExceptionHandler(CustomRoutes.ExceptionHandlerPath);
+
+
 			app.SetupPipeline();
 
 
@@ -135,14 +141,11 @@ namespace App
 
 			#region POPULATE DATABASES
 
-			IIdentityUnitOfWork identityUnitOfWork = app.Services.CreateScope().ServiceProvider.GetRequiredService<IIdentityUnitOfWork>();
+			IIdentityDbSeeder identityDbSeeder = app.Services.CreateScope().ServiceProvider.GetRequiredService<IIdentityDbSeeder>();
+			await identityDbSeeder.EnsurePopulated();
 
-			await IdentitySeedData.EnsurePopulated(identityUnitOfWork, app.Logger);
-
-			IDataUnitOfWork unitOfWork = app.Services.CreateScope().ServiceProvider.GetRequiredService<IDataUnitOfWork>();
-			ISeedData seedContainer = app.Services.CreateScope().ServiceProvider.GetRequiredService<ISeedData>();
-
-			await DbSeeder.EnsurePopulated(unitOfWork, seedContainer, app.Logger);
+			IDbSeeder dbSeeder = app.Services.CreateScope().ServiceProvider.GetRequiredService<IDbSeeder>();
+			await dbSeeder.EnsurePopulated();
 
 			#endregion
 

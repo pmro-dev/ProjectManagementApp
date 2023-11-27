@@ -1,4 +1,4 @@
-﻿using App.Common.Helpers;
+﻿using App.Features.Exceptions.Throw;
 using App.Features.Users.Authentication.Interfaces;
 using App.Features.Users.Common.Interfaces;
 using App.Features.Users.Common.Models;
@@ -51,7 +51,7 @@ public class CookieEventsService : ICookieEventsService
 	private Claim GetAuthenticationClaim(CookieSigningInContext cookieSigningInContext)
 	{
 		var authSchemeValuePair = cookieSigningInContext.Properties.Items.SingleOrDefault(authProperty => authProperty.Key == AuthenticationConsts.AuthSchemeClaimKey);
-		ExceptionsService.WhenArgumentIsNullOrEmptyThrowError(nameof(GetAuthenticationClaim), authSchemeValuePair.Value, nameof(authSchemeValuePair.Value), _logger);
+		ExceptionsService.WhenArgumentIsNullOrEmptyThrow(nameof(GetAuthenticationClaim), authSchemeValuePair.Value, nameof(authSchemeValuePair.Value), _logger);
 
 		return new Claim(authSchemeValuePair.Key, authSchemeValuePair.Value!);
 	}

@@ -1,4 +1,5 @@
-﻿using static App.Common.ControllersConsts;
+﻿using App.Common.Views;
+using static App.Common.ControllersConsts;
 
 namespace App.Common;
 
@@ -9,14 +10,16 @@ public static class CustomRoutes
     public const string AccessDeniedPath = "/Shared/AccessDenied";
     public const string DefaultRouteName = "default";
     public const string DefaultRoutePattern = "{controller=User}/{action=Login}/{id?}";
+	public const string ExceptionShowRoute = "{controller}/{action}";
+    public static readonly string ExceptionHandlerPath = string.Concat("/", ExceptionCtrl.Name, "/", ExceptionCtrl.ShowAction, "/", ViewsConsts.ExceptionViews.Error);
 
-    public const string TodoListControllerRoute = TodoListCtrl.Name;
+	public const string TodoListControllerRoute = TodoListCtrl.Name;
     public const string UserControllerRoute = UserCtrl.Name;
 
     public const string MainBoardRoute = "/[controller]/[action]";
     public const string MainBoardUri = BoardsCtrl.Name + "/" + BoardsCtrl.BrieflyAction;
 
-    public const string AllDetailsRoute = "/[controller]/[action]";
+    public const string BoardAllRoute = "/[controller]/[action]";
     public const string TodoListShowRoute = "/Boards/[action]/[controller]/{id:int}";
     public const string TodoListCreateRoute = "/[controller]/[action]";
     public const string TodoListEditRoute = "/[controller]/{id:int}/[action]";

@@ -1,6 +1,7 @@
 ﻿#region ADD USINGS
 
 using App.Common;
+using App.Features.Exceptions.Handle;
 using App.Infrastructure.Databases.App;
 using App.Infrastructure.Databases.App.Helpers;
 using App.Infrastructure.Databases.App.Interfaces;
@@ -8,6 +9,7 @@ using App.Infrastructure.Databases.App.Seeds;
 using App.Infrastructure.Databases.App.Seeds.Interfaces;
 using App.Infrastructure.Databases.Identity;
 using App.Infrastructure.Databases.Identity.Interfaces;
+using App.Infrastructure.Databases.Identity.Seeds;
 using EntityFramework.Exceptions.SqlServer;
 using Microsoft.EntityFrameworkCore;
 
@@ -64,7 +66,9 @@ public static class BasicWebBuilderExtensions
     public static void SetupSeedDataServices(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<ISeedData, SeedData>();
-    }
+		builder.Services.AddScoped<IDbSeeder, DbSeeder>();
+		builder.Services.AddScoped<IIdentityDbSeeder, IdentityDbSeeder>();
+	}
 
     /// <summary>
     /// Setup basic environment settings such as development environment.
@@ -74,11 +78,27 @@ public static class BasicWebBuilderExtensions
     {
         if (builder.Environment.IsDevelopment())
         {
-            builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
-        }
-        else
+            builder.Services
+                .AddControllersWithViews()
+                .AddRazorRuntimeCompilation();
+
+			#region SETUP LOGGERS
+            builder.Logging.ClearProviders();
+			builder.Logging.AddConsole();
+            builder.Logging
+                .AddDebug()
+                .SetMinimumLevel(LogLevel.Warning);
+
+			#endregion
+		}
+		else
         {
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(cfg => cfg.Filters.Add(typeof(ExceptionCustomFilter)));
+
+            builder.Logging.ClearProviders();
+			builder.Logging
+                .AddEventLog(cfg => cfg.SourceName = "ProjectManagementApp")
+                .SetMinimumLevel(LogLevel.Error);
         }
     }
 

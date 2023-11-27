@@ -42,7 +42,7 @@ public class BoardsController : Controller
 	/// or view with data.
 	/// </returns>
 	[HttpGet]
-	[Route(CustomRoutes.AllDetailsRoute)]
+	[Route(CustomRoutes.BoardAllRoute)]
 	public async Task<IActionResult> All()
 	{
 		var result = await _mediator.Send(new GetBoardAllQuery());

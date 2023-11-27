@@ -1,4 +1,4 @@
-﻿using App.Common.Helpers;
+﻿using App.Features.Exceptions.Throw;
 using App.Infrastructure.Databases.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -44,7 +44,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	///<inheritdoc />
 	public async Task<ICollection<TEntity>> GetAllByFilterAsync(Expression<Func<TEntity, bool>> filter)
 	{
-		ExceptionsService.ThrowErrorFilterExpressionIsNull(filter, nameof(GetAllByFilterAsync), _logger);
+		ExceptionsService.WhenFilterExpressionIsNullThrow(filter, nameof(GetAllByFilterAsync), _logger);
 
 		return await _dbSet.Where(filter).ToListAsync();
 	}
@@ -52,7 +52,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	///<inheritdoc />
 	public async Task<TEntity?> GetByFilterAsync(Expression<Func<TEntity, bool>> filter)
 	{
-		ExceptionsService.ThrowErrorFilterExpressionIsNull(filter, nameof(GetByFilterAsync), _logger);
+		ExceptionsService.WhenFilterExpressionIsNullThrow(filter, nameof(GetByFilterAsync), _logger);
 	
 		return await _dbSet.SingleOrDefaultAsync(filter);
 	}

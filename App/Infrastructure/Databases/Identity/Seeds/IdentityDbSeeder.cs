@@ -2,7 +2,6 @@
 using App.Features.Users.Common.Models;
 using App.Features.Users.Common.Roles.Models;
 using App.Infrastructure.Databases.Identity.Interfaces;
-using MethodTimer;
 using System.Text;
 
 namespace App.Infrastructure.Databases.Identity.Seeds;
@@ -10,16 +9,24 @@ namespace App.Infrastructure.Databases.Identity.Seeds;
 /// <summary>
 /// Class manages seeding Identity data to database.
 /// </summary>
-public static class IdentitySeedData
+public class IdentityDbSeeder : IIdentityDbSeeder
 {
 	public const string DefaultRole = "Guest";
-	private static readonly string RoleIdSuffix = "RoleId";
+	private const string RoleIdSuffix = "RoleId";
 	private const string AdminUser = "Admin";
 	private const string AdminRoleName = "Admin";
 	private const string AdminId = "adminId";
 	private const string AdminPassword = "Secret123$";
 	private const string AdminEmail = "admin@gmail.com";
 	private const string ProviderName = AuthenticationConsts.DefaultScheme;
+	private readonly ILogger<IdentityDbSeeder> _logger;
+	private readonly IIdentityUnitOfWork _identityUnitOfWork;
+
+	public IdentityDbSeeder(ILogger<IdentityDbSeeder> logger, IIdentityUnitOfWork identityUnitOfWork)
+	{
+		_logger = logger;
+		_identityUnitOfWork = identityUnitOfWork;
+	}
 
 	private static readonly UserModel AdminInitModel = new()
 	{
@@ -49,55 +56,54 @@ public static class IdentitySeedData
 	/// Checks that Identity Database is set and populated, if not -> try to create database, applies migrations and seed data to it.
 	/// </summary>
 	/// <param name="app">Application builder.</param>
-	public static async Task EnsurePopulated(IIdentityUnitOfWork identityUnitOfWork, ILogger logger)
+	public async Task EnsurePopulated()
 	{
-		using var transaction = await identityUnitOfWork.BeginTransactionAsync();
+		using var transaction = await _identityUnitOfWork.BeginTransactionAsync();
 
 		try
 		{
 			await transaction.CreateSavepointAsync("BeforeMigrations");
-			await EnsurePendingMigrationsAppliedAsync(identityUnitOfWork);
+			await EnsurePendingMigrationsAppliedAsync();
 
-            await transaction.CreateSavepointAsync("BeforeRolesAndAdminPopulated");
-            await EnsureRolesPopulatedAsync(identityUnitOfWork);
-            await EnsureAdminPopulatedAsync(identityUnitOfWork);
-			await identityUnitOfWork.SaveChangesAsync();
+			await transaction.CreateSavepointAsync("BeforeRolesAndAdminPopulated");
+			await EnsureRolesPopulatedAsync();
+			await EnsureAdminPopulatedAsync();
+			await _identityUnitOfWork.SaveChangesAsync();
 
-            await transaction.CreateSavepointAsync("BeforeRoleForAdminSetup");
-            await SetRoleForAdmin(identityUnitOfWork);
-			await identityUnitOfWork.SaveChangesAsync();
+			await transaction.CreateSavepointAsync("BeforeRoleForAdminSetup");
+			await SetRoleForAdmin();
+			await _identityUnitOfWork.SaveChangesAsync();
 
-			await identityUnitOfWork.CommitTransactionAsync();
+			await _identityUnitOfWork.CommitTransactionAsync();
 		}
 		catch (Exception ex)
 		{
-			await identityUnitOfWork.RollbackTransactionAsync();
-			logger.LogCritical(ex, "An error occurred while populating the Identity database.");
+			_logger.LogCritical(ex, "An error occurred while populating the Identity database.");
 			throw;
 		}
 	}
 
-	private static async Task EnsurePendingMigrationsAppliedAsync(IIdentityUnitOfWork identityUnitOfWork)
+	private async Task EnsurePendingMigrationsAppliedAsync()
 	{
 		try
 		{
-			var migrations = await identityUnitOfWork.GetPendingMigrationsAsync();
+			var migrations = await _identityUnitOfWork.GetPendingMigrationsAsync();
 
 			if (migrations.Any())
 			{
-				await identityUnitOfWork.MigrateAsync();
+				await _identityUnitOfWork.MigrateAsync();
 			}
 		}
 		catch
 		{
-			await identityUnitOfWork.RollbackTransactionAsync();
+			await _identityUnitOfWork.RollbackTransactionAsync();
+			throw;
 		}
 	}
 
-	[Time]
-	private static async Task EnsureRolesPopulatedAsync(IIdentityUnitOfWork identityUnitOfWork)
+	private async Task EnsureRolesPopulatedAsync()
 	{
-		IRoleRepository roleRepository = identityUnitOfWork.RoleRepository;
+		IRoleRepository roleRepository = _identityUnitOfWork.RoleRepository;
 
 		if (!await roleRepository.ContainsAny())
 		{
@@ -123,9 +129,9 @@ public static class IdentitySeedData
 		}
 	}
 
-	private static async Task EnsureAdminPopulatedAsync(IIdentityUnitOfWork identityUnitOfWork)
+	private async Task EnsureAdminPopulatedAsync()
 	{
-		IUserRepository userRepository = identityUnitOfWork.UserRepository;
+		IUserRepository userRepository = _identityUnitOfWork.UserRepository;
 
 		if (!await userRepository.ContainsAny())
 		{
@@ -133,10 +139,10 @@ public static class IdentitySeedData
 		}
 	}
 
-	private static async Task SetRoleForAdmin(IIdentityUnitOfWork identityUnitOfWork)
+	private async Task SetRoleForAdmin()
 	{
-		IUserRepository userRepository = identityUnitOfWork.UserRepository;
-		IRoleRepository roleRepository = identityUnitOfWork.RoleRepository;
+		IUserRepository userRepository = _identityUnitOfWork.UserRepository;
+		IRoleRepository roleRepository = _identityUnitOfWork.RoleRepository;
 
 		UserModel? adminUser = await userRepository.GetWithDetailsAsync(AdminId);
 		string roleId = string.Concat(AdminRoleName.ToLower(), RoleIdSuffix);

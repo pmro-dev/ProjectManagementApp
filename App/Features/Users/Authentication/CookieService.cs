@@ -1,5 +1,5 @@
 ﻿using App.Common;
-using App.Common.Helpers;
+using App.Features.Exceptions.Throw;
 using App.Features.Users.Authentication.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -18,7 +18,7 @@ public class CookieService : ICookieService
 
 	public void SetupOptions(CookieAuthenticationOptions options)
 	{
-		ExceptionsService.ThrowWhenAuthOptionsObjectIsNull(nameof(SetupOptions), options, nameof(CookieAuthenticationOptions), _logger);
+		ExceptionsService.WhenAuthOptionsIsNullThrow(nameof(SetupOptions), options, nameof(CookieAuthenticationOptions), _logger);
 
 		options.AccessDeniedPath = CustomRoutes.AccessDeniedPath;
 		options.LoginPath = CustomRoutes.LoginPath;

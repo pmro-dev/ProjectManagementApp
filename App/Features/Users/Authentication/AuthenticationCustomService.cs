@@ -1,5 +1,5 @@
 ﻿using App.Common;
-using App.Common.Helpers;
+using App.Features.Exceptions.Throw;
 using App.Features.Users.Authentication.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -46,7 +46,7 @@ public class AuthenticationCustomService : IAuthenticationCustomService
 	{
 		if (userPrincipal is null)
 		{
-			_logger.LogError(MessagesPacket.LogUnableToAuthenticateUserPrincipal, nameof(AuthenticateUser), nameof(AuthenticationCustomService));
+			_logger.LogError(ExceptionsMessages.LogUnableToAuthenticateUserPrincipal, nameof(AuthenticateUser), nameof(AuthenticationCustomService));
 			return false;
 		}
 

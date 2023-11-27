@@ -1,4 +1,4 @@
-﻿using App.Common.Helpers;
+﻿using App.Features.Exceptions.Throw;
 using App.Features.Users.Authentication;
 using App.Features.Users.Logout.Interfaces;
 using Microsoft.AspNetCore.Authentication;
@@ -25,8 +25,8 @@ public class LogoutService : ILogoutService
 
 		if (httpContext is null)
 		{
-			_logger.LogCritical(MessagesPacket.LogHttpContextObjectIsNull, nameof(LogoutAsync));
-			throw new InvalidOperationException(MessagesPacket.LogHttpContextObjectIsNull);
+			_logger.LogCritical(ExceptionsMessages.LogHttpContextObjectIsNull, nameof(LogoutAsync));
+			throw new InvalidOperationException(ExceptionsMessages.LogHttpContextObjectIsNull);
 		}
 
 		//TODO error logging

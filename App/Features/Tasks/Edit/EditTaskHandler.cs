@@ -7,6 +7,7 @@ using App.Infrastructure.Databases.App.Interfaces;
 using App.Features.Tasks.Common.Models;
 using App.Features.Tasks.Edit.Models;
 using App.Common;
+using App.Features.Exceptions.Throw;
 
 namespace App.Features.Tasks.Edit;
 
@@ -70,7 +71,7 @@ public class EditTaskHandler :
 		TaskEditInputDto taskEditInputDto = _taskEntityMapper.TransferToDto(request.InputVM);
 
 		if (await _taskRepository.ContainsAny(task => task.Title == taskEditInputDto.Title && task.UserId == taskEditInputDto.UserId))
-			return new EditTaskCommandResponse(null, MessagesPacket.NameTaken, StatusCodesExtension.EntityNameTaken);
+			return new EditTaskCommandResponse(null, ExceptionsMessages.NameTaken, StatusCodesExtension.EntityNameTaken);
 
 		TaskModel? taskDbModel = await _taskRepository.GetAsync(taskEditInputDto.Id);
 

@@ -1,4 +1,4 @@
-﻿using App.Common.Helpers;
+﻿using App.Features.Exceptions.Throw;
 using App.Features.Users.Common.Models;
 using App.Features.Users.Common.Roles.Models;
 using Microsoft.EntityFrameworkCore;
@@ -52,6 +52,6 @@ public class CustomIdentityDbContext : DbContext
 			.ToTable("UserRoles");
 
 
-		_logger?.LogInformation(MessagesPacket.LogBuildingSucceed, nameof(OnModelCreating), nameof(CustomIdentityDbContext));
+		_logger?.LogInformation(ExceptionsMessages.LogBuildingSucceed, nameof(OnModelCreating), nameof(CustomIdentityDbContext));
 	}
 }

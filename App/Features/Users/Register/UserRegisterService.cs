@@ -1,4 +1,4 @@
-﻿using App.Common.Helpers;
+﻿using App.Features.Exceptions.Throw;
 using App.Features.Users.Authentication;
 using App.Features.Users.Common.Interfaces;
 using App.Features.Users.Common.Models;
@@ -18,7 +18,7 @@ public class UserRegisterService : IUserRegisterService
 	private readonly IUserFactory _userFactory;
 	private readonly IMapper _mapper;
 	private readonly ILogger<UserRegisterService> _logger;
-	private readonly string _defaultRole = IdentitySeedData.DefaultRole;
+	private readonly string _defaultRole = IdentityDbSeeder.DefaultRole;
 
 	public UserRegisterService(IIdentityUnitOfWork identityUnitOfWork, ILogger<UserRegisterService> logger, IUserFactory userFactory, IMapper mapper)
 	{
@@ -74,8 +74,8 @@ public class UserRegisterService : IUserRegisterService
 
 		if (roleForNewUser is null)
 		{
-			_logger.LogCritical(MessagesPacket.LogCriticalErrorRoleNotFoundInDb, nameof(SetRoles), _defaultRole);
-			throw new InvalidOperationException(MessagesPacket.RoleNotFoundInDb(nameof(SetRoles), _defaultRole));
+			_logger.LogCritical(ExceptionsMessages.LogCriticalErrorRoleNotFoundInDb, nameof(SetRoles), _defaultRole);
+			throw new InvalidOperationException(ExceptionsMessages.RoleNotFoundInDb(nameof(SetRoles), _defaultRole));
 		}
 
 		var roleDto = _mapper.Map<RoleDto>(roleForNewUser);

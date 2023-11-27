@@ -1,4 +1,4 @@
-﻿using App.Common.Helpers;
+﻿using App.Features.Exceptions.Throw;
 using App.Features.Tasks.Common.Interfaces;
 using App.Features.Tasks.Common.Models;
 using App.Features.Tasks.Common.TaskTags.Common;
@@ -89,7 +89,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	///<inheritdoc />
 	public async Task<ICollection<TodoListModel>> GetAllWithDetailsAsync(string userId)
 	{
-		ExceptionsService.WhenArgumentIsNullOrEmptyThrowError(nameof(GetAllWithDetailsAsync), userId, nameof(userId), _logger);
+		ExceptionsService.WhenArgumentIsNullOrEmptyThrow(nameof(GetAllWithDetailsAsync), userId, nameof(userId), _logger);
 
 		ICollection<TodoListModel> allTodoListsWithDetails = await _dbContext
 			.Set<TodoListModel>()
@@ -103,7 +103,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	///<inheritdoc />
 	public async Task<ICollection<TodoListModel>> GetAllWithDetailsByFilterAsync(Expression<Func<TodoListModel, bool>> filter)
 	{
-		ExceptionsService.ThrowErrorFilterExpressionIsNull(filter, nameof(GetAllWithDetailsByFilterAsync), _logger);
+		ExceptionsService.WhenFilterExpressionIsNullThrow(filter, nameof(GetAllWithDetailsByFilterAsync), _logger);
 
 		ICollection<TodoListModel> entities = await _dbContext
 			.Set<TodoListModel>()
