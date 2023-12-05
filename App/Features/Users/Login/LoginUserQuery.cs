@@ -3,7 +3,7 @@ using MediatR;
 
 namespace App.Features.Users.Login;
 
-public class LoginUserQuery : IRequest<bool>
+public class LoginUserQuery : IRequest<LoginUserQueryResponse>
 {
 	public LoginInputVM InputVM { get; }
 
@@ -12,3 +12,5 @@ public class LoginUserQuery : IRequest<bool>
 		InputVM = inputVM;
 	}
 }
+
+public record LoginUserQueryResponse(string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }

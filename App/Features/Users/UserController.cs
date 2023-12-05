@@ -36,9 +36,9 @@ public class UserController : Controller
 	/// <returns>Return user to Login Page.</returns>
 	[HttpGet]
 	[AllowAnonymous]
-	public ViewResult Login() 
-	{ 
-		return View(); 
+	public ViewResult Login()
+	{
+		return View();
 	}
 
 	/// <summary>
@@ -53,10 +53,8 @@ public class UserController : Controller
 	{
 		var result = await _mediator.Send(new LoginUserQuery(loginInputVM));
 
-		if (!result)
-		{
+		if (result.StatusCode != StatusCodes.Status200OK)
 			return View(loginInputVM);
-		}
 
 		return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
 	}
@@ -75,7 +73,16 @@ public class UserController : Controller
 
 		var result = await _mediator.Send(new LoginUserByProviderQuery(provider));
 
-		return result;
+		if (result.StatusCode != StatusCodes.Status200OK)
+			return BadRequest();
+
+		if (result.Data is null)
+		{
+			_logger.LogCritical(ExceptionsMessages.LogCriticalModelObjectIsNull, nameof(LoginByProvider), nameof(IActionResult));
+			throw new InvalidOperationException(ExceptionsMessages.ExceptionCriticalNullObject(nameof(LoginByProvider), nameof(IActionResult)));
+		}
+
+		return result.Data;
 	}
 
 	/// <summary>
@@ -87,7 +94,16 @@ public class UserController : Controller
 	{
 		var result = await _mediator.Send(new LogoutUserQuery());
 
-		return result;
+		if (result.StatusCode != StatusCodes.Status200OK)
+			return BadRequest();
+
+		if (result.Data is null)
+		{
+			_logger.LogCritical(ExceptionsMessages.LogCriticalModelObjectIsNull, nameof(LogOut), nameof(IActionResult));
+			throw new InvalidOperationException(ExceptionsMessages.ExceptionCriticalNullObject(nameof(LogOut), nameof(IActionResult)));
+		}
+
+		return result.Data;
 	}
 
 	/// <summary>
@@ -95,9 +111,9 @@ public class UserController : Controller
 	/// </summary>
 	/// <returns>Return user to Register Page.</returns>
 	[AllowAnonymous]
-	public ViewResult Register() 
-	{ 
-		return View(); 
+	public ViewResult Register()
+	{
+		return View();
 	}
 
 	/// <summary>
@@ -112,7 +128,7 @@ public class UserController : Controller
 	{
 		var result = await _mediator.Send(new RegisterUserCommand(registerInputVM));
 
-		if (!result)
+		if (result.StatusCode != StatusCodes.Status200OK)
 			return BadRequest();
 
 		return View(UserCtrl.LoginAction);
@@ -124,8 +140,8 @@ public class UserController : Controller
 	/// <returns>Return Error View.</returns>
 	[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 	[AllowAnonymous]
-	public IActionResult Error() 
-	{ 
-		return View(); 
+	public IActionResult Error()
+	{
+		return View();
 	}
 }

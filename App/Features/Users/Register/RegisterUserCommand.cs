@@ -3,7 +3,7 @@ using MediatR;
 
 namespace App.Features.Users.Register;
 
-public class RegisterUserCommand : IRequest<bool>
+public class RegisterUserCommand : IRequest<RegisterUserCommandResponse>
 {
 	public RegisterInputVM InputVM { get; }
 
@@ -12,3 +12,5 @@ public class RegisterUserCommand : IRequest<bool>
 		InputVM = inputVM;
 	}
 }
+
+public record RegisterUserCommandResponse(string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }

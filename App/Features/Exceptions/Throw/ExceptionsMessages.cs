@@ -63,9 +63,6 @@ public static class ExceptionsMessages
     public const string ProvidedArgumentIsWithInvalidType = "The id parameter is not a valid type.";
     public const string DbSetIsNull = "Critical error! Dbset object cannot be null!";
     public const string ItemNotFoundInDb = "There's not such item in Database.";
-    public const string InvalidLoginData = "Invalid name or password.";
-    public const string UnableToLogin = "Unable to login, try again or contact support";
-    public const string InvalidRegisterData = "Invalid register data: login, password or email!";
     public const string NameTaken = "Name already taken! Try again and get new one!";
 
     #endregion

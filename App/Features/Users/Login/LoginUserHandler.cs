@@ -1,4 +1,5 @@
-﻿using App.Features.Exceptions.Throw;
+﻿using App.Common.Helpers;
+using App.Features.Exceptions.Throw;
 using App.Features.Users.Authentication.Interfaces;
 using App.Features.Users.Common.Interfaces;
 using App.Features.Users.Login.Interfaces;
@@ -11,7 +12,7 @@ using static App.Common.ControllersConsts;
 
 namespace App.Features.Users.Login;
 
-public class LoginUserHandler : IRequestHandler<LoginUserQuery, bool>, IRequestHandler<LoginUserByProviderQuery, IActionResult>
+public class LoginUserHandler : IRequestHandler<LoginUserQuery, LoginUserQueryResponse>, IRequestHandler<LoginUserByProviderQuery, LoginUserByProviderQueryResponse>
 {
 	private readonly ILogger<LoginUserHandler> _logger;
 	private readonly ILoginService _loginService;
@@ -29,65 +30,46 @@ public class LoginUserHandler : IRequestHandler<LoginUserQuery, bool>, IRequestH
 		_userService = userService;
 	}
 
-	public async Task<bool> Handle(LoginUserQuery request, CancellationToken cancellationToken)
+	public async Task<LoginUserQueryResponse> Handle(LoginUserQuery request, CancellationToken cancellationToken)
 	{
 		LoginInputDto loginInputDto = _mapper.Map<LoginInputDto>(request.InputVM);
 		bool isLoginDataInvalid = !LoginDtoValidator.Valid(loginInputDto);
 
 		if (isLoginDataInvalid)
-		{
-			return false;
-			//TODO 
-			//ModelState.AddModelError(string.Empty, MessagesPacket.InvalidLoginData);
-			//return View(loginInputVM);
-		}
+			return new LoginUserQueryResponse(ErrorMessagesHelper.InvalidLoginData, StatusCodesExtension.InvalidLoginData);
 
-		//try
-		//{
 
 		bool isUserNotRegistered = !await _loginService.CheckIsUserAlreadyRegisteredAsync(loginInputDto);
 
 		if (isUserNotRegistered)
-		{
-			return false;
-			//TODO
-			//ModelState.AddModelError(string.Empty, MessagesPacket.InvalidLoginData);
-			//return View();
-		}
+			return new LoginUserQueryResponse(ErrorMessagesHelper.UserNotRegistered, StatusCodesExtension.UserNotRegistered);
+
 
 		bool isLoggedInFailed = !await _loginService.LogInUserAsync(loginInputDto);
 
 		if (isLoggedInFailed)
-		{
-			return false;
-			//_logger.LogError(MessagesPacket.LoginFailedForRegisteredUser, nameof(Login), loginInputDto.Username);
-			//ModelState.AddModelError(string.Empty, MessagesPacket.UnableToLogin);
-			//return View();
-		}
+			return new LoginUserQueryResponse(ErrorMessagesHelper.UnableToLogin, StatusCodesExtension.UnableToLogin);
 
-		return true;
-
-		//catch (Exception ex)
-		//{
-		//	_logger.LogCritical(ex, MessagesPacket.LogExceptionOccurredOnLogging);
-		//	throw;
-		//}
+		return new LoginUserQueryResponse();
 	}
 
-	public Task<IActionResult> Handle(LoginUserByProviderQuery request, CancellationToken cancellationToken)
+	public async Task<LoginUserByProviderQueryResponse> Handle(LoginUserByProviderQuery request, CancellationToken cancellationToken)
 	{
 		ExceptionsService.WhenArgumentIsNullOrEmptyThrow(nameof(LoginUserByProviderQuery), request.Provider, nameof(request.Provider), _logger);
 
-		return Task<IActionResult>.Factory.StartNew(() =>
+		return await Task<LoginUserByProviderQueryResponse>.Factory.StartNew(() =>
 		{
 			ClaimsPrincipal userPrincipal = _userService.GetSignedInUser();
 			var isUserAuthenticated = _authenticationService.AuthenticateUser(userPrincipal);
+			IActionResult responseData;
 
 			if (isUserAuthenticated)
-				return new RedirectToActionResult(BoardsCtrl.BrieflyAction, BoardsCtrl.Name, null);
+				responseData = new RedirectToActionResult(BoardsCtrl.BrieflyAction, BoardsCtrl.Name, null);
 			else
-				return _authenticationService.ChallengeProviderToLogin(request.Provider);
-		}, 
+				responseData = _authenticationService.ChallengeProviderToLogin(request.Provider);
+
+			return new LoginUserByProviderQueryResponse(responseData);
+		},
 		cancellationToken);
 	}
 }

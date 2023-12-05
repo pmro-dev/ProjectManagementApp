@@ -3,10 +3,11 @@ using App.Features.Users.Common;
 using MediatR;
 using AutoMapper;
 using App.Features.Users.Register.Interfaces;
+using App.Common.Helpers;
 
 namespace App.Features.Users.Register;
 
-public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, bool>
+public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, RegisterUserCommandResponse>
 {
 	private readonly IMapper _mapper;
 	private readonly IUserRegisterService _userRegisterService;
@@ -17,36 +18,20 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, bool>
 		_userRegisterService = userRegisterService;
 	}
 
-	public async Task<bool> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+	public async Task<RegisterUserCommandResponse> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
 	{
 		UserDto userDto = _mapper.Map<UserDto>(request.InputVM);
 
 		bool isDataInvalid = !UserDtoValidator.ValidData(userDto);
 
 		if (isDataInvalid)
-		{
-			return false;
-			//ModelState.AddModelError(string.Empty, MessagesPacket.InvalidRegisterData);
-			//return View();
-		}
+			return new RegisterUserCommandResponse(ErrorMessagesHelper.InvalidRegisterData, StatusCodesExtension.InvalidRegisterData);
 
-		////try
-		////{
 		bool isUserRegistrationFailed = !await _userRegisterService.RegisterAsync(userDto);
 
 		if (isUserRegistrationFailed)
-		{
-			return false;
-			//return View(UserCtrl.LoginAction);
-		}
-
-		////}
-		////catch (Exception ex)
-		////{
-		//	_logger.LogCritical(ex, MessagesPacket.LogCreatingUserIdentityFailed, operationName);
-		//	return Error();
-		////}
+			return new RegisterUserCommandResponse(ErrorMessagesHelper.RegistrationFailed, StatusCodesExtension.RegistrationFailed);
 		
-		return true;
+		return new RegisterUserCommandResponse();
 	}
 }

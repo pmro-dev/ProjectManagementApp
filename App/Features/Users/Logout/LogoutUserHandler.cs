@@ -1,22 +1,31 @@
-﻿using App.Features.Users.Logout.Interfaces;
+﻿using App.Features.Exceptions.Throw;
+using App.Features.Users.Logout.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App.Features.Users.Logout;
 
-public class LogoutUserHandler : IRequestHandler<LogoutUserQuery, IActionResult>
+public class LogoutUserHandler : IRequestHandler<LogoutUserQuery, LogoutUserQueryResponse>
 {
 	private readonly ILogoutService _logoutService;
+	private readonly ILogger<LogoutUserHandler> _logger;
 
-	public LogoutUserHandler(ILogoutService logoutService)
+	public LogoutUserHandler(ILogoutService logoutService, ILogger<LogoutUserHandler> logger)
 	{
 		_logoutService = logoutService;
+		_logger = logger;
 	}
 
-	public async Task<IActionResult> Handle(LogoutUserQuery request, CancellationToken cancellationToken)
+	public async Task<LogoutUserQueryResponse> Handle(LogoutUserQuery request, CancellationToken cancellationToken)
 	{
-		var result = await _logoutService.LogoutAsync();
+		var actionResult = await _logoutService.LogoutAsync();
 
-		return result;
+		if (actionResult is null)
+		{
+			_logger.LogCritical(ExceptionsMessages.LogCriticalModelObjectIsNull, nameof(LogoutUserQuery), nameof(IActionResult));
+			throw new InvalidOperationException(ExceptionsMessages.ProvidedObjectIsNull);
+		}
+
+		return new LogoutUserQueryResponse(actionResult);
 	}
 }
