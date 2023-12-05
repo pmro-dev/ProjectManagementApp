@@ -22,135 +22,131 @@ using App.Features.Users.Register.Interfaces;
 using Microsoft.AspNetCore.Mvc.Razor;
 using App.Common.Views;
 using App.Features.Users.Common.Roles;
-using App.Infrastructure.Databases.App.Interfaces;
-using App.Infrastructure.Databases.Identity.Interfaces;
 using App.Features.Users.Authentication.Interfaces;
 using App.Features.Boards.Common.Interfaces;
 using App.Features.Users.Common.Roles.Interfaces;
-using App.Infrastructure.Databases.App.Seeds.Interfaces;
 using App.Common;
-using static App.Common.ControllersConsts;
-
-
-
 
 #endregion
 
-namespace App
+namespace App;
+
+public static class Program
 {
-	public static class Program
+	public static async Task Main(string[] args)
 	{
-		public static async Task Main(string[] args)
+		var builder = WebApplication.CreateBuilder(args);
+
+		builder.Configuration
+			.AddEnvironmentVariables()
+			.AddUserSecrets(Assembly.GetExecutingAssembly(), true);
+
+		builder.SetupEnvironmentSettings();
+
+		builder.AddCustomDbContexts();
+		builder.SetupUnitOfWorkServices();
+
+		builder.Services.AddHttpContextAccessor();
+		builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
+
+		#region IDENTITY SERVICES
+
+		builder.Services.AddScoped<ILoginService, LoginService>();
+		builder.Services.AddScoped<ILogoutService, LogoutService>();
+		builder.Services.AddScoped<IUserRegisterService, UserRegisterService>();
+		builder.Services.AddScoped<IAuthenticationCustomService, AuthenticationCustomService>();
+		builder.Services.AddScoped<IClaimsService, ClaimsService>();
+		builder.Services.AddScoped<IRoleService, RoleService>();
+		builder.Services.AddScoped<IUserService, UserService>();
+		builder.Services.AddScoped<ICookieEventsService, CookieEventsService>();
+		builder.Services.AddScoped<IIdentityService, IdentityService>();
+		builder.Services.AddScoped<ICookieService, CookieService>();
+
+		#endregion
+
+
+		#region MAPPERS
+
+		builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+		builder.Services.AddScoped<ITaskEntityMapper, TaskEntityMapper>();
+		builder.Services.AddScoped<ITodoListMapper, TodoListMapper>();
+
+		#endregion
+
+
+		#region FACTORIES
+
+		builder.Services.AddScoped<IBoardViewModelsFactory, BoardViewModelsFactory>();
+		builder.Services.AddScoped<ITodoListViewModelsFactory, TodoListViewModelsFactory>();
+		builder.Services.AddScoped<ITaskViewModelsFactory, TaskViewModelsFactory>();
+
+		builder.Services.AddScoped<ITodoListFactory, TodoListFactory>();
+		builder.Services.AddScoped<ITaskEntityFactory, TaskEntityFactory>();
+
+		builder.Services.AddScoped<ILoginFactory, LoginFactory>();
+		builder.Services.AddScoped<IRoleFactory, RoleFactory>();
+		builder.Services.AddScoped<IUserFactory, UserFactory>();
+
+		#endregion
+
+
+		builder.Services.AddScoped<ITaskSelector, TaskSelector>();
+		builder.Services.AddScoped<ITodoListSelector, TodoListSelector>();
+
+		builder.SetupSeedDataServices();
+
+
+		#region SETUP AUTHENNTICATION
+
+		builder.SetupBasicAuthenticationWithCookie();
+		builder.SetupGoogleAuthentication();
+
+		#endregion
+
+
+		builder.Services.Configure<RazorViewEngineOptions>(options =>
 		{
-			var builder = WebApplication.CreateBuilder(args);
-
-			builder.Configuration
-				.AddEnvironmentVariables()
-				.AddUserSecrets(Assembly.GetExecutingAssembly(), true);
-
-			builder.SetupEnvironmentSettings();
-
-			builder.AddCustomDbContexts();
-			builder.SetupUnitOfWorkServices();
-
-			builder.Services.AddHttpContextAccessor();
-			builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+			var expanderLogger = new LoggerFactory().CreateLogger<ViewLocationExpander>();
+			options.ViewLocationExpanders.Add((new ViewLocationExpander(expanderLogger)));
+		});
 
 
-			#region IDENTITY SERVICES
-
-			builder.Services.AddScoped<ILoginService, LoginService>();
-			builder.Services.AddScoped<ILogoutService, LogoutService>();
-			builder.Services.AddScoped<IUserRegisterService, UserRegisterService>();
-			builder.Services.AddScoped<IAuthenticationCustomService, AuthenticationCustomService>();
-			builder.Services.AddScoped<IClaimsService, ClaimsService>();
-			builder.Services.AddScoped<IRoleService, RoleService>();
-			builder.Services.AddScoped<IUserService, UserService>();
-			builder.Services.AddScoped<ICookieEventsService, CookieEventsService>();
-			builder.Services.AddScoped<IIdentityService, IdentityService>();
-			builder.Services.AddScoped<ICookieService, CookieService>();
-
-			#endregion
+		var app = builder.Build();
 
 
-			#region MAPPERS
-
-			builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
-			builder.Services.AddScoped<ITaskEntityMapper, TaskEntityMapper>();
-			builder.Services.AddScoped<ITodoListMapper, TodoListMapper>();
-
-			#endregion
+		if (app.Environment.IsDevelopment())
+			app.UseDeveloperExceptionPage();
+		else
+			app.UseExceptionHandler(CustomRoutes.ExceptionHandlerPath);
 
 
-			#region FACTORIES
-
-			builder.Services.AddScoped<IBoardViewModelsFactory, BoardViewModelsFactory>();
-			builder.Services.AddScoped<ITodoListViewModelsFactory, TodoListViewModelsFactory>();
-			builder.Services.AddScoped<ITaskViewModelsFactory, TaskViewModelsFactory>();
-
-			builder.Services.AddScoped<ITodoListFactory, TodoListFactory>();
-			builder.Services.AddScoped<ITaskEntityFactory, TaskEntityFactory>();
-
-			builder.Services.AddScoped<ILoginFactory, LoginFactory>();
-			builder.Services.AddScoped<IRoleFactory, RoleFactory>();
-			builder.Services.AddScoped<IUserFactory, UserFactory>();
-
-			#endregion
+		app.SetupPipeline();
 
 
-			builder.Services.AddScoped<ITaskSelector, TaskSelector>();
-			builder.Services.AddScoped<ITodoListSelector, TodoListSelector>();
+		#region SETUP ROUTES
 
-			builder.SetupSeedDataServices();
+		app.MapControllerRoute(
+			name: CustomRoutes.DefaultRouteName,
+			pattern: CustomRoutes.DefaultRoutePattern);
 
-
-			#region SETUP AUTHENNTICATION
-
-			builder.SetupBasicAuthenticationWithCookie();
-			builder.SetupGoogleAuthentication();
-
-			#endregion
+		#endregion
 
 
-			builder.Services.Configure<RazorViewEngineOptions>(options =>
-			{
-				options.ViewLocationExpanders.Add(new ViewLocationExpander());
-			});
+		#region POPULATE DATABASES
 
-
-			var app = builder.Build();
-
-
-			if (app.Environment.IsDevelopment())
-				app.UseDeveloperExceptionPage();
-			else
-				app.UseExceptionHandler(CustomRoutes.ExceptionHandlerPath);
-
-
-			app.SetupPipeline();
-
-
-			#region SETUP ROUTES
-
-			app.MapControllerRoute(
-				name: CustomRoutes.DefaultRouteName,
-				pattern: CustomRoutes.DefaultRoutePattern);
-
-			#endregion
-
-
-			#region POPULATE DATABASES
-
-			IIdentityDbSeeder identityDbSeeder = app.Services.CreateScope().ServiceProvider.GetRequiredService<IIdentityDbSeeder>();
+		using (var serviceScope = app.Services.CreateScope())
+		{
+			IIdentityDbSeeder identityDbSeeder = serviceScope.ServiceProvider.GetRequiredService<IIdentityDbSeeder>();
 			await identityDbSeeder.EnsurePopulated();
 
-			IDbSeeder dbSeeder = app.Services.CreateScope().ServiceProvider.GetRequiredService<IDbSeeder>();
+			IDbSeeder dbSeeder = serviceScope.ServiceProvider.GetRequiredService<IDbSeeder>();
 			await dbSeeder.EnsurePopulated();
-
-			#endregion
-
-
-			app.Run();
 		}
+
+		#endregion
+
+
+		app.Run();
 	}
 }

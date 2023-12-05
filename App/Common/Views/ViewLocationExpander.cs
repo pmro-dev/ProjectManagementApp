@@ -1,14 +1,29 @@
-﻿using Microsoft.AspNetCore.Mvc.Razor;
+﻿using App.Features.Exceptions.Throw;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace App.Common.Views;
 
 public class ViewLocationExpander : IViewLocationExpander
 {
-    public void PopulateValues(ViewLocationExpanderContext context) { }
+    private readonly ILogger<ViewLocationExpander> _logger;
+
+	public ViewLocationExpander(ILogger<ViewLocationExpander> logger)
+	{
+		_logger = logger;
+	}
+
+	public void PopulateValues(ViewLocationExpanderContext context) { }
 
     public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
     {
         var featureName = context.ActionContext.ActionDescriptor.DisplayName;
+
+        if (string.IsNullOrEmpty(featureName))
+        {
+            _logger.LogCritical(ExceptionsMessages.LogPropertyIsNullOrEmpty, nameof(ExpandViewLocations), nameof(featureName));
+			throw new InvalidOperationException(ExceptionsMessages.PropertyIsNullOrEmpty(nameof(ExpandViewLocations), nameof(featureName)));
+        }
+
         var featureParts = featureName.Split('.');
         var actionFolder = featureParts[^1].Replace(" (App)", string.Empty);
 
