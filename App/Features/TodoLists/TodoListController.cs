@@ -109,10 +109,10 @@ public class TodoListController : Controller
 
 		var response = await _mediator.Send(new EditTodoListQuery(id));
 
-		if (response.StatusCode == StatusCodes.Status200OK)
-			return View(TodoListViews.Edit, response.Data);
+		if (response.StatusCode != StatusCodes.Status200OK)
+			return BadRequest();
 
-		return BadRequest();
+		return View(TodoListViews.Edit, response.Data);
 	}
 
 	/// <summary>
@@ -135,9 +135,6 @@ public class TodoListController : Controller
 
 		var response = await _mediator.Send(new EditTodoListCommand(inputVM, id));
 
-		if (response.StatusCode == StatusCodes.Status201Created)
-			return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
-
 		if (response.StatusCode == StatusCodesExtension.EntityNameTaken)
 		{
 			ModelState.AddModelError(string.Empty, response.ErrorMessage!);
@@ -147,7 +144,10 @@ public class TodoListController : Controller
 			return RedirectToAction(TodoListCtrl.EditAction, routeValues);
 		}
 
-		return BadRequest();
+		if (response.StatusCode != StatusCodes.Status201Created)
+			return BadRequest();
+
+		return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
 	}
 
 	/// <summary>
