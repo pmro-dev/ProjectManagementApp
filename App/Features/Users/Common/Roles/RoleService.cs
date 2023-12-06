@@ -6,6 +6,7 @@ using App.Features.Users.Common.Roles.Models;
 using App.Infrastructure.Databases.Identity.Interfaces;
 using App.Infrastructure.Databases.Identity.Seeds;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Features.Users.Common.Roles;
 
@@ -26,7 +27,10 @@ public class RoleService : IRoleService
 
 	public async Task AddDefaultRoleToUserAsync(UserDto userDto)
 	{
-		RoleModel? roleModel = await _roleRepository.GetByFilterAsync(r => r.Name == IdentityDbSeeder.DefaultRole);
+		RoleModel? roleModel = await _roleRepository
+			.GetByFilter(r => r.Name == IdentityDbSeeder.DefaultRole)
+			.SingleOrDefaultAsync();
+
 		ExceptionsService.WhenRoleNotFoundInDbThrow(nameof(AddDefaultRoleToUserAsync), roleModel, IdentityDbSeeder.DefaultRole, _logger);
 
 		RoleDto? roleDto = _mapper.Map<RoleDto>(roleModel);

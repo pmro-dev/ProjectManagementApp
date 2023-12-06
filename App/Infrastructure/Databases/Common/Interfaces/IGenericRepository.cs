@@ -6,7 +6,7 @@ namespace App.Infrastructure.Databases.Common.Interfaces;
 /// Generic class for T type repository.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public interface IGenericRepository<T> where T : class
+public interface IGenericRepository<T, Y> where T : class, IBaseEntity<Y> where Y : notnull
 {
 	/// <summary>
 	/// Add entity to Db by repository.
@@ -20,7 +20,7 @@ public interface IGenericRepository<T> where T : class
 	/// </summary>
 	/// <param name="id">Id of targeted entity.</param>
 	/// <returns>Async Task operation.</returns>
-	Task<T?> GetAsync(object id);
+	IQueryable<T?> GetEntity(object id);
 
 	/// <summary>
 	/// Get all entities that match filter, default filter is null.
@@ -34,7 +34,7 @@ public interface IGenericRepository<T> where T : class
 	/// </summary>
 	/// <param name="filter">Filter expression to filter entities in Db.</param>
 	/// <returns>Async Task operation.</returns>
-	Task<T?> GetByFilterAsync(Expression<Func<T, bool>> filter);
+	IQueryable<T?> GetByFilter(Expression<Func<T, bool>> filter);
 
 	/// <summary>
 	/// Update entity in Db by repository.
@@ -58,7 +58,7 @@ public interface IGenericRepository<T> where T : class
 	/// Check that Db contains any entity.
 	/// </summary>
 	/// <returns>Return True when Db contains any entity, otherwise return false.</returns>
-	Task<bool> ContainsAny(Expression<Func<T, bool>>? predicate = null);
+	Task<bool> ContainsAnyAsync(Expression<Func<T, bool>>? predicate = null);
 
 	/// <summary>
 	/// Add range of entities to Db by repository.

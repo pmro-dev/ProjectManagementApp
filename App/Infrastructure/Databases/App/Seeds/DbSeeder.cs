@@ -61,7 +61,7 @@ public class DbSeeder : IDbSeeder
 	{
 		ITodoListRepository todoListRepository = _unitOfWork.TodoListRepository;
 
-		if (!await todoListRepository.ContainsAny())
+		if (!await todoListRepository.ContainsAnyAsync())
 		{
 			await todoListRepository.AddRangeAsync(_seedContainer.TodoLists);
 		}
@@ -71,7 +71,7 @@ public class DbSeeder : IDbSeeder
 	{
 		ITaskRepository taskRepository = _unitOfWork.TaskRepository;
 
-		if (!await taskRepository.ContainsAny())
+		if (!await taskRepository.ContainsAnyAsync())
 		{
 			await taskRepository.AddRangeAsync(_seedContainer.AllTasks);
 		}

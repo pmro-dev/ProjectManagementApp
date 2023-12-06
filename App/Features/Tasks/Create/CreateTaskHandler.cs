@@ -7,6 +7,7 @@ using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
 using App.Infrastructure.Databases.App.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Features.Tasks.Create;
 
@@ -39,7 +40,10 @@ public class CreateTaskHandler :
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(CreateTaskQuery), request.TodoListId, nameof(request.TodoListId), _logger);
 
-		TodoListModel? todoListModel = await _todoListRepository.GetAsync(request.TodoListId);
+		TodoListModel? todoListModel = await _todoListRepository
+			.GetEntity(request.TodoListId)
+			.SingleOrDefaultAsync();
+
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(CreateTaskQuery), todoListModel, _logger, request.TodoListId);
 
 		TodoListDto todoListDto = _todoListMapper.TransferToDto(todoListModel!);
@@ -54,7 +58,7 @@ public class CreateTaskHandler :
 	{
 		TaskDto taskDto = _taskEntityMapper.TransferToDto(request.InputVM);
 
-        if (await _taskRepository.ContainsAny(task => task.Title == taskDto.Title && task.UserId == taskDto.UserId))
+        if (await _taskRepository.ContainsAnyAsync(task => task.Title == taskDto.Title && task.UserId == taskDto.UserId))
             return new CreateTaskCommandResponse(null, ExceptionsMessages.NameTaken, StatusCodesExtension.EntityNameTaken);
 
 		TaskModel taskModel = _taskEntityMapper.TransferToModel(taskDto);

@@ -1,11 +1,13 @@
 ﻿using App.Common.Interfaces;
 using App.Infrastructure.Databases.App;
+using App.Infrastructure.Databases.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 
 namespace Project_UnitTests.Helpers;
 
-public static class GenericMockSetup<IModel, TModel> where TModel : class, IModel where IModel : IBasicModelAbstract
+//TODO
+public static class GenericMockSetup<IModel, TModel> where TModel : class, IModel where IModel : IBasicModelAbstract<int>
 {
     public static void SetupDbContextSaveChangesAsync(Mock<CustomAppDbContext> AppDbContextMock, List<Action> DbOperationsToExecute)
     {

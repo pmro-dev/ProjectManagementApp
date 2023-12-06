@@ -8,6 +8,7 @@ using App.Features.Tasks.Common.Models;
 using App.Features.Tasks.Delete.Models;
 using App.Infrastructure.Databases.App.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 #endregion
 
@@ -37,7 +38,10 @@ public class DeleteTaskHandler :
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Delete), request.TodoListId, nameof(request.TodoListId), _logger);
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Delete), request.TaskId, nameof(request.TaskId), _logger);
 
-		TaskModel? taskToDeleteModel = await _taskRepository.GetAsync(request.TaskId);
+		TaskModel? taskToDeleteModel = await _taskRepository
+			.GetEntity(request.TaskId)
+			.SingleOrDefaultAsync();
+
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(DeleteTaskQuery), taskToDeleteModel, _logger, request.TaskId.ToString());
 
 		TaskDto taskToDeleteDto = _taskEntityMapper.TransferToDto(taskToDeleteModel!);
@@ -60,7 +64,10 @@ public class DeleteTaskHandler :
 
 		TaskDeleteInputDto taskInputDto = _taskEntityMapper.TransferToDto(inputVM);
 
-		TaskModel? taskModel = await _taskRepository.GetAsync(taskInputDto.Id);
+		TaskModel? taskModel = await _taskRepository
+			.GetEntity(taskInputDto.Id)
+			.SingleOrDefaultAsync();
+
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(DeleteTaskCommand), taskModel, _logger, taskInputDto.Id);
 
 		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(DeleteTaskCommand), taskModel!.TodoListId, nameof(taskModel.TodoListId), taskInputDto.TodoListId, nameof(taskInputDto.TodoListId), _logger);

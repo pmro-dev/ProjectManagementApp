@@ -7,6 +7,7 @@ using App.Features.Users.Register.Interfaces;
 using App.Infrastructure.Databases.Identity.Interfaces;
 using App.Infrastructure.Databases.Identity.Seeds;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Features.Users.Register;
 
@@ -70,7 +71,9 @@ public class UserRegisterService : IUserRegisterService
 
 	private async Task SetRoles(UserDto userDto)
 	{
-		RoleModel? roleForNewUser = await _roleRepository.GetByFilterAsync(role => role.Name == _defaultRole);
+		RoleModel? roleForNewUser = await _roleRepository
+			.GetByFilter(role => role.Name == _defaultRole)
+			.SingleOrDefaultAsync();
 
 		if (roleForNewUser is null)
 		{

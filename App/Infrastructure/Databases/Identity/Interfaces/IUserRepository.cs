@@ -7,7 +7,7 @@ namespace App.Infrastructure.Databases.Identity.Interfaces;
 /// <summary>
 /// User Repository allows to manage operations on User's data in Db.
 /// </summary>
-public interface IUserRepository : IGenericRepository<UserModel>
+public interface IUserRepository : IGenericRepository<UserModel, string>
 {
 	/// <summary>
 	/// Get a specific User with details (where details are related data in other tables).

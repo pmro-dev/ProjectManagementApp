@@ -2,6 +2,7 @@
 using App.Features.Users.Common.Models;
 using App.Features.Users.Common.Roles.Models;
 using App.Infrastructure.Databases.Identity.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Text;
 
 namespace App.Infrastructure.Databases.Identity.Seeds;
@@ -30,7 +31,7 @@ public class IdentityDbSeeder : IIdentityDbSeeder
 
 	private static readonly UserModel AdminInitModel = new()
 	{
-		UserId = AdminId,
+		Id = AdminId,
 		FirstName = AdminUser,
 		LastName = AdminUser,
 		NameIdentifier = AdminId,
@@ -105,7 +106,7 @@ public class IdentityDbSeeder : IIdentityDbSeeder
 	{
 		IRoleRepository roleRepository = _identityUnitOfWork.RoleRepository;
 
-		if (!await roleRepository.ContainsAny())
+		if (!await roleRepository.ContainsAnyAsync())
 		{
 			ICollection<RoleModel> defaultRoles = new List<RoleModel>();
 			StringBuilder idBuilder = new();
@@ -133,7 +134,7 @@ public class IdentityDbSeeder : IIdentityDbSeeder
 	{
 		IUserRepository userRepository = _identityUnitOfWork.UserRepository;
 
-		if (!await userRepository.ContainsAny())
+		if (!await userRepository.ContainsAnyAsync())
 		{
 			await userRepository.AddAsync(AdminInitModel);
 		}
@@ -146,13 +147,15 @@ public class IdentityDbSeeder : IIdentityDbSeeder
 
 		UserModel? adminUser = await userRepository.GetWithDetailsAsync(AdminId);
 		string roleId = string.Concat(AdminRoleName.ToLower(), RoleIdSuffix);
-		RoleModel? roleForAdmin = await roleRepository.GetAsync(roleId);
+		RoleModel? roleForAdmin = await roleRepository
+			.GetEntity(roleId)
+			.SingleOrDefaultAsync();
 
 		if (adminUser != null && !adminUser.UserRoles.Any() && roleForAdmin != null)
 		{
 			UserRoleModel roleModel = new(adminUser, roleForAdmin)
 			{
-				UserId = adminUser.UserId,
+				UserId = adminUser.Id,
 				RoleId = roleForAdmin.Id,
 			};
 

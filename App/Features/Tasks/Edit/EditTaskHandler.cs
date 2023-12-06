@@ -42,10 +42,16 @@ public class EditTaskHandler :
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), request.TodoListId, nameof(request.TodoListId), _logger);
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), request.TaskId, nameof(request.TaskId), _logger);
 
-		TaskModel? taskModel = await _taskRepository.GetAsync(request.TaskId);
+		TaskModel? taskModel = await _taskRepository
+			.GetEntity(request.TaskId)
+			.SingleOrDefaultAsync();
+
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(EditTaskQuery), taskModel, _logger, request.TaskId);
 
-		TodoListModel? targetTodoListModel = await _todoListRepository.GetAsync(request.TodoListId);
+		TodoListModel? targetTodoListModel = await _todoListRepository
+			.GetEntity(request.TodoListId)
+			.SingleOrDefaultAsync();
+
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(EditTaskQuery), targetTodoListModel, _logger, request.TodoListId);
 
 		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(Edit), taskModel!.TodoListId, nameof(taskModel.TodoListId), targetTodoListModel!.Id, nameof(targetTodoListModel.Id), _logger);
@@ -71,10 +77,12 @@ public class EditTaskHandler :
 	{
 		TaskEditInputDto taskEditInputDto = _taskEntityMapper.TransferToDto(request.InputVM);
 
-		if (await _taskRepository.ContainsAny(task => task.Title == taskEditInputDto.Title && task.UserId == taskEditInputDto.UserId))
+		if (await _taskRepository.ContainsAnyAsync(task => task.Title == taskEditInputDto.Title && task.UserId == taskEditInputDto.UserId))
 			return new EditTaskCommandResponse(null, ExceptionsMessages.NameTaken, StatusCodesExtension.EntityNameTaken);
 
-		TaskModel? taskDbModel = await _taskRepository.GetAsync(taskEditInputDto.Id);
+		TaskModel? taskDbModel = await _taskRepository
+			.GetEntity(taskEditInputDto.Id)
+			.SingleOrDefaultAsync();
 
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(EditTaskCommand), taskDbModel, _logger, taskEditInputDto.Id);
 		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(EditTaskCommand), taskDbModel!.Id, nameof(taskDbModel.Id), taskEditInputDto.Id, nameof(taskEditInputDto.Id), _logger);

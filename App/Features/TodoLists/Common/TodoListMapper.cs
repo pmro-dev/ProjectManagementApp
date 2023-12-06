@@ -45,7 +45,9 @@ public class TodoListMapper : ITodoListMapper
 
 	private ICollection<TaskModel> MapMultipleTasksToModels(ICollection<TaskDto> taskDtos, IDictionary<object, object> mappedObjects)
 	{
-		return taskDtos.Select(task => _taskEntityMapper.TransferToModel(task, mappedObjects)).ToList();
+		return taskDtos
+			.Select(task => _taskEntityMapper.TransferToModel(task, mappedObjects))
+			.ToList();
 	}
 
 	#endregion
@@ -80,7 +82,9 @@ public class TodoListMapper : ITodoListMapper
 	{
 		var mappedObjects = new Dictionary<object, object>();
 
-		var todoListDtos = todoLists.Select(list => MapTodoListToDto(list, mappedObjects)).ToList();
+		var todoListDtos = todoLists
+			.Select(list => MapTodoListToDto(list, mappedObjects))
+			.ToList();
 
 		return todoListDtos;
 	}
@@ -104,7 +108,9 @@ public class TodoListMapper : ITodoListMapper
 
 	private ICollection<TaskDto> MapMultipleTasksToDtos(ICollection<TaskModel> taskModels, IDictionary<object, object> mappedObjects)
 	{
-		return taskModels.Select(task => _taskEntityMapper.TransferToDto(task, mappedObjects)).ToList();
+		return taskModels
+			.Select(task => _taskEntityMapper.TransferToDto(task, mappedObjects))
+			.ToList();
 	}
 
 	#endregion

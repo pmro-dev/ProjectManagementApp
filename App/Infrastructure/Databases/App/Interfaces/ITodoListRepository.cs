@@ -5,14 +5,14 @@ using System.Linq.Expressions;
 namespace App.Infrastructure.Databases.App.Interfaces;
 
 ///<inheritdoc />
-public interface ITodoListRepository : IGenericRepository<TodoListModel>
+public interface ITodoListRepository : IGenericRepository<TodoListModel, int>
 {
 	/// <summary>
 	/// Get a specific ToDoList with details (where details are related data in other tables).
 	/// </summary>
 	/// <param name="todoListId">Targeted list id.</param>
 	/// <returns>ToDoList with details from Db.</returns>
-	Task<TodoListModel?> GetWithDetailsAsync(int todoListId);
+	IQueryable<TodoListModel> GetWithDetails(int todoListId);
 
 	/// <summary>
 	/// Get All ToDoLists with details (where details are related data in other tables).

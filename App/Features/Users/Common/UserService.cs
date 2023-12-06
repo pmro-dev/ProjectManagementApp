@@ -57,7 +57,10 @@ public class UserService : IUserService
 
 	public async Task UpdateUserModelAsync(UserDto userBasedOnProviderDataDto, Claim authenticationSchemeClaim)
 	{
-		UserModel? userFromDb = await _userRepository.GetAsync(userBasedOnProviderDataDto.NameIdentifier);
+		UserModel? userFromDb = await _userRepository
+			.GetEntity(userBasedOnProviderDataDto.NameIdentifier)
+			.SingleOrDefaultAsync();
+
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(UpdateUserModelAsync), userFromDb, _logger, userBasedOnProviderDataDto.NameIdentifier);
 
 		bool IsUserUsedExternalAuthProvider = userBasedOnProviderDataDto.Provider != CookieAuthenticationDefaults.AuthenticationScheme;

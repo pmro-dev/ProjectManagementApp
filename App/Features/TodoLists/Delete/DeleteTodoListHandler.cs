@@ -3,6 +3,7 @@ using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
 using App.Infrastructure.Databases.App.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Features.TodoLists.Delete;
 
@@ -30,7 +31,10 @@ public class DeleteTodoListHandler :
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(DeleteTodoListQuery), request.RouteTodoListId, nameof(request.RouteTodoListId), _logger);
 
-		TodoListModel? todoListDbModel = await _todoListRepository.GetAsync(request.RouteTodoListId);
+		TodoListModel? todoListDbModel = await _todoListRepository
+			.GetEntity(request.RouteTodoListId)
+			.SingleOrDefaultAsync();
+
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(DeleteTodoListQuery), todoListDbModel, _logger, request.RouteTodoListId);
 
 		var todoListDto = _todoListMapper.TransferToDto(todoListDbModel!);
@@ -43,7 +47,10 @@ public class DeleteTodoListHandler :
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(DeleteTodoListCommand), request.TodoListId, nameof(request.TodoListId), _logger);
 
-		TodoListModel? todoListDbModel = await _todoListRepository.GetAsync(request.TodoListId);
+		TodoListModel? todoListDbModel = await _todoListRepository
+			.GetEntity(request.TodoListId)
+			.SingleOrDefaultAsync();
+
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(DeleteTodoListCommand), todoListDbModel, _logger, request.TodoListId);
 
 		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(DeleteTodoListCommand), todoListDbModel!.Id, nameof(todoListDbModel.Id), request.TodoListId, nameof(request.TodoListId), _logger);

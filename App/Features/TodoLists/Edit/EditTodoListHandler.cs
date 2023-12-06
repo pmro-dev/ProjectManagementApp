@@ -4,6 +4,7 @@ using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
 using App.Infrastructure.Databases.App.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Features.TodoLists.Edit;
 
@@ -30,7 +31,10 @@ public class EditTodoListHandler :
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), request.TodoListId, nameof(request.TodoListId), _logger);
 
-		TodoListModel? todoListModel = await _todoListRepository.GetAsync(request.TodoListId);
+		TodoListModel? todoListModel = await _todoListRepository
+			.GetEntity(request.TodoListId)
+			.SingleOrDefaultAsync();
+
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(EditTodoListQuery), todoListModel, _logger, request.TodoListId);
 
 		var todoListDto = _todoListMapper.TransferToDto(todoListModel!);
@@ -46,10 +50,13 @@ public class EditTodoListHandler :
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), request.TodoListId, nameof(request.TodoListId), _logger);
 		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(Edit), request.RouteTodoListId, nameof(request.RouteTodoListId), request.TodoListId, nameof(request.TodoListId), _logger);
 
-		if (await _todoListRepository.ContainsAny(todoList => todoList.Title == request.InputVM.Title && todoList.UserId == request.InputVM.UserId))
+		if (await _todoListRepository.ContainsAnyAsync(todoList => todoList.Title == request.InputVM.Title && todoList.UserId == request.InputVM.UserId))
 			return new EditTodoListCommandResponse(ExceptionsMessages.NameTaken, StatusCodesExtension.EntityNameTaken);
 
-		TodoListModel? todoListDbModel = await _todoListRepository.GetAsync(request.TodoListId);
+		TodoListModel? todoListDbModel = await _todoListRepository
+			.GetEntity(request.TodoListId)
+			.SingleOrDefaultAsync();
+
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(EditTodoListCommand), todoListDbModel, _logger, request.TodoListId);
 
 		var editInputDto = _todoListMapper.TransferToDto(request.InputVM);

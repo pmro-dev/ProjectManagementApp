@@ -44,7 +44,7 @@ public class CreateTodoListHandler :
 	public async Task<CreateTodoListCommandResponse> Handle(CreateTodoListCommand request, CancellationToken cancellationToken)
 	{
         var todoListDto = _todoListMapper.TransferToDto(request.InputVM);
-        if (await _todoListRepository.ContainsAny(todoList => todoList.Title == todoListDto.Title && todoList.UserId == todoListDto.UserId))
+        if (await _todoListRepository.ContainsAnyAsync(todoList => todoList.Title == todoListDto.Title && todoList.UserId == todoListDto.UserId))
 			return new CreateTodoListCommandResponse(ExceptionsMessages.NameTaken, StatusCodesExtension.EntityNameTaken);
 
         var todoListModel = _todoListMapper.TransferToModel(todoListDto);

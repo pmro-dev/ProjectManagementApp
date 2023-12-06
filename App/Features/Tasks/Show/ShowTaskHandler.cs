@@ -3,6 +3,7 @@ using App.Features.Tasks.Common.Interfaces;
 using App.Features.Tasks.Common.Models;
 using App.Infrastructure.Databases.App.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Features.Tasks.Show;
 
@@ -27,7 +28,9 @@ public class ShowTaskHandler : IRequestHandler<ShowTaskQuery, ShowTaskQueryRespo
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(ShowTaskQuery), request.TodoListId, nameof(request.TodoListId), _logger);
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(ShowTaskQuery), request.TaskId, nameof(request.TaskId), _logger);
 
-		TaskModel? taskModel = await _taskRepository.GetAsync(request.TaskId);
+		TaskModel? taskModel = await _taskRepository
+			.GetEntity(request.TaskId)
+			.SingleOrDefaultAsync();
 
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(ShowTaskQuery), taskModel, _logger, request.TaskId);
 		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(ShowTaskQuery), request.TodoListId, nameof(request.TodoListId), taskModel!.TodoListId, nameof(taskModel.TodoListId), _logger);

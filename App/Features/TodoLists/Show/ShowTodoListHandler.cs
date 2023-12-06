@@ -1,8 +1,8 @@
 ﻿using App.Features.Exceptions.Throw;
 using App.Features.TodoLists.Common.Interfaces;
-using App.Features.TodoLists.Common.Models;
 using App.Infrastructure.Databases.App.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Features.TodoLists.Show;
 
@@ -27,7 +27,7 @@ public class ShowTodoListHandler : IRequestHandler<ShowTodoListQuery, ShowTodoLi
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(ShowTodoListQuery), request.TodoListId, nameof(request.TodoListId), _logger);
 
-		TodoListModel? todoListDbModel = await _todoListRepository.GetWithDetailsAsync(request.TodoListId);
+		var todoListDbModel = await _todoListRepository.GetWithDetails(request.TodoListId).SingleOrDefaultAsync();
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(ShowTodoListQuery), todoListDbModel, _logger, request.TodoListId);
 
 		var todoListDto = _todoListMapper.TransferToDto(todoListDbModel!);

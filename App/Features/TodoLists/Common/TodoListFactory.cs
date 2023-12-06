@@ -11,6 +11,15 @@ public class TodoListFactory : ITodoListFactory
 	{
 		return new TodoListModel();
 	}
+	public TodoListModel CreateModel(TodoListModel originModel, ICollection<TaskModel> originTasks)
+	{
+		return new TodoListModel()
+		{
+			Title = originModel.Title + "###",
+			Tasks = originTasks,
+			UserId = originModel.UserId
+		};
+	}
 
 	public TodoListDto CreateDto()
 	{
@@ -20,15 +29,5 @@ public class TodoListFactory : ITodoListFactory
 	public TodoListEditInputDto CreateEditInputDto()
 	{
 		return new TodoListEditInputDto();
-	}
-
-	public TodoListModel CreateModel(TodoListModel originModel, ICollection<TaskModel> originTasks)
-	{
-		return new TodoListModel()
-		{
-			Title = originModel.Title + "###",
-			Tasks = originTasks,
-			UserId = originModel.UserId
-		};
 	}
 }

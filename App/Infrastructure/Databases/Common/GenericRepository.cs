@@ -6,13 +6,13 @@ using System.Linq.Expressions;
 namespace App.Infrastructure.Databases.Common;
 
 ///<inheritdoc />
-public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
+public class GenericRepository<TEntity, TId> : IGenericRepository<TEntity, TId> where TEntity : class, IBaseEntity<TId> where TId : notnull
 {
 	protected readonly DbContext Context;
 	private readonly DbSet<TEntity> _dbSet;
-	private readonly ILogger<GenericRepository<TEntity>> _logger;
+	private readonly ILogger<GenericRepository<TEntity, TId>> _logger;
 
-	public GenericRepository(DbContext dbContext, ILogger<GenericRepository<TEntity>> logger)
+	public GenericRepository(DbContext dbContext, ILogger<GenericRepository<TEntity, TId>> logger)
 	{
 		Context = dbContext;
 		_dbSet = Context.Set<TEntity>();
@@ -30,17 +30,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	///<inheritdoc />
 	public IQueryable<TEntity> GetAll()
 	{
-		return _dbSet
-			.AsNoTracking()
-			.AsQueryable();
-	}
-
-	///<inheritdoc />
-	public async Task<TEntity?> GetAsync(object id)
-	{
-		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetAsync), id, nameof(id), _logger);
-
-		return await _dbSet.FindAsync(id);
+		return _dbSet.AsNoTracking();
 	}
 
 	///<inheritdoc />
@@ -48,15 +38,25 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	{
 		ExceptionsService.WhenFilterExpressionIsNullThrow(filter, nameof(GetAllByFilter), _logger);
 
-		return _dbSet.AsQueryable().Where(filter);
+		return _dbSet
+			.AsNoTracking()
+			.Where(filter);
 	}
 
 	///<inheritdoc />
-	public async Task<TEntity?> GetByFilterAsync(Expression<Func<TEntity, bool>> filter)
+	public IQueryable<TEntity?> GetEntity(object id)
 	{
-		ExceptionsService.WhenFilterExpressionIsNullThrow(filter, nameof(GetByFilterAsync), _logger);
-	
-		return await _dbSet.SingleOrDefaultAsync(filter);
+		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetEntity), id, nameof(id), _logger);
+
+		return _dbSet.Where(e => e.Id.Equals(id));
+	}
+
+	///<inheritdoc />
+	public IQueryable<TEntity?> GetByFilter(Expression<Func<TEntity, bool>> filter)
+	{
+		ExceptionsService.WhenFilterExpressionIsNullThrow(filter, nameof(GetByFilter), _logger);
+
+		return _dbSet.Where(filter);
 	}
 
 	///<inheritdoc />
@@ -84,7 +84,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	}
 
 	///<inheritdoc />
-	public async Task<bool> ContainsAny(Expression<Func<TEntity, bool>>? predicate = null)
+	public async Task<bool> ContainsAnyAsync(Expression<Func<TEntity, bool>>? predicate = null)
 	{
 		if (predicate is null)
 		{

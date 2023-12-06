@@ -1,7 +1,9 @@
-﻿namespace App.Common.Interfaces;
+﻿using App.Infrastructure.Databases.Common.Interfaces;
 
-public interface IBasicModelAbstract
+namespace App.Common.Interfaces;
+
+public interface IBasicModelAbstract<TId> : IBaseEntity<TId>
 {
-    public int Id { get; set; }
+    //public int Id { get; set; }
     public string Title { get; set; }
 }

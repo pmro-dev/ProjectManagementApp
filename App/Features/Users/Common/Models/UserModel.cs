@@ -9,7 +9,7 @@ public sealed class UserModel : IUserModel
 {
 	[Key]
 	[Required]
-	public string UserId { get; set; } = Guid.NewGuid().ToString();
+	public string Id { get; set; } = Guid.NewGuid().ToString();
 	[Required]
 	// ConcurrencyStamp
 	public string DataVersion { get; set; } = Guid.NewGuid().ToString();

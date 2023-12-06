@@ -4,7 +4,7 @@ using App.Features.TodoLists.Common.Models;
 
 namespace App.Features.TodoLists.Common.Interfaces;
 
-public interface ITodoListModel : IBasicModelAbstract
+public interface ITodoListModel : IBasicModelAbstract<int>
 {
 	ICollection<TaskModel> Tasks { get; set; }
 	string UserId { get; set; }

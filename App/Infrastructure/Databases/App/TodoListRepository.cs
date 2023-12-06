@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 namespace App.Infrastructure.Databases.App;
 
 ///<inheritdoc />
-public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRepository
+public class TodoListRepository : GenericRepository<TodoListModel, int>, ITodoListRepository
 {
 	private readonly CustomAppDbContext _dbContext;
 	private readonly ILogger<TodoListRepository> _logger;
@@ -32,14 +32,18 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	{
 		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(DuplicateWithDetailsAsync), todoListId, nameof(todoListId), _logger);
 
-		TodoListModel? todoListWithDetails = await _dbContext
+		TodoListModel todoListWithDetails = await _dbContext
 			.Set<TodoListModel>()
 			.Where(todoList => todoList.Id == todoListId)
 			.Include(todoList => todoList.Tasks)
-			.SingleOrDefaultAsync();
+			.SingleAsync();
+
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(DuplicateWithDetailsAsync), todoListWithDetails, _logger, todoListId);
 
-		var duplicatedTasks = todoListWithDetails!.Tasks.Select(originTask => CreateNewTaskObject(originTask)).ToList();
+		var duplicatedTasks = todoListWithDetails.Tasks
+			.Select(originTask => CreateNewTaskObject(originTask))
+			.ToList();
+
 		var duplicatedTodoList = CreateNewTodoListObject(todoListWithDetails, duplicatedTasks);
 
 		await AddAsync(duplicatedTodoList);
@@ -66,13 +70,12 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	{
 		ExceptionsService.WhenArgumentIsNullOrEmptyThrow(nameof(GetAllWithDetails), userId, nameof(userId), _logger);
 
-		IQueryable<TodoListModel> allTodoListsWithDetails = _dbContext
+		var query = _dbContext
 			.Set<TodoListModel>()
-			.AsQueryable()
 			.Where(todoList => todoList.UserId == userId)
 			.Include(todoList => todoList.Tasks);
 
-		return allTodoListsWithDetails;
+		return query;
 	}
 
 	///<inheritdoc />
@@ -80,26 +83,30 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	{
 		ExceptionsService.WhenFilterExpressionIsNullThrow(filter, nameof(GetAllWithDetailsByFilter), _logger);
 
-		IQueryable<TodoListModel> entities = _dbContext
+		var query = _dbContext
 			.Set<TodoListModel>()
-			.AsQueryable()
 			.Where(filter)
 			.Include(todoList => todoList.Tasks);
 
-		return entities;
+		return query;
 	}
 
 	///<inheritdoc />
-	public async Task<TodoListModel?> GetWithDetailsAsync(int todoListId)
+	public IQueryable<TodoListModel> GetWithDetails(int todoListId)
 	{
-		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetWithDetailsAsync), todoListId, nameof(todoListId), _logger);
+		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetWithDetails), todoListId, nameof(todoListId), _logger);
 
-		TodoListModel? todoListFromDb = await _dbContext
+		//TODO
+
+		var query = _dbContext
 			.Set<TodoListModel>()
 			.Where(todoList => todoList.Id == todoListId)
-			.Include(todoList => todoList.Tasks)
-			.SingleOrDefaultAsync();
+			.Include(todoList => todoList
+				.Tasks
+					.Skip((2 - 1) * 2)
+					.Take(2)
+			);
 
-		return todoListFromDb;
+		return query;
 	}
 }

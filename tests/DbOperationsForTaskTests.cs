@@ -43,7 +43,7 @@ public class DatabaseOperationsTests : BaseOperationsSetup
     [Test]
     public async Task ContainsAnyShouldSucceed()
     {
-        var result = await TaskRepo.ContainsAny();
+        var result = await TaskRepo.ContainsAnyAsync();
 
         Assert.That(result, Is.True);
     }
@@ -59,7 +59,10 @@ public class DatabaseOperationsTests : BaseOperationsSetup
         await DataUnitOfWork.SaveChangesAsync();
         await GenericMockSetup<ITaskModel, TaskModel>.SetupGetEntity(assertTask.Id, DbSetTaskMock, TasksCollection);
 
-        TaskModel resultTask = await TaskRepo.GetAsync(assertTask.Id) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
+        TaskModel resultTask = await TaskRepo
+            .GetEntity(assertTask.Id)
+            .SingleOrDefaultAsync() 
+            ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
         Assert.Multiple(() =>
         {
@@ -89,7 +92,10 @@ public class DatabaseOperationsTests : BaseOperationsSetup
 
         await GenericMockSetup<ITaskModel, TaskModel>.SetupGetEntity(assertTask.Id, DbSetTaskMock, TasksCollection);
 
-        var resultTask = await TaskRepo.GetAsync(assertTask.Id) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
+        var resultTask = await TaskRepo
+            .GetEntity(assertTask.Id)
+            .SingleOrDefaultAsync() 
+            ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
         Assert.Multiple(() =>
         {
@@ -114,7 +120,9 @@ public class DatabaseOperationsTests : BaseOperationsSetup
     {
         ITaskModel? assertTask = TasksCollection.Single(t => t.Id == taskId);
 
-        ITaskModel? taskFromDb = await TaskRepo.GetByFilterAsync(t => t.Id == taskId);
+        ITaskModel? taskFromDb = await TaskRepo
+            .GetByFilter(t => t.Id == taskId)
+            .SingleOrDefaultAsync();
 
         Assert.That(assertTask, Is.EqualTo(taskFromDb));
     }
@@ -145,13 +153,13 @@ public class DatabaseOperationsTests : BaseOperationsSetup
         switch (exceptionType)
         {
             case Type argExNull when argExNull == typeof(ArgumentNullException):
-                Assert.ThrowsAsync<ArgumentNullException>(async () => await TaskRepo.GetAsync(id!));
+                Assert.ThrowsAsync<ArgumentNullException>(async () => await TaskRepo.GetEntity(id!).SingleOrDefaultAsync());
                 break;
             case Type argExOutOfRange when argExOutOfRange == typeof(ArgumentOutOfRangeException):
-                Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await TaskRepo.GetAsync(id!));
+                Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await TaskRepo.GetEntity(id!).SingleOrDefaultAsync());
                 break;
             case Type argEx when argEx == typeof(ArgumentException):
-                Assert.ThrowsAsync<ArgumentException>(async () => await TaskRepo.GetAsync(id!));
+                Assert.ThrowsAsync<ArgumentException>(async () => await TaskRepo.GetEntity(id!).SingleOrDefaultAsync());
                 break;
         }
     }
@@ -161,7 +169,10 @@ public class DatabaseOperationsTests : BaseOperationsSetup
     {
         int taskToUpdateId = TasksCollection[_firstIndex].Id;
         await GenericMockSetup<ITaskModel, TaskModel>.SetupGetEntity(taskToUpdateId, DbSetTaskMock, TasksCollection);
-        TaskModel taskToUpdate = await TaskRepo.GetAsync(taskToUpdateId) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
+        TaskModel taskToUpdate = await TaskRepo
+            .GetEntity(taskToUpdateId)
+            .SingleOrDefaultAsync() 
+            ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
         ModifyTaskData(taskToUpdate);
         await GenericMockSetup<ITaskModel, TaskModel>.SetupUpdateEntity(taskToUpdate, DbSetTaskMock, TasksCollection, DbOperationsToExecute);
@@ -169,7 +180,10 @@ public class DatabaseOperationsTests : BaseOperationsSetup
         TaskRepo.Update(taskToUpdate);
         await DataUnitOfWork.SaveChangesAsync();
 
-        TaskModel updatedTask = await TaskRepo.GetAsync(taskToUpdateId) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
+        TaskModel updatedTask = await TaskRepo
+            .GetEntity(taskToUpdateId)
+            .SingleOrDefaultAsync()
+            ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
         Assert.Multiple(() =>
         {
             Assert.That(updatedTask.Title, Is.EqualTo(taskToUpdate.Title));
@@ -196,7 +210,10 @@ public class DatabaseOperationsTests : BaseOperationsSetup
     {
         var itemsNumberBeforeDelete = TasksCollection.Count;
         await GenericMockSetup<ITaskModel, TaskModel>.SetupGetEntity(assertTaskId, DbSetTaskMock, TasksCollection);
-        TaskModel taskToRemove = await TaskRepo.GetAsync(assertTaskId) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
+        TaskModel taskToRemove = await TaskRepo
+            .GetEntity(assertTaskId)
+            .SingleOrDefaultAsync()
+            ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
         await GenericMockSetup<ITaskModel, TaskModel>.SetupDeleteEntity(taskToRemove, DbSetTaskMock, TasksCollection, DbOperationsToExecute);
         TaskRepo.Remove(taskToRemove);
@@ -207,7 +224,9 @@ public class DatabaseOperationsTests : BaseOperationsSetup
         // I don't know why but I have to "refresh" TasksCollection because somehow it can get "deleted" task from memory.
         await GenericMockSetup<ITaskModel, TaskModel>.SetupGetEntity(assertTaskId, DbSetTaskMock, TasksCollection);
 
-        TaskModel? resultOfTryToGetRemovedTask = await TaskRepo.GetAsync(assertTaskId);
+        TaskModel? resultOfTryToGetRemovedTask = await TaskRepo
+            .GetEntity(assertTaskId)
+            .SingleOrDefaultAsync();
 
         Assert.Multiple(() =>
         {

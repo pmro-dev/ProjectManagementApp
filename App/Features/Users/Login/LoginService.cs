@@ -37,7 +37,7 @@ public class LoginService : ILoginService
 
 	public async Task<bool> CheckIsUserAlreadyRegisteredAsync(LoginInputDto loginInputDto)
 	{
-		return await _userRepository.ContainsAny(dbUser => dbUser.Username == loginInputDto.Username && dbUser.Password == loginInputDto.Password);
+		return await _userRepository.ContainsAnyAsync(dbUser => dbUser.Username == loginInputDto.Username && dbUser.Password == loginInputDto.Password);
 	}
 
 	public async Task<bool> LogInUserAsync(LoginInputDto loginInputDto)

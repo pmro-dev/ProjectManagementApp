@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 namespace App.Infrastructure.Databases.Identity;
 
 ///<inheritdoc />
-public class UserRepository : GenericRepository<UserModel>, IUserRepository
+public class UserRepository : GenericRepository<UserModel, string>, IUserRepository
 {
 	private readonly CustomIdentityDbContext _identityContext;
 	private readonly ILogger<UserRepository> _logger;
@@ -27,7 +27,7 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 
 		UserModel? userWithDetailsFromDb = await _identityContext
 			.Set<UserModel>()
-			.Where(user => user.UserId == userId)
+			.Where(user => user.Id == userId)
 			.Include(user => user.UserRoles)
 			.SingleOrDefaultAsync();
 

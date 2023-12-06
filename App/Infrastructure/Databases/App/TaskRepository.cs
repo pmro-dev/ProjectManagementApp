@@ -4,7 +4,7 @@ using App.Infrastructure.Databases.Common;
 
 namespace App.Infrastructure.Databases.App;
 
-public class TaskRepository : GenericRepository<TaskModel>, ITaskRepository
+public class TaskRepository : GenericRepository<TaskModel, int>, ITaskRepository
 {
 	///<inheritdoc />
 	public TaskRepository(CustomAppDbContext dbContext, ILogger<TaskRepository> logger) : base(dbContext, logger)
