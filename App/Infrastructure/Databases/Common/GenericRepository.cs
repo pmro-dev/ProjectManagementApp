@@ -28,9 +28,11 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	}
 
 	///<inheritdoc />
-	public async Task<ICollection<TEntity>> GetAllAsync()
+	public IQueryable<TEntity> GetAll()
 	{
-		return await _dbSet.ToListAsync();
+		return _dbSet
+			.AsNoTracking()
+			.AsQueryable();
 	}
 
 	///<inheritdoc />
@@ -42,11 +44,11 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	}
 
 	///<inheritdoc />
-	public async Task<ICollection<TEntity>> GetAllByFilterAsync(Expression<Func<TEntity, bool>> filter)
+	public IQueryable<TEntity> GetAllByFilter(Expression<Func<TEntity, bool>> filter)
 	{
-		ExceptionsService.WhenFilterExpressionIsNullThrow(filter, nameof(GetAllByFilterAsync), _logger);
+		ExceptionsService.WhenFilterExpressionIsNullThrow(filter, nameof(GetAllByFilter), _logger);
 
-		return await _dbSet.Where(filter).ToListAsync();
+		return _dbSet.AsQueryable().Where(filter);
 	}
 
 	///<inheritdoc />

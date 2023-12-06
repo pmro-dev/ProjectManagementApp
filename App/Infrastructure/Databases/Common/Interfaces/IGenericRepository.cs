@@ -27,7 +27,7 @@ public interface IGenericRepository<T> where T : class
 	/// </summary>
 	/// <param name="filter">Filter expression to filter entities in Db.</param>
 	/// <returns>Async Task operation.</returns>
-	Task<ICollection<T>> GetAllByFilterAsync(Expression<Func<T, bool>> filter);
+	IQueryable<T> GetAllByFilter(Expression<Func<T, bool>> filter);
 
 	/// <summary>
 	/// Get single entity that matches filter, default filter is null.
@@ -52,7 +52,7 @@ public interface IGenericRepository<T> where T : class
 	/// Get all possible entities from Db by repository.
 	/// </summary>
 	/// <returns>IEnumerable set of entities from Db.</returns>
-	Task<ICollection<T>> GetAllAsync();
+	IQueryable<T> GetAll();
 
 	/// <summary>
 	/// Check that Db contains any entity.

@@ -1,7 +1,6 @@
 ﻿using App.Features.Exceptions.Throw;
 using App.Features.Tasks.Common.Interfaces;
 using App.Features.Tasks.Common.Models;
-using App.Features.Tasks.Common.TaskTags.Common;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
 using App.Infrastructure.Databases.App.Interfaces;
@@ -51,65 +50,41 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 
 	private TaskModel CreateNewTaskObject(TaskModel originTask)
 	{
-		var newTask = _taskEntityFactory.CreateModel();
-		newTask.UserId = originTask.UserId;
-		newTask.Title = originTask.Title;
-		newTask.Description = originTask.Description;
-		newTask.DueDate = originTask.DueDate;
-		newTask.ReminderDate = originTask.ReminderDate;
-		newTask.Status = originTask.Status;
-
-		newTask.TaskTags = originTask.TaskTags.Select(originTaskTag => CreateNewTaskTagObject(originTaskTag)).ToList();
-
-		return newTask;
-	}
-
-	private TaskTagModel CreateNewTaskTagObject(TaskTagModel originTaskTag)
-	{
-		var newTaskTag = _taskEntityFactory.CreateTaskTagModel();
-		newTaskTag.TagId = originTaskTag.TagId;
-		newTaskTag.TaskId = originTaskTag.TaskId;
-
-		return newTaskTag;
+		return _taskEntityFactory.CreateTaskModel(originTask);
 	}
 
 	private TodoListModel CreateNewTodoListObject(TodoListModel originTodoList, ICollection<TaskModel> newTasks)
 	{
-		TodoListModel newTodoList = _todoListFactory.CreateModel();
-		newTodoList.Title = originTodoList.Title + "###";
-		newTodoList.Tasks = newTasks;
-		newTodoList.UserId = originTodoList.UserId;
-
-		return newTodoList;
+		return _todoListFactory.CreateModel(originTodoList, newTasks);
 	}
 
 	#endregion
 
 
 	///<inheritdoc />
-	public async Task<ICollection<TodoListModel>> GetAllWithDetailsAsync(string userId)
+	public IQueryable<TodoListModel> GetAllWithDetails(string userId)
 	{
-		ExceptionsService.WhenArgumentIsNullOrEmptyThrow(nameof(GetAllWithDetailsAsync), userId, nameof(userId), _logger);
+		ExceptionsService.WhenArgumentIsNullOrEmptyThrow(nameof(GetAllWithDetails), userId, nameof(userId), _logger);
 
-		ICollection<TodoListModel> allTodoListsWithDetails = await _dbContext
+		IQueryable<TodoListModel> allTodoListsWithDetails = _dbContext
 			.Set<TodoListModel>()
+			.AsQueryable()
 			.Where(todoList => todoList.UserId == userId)
-			.Include(todoList => todoList.Tasks)
-			.ToListAsync();
+			.Include(todoList => todoList.Tasks);
 
 		return allTodoListsWithDetails;
 	}
 
 	///<inheritdoc />
-	public async Task<ICollection<TodoListModel>> GetAllWithDetailsByFilterAsync(Expression<Func<TodoListModel, bool>> filter)
+	public IQueryable<TodoListModel> GetAllWithDetailsByFilter(Expression<Func<TodoListModel, bool>> filter)
 	{
-		ExceptionsService.WhenFilterExpressionIsNullThrow(filter, nameof(GetAllWithDetailsByFilterAsync), _logger);
+		ExceptionsService.WhenFilterExpressionIsNullThrow(filter, nameof(GetAllWithDetailsByFilter), _logger);
 
-		ICollection<TodoListModel> entities = await _dbContext
+		IQueryable<TodoListModel> entities = _dbContext
 			.Set<TodoListModel>()
+			.AsQueryable()
 			.Where(filter)
-			.Include(todoList => todoList.Tasks)
-			.ToListAsync();
+			.Include(todoList => todoList.Tasks);
 
 		return entities;
 	}

@@ -51,5 +51,5 @@ public interface IUserRepository : IGenericRepository<UserModel>
 	/// </summary>
 	/// <param name="userId">Targeted User id.</param>
 	/// <returns>Set of roles of targeted User.</returns>
-	Task<ICollection<RoleModel>> GetRolesAsync(string userId);
+	IQueryable<RoleModel> GetRoles(string userId);
 }

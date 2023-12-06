@@ -48,4 +48,27 @@ public class TaskEntityFactory : ITaskEntityFactory
 	{
 		return new TaskTagModel();
 	}
+
+	public TaskTagModel CreateTaskTagModel(TaskTagModel originTaskTag)
+	{
+		return new TaskTagModel()
+		{
+			TagId = originTaskTag.TagId,
+			TaskId = originTaskTag.TaskId
+		};
+	}
+
+	public TaskModel CreateTaskModel(TaskModel originTask)
+	{
+		return new TaskModel()
+		{
+			UserId = originTask.UserId,
+			Title = originTask.Title,
+			Description = originTask.Description,
+			DueDate = originTask.DueDate,
+			ReminderDate = originTask.ReminderDate,
+			Status = originTask.Status,
+			TaskTags = originTask.TaskTags.Select(originTaskTag => CreateTaskTagModel(originTaskTag)).ToList()
+		};
+	}
 }

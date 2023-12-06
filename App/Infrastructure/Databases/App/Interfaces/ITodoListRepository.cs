@@ -19,14 +19,14 @@ public interface ITodoListRepository : IGenericRepository<TodoListModel>
 	/// </summary>
 	/// <param name="userId"></param>
 	/// <returns>All ToDoLists wiith details from Db.</returns>
-	Task<ICollection<TodoListModel>> GetAllWithDetailsAsync(string userId);
+	IQueryable<TodoListModel> GetAllWithDetails(string userId);
 
 	/// <summary>
 	/// Get only those TodoLists with details (where details are related data in other tables) which follow predicate filter.
 	/// </summary>
 	/// <param name="filter"></param>
 	/// <returns></returns>
-	Task<ICollection<TodoListModel>> GetAllWithDetailsByFilterAsync(Expression<Func<TodoListModel, bool>> filter);
+	IQueryable<TodoListModel> GetAllWithDetailsByFilter(Expression<Func<TodoListModel, bool>> filter);
 
 	/// <summary>
 	/// Duplicate a whole, specifc ToDoList with details in Db (where details are related data in other tables).

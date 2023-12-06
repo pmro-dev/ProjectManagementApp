@@ -4,6 +4,7 @@ using Project_UnitTests.Services;
 using App.Features.Tasks.Common.Interfaces;
 using App.Features.Tasks.Common.Models;
 using App.Features.Tasks.Common.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace Project_UnitTests;
 
@@ -12,7 +13,10 @@ namespace Project_UnitTests;
 /// </summary>
 public class DatabaseOperationsTests : BaseOperationsSetup
 {
-    private static void ModifyTaskData(TaskModel taskToUpdate)
+	private static readonly Index lastIndex = ^1;
+	private static readonly int _firstIndex = 0;
+
+	private static void ModifyTaskData(TaskModel taskToUpdate)
     {
         taskToUpdate.Title = "New Title Set";
         taskToUpdate.Description = "Lorem Ipsum lorem lorem ipsum Lorem Ipsum lorem lorem ipsum";
@@ -26,7 +30,7 @@ public class DatabaseOperationsTests : BaseOperationsSetup
 
         return new TaskModel()
         {
-            Id = TasksCollection.Last().Id + IndexValueOne,
+            Id = TasksCollection[lastIndex].Id + IndexValueOne,
             Title = taskTitle + TitleSuffix,
             Description = taskDescription,
             DueDate = taskDueDate,
@@ -99,7 +103,7 @@ public class DatabaseOperationsTests : BaseOperationsSetup
     {
         var assertTasks = TasksCollection.ToList();
 
-        var resultTasks = await TaskRepo.GetAllAsync();
+        var resultTasks = await TaskRepo.GetAll().ToListAsync();
 
         CollectionAssert.AreEqual(assertTasks, resultTasks);
     }
@@ -122,7 +126,7 @@ public class DatabaseOperationsTests : BaseOperationsSetup
     {
         var assertTasks = TasksCollection.Where(t => t.Status.ToString() == taskStatus.ToString());
 
-        var tasksFromDb = await TaskRepo.GetAllByFilterAsync(t => t.Status.ToString() == taskStatus.ToString());
+        var tasksFromDb = await TaskRepo.GetAllByFilter(t => t.Status.ToString() == taskStatus.ToString()).ToListAsync();
 
         CollectionAssert.AreEqual(assertTasks, tasksFromDb);
     }
@@ -134,7 +138,7 @@ public class DatabaseOperationsTests : BaseOperationsSetup
     [TestCase(-5, typeof(ArgumentOutOfRangeException))]
     public async Task AttemptToGetTaskByInvalidIdShouldThrowException(object id, Type exceptionType)
     {
-        int taskIdForMockSetup = TasksCollection.First().Id;
+        int taskIdForMockSetup = TasksCollection[_firstIndex].Id;
 
         await GenericMockSetup<ITaskModel, TaskModel>.SetupGetEntity(taskIdForMockSetup, DbSetTaskMock, TasksCollection);
 
@@ -155,7 +159,7 @@ public class DatabaseOperationsTests : BaseOperationsSetup
     [Test]
     public async Task UpdateTaskShouldSucceed()
     {
-        int taskToUpdateId = TasksCollection.First().Id;
+        int taskToUpdateId = TasksCollection[_firstIndex].Id;
         await GenericMockSetup<ITaskModel, TaskModel>.SetupGetEntity(taskToUpdateId, DbSetTaskMock, TasksCollection);
         TaskModel taskToUpdate = await TaskRepo.GetAsync(taskToUpdateId) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
@@ -238,13 +242,15 @@ public class DatabaseOperationsTests : BaseOperationsSetup
     [Test]
     public async Task AddTasksAsRangeShouldSucceed()
     {
-        var tasksRange = TasksDataService.NewTasksRange.Cast<TaskModel>().ToList();
+        var tasksRange = TasksDataService.NewTasksRange.ToList();
 
         await GenericMockSetup<ITaskModel, TaskModel>.SetupAddEntitiesRange(tasksRange, TasksCollection, DbSetTaskMock, DbOperationsToExecute);
         await TaskRepo.AddRangeAsync(tasksRange);
         await DataUnitOfWork.SaveChangesAsync();
 
-        var tasksFromDb = await TaskRepo.GetAllByFilterAsync(t => t.Title.Contains(TasksDataService.TaskRangeSuffix));
+        var tasksFromDb = await TaskRepo
+            .GetAllByFilter(t => t.Title.Contains(TasksDataService.TaskRangeSuffix))
+            .ToListAsync();
 
         Assert.Multiple(() =>
         {

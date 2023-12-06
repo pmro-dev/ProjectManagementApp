@@ -5,6 +5,7 @@ using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Interfaces;
 using App.Infrastructure.Databases.App.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Features.Boards.Briefly;
 
@@ -30,7 +31,10 @@ public class GetBoardBrieflyHandler : IRequestHandler<GetBoardBrieflyQuery, GetB
 
 	public async Task<GetBoardBrieflyQueryResponse> Handle(GetBoardBrieflyQuery request, CancellationToken cancellationToken)
 	{
-		ICollection<TodoListModel> todoListModels = await _todoListRepository.GetAllWithDetailsByFilterAsync(todoList => todoList.UserId == _signedInUserId);
+		ICollection<TodoListModel> todoListModels = await _todoListRepository
+			.GetAllWithDetailsByFilter(todoList => todoList.UserId == _signedInUserId)
+			.ToListAsync();
+
 		var todoListDtos = _todoListMapper.TransferToDto(todoListModels);
 		var data = _boardsVMFactory.CreateBrieflyOutputVM(todoListDtos);
 

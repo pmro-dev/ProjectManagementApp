@@ -6,6 +6,7 @@ using App.Features.Users.Common.Roles.Models;
 using App.Infrastructure.Databases.Identity.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace App.Features.Users.Common;
@@ -86,7 +87,7 @@ public class UserService : IUserService
 		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(SetRolesForUserPrincipleAsync), userId, nameof(userId), _logger);
 		ExceptionsService.WhenIdentityIsNullThrowCritical(identity, _logger);
 
-		IEnumerable<RoleModel> userRoles = await _userRepository.GetRolesAsync(userId);
+		IEnumerable<RoleModel> userRoles = await _userRepository.GetRoles(userId).ToListAsync();
 		IEnumerable<string> userRolesNames = userRoles.Select(userRole => userRole.Name).ToList();
 
 		foreach (string roleName in userRolesNames)

@@ -4,7 +4,6 @@ using App.Infrastructure.Databases.App.Interfaces;
 using App.Features.TodoLists.Create.Models;
 using App.Common.Helpers;
 using App.Features.Exceptions.Throw;
-using App.Features.TodoLists.Delete;
 
 namespace App.Features.TodoLists.Create;
 

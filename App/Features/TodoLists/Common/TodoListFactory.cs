@@ -1,4 +1,5 @@
-﻿using App.Features.TodoLists.Common.Interfaces;
+﻿using App.Features.Tasks.Common.Models;
+using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
 using App.Features.TodoLists.Edit.Models;
 
@@ -19,5 +20,15 @@ public class TodoListFactory : ITodoListFactory
 	public TodoListEditInputDto CreateEditInputDto()
 	{
 		return new TodoListEditInputDto();
+	}
+
+	public TodoListModel CreateModel(TodoListModel originModel, ICollection<TaskModel> originTasks)
+	{
+		return new TodoListModel()
+		{
+			Title = originModel.Title + "###",
+			Tasks = originTasks,
+			UserId = originModel.UserId
+		};
 	}
 }

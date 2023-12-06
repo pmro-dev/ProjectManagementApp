@@ -1,4 +1,5 @@
 using App.Features.TodoLists.Common.Models;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using Project_UnitTests.Data;
 using Project_UnitTests.Helpers;
@@ -113,7 +114,7 @@ public class DbOperationsForTodoListTests : BaseOperationsSetup
 	public async Task GetAllTodoListsWithDetailsShouldSucceed()
 	{
 		var expected = TodoListsCollection;
-		var actual = await TodoListRepo.GetAllWithDetailsAsync(AdminId);
+		var actual = await TodoListRepo.GetAllWithDetails(AdminId).ToListAsync();
 
 		Assert.Multiple(() =>
 		{
@@ -137,7 +138,9 @@ public class DbOperationsForTodoListTests : BaseOperationsSetup
 	{
 		var assertTodoLists = TodoListsCollection.ToList();
 
-		var resultTodoLists = await TodoListRepo.GetAllAsync();
+		var resultTodoLists = await TodoListRepo
+			.GetAll()
+			.ToListAsync();
 
 		CollectionAssert.AreEqual(assertTodoLists, resultTodoLists);
 	}
@@ -160,7 +163,9 @@ public class DbOperationsForTodoListTests : BaseOperationsSetup
 	{
 		var assertTodoLists = TodoListsCollection.Where(t => t.Tasks.Count == tasksCount);
 
-		var todoListsFromDb = await TodoListRepo.GetAllByFilterAsync(t => t.Tasks.Count == tasksCount);
+		var todoListsFromDb = await TodoListRepo
+			.GetAllByFilter(t => t.Tasks.Count == tasksCount)
+			.ToListAsync();
 
 		CollectionAssert.AreEqual(assertTodoLists, todoListsFromDb);
 	}
@@ -296,7 +301,9 @@ public class DbOperationsForTodoListTests : BaseOperationsSetup
 		await TodoListRepo.AddRangeAsync(todoListsRange);
 		await DataUnitOfWork.SaveChangesAsync();
 
-		var todoListsFromDb = await TodoListRepo.GetAllByFilterAsync(t => t.Title.Contains(TodoListsDataService.ListRangeSuffix));
+		var todoListsFromDb = await TodoListRepo
+			.GetAllByFilter(t => t.Title.Contains(TodoListsDataService.ListRangeSuffix))
+			.ToListAsync();
 
 		Assert.That(todoListsFromDb, Has.Count.EqualTo(todoListsRange.Count));
 	}

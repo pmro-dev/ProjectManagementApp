@@ -11,4 +11,5 @@ public interface ITaskEntityFactory : IBaseEntityFactory<TaskModel, TaskDto>, IT
 {
 	TaskDeleteInputDto CreateDeleteInputDto();
 	TaskEditInputDto CreateEditInputDto();
+	TaskModel CreateTaskModel(TaskModel originTask);
 }

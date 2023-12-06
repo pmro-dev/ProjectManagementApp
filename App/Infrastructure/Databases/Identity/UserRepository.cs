@@ -71,15 +71,15 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 	}
 
 	///<inheritdoc />
-	public async Task<ICollection<RoleModel>> GetRolesAsync(string userId)
+	public IQueryable<RoleModel> GetRoles(string userId)
 	{
-		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetRolesAsync), userId, nameof(userId), _logger);
+		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetRoles), userId, nameof(userId), _logger);
 
-		ICollection<RoleModel> userRoles = await _identityContext
+		IQueryable<RoleModel> userRoles = _identityContext
 			.Set<UserRoleModel>()
+			.AsQueryable()
 			.Where(user => user.UserId == userId)
-			.Select(user => user.Role)
-			.ToListAsync();
+			.Select(user => user.Role);
 
 		return userRoles;
 	}

@@ -5,6 +5,7 @@ using App.Features.TodoLists.Common.Interfaces;
 using App.Features.Users.Common.Interfaces;
 using App.Infrastructure.Databases.App.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Features.Boards.All;
 
@@ -29,7 +30,10 @@ public class GetBoardAllHandler : IRequestHandler<GetBoardAllQuery, GetBoardAllQ
 
 	public async Task<GetBoardAllQueryResponse> Handle(GetBoardAllQuery request, CancellationToken cancellationToken)
 	{
-		var todoListModels = await _todoListRepository.GetAllWithDetailsAsync(_signedInUserId);
+		var todoListModels = await _todoListRepository
+			.GetAllWithDetails(_signedInUserId)
+			.ToListAsync();
+
 		var todoListDtos = _todoListMapper.TransferToDto(todoListModels);
 		BoardAllOutputVM data = _boardsVMFactory.CreateAllOutputVM(todoListDtos);
 
