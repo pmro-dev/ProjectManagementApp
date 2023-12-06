@@ -30,7 +30,7 @@ public class IdentityDbSeeder : IIdentityDbSeeder
 
 	private static readonly UserModel AdminInitModel = new()
 	{
-		UserId = AdminId,
+		Id = AdminId,
 		FirstName = AdminUser,
 		LastName = AdminUser,
 		NameIdentifier = AdminId,
@@ -152,7 +152,7 @@ public class IdentityDbSeeder : IIdentityDbSeeder
 		{
 			UserRoleModel roleModel = new(adminUser, roleForAdmin)
 			{
-				UserId = adminUser.UserId,
+				UserId = adminUser.Id,
 				RoleId = roleForAdmin.Id,
 			};
 

@@ -12,7 +12,7 @@ public interface IUserModel : IEquatable<UserModel>
     string NameIdentifier { get; set; }
     string Password { get; set; }
     string Provider { get; set; }
-    string UserId { get; set; }
+    string Id { get; set; }
     string Username { get; set; }
     ICollection<UserRoleModel> UserRoles { get; set; }
 }

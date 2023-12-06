@@ -27,7 +27,7 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 
 		UserModel? userWithDetailsFromDb = await _identityContext
 			.Set<UserModel>()
-			.Where(user => user.UserId == userId)
+			.Where(user => user.Id == userId)
 			.Include(user => user.UserRoles)
 			.SingleOrDefaultAsync();
 
