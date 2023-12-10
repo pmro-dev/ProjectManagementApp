@@ -12,26 +12,26 @@ public interface ITodoListRepository : IGenericRepository<TodoListModel>
 	/// </summary>
 	/// <param name="todoListId">Targeted list id.</param>
 	/// <returns>ToDoList with details from Db.</returns>
-	Task<TodoListModel?> GetWithDetailsAsync(int todoListId);
+	Task<TodoListModel?> GetSingleWithDetailsAsync(int todoListId);
 
 	/// <summary>
 	/// Get All ToDoLists with details (where details are related data in other tables).
 	/// </summary>
 	/// <param name="userId"></param>
 	/// <returns>All ToDoLists wiith details from Db.</returns>
-	Task<ICollection<TodoListModel>> GetAllWithDetailsAsync(string userId);
+	Task<ICollection<TodoListModel>> GetMultipleWithDetailsAsync(string userId);
 
 	/// <summary>
 	/// Get only those TodoLists with details (where details are related data in other tables) which follow predicate filter.
 	/// </summary>
 	/// <param name="filter"></param>
 	/// <returns></returns>
-	Task<ICollection<TodoListModel>> GetAllWithDetailsByFilterAsync(Expression<Func<TodoListModel, bool>> filter);
+	Task<ICollection<TodoListModel>> GetMultipleWithDetailsByFilterAsync(Expression<Func<TodoListModel, bool>> filter);
 
 	/// <summary>
 	/// Duplicate a whole, specifc ToDoList with details in Db (where details are related data in other tables).
 	/// </summary>
 	/// <param name="todoListId">Targeted list id.</param>
 	/// <returns></returns>
-	Task DuplicateWithDetailsAsync(int todoListId);
+	Task DuplicateSingleWithDetailsAsync(int todoListId);
 }

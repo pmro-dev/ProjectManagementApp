@@ -32,15 +32,15 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	}
 
 	///<inheritdoc />
-	public async Task DuplicateWithDetailsAsync(int todoListId)
+	public async Task DuplicateSingleWithDetailsAsync(int todoListId)
 	{
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DuplicateWithDetailsAsync), todoListId, nameof(todoListId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DuplicateSingleWithDetailsAsync), todoListId, nameof(todoListId), _logger);
 
 		TodoListModel? todoListWithDetails = await _dbSet
 			.Where(todoList => todoList.Id == todoListId)
 			.Include(todoList => todoList.Tasks)
 			.SingleOrDefaultAsync();
-		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(DuplicateWithDetailsAsync), todoListWithDetails, _logger, todoListId);
+		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(DuplicateSingleWithDetailsAsync), todoListWithDetails, _logger, todoListId);
 
 		var duplicatedTasks = todoListWithDetails!.Tasks.Select(originTask => CreateNewTaskObject(originTask)).ToList();
 		var duplicatedTodoList = CreateNewTodoListObject(todoListWithDetails, duplicatedTasks);
@@ -89,9 +89,9 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 
 
 	///<inheritdoc />
-	public async Task<ICollection<TodoListModel>> GetAllWithDetailsAsync(string userId)
+	public async Task<ICollection<TodoListModel>> GetMultipleWithDetailsAsync(string userId)
 	{
-		ExceptionsService.WhenArgumentIsNullOrEmptyThrow(nameof(GetAllWithDetailsAsync), userId, nameof(userId), _logger);
+		ExceptionsService.WhenArgumentIsNullOrEmptyThrow(nameof(GetMultipleWithDetailsAsync), userId, nameof(userId), _logger);
 
 		ICollection<TodoListModel> allTodoListsWithDetails = await _dbSet
 			.Where(todoList => todoList.UserId == userId)
@@ -102,9 +102,9 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	}
 
 	///<inheritdoc />
-	public async Task<ICollection<TodoListModel>> GetAllWithDetailsByFilterAsync(Expression<Func<TodoListModel, bool>> filter)
+	public async Task<ICollection<TodoListModel>> GetMultipleWithDetailsByFilterAsync(Expression<Func<TodoListModel, bool>> filter)
 	{
-		ExceptionsService.WhenFilterExpressionIsNullThrow(filter, nameof(GetAllWithDetailsByFilterAsync), _logger);
+		ExceptionsService.WhenFilterExpressionIsNullThrow(filter, nameof(GetMultipleWithDetailsByFilterAsync), _logger);
 
 		ICollection<TodoListModel> entities = await _dbSet
 			.Where(filter)
@@ -115,9 +115,9 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	}
 
 	///<inheritdoc />
-	public async Task<TodoListModel?> GetWithDetailsAsync(int todoListId)
+	public async Task<TodoListModel?> GetSingleWithDetailsAsync(int todoListId)
 	{
-		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetWithDetailsAsync), todoListId, nameof(todoListId), _logger);
+		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetSingleWithDetailsAsync), todoListId, nameof(todoListId), _logger);
 
 		TodoListModel? todoListFromDb = await _dbSet
 			.Where(todoList => todoList.Id == todoListId)

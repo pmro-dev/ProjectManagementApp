@@ -21,7 +21,7 @@ public class DuplicateTodoListHandler : IRequestHandler<DuplicateTodoListCommand
 	{
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Duplicate), request.TodoListId, nameof(request.TodoListId), _logger);
 
-		await _todoListRepository.DuplicateWithDetailsAsync(request.TodoListId);
+		await _todoListRepository.DuplicateSingleWithDetailsAsync(request.TodoListId);
 		await _dataUnitOfWork.SaveChangesAsync();
 
 		return new DuplicateTodoListCommandResponse();

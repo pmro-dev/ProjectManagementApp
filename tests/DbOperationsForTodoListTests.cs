@@ -91,7 +91,7 @@ public class DbOperationsForTodoListTests : BaseOperationsSetup
 
 		await GenericMockSetup<TodoListModel, TodoListModel>.SetupGetEntity(assertTodoList.Id, DbSetTodoListMock, TodoListsCollection);
 
-		var resultTodoList = await TodoListRepo.GetWithDetailsAsync(assertTodoList.Id) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
+		var resultTodoList = await TodoListRepo.GetSingleWithDetailsAsync(assertTodoList.Id) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
 		Assert.Multiple(() =>
 		{
@@ -105,7 +105,7 @@ public class DbOperationsForTodoListTests : BaseOperationsSetup
 	public Task AttemptToGetTodoListWithDetailsByInvalidIdShouldThrowException(int invalidTodoListId)
 	{
 		return Task.Run(() =>
-			Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await TodoListRepo.GetWithDetailsAsync(invalidTodoListId))
+			Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await TodoListRepo.GetSingleWithDetailsAsync(invalidTodoListId))
 		);
 	}
 
@@ -113,7 +113,7 @@ public class DbOperationsForTodoListTests : BaseOperationsSetup
 	public async Task GetAllTodoListsWithDetailsShouldSucceed()
 	{
 		var expected = TodoListsCollection;
-		var actual = await TodoListRepo.GetAllWithDetailsAsync(AdminId);
+		var actual = await TodoListRepo.GetMultipleWithDetailsAsync(AdminId);
 
 		Assert.Multiple(() =>
 		{
@@ -226,12 +226,12 @@ public class DbOperationsForTodoListTests : BaseOperationsSetup
 		int todoListToUpdateId = TodoListsCollection[FirstIndex].Id;
 		var newTasks = TasksData.NewTasksRange;
 
-		TodoListModel? todoListToUpdate = await TodoListRepo.GetWithDetailsAsync(todoListToUpdateId) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
+		TodoListModel? todoListToUpdate = await TodoListRepo.GetSingleWithDetailsAsync(todoListToUpdateId) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
 		todoListToUpdate.Tasks = newTasks;
 		TodoListRepo.Update(todoListToUpdate);
 		await DataUnitOfWork.SaveChangesAsync();
 
-		TodoListModel? updatedTodoList = await TodoListRepo.GetWithDetailsAsync(todoListToUpdateId) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
+		TodoListModel? updatedTodoList = await TodoListRepo.GetSingleWithDetailsAsync(todoListToUpdateId) ?? throw new AssertionException("Cannot find targeted TodoList in seeded data for unit tests.");
 
 		CollectionAssert.AreEqual(updatedTodoList.Tasks, newTasks);
 	}
