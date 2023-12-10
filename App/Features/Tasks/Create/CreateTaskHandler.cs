@@ -37,7 +37,7 @@ public class CreateTaskHandler :
 
 	public async Task<CreateTaskQueryResponse> Handle(CreateTaskQuery request, CancellationToken cancellationToken)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(CreateTaskQuery), request.TodoListId, nameof(request.TodoListId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(CreateTaskQuery), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		TodoListModel? todoListModel = await _todoListRepository.GetAsync(request.TodoListId);
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(CreateTaskQuery), todoListModel, _logger, request.TodoListId);

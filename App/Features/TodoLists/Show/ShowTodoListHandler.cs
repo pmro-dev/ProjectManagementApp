@@ -25,7 +25,7 @@ public class ShowTodoListHandler : IRequestHandler<ShowTodoListQuery, ShowTodoLi
 
 	public async Task<ShowTodoListQueryResponse> Handle(ShowTodoListQuery request, CancellationToken cancellationToken)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(ShowTodoListQuery), request.TodoListId, nameof(request.TodoListId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTodoListQuery), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		TodoListModel? todoListDbModel = await _todoListRepository.GetWithDetailsAsync(request.TodoListId);
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(ShowTodoListQuery), todoListDbModel, _logger, request.TodoListId);

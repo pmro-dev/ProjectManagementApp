@@ -34,8 +34,8 @@ public class DeleteTaskHandler :
 
 	public async Task<DeleteTaskQueryResponse> Handle(DeleteTaskQuery request, CancellationToken cancellationToken)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Delete), request.TodoListId, nameof(request.TodoListId), _logger);
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Delete), request.TaskId, nameof(request.TaskId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Delete), request.TodoListId, nameof(request.TodoListId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Delete), request.TaskId, nameof(request.TaskId), _logger);
 
 		TaskModel? taskToDeleteModel = await _taskRepository.GetAsync(request.TaskId);
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(DeleteTaskQuery), taskToDeleteModel, _logger, request.TaskId.ToString());
@@ -55,8 +55,8 @@ public class DeleteTaskHandler :
 	{
 		TaskDeleteInputVM inputVM = request.InputVM;
 
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(DeleteTaskCommand), inputVM.TodoListId, nameof(inputVM.TodoListId), _logger);
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(DeleteTaskCommand), inputVM.Id, nameof(inputVM.Id), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeleteTaskCommand), inputVM.TodoListId, nameof(inputVM.TodoListId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeleteTaskCommand), inputVM.Id, nameof(inputVM.Id), _logger);
 
 		TaskDeleteInputDto taskInputDto = _taskEntityMapper.TransferToDto(inputVM);
 

@@ -28,7 +28,7 @@ public class EditTodoListHandler :
 
 	public async Task<EditTodoListQueryResponse> Handle(EditTodoListQuery request, CancellationToken cancellationToken)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), request.TodoListId, nameof(request.TodoListId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		TodoListModel? todoListModel = await _todoListRepository.GetAsync(request.TodoListId);
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(EditTodoListQuery), todoListModel, _logger, request.TodoListId);
@@ -43,7 +43,7 @@ public class EditTodoListHandler :
 
 	public async Task<EditTodoListCommandResponse> Handle(EditTodoListCommand request, CancellationToken cancellationToken)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), request.TodoListId, nameof(request.TodoListId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), request.TodoListId, nameof(request.TodoListId), _logger);
 		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(Edit), request.RouteTodoListId, nameof(request.RouteTodoListId), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		if (await _todoListRepository.ContainsAny(todoList => todoList.Title == request.InputVM.Title && todoList.UserId == request.InputVM.UserId))

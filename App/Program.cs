@@ -111,15 +111,12 @@ public static class Program
 			options.ViewLocationExpanders.Add((new ViewLocationExpander(expanderLogger)));
 		});
 
-
 		var app = builder.Build();
-
 
 		if (app.Environment.IsDevelopment())
 			app.UseDeveloperExceptionPage();
 		else
 			app.UseExceptionHandler(CustomRoutes.ExceptionHandlerPath);
-
 
 		app.SetupPipeline();
 

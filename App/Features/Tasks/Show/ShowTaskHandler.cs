@@ -24,8 +24,8 @@ public class ShowTaskHandler : IRequestHandler<ShowTaskQuery, ShowTaskQueryRespo
 
 	public async Task<ShowTaskQueryResponse> Handle(ShowTaskQuery request, CancellationToken cancellationToken)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(ShowTaskQuery), request.TodoListId, nameof(request.TodoListId), _logger);
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(ShowTaskQuery), request.TaskId, nameof(request.TaskId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTaskQuery), request.TodoListId, nameof(request.TodoListId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTaskQuery), request.TaskId, nameof(request.TaskId), _logger);
 
 		TaskModel? taskModel = await _taskRepository.GetAsync(request.TaskId);
 

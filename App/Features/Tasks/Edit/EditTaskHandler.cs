@@ -38,8 +38,8 @@ public class EditTaskHandler :
 
 	public async Task<EditTaskQueryResponse> Handle(EditTaskQuery request, CancellationToken cancellationToken)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), request.TodoListId, nameof(request.TodoListId), _logger);
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), request.TaskId, nameof(request.TaskId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), request.TodoListId, nameof(request.TodoListId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), request.TaskId, nameof(request.TaskId), _logger);
 
 		TaskModel? taskModel = await _taskRepository.GetAsync(request.TaskId);
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(EditTaskQuery), taskModel, _logger, request.TaskId);

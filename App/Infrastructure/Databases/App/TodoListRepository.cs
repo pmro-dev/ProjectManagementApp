@@ -18,6 +18,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	private readonly ILogger<TodoListRepository> _logger;
 	private readonly ITaskEntityFactory _taskEntityFactory;
 	private readonly ITodoListFactory _todoListFactory;
+	private readonly DbSet<TodoListModel> _dbSet;
 
 	public TodoListRepository(CustomAppDbContext dbContext, ILogger<TodoListRepository> logger, ITaskEntityFactory taskEntityFactory, ITodoListFactory todoListFactory)
 		: base(dbContext, logger)
@@ -26,15 +27,16 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 		_logger = logger;
 		_taskEntityFactory = taskEntityFactory;
 		_todoListFactory = todoListFactory;
+
+		_dbSet = _dbContext.Set<TodoListModel>();
 	}
 
 	///<inheritdoc />
 	public async Task DuplicateWithDetailsAsync(int todoListId)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(DuplicateWithDetailsAsync), todoListId, nameof(todoListId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DuplicateWithDetailsAsync), todoListId, nameof(todoListId), _logger);
 
-		TodoListModel? todoListWithDetails = await _dbContext
-			.Set<TodoListModel>()
+		TodoListModel? todoListWithDetails = await _dbSet
 			.Where(todoList => todoList.Id == todoListId)
 			.Include(todoList => todoList.Tasks)
 			.SingleOrDefaultAsync();
@@ -91,8 +93,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	{
 		ExceptionsService.WhenArgumentIsNullOrEmptyThrow(nameof(GetAllWithDetailsAsync), userId, nameof(userId), _logger);
 
-		ICollection<TodoListModel> allTodoListsWithDetails = await _dbContext
-			.Set<TodoListModel>()
+		ICollection<TodoListModel> allTodoListsWithDetails = await _dbSet
 			.Where(todoList => todoList.UserId == userId)
 			.Include(todoList => todoList.Tasks)
 			.ToListAsync();
@@ -105,8 +106,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	{
 		ExceptionsService.WhenFilterExpressionIsNullThrow(filter, nameof(GetAllWithDetailsByFilterAsync), _logger);
 
-		ICollection<TodoListModel> entities = await _dbContext
-			.Set<TodoListModel>()
+		ICollection<TodoListModel> entities = await _dbSet
 			.Where(filter)
 			.Include(todoList => todoList.Tasks)
 			.ToListAsync();
@@ -119,8 +119,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	{
 		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetWithDetailsAsync), todoListId, nameof(todoListId), _logger);
 
-		TodoListModel? todoListFromDb = await _dbContext
-			.Set<TodoListModel>()
+		TodoListModel? todoListFromDb = await _dbSet
 			.Where(todoList => todoList.Id == todoListId)
 			.Include(todoList => todoList.Tasks)
 			.SingleOrDefaultAsync();

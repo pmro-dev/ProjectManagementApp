@@ -10,7 +10,7 @@ namespace App.Features.Boards.Briefly.Models;
 /// </summary>
 public class BoardBrieflyOutputVM : IBoardBrieflyOutputVM
 {
-    private readonly int ValueIndicatesEquality = 0;
+    private readonly int ValueIndicatedEquality = 0;
 
     public ICollection<TodoListDto> TodoLists { get; set; } = new List<TodoListDto>();
 
@@ -57,7 +57,7 @@ public class BoardBrieflyOutputVM : IBoardBrieflyOutputVM
 
     private bool IsSameDate(string fistDate, string secondDate)
     {
-        return fistDate.CompareTo(secondDate) == ValueIndicatesEquality;
+        return fistDate.CompareTo(secondDate) == ValueIndicatedEquality;
     }
 
     private static bool IsTaskNotCompleted(TaskDto task)

@@ -5,7 +5,7 @@ using Moq;
 
 namespace Project_UnitTests.Helpers;
 
-public static class GenericMockSetup<IModel, TModel> where TModel : class, IModel where IModel : IBasicModelAbstract
+public static class GenericMockSetup<IModel, TModel> where TModel : class, IModel where IModel : IBasicModelWithTitle
 {
     public static void SetupDbContextSaveChangesAsync(Mock<CustomAppDbContext> AppDbContextMock, List<Action> DbOperationsToExecute)
     {

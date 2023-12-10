@@ -24,7 +24,7 @@ public class GetBoardAllHandler : IRequestHandler<GetBoardAllQuery, GetBoardAllQ
 		_todoListRepository = todoListRepository;
 		_signedInUserId = userService.GetSignedInUserId();
 
-		ExceptionsService.WhenPropertyIsNullOrEmptyThrow("Constructing " + nameof(GetBoardAllHandler), _signedInUserId, nameof(_signedInUserId), _logger);
+		ExceptionsService.WhenPropertyIsNullOrEmptyThrow(nameof(GetBoardAllHandler), _signedInUserId, nameof(_signedInUserId), _logger);
 	}
 
 	public async Task<GetBoardAllQueryResponse> Handle(GetBoardAllQuery request, CancellationToken cancellationToken)

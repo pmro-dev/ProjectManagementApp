@@ -5,25 +5,17 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using static App.Common.Views.ViewsConsts;
 using static App.Common.ControllersConsts;
-using App.Features.TodoLists.Common.Interfaces;
-using App.Infrastructure.Databases.App.Interfaces;
 using App.Features.TodoLists.Edit;
 using App.Features.TodoLists.Create;
 using App.Common.Helpers;
-using App.Common.ViewModels;
-using App.Features.TodoLists.Common.Models;
 using MediatR;
 using App.Features.TodoLists.Show;
 using App.Features.TodoLists.Duplicate;
-using App.Features.Tasks.Edit;
 using App.Features.TodoLists.Delete;
 using App.Features.TodoLists.Create.Models;
 using App.Features.TodoLists.Edit.Models;
 using App.Common;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Azure;
 using App.Features.Exceptions.Throw;
-
 
 #endregion
 
@@ -104,7 +96,7 @@ public class TodoListController : Controller
 	[Route(CustomRoutes.TodoListEditRoute)]
 	public async Task<IActionResult> Edit(int id)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), id, nameof(id), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), id, nameof(id), _logger);
 		ModelStateHelper.SetModelStateErrorMessageWhenSomeHappendOnPost(ModelState, TempData);
 
 		var response = await _mediator.Send(new EditTodoListQuery(id));
@@ -130,8 +122,8 @@ public class TodoListController : Controller
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> Edit(int id, [FromForm] TodoListEditInputVM inputVM)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), id, nameof(id), _logger);
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), inputVM.Id, nameof(inputVM.Id), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), id, nameof(id), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), inputVM.Id, nameof(inputVM.Id), _logger);
 
 		var response = await _mediator.Send(new EditTodoListCommand(inputVM, id));
 
@@ -163,7 +155,7 @@ public class TodoListController : Controller
 	[Route(CustomRoutes.TodoListDeleteRoute)]
 	public async Task<IActionResult> Delete(int id)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Delete), id, nameof(id), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Delete), id, nameof(id), _logger);
 
 		var response = await _mediator.Send(new DeleteTodoListQuery(id));
 
@@ -187,7 +179,7 @@ public class TodoListController : Controller
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> DeletePost(int id)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(DeletePost), id, nameof(id), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeletePost), id, nameof(id), _logger);
 
 		var response = await _mediator.Send(new DeleteTodoListCommand(id));
 
@@ -206,7 +198,7 @@ public class TodoListController : Controller
 	[Route(CustomRoutes.TodoListDuplicateRoute)]
 	public async Task<IActionResult> Duplicate(int todoListId)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Duplicate), todoListId, nameof(todoListId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Duplicate), todoListId, nameof(todoListId), _logger);
 
 		var response = await _mediator.Send(new DuplicateTodoListCommand(todoListId));
 
@@ -227,7 +219,7 @@ public class TodoListController : Controller
 	[Route(CustomRoutes.TodoListShowRoute)]
 	public async Task<IActionResult> Show(int id, DateTime? filterDueDate)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Show), id, nameof(id), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), id, nameof(id), _logger);
 
 		var response = await _mediator.Send(new ShowTodoListQuery(id, filterDueDate));
 

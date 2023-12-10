@@ -7,7 +7,7 @@ using static App.Features.Tasks.Common.Helpers.TaskStatusHelper;
 
 namespace App.Features.Tasks.Common.Interfaces;
 
-public interface ITaskModel : IBasicModelAbstract
+public interface ITaskModel : IBasicModelWithTitle
 {
 	private const string DataFormat = AttributesHelper.DataFormat;
 

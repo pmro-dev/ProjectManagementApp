@@ -10,7 +10,8 @@ namespace App.Features.Exceptions.Throw;
 /// </summary>
 public static class ExceptionsService
 {
-	public const int _IdBottomBoundry = 0;
+	public const int IdBottomBoundry = 0;
+	public const int BoundryValueOne = 1;
 
 	public static void WhenRoleNotFoundInDbThrow(string operationName, IRoleModel? roleModel, string roleName, ILogger logger)
 	{
@@ -110,7 +111,7 @@ public static class ExceptionsService
 		}
 		else if (argument is int idInt)
 		{
-			if (idInt < _IdBottomBoundry)
+			if (idInt < IdBottomBoundry)
 			{
 				logger.LogError(ExceptionsMessages.LogOutOfRange, operationName, argumentName, argument);
 				throw new ArgumentOutOfRangeException(argumentName, ExceptionsMessages.ProvidedArgumentIsOutOfRange);
@@ -152,17 +153,14 @@ public static class ExceptionsService
 	/// Throws and Logs exception when id value is lower than bottom boundry.
 	/// </summary>
 	/// <param name="operationName">Name of operation during exception could occured.</param>
-	/// <param name="id">Id value.</param>
-	/// <param name="paramName">Name of method's param.</param>
-	/// <param name="bottomBoundry">The Lower allowed value for id.</param>
 	/// <param name="logger">Logger from class that invokes method.</param>
 	/// <exception cref="ArgumentOutOfRangeException">Occured when id is lower than bottom boundry.</exception>
-	public static void WhenIdLowerThanBottomBoundryThrowError(string operationName, int id, string paramName, ILogger logger)
+	public static void WhenValueLowerThanBottomBoundryThrow(string operationName, int value, string paramName, ILogger logger)
 	{
-		if (id < _IdBottomBoundry)
+		if (IsValueLessThanBottomBoundry(value, IdBottomBoundry))
 		{
-			logger.LogError(ExceptionsMessages.LogOutOfRange, operationName, paramName, id);
-			throw new ArgumentOutOfRangeException(paramName, id, ExceptionsMessages.ArgumentOutOfRange(operationName, nameof(id), id));
+			logger.LogError(ExceptionsMessages.LogOutOfRange, operationName, paramName, value);
+			throw new ArgumentOutOfRangeException(paramName, value, ExceptionsMessages.ArgumentOutOfRange(operationName, nameof(value), value));
 		}
 	}
 
@@ -203,5 +201,13 @@ public static class ExceptionsService
 			logger.LogCritical(ExceptionsMessages.LogConflictBetweenEntitiesIds, operationName, firstId, firstIdName, secondId, secondIdName);
 			throw new InvalidOperationException(ExceptionsMessages.ConflictBetweenEntitiesIds(operationName, firstId, firstIdName, secondId, secondIdName));
 		}
+	}
+
+	private static bool IsValueLessThanBottomBoundry(int value, int bottomBoundry)
+	{
+		if (value < bottomBoundry)
+			return true;
+
+		return false;
 	}
 }

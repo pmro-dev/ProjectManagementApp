@@ -59,8 +59,8 @@ public class TaskController : Controller
 	[Route(CustomRoutes.TaskShowRoute)]
 	public async Task<IActionResult> Show([FromRoute] int routeTodoListId, [FromRoute] int routeTaskId)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Show), routeTodoListId, nameof(routeTodoListId), _logger);
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Show), routeTaskId, nameof(routeTaskId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), routeTodoListId, nameof(routeTodoListId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), routeTaskId, nameof(routeTaskId), _logger);
 
 		var response = await _mediator.Send(new ShowTaskQuery(routeTodoListId, routeTaskId));
 
@@ -83,7 +83,7 @@ public class TaskController : Controller
 	[Route(CustomRoutes.CreateTaskRoute)]
 	public async Task<IActionResult> Create(int id)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Create), id, nameof(id), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Create), id, nameof(id), _logger);
 		ModelStateHelper.SetModelStateErrorMessageWhenSomeHappendOnPost(ModelState, TempData);
 
 		var respond = await _mediator.Send(new CreateTaskQuery(id));
@@ -109,7 +109,7 @@ public class TaskController : Controller
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> Create(int todoListId, TaskCreateInputVM inputVM)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Create), todoListId, nameof(todoListId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Create), todoListId, nameof(todoListId), _logger);
 
 		var response = await _mediator.Send(new CreateTaskCommand(inputVM, todoListId));
 
@@ -139,8 +139,8 @@ public class TaskController : Controller
 	[Route(CustomRoutes.TaskEditGetRoute)]
 	public async Task<IActionResult> Edit([FromRoute] int todoListId, [FromRoute] int taskId)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), todoListId, nameof(todoListId), _logger);
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Edit), taskId, nameof(taskId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), todoListId, nameof(todoListId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), taskId, nameof(taskId), _logger);
 		ModelStateHelper.SetModelStateErrorMessageWhenSomeHappendOnPost(ModelState, TempData);
 
 		var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -166,8 +166,8 @@ public class TaskController : Controller
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> EditPost([FromForm] TaskEditInputVM inputVM)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(EditPost), inputVM.TodoListId, nameof(inputVM.TodoListId), _logger);
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(EditPost), inputVM.Id, nameof(inputVM.Id), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(EditPost), inputVM.TodoListId, nameof(inputVM.TodoListId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(EditPost), inputVM.Id, nameof(inputVM.Id), _logger);
 
 		var response = await _mediator.Send(new EditTaskCommand(inputVM));
 
@@ -200,8 +200,8 @@ public class TaskController : Controller
 	[Route(CustomRoutes.TaskDeleteGetRoute)]
 	public async Task<IActionResult> Delete(int todoListId, int taskId)
 	{
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Delete), todoListId, nameof(todoListId), _logger);
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(Delete), taskId, nameof(taskId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Delete), todoListId, nameof(todoListId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Delete), taskId, nameof(taskId), _logger);
 
 		var response = await _mediator.Send(new DeleteTaskQuery(todoListId, taskId));
 
@@ -228,8 +228,8 @@ public class TaskController : Controller
 	{
 		TaskDeleteInputVM deleteInputVM = deleteWrapperVM.InputVM;
 
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(DeletePost), deleteInputVM.TodoListId, nameof(deleteInputVM.TodoListId), _logger);
-		ExceptionsService.WhenIdLowerThanBottomBoundryThrowError(nameof(DeletePost), deleteInputVM.Id, nameof(deleteInputVM.Id), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeletePost), deleteInputVM.TodoListId, nameof(deleteInputVM.TodoListId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeletePost), deleteInputVM.Id, nameof(deleteInputVM.Id), _logger);
 
 		var response = await _mediator.Send(new DeleteTaskCommand(deleteInputVM));
 
