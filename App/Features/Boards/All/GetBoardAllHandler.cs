@@ -29,7 +29,14 @@ public class GetBoardAllHandler : IRequestHandler<GetBoardAllQuery, GetBoardAllQ
 
 	public async Task<GetBoardAllQueryResponse> Handle(GetBoardAllQuery request, CancellationToken cancellationToken)
 	{
-		var todoListModels = await _todoListRepository.GetAllWithDetailsAsync(_signedInUserId);
+		var todoListModels = await _todoListRepository
+			.GetMultipleWithDetailsAsync(
+				_signedInUserId,
+				t => t.Title,
+				request.PageNumber,
+				request.ItemsPerPageCount
+			);
+
 		var todoListDtos = _todoListMapper.TransferToDto(todoListModels);
 		BoardAllOutputVM data = _boardsVMFactory.CreateAllOutputVM(todoListDtos);
 

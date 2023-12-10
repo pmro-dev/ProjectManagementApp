@@ -1,8 +1,12 @@
 ﻿@using App.Features.Boards.Briefly.Models;
+@using App.Features.TodoLists.Common.Models
 @model BoardBrieflyOutputVM
 
 @{
 	Layout = SharedViews.DefaultLayout;
+	TodoListDto todoList;
+	int allTasksCount;
+	int completedTasksCount;
 }
 
 <h1>To Do Lists Briefly</h1>
@@ -12,11 +16,15 @@
 	<a asp-action=@BoardsCtrl.AllAction class="btn btn-dark" >Show All - Details</a>
 </p>
 
-@foreach (var todoList in Model.TodoLists)
+@foreach (var tuplet in Model.TupleDtos)
 {
+	todoList = tuplet.Item1;
+	completedTasksCount = tuplet.Item2;
+	allTasksCount = tuplet.Item3;
+
 	<div class="card border-primary mb-3 align-items-center" style="max-width: 25rem;">
 		<div class="card-header" style="font-weight: 600; width: 100%; background-color: #7866e2; color: white;">
-			
+
 			@Html.DisplayFor(modelItem => todoList.Title)
 
 			@if (Model.IsReminderForToday(todoList))
@@ -28,11 +36,11 @@
 		</div>
 		<div style="width: 100%; text-align: center;">
 			<img src="\list-puzzle.jpg" class="card-img-top" style="width: 30%;" alt="...">
-			<p class="card-text" style="font-size: 11px; font-weight: 500;">@Model.GetNumberOfCompletedTasks(todoList) / @Model.GetNumberOfAllTasks(todoList) tasks</p>
+			<p class="card-text" style="font-size: 11px; font-weight: 500;">@completedTasksCount / @allTasksCount tasks</p>
 
 		</div>
 		<div class="card-body">
-			<a asp-action=@TodoListCtrl.ShowAction asp-controller=@TodoListCtrl.Name asp-route-id="@todoList.Id" class="btn btn-outline-primary btn-sm">Details</a>
+			<a asp-action=@TodoListCtrl.ShowAction asp-controller=@TodoListCtrl.Name asp-route-id="@todoList.Id" asp-route-pageNumber="1" asp-route-itemsPerPage="2" class="btn btn-outline-primary btn-sm">Details</a>
 			<a asp-action=@TodoListCtrl.EditAction asp-controller=@TodoListCtrl.Name asp-route-id="@todoList.Id" class="btn btn-outline-warning btn-sm">Edit</a>
 			<button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal+@todoList.Id">Delete</button>
 			<a asp-action=@TodoListCtrl.DuplicateAction asp-controller=@TodoListCtrl.Name asp-route-todoListId="@todoList.Id" class="btn btn-outline-info btn-sm">Duplicate</a>

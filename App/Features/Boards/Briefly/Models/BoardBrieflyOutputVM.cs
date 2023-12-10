@@ -12,27 +12,7 @@ public class BoardBrieflyOutputVM : IBoardBrieflyOutputVM
 {
     private readonly int ValueIndicatedEquality = 0;
 
-    public ICollection<TodoListDto> TodoLists { get; set; } = new List<TodoListDto>();
-
-    /// <summary>
-    /// Get completed tasks count.
-    /// </summary>
-    /// <param name="todoList">Targeted ToDoList oobject.</param>
-    /// <returns>Completed Tasks number.</returns>
-    public int GetNumberOfCompletedTasks(TodoListDto todoList)
-    {
-        return todoList.Tasks.Count(t => t.Status == TaskStatusHelper.TaskStatusType.Completed);
-    }
-
-    /// <summary>
-    /// Get number of all tasks in a specific ToDoList.
-    /// </summary>
-    /// <param name="todoList">Targeted ToDoList oobject.</param>
-    /// <returns>All Tasks count in a specific ToDoList.</returns>
-    public int GetNumberOfAllTasks(TodoListDto todoList)
-    {
-        return todoList.Tasks.Count;
-    }
+    public List<Tuple<TodoListDto, int, int>> TupleDtos { get; set; } = new();
 
     /// <summary>
     /// Check that a specific ToDoList has any Task's reminder set for a present day.

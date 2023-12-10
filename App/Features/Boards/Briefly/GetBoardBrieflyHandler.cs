@@ -1,10 +1,10 @@
 ﻿using App.Features.Boards.Common.Interfaces;
 using App.Features.Exceptions.Throw;
-using App.Features.TodoLists.Common.Interfaces;
-using App.Features.TodoLists.Common.Models;
+using App.Features.Tasks.Common.Helpers;
 using App.Features.Users.Common.Interfaces;
 using App.Infrastructure.Databases.App.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Features.Boards.Briefly;
 
@@ -12,28 +12,42 @@ public class GetBoardBrieflyHandler : IRequestHandler<GetBoardBrieflyQuery, GetB
 {
 	private readonly ILogger<GetBoardBrieflyHandler> _logger;
 	private readonly IBoardViewModelsFactory _boardsVMFactory;
-	private readonly ITodoListMapper _todoListMapper;
 	private readonly ITodoListRepository _todoListRepository;
 	private readonly string _signedInUserId;
 
-	public GetBoardBrieflyHandler(IBoardViewModelsFactory boardsVMFactory, ITodoListMapper todoListMapper, ITodoListRepository todoListRepository, 
-		IUserService userService, ILogger<GetBoardBrieflyHandler> logger)
+	public GetBoardBrieflyHandler(IBoardViewModelsFactory boardsVMFactory, ITodoListRepository todoListRepository, IUserService userService, 
+		ILogger<GetBoardBrieflyHandler> logger)
 	{
 		_logger = logger;
 		_boardsVMFactory = boardsVMFactory;
-		_todoListMapper = todoListMapper;
 		_todoListRepository = todoListRepository;
 		_signedInUserId = userService.GetSignedInUserId();
 
-		ExceptionsService.WhenPropertyIsNullOrEmptyThrow("Constructing " + nameof(GetBoardBrieflyHandler), _signedInUserId, nameof(_signedInUserId), _logger);
+		ExceptionsService.WhenPropertyIsNullOrEmptyThrow(nameof(GetBoardBrieflyHandler), _signedInUserId, nameof(_signedInUserId), _logger);
 	}
 
 	public async Task<GetBoardBrieflyQueryResponse> Handle(GetBoardBrieflyQuery request, CancellationToken cancellationToken)
 	{
-		ICollection<TodoListModel> todoListModels = await _todoListRepository.GetAllWithDetailsByFilterAsync(todoList => todoList.UserId == _signedInUserId);
-		var todoListDtos = _todoListMapper.TransferToDto(todoListModels);
-		var data = _boardsVMFactory.CreateBrieflyOutputVM(todoListDtos);
+		var paginatedTodoListsQuery = _todoListRepository
+			.GetMultipleByFilter(todoList =>
+				todoList.UserId == _signedInUserId,
+				todoList => todoList.Title,
+				request.PageNumber,
+				request.ItemsPerPageCount);
 
+		var extendedOfTasksCountsQuery = paginatedTodoListsQuery.Select(todoList =>
+			Tuple.Create(
+				todoList,
+				todoList.Tasks.Count(task => 
+					task.Status == TaskStatusHelper.TaskStatusType.Completed),
+				todoList.Tasks.Count
+			));
+
+		var tuples = await extendedOfTasksCountsQuery.ToListAsync();
+		var tuplesDto = TupleBrieflyMapper.MapToDto(tuples);
+
+		var data = _boardsVMFactory.CreateBrieflyOutputVM(tuplesDto);
+		
 		return new GetBoardBrieflyQueryResponse(data);
 	}
 }

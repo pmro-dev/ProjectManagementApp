@@ -217,11 +217,11 @@ public class TodoListController : Controller
 	/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
 	[HttpGet]
 	[Route(CustomRoutes.TodoListShowRoute)]
-	public async Task<IActionResult> Show(int id, DateTime? filterDueDate)
+	public async Task<IActionResult> Show(int id, DateTime? filterDueDate, int pageNumber, int itemsPerPage)
 	{
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), id, nameof(id), _logger);
 
-		var response = await _mediator.Send(new ShowTodoListQuery(id, filterDueDate));
+		var response = await _mediator.Send(new ShowTodoListQuery(id, filterDueDate, pageNumber, itemsPerPage));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
 			return View(TodoListViews.Show, response.Data);

@@ -7,11 +7,15 @@ public class ShowTodoListQuery : IRequest<ShowTodoListQueryResponse>
 {
 	public int TodoListId { get; }
 	public DateTime? FilterDueDate { get; }
+	public int PageNumber { get; }
+	public int ItemsPerPageCount { get; }
 
-	public ShowTodoListQuery(int todoListId, DateTime? filterDueDate)
+	public ShowTodoListQuery(int todoListId, DateTime? filterDueDate, int pageNumber, int itemsPerPageCount)
 	{
 		TodoListId = todoListId;
 		FilterDueDate = filterDueDate;
+		ItemsPerPageCount = itemsPerPageCount;
+		PageNumber = pageNumber;
 	}
 }
 

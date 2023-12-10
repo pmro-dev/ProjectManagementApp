@@ -6,6 +6,6 @@ namespace App.Features.Boards.Common.Interfaces;
 
 public interface IBoardViewModelsFactory
 {
-    public BoardBrieflyOutputVM CreateBrieflyOutputVM(ICollection<TodoListDto> todolistDto);
+    public BoardBrieflyOutputVM CreateBrieflyOutputVM(List<Tuple<TodoListDto, int, int>> tupleDtos);
     public BoardAllOutputVM CreateAllOutputVM(ICollection<TodoListDto> todolistDto);
 }

@@ -15,11 +15,11 @@ public class BoardViewModelsFactory : IBoardViewModelsFactory
 		};
 	}
 
-	public BoardBrieflyOutputVM CreateBrieflyOutputVM(ICollection<TodoListDto> todolistDto)
+	public BoardBrieflyOutputVM CreateBrieflyOutputVM(List<Tuple<TodoListDto, int, int>> tupletDtosList)
 	{
 		return new BoardBrieflyOutputVM()
 		{
-			TodoLists = todolistDto
+			TupleDtos = tupletDtosList
 		};
 	}
 }

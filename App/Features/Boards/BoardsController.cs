@@ -1,6 +1,7 @@
 ﻿using App.Common;
 using App.Features.Boards.All;
 using App.Features.Boards.Briefly;
+using App.Features.Exceptions.Throw;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,14 @@ namespace App.Features.Boards;
 public class BoardsController : Controller
 {
 	private readonly IMediator _mediator;
+	private readonly ILogger<BoardsController> _logger;
+	private const int firstPageNumber = 1;
+	private const int defaultItemsPerPageCount = 5;
 
-	public BoardsController(IMediator mediator)
+	public BoardsController(IMediator mediator, ILogger<BoardsController> logger)
 	{
 		_mediator = mediator;
+		_logger = logger;
 	}
 
 	/// <summary>
@@ -23,9 +28,15 @@ public class BoardsController : Controller
 	[HttpGet]
 	[Route(CustomRoutes.MainBoardRoute)]
 	[Authorize]
-	public async Task<IActionResult> Briefly()
+	public async Task<IActionResult> Briefly(int? pageNumber, int? itemsPerPageCount)
 	{
-		var result = await _mediator.Send(new GetBoardBrieflyQuery());
+		int pageNumberTemp = pageNumber ?? firstPageNumber;
+		int itemsPerPageCountTemp = itemsPerPageCount ?? defaultItemsPerPageCount;
+
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Briefly), pageNumberTemp, nameof(pageNumberTemp), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Briefly), itemsPerPageCountTemp, nameof(itemsPerPageCountTemp), _logger);
+
+		var result = await _mediator.Send(new GetBoardBrieflyQuery(pageNumberTemp, itemsPerPageCountTemp));
 
 		if (result.StatusCode is StatusCodes.Status200OK)
 			return View(result.Data);
@@ -43,9 +54,15 @@ public class BoardsController : Controller
 	/// </returns>
 	[HttpGet]
 	[Route(CustomRoutes.BoardAllRoute)]
-	public async Task<IActionResult> All()
+	public async Task<IActionResult> All(int? pageNumber, int? itemsPerPageCount)
 	{
-		var result = await _mediator.Send(new GetBoardAllQuery());
+		int pageNumberTemp = pageNumber ?? firstPageNumber;
+		int itemsPerPageCountTemp = itemsPerPageCount ?? defaultItemsPerPageCount;
+
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Briefly), pageNumberTemp, nameof(pageNumberTemp), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Briefly), itemsPerPageCountTemp, nameof(itemsPerPageCountTemp), _logger);
+
+		var result = await _mediator.Send(new GetBoardAllQuery(pageNumberTemp, itemsPerPageCountTemp));
 
 		if (result.StatusCode is StatusCodes.Status200OK)
 			return View(result.Data);
