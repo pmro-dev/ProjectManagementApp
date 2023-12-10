@@ -1,4 +1,5 @@
 ﻿using App.Features.Exceptions.Throw;
+using App.Features.Pagination;
 using App.Infrastructure.Databases.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -53,7 +54,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 	public async Task<TEntity?> GetByFilterAsync(Expression<Func<TEntity, bool>> filter)
 	{
 		ExceptionsService.WhenFilterExpressionIsNullThrow(filter, nameof(GetByFilterAsync), _logger);
-	
+
 		return await _dbSet.SingleOrDefaultAsync(filter);
 	}
 
@@ -90,5 +91,28 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 		}
 
 		return await _dbSet.AnyAsync(predicate);
+	}
+
+	public async Task<ICollection<TEntity>> GetAllAsync(Expression<Func<TEntity, object>> orderBySelector, int pageNumber, int itemsPerPageCount)
+	{
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(GetAllAsync), pageNumber, nameof(pageNumber), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(GetAllAsync), itemsPerPageCount, nameof(itemsPerPageCount), _logger);
+
+		var baseSource = _dbSet;
+		var paginatedSource = baseSource.UsePagination(orderBySelector, pageNumber, itemsPerPageCount, _logger);
+
+		return await paginatedSource.ToListAsync();
+	}
+
+	public async Task<ICollection<TEntity>> GetAllByFilterAsync(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, object>> orderBySelector, int pageNumber, int itemsPerPageCount)
+	{
+		ExceptionsService.WhenFilterExpressionIsNullThrow(filter, nameof(GetAllByFilterAsync), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(GetAllByFilterAsync), pageNumber, nameof(pageNumber), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(GetAllByFilterAsync), itemsPerPageCount, nameof(itemsPerPageCount), _logger);
+
+		var baseSource = _dbSet.Where(filter);
+		var paginatedSource = baseSource.UsePagination(orderBySelector, pageNumber, itemsPerPageCount, _logger);
+
+		return await paginatedSource.ToListAsync();
 	}
 }

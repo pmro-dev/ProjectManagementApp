@@ -6,7 +6,7 @@ namespace App.Infrastructure.Databases.Common.Interfaces;
 /// Generic class for T type repository.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public interface IGenericRepository<T> where T : class
+public interface IGenericRepository<T> : IGenericRepositoryPagination<T> where T : class
 {
 	/// <summary>
 	/// Add entity to Db by repository.
