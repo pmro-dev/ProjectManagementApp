@@ -1,4 +1,5 @@
 ﻿using App.Features.Exceptions.Throw;
+using App.Features.Pagination;
 using App.Features.Tasks.Common.Interfaces;
 using App.Features.Tasks.Common.Models;
 using App.Features.Tasks.Common.TaskTags.Common;
@@ -125,5 +126,56 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 			.SingleOrDefaultAsync();
 
 		return todoListFromDb;
+	}
+
+	public async Task<TodoListModel?> GetSingleWithDetailsAsync(int todoListId, int pageNumber, int itemsPerPageCount)
+	{
+		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetSingleWithDetailsAsync), todoListId, nameof(todoListId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(GetSingleWithDetailsAsync), pageNumber, nameof(pageNumber), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(GetSingleWithDetailsAsync), itemsPerPageCount, nameof(itemsPerPageCount), _logger);
+
+		int skipAmount = PaginationHelper.CountItemsToSkip(pageNumber, itemsPerPageCount, _logger);
+
+		var query = _dbSet
+			.Where(todoList => todoList.Id == todoListId)
+			.Include(todoList => todoList.Tasks
+				.Skip(skipAmount)
+				.Take(itemsPerPageCount));
+
+		var todoList = await query.SingleOrDefaultAsync();
+		return todoList;
+	}
+
+	public async Task<ICollection<TodoListModel>> GetMultipleWithDetailsAsync(string userId, Expression<Func<TodoListModel, object>> orderBySelector, int pageNumber, int itemsPerPageCount)
+	{
+		ExceptionsService.WhenArgumentIsNullOrEmptyThrow(nameof(GetMultipleWithDetailsAsync), userId, nameof(userId), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(GetMultipleWithDetailsAsync), pageNumber, nameof(pageNumber), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(GetMultipleWithDetailsAsync), itemsPerPageCount, nameof(itemsPerPageCount), _logger);
+
+		int skipAmount = PaginationHelper.CountItemsToSkip(pageNumber, itemsPerPageCount, _logger);
+
+		IQueryable<TodoListModel> query = _dbSet
+					.Where(todoList => todoList.UserId == userId)
+					.Include(todoList => todoList.Tasks)
+					.OrderBy(orderBySelector)
+					.Skip(skipAmount)
+					.Take(itemsPerPageCount);
+
+		return await query.ToListAsync();
+	}
+
+	public IQueryable<TodoListModel> GetMultipleByFilter(Expression<Func<TodoListModel, bool>> filter, Expression<Func<TodoListModel, object>> orderBySelector, int pageNumber, int itemsPerPageCount)
+	{
+		ExceptionsService.WhenFilterExpressionIsNullThrow(filter, nameof(GetMultipleWithDetailsByFilterAsync), _logger);
+
+		int skipAmount = PaginationHelper.CountItemsToSkip(pageNumber, itemsPerPageCount, _logger);
+
+		var query = _dbSet
+			.Where(filter)
+			.OrderBy(orderBySelector)
+			.Skip(skipAmount)
+			.Take(itemsPerPageCount);
+
+		return query;
 	}
 }

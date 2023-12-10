@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 namespace App.Infrastructure.Databases.App.Interfaces;
 
 ///<inheritdoc />
-public interface ITodoListRepository : IGenericRepository<TodoListModel>
+public interface ITodoListRepository : IGenericRepository<TodoListModel>, ITodoListRepositoryPagination
 {
 	/// <summary>
 	/// Get a specific ToDoList with details (where details are related data in other tables).
