@@ -32,9 +32,10 @@ public class GetBoardAllHandler : IRequestHandler<GetBoardAllQuery, GetBoardAllQ
 		var todoListModels = await _todoListRepository
 			.GetMultipleWithDetailsAsync(
 				_signedInUserId,
-				t => t.Title,
 				request.PageNumber,
-				request.ItemsPerPageCount
+				request.ItemsPerPageCount,
+				request.OrderBySelector,
+				request.OrderDetailsBySelector
 			);
 
 		var todoListDtos = _todoListMapper.TransferToDto(todoListModels);

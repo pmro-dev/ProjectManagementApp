@@ -128,7 +128,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 		return todoListFromDb;
 	}
 
-	public async Task<TodoListModel?> GetSingleWithDetailsAsync(int todoListId, int pageNumber, int itemsPerPageCount)
+	public async Task<TodoListModel?> GetSingleWithDetailsAsync(int todoListId, Func<TaskModel, object> orderDetailsBySelector, int pageNumber, int itemsPerPageCount)
 	{
 		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetSingleWithDetailsAsync), todoListId, nameof(todoListId), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(GetSingleWithDetailsAsync), pageNumber, nameof(pageNumber), _logger);
@@ -139,6 +139,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 		var query = _dbSet
 			.Where(todoList => todoList.Id == todoListId)
 			.Include(todoList => todoList.Tasks
+				.OrderBy(orderDetailsBySelector)
 				.Skip(skipAmount)
 				.Take(itemsPerPageCount));
 
@@ -146,7 +147,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 		return todoList;
 	}
 
-	public async Task<ICollection<TodoListModel>> GetMultipleWithDetailsAsync(string userId, Expression<Func<TodoListModel, object>> orderBySelector, int pageNumber, int itemsPerPageCount)
+	public async Task<ICollection<TodoListModel>> GetMultipleWithDetailsAsync(string userId, int pageNumber, int itemsPerPageCount, Expression<Func<TodoListModel, object>> orderBySelector, Expression<Func<TaskModel, object>> orderDetailsBySelector)
 	{
 		ExceptionsService.WhenArgumentIsNullOrEmptyThrow(nameof(GetMultipleWithDetailsAsync), userId, nameof(userId), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(GetMultipleWithDetailsAsync), pageNumber, nameof(pageNumber), _logger);
@@ -156,7 +157,8 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 
 		IQueryable<TodoListModel> query = _dbSet
 					.Where(todoList => todoList.UserId == userId)
-					.Include(todoList => todoList.Tasks)
+					.Include(todoList => todoList.Tasks.AsQueryable()
+						.OrderBy(orderDetailsBySelector))
 					.OrderBy(orderBySelector)
 					.Skip(skipAmount)
 					.Take(itemsPerPageCount);

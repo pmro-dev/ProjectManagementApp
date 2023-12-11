@@ -36,7 +36,7 @@ public class BoardsController : Controller
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Briefly), pageNumberTemp, nameof(pageNumberTemp), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Briefly), itemsPerPageCountTemp, nameof(itemsPerPageCountTemp), _logger);
 
-		var result = await _mediator.Send(new GetBoardBrieflyQuery(pageNumberTemp, itemsPerPageCountTemp));
+		var result = await _mediator.Send(new GetBoardBrieflyQuery(pageNumberTemp, itemsPerPageCountTemp, todoList => todoList.Title));
 
 		if (result.StatusCode is StatusCodes.Status200OK)
 			return View(result.Data);
@@ -62,7 +62,7 @@ public class BoardsController : Controller
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Briefly), pageNumberTemp, nameof(pageNumberTemp), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Briefly), itemsPerPageCountTemp, nameof(itemsPerPageCountTemp), _logger);
 
-		var result = await _mediator.Send(new GetBoardAllQuery(pageNumberTemp, itemsPerPageCountTemp));
+		var result = await _mediator.Send(new GetBoardAllQuery(pageNumberTemp, itemsPerPageCountTemp, todoList => todoList.Title, task => task.DueDate));
 
 		if (result.StatusCode is StatusCodes.Status200OK)
 			return View(result.Data);

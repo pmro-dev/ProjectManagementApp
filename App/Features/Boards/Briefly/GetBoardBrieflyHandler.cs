@@ -31,7 +31,7 @@ public class GetBoardBrieflyHandler : IRequestHandler<GetBoardBrieflyQuery, GetB
 		var paginatedTodoListsQuery = _todoListRepository
 			.GetMultipleByFilter(todoList =>
 				todoList.UserId == _signedInUserId,
-				todoList => todoList.Title,
+				request.OrderBySelector,
 				request.PageNumber,
 				request.ItemsPerPageCount);
 
