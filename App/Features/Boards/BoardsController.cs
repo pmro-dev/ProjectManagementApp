@@ -12,8 +12,6 @@ public class BoardsController : Controller
 {
 	private readonly IMediator _mediator;
 	private readonly ILogger<BoardsController> _logger;
-	private const int firstPageNumber = 1;
-	private const int defaultItemsPerPageCount = 5;
 
 	public BoardsController(IMediator mediator, ILogger<BoardsController> logger)
 	{
@@ -30,8 +28,8 @@ public class BoardsController : Controller
 	[Authorize]
 	public async Task<IActionResult> Briefly(int? pageNumber, int? itemsPerPageCount)
 	{
-		int pageNumberTemp = pageNumber ?? firstPageNumber;
-		int itemsPerPageCountTemp = itemsPerPageCount ?? defaultItemsPerPageCount;
+		int pageNumberTemp = pageNumber ?? ControllersConsts.FirstPageNumber;
+		int itemsPerPageCountTemp = itemsPerPageCount ?? ControllersConsts.DefaultItemsPerPageCount;
 
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Briefly), pageNumberTemp, nameof(pageNumberTemp), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Briefly), itemsPerPageCountTemp, nameof(itemsPerPageCountTemp), _logger);
@@ -56,8 +54,8 @@ public class BoardsController : Controller
 	[Route(CustomRoutes.BoardAllRoute)]
 	public async Task<IActionResult> All(int? pageNumber, int? itemsPerPageCount)
 	{
-		int pageNumberTemp = pageNumber ?? firstPageNumber;
-		int itemsPerPageCountTemp = itemsPerPageCount ?? defaultItemsPerPageCount;
+		int pageNumberTemp = pageNumber ?? ControllersConsts.FirstPageNumber;
+		int itemsPerPageCountTemp = itemsPerPageCount ?? ControllersConsts.DefaultItemsPerPageCount;
 
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Briefly), pageNumberTemp, nameof(pageNumberTemp), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Briefly), itemsPerPageCountTemp, nameof(itemsPerPageCountTemp), _logger);

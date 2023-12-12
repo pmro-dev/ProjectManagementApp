@@ -8,6 +8,9 @@ namespace App.Common;
 
 public static class ControllersConsts
 {
+	public const int FirstPageNumber = 1;
+	public const int DefaultItemsPerPageCount = 5;
+
 	public readonly struct ExceptionCtrl
 	{
 		public const string Name = "Exception";

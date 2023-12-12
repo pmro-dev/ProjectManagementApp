@@ -7,11 +7,11 @@ namespace App.Features.Boards.Common;
 
 public class BoardViewModelsFactory : IBoardViewModelsFactory
 {
-	public BoardAllOutputVM CreateAllOutputVM(ICollection<TodoListDto> todolistDto)
+	public BoardAllOutputVM CreateAllOutputVM(ICollection<TodoListDto> todolistDtos)
 	{
 		return new BoardAllOutputVM()
 		{
-			TodoLists = todolistDto
+			TodoLists = todolistDtos
 		};
 	}
 

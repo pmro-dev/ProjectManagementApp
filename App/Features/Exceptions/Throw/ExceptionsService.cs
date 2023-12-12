@@ -157,7 +157,12 @@ public static class ExceptionsService
 	/// <exception cref="ArgumentOutOfRangeException">Occured when id is lower than bottom boundry.</exception>
 	public static void WhenValueLowerThanBottomBoundryThrow(string operationName, int value, string paramName, ILogger logger)
 	{
-		if (IsValueLessThanBottomBoundry(value, IdBottomBoundry))
+		if (IsValueLessThanBottomBoundry(value, DefaultBottomBoundry))
+		{
+			logger.LogError(ExceptionsMessages.LogOutOfRange, operationName, paramName, value);
+			throw new ArgumentOutOfRangeException(paramName, value, ExceptionsMessages.ArgumentOutOfRange(operationName, nameof(value), value));
+		}
+	}
 		{
 			logger.LogError(ExceptionsMessages.LogOutOfRange, operationName, paramName, value);
 			throw new ArgumentOutOfRangeException(paramName, value, ExceptionsMessages.ArgumentOutOfRange(operationName, nameof(value), value));
