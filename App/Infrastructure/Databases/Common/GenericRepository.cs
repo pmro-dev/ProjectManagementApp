@@ -115,4 +115,12 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
 		return await paginatedSource.ToListAsync();
 	}
+
+	public async Task<int> CountAsync(Expression<Func<TEntity, bool>>? predicate = null)
+	{
+		if (predicate is null)
+			return await _dbSet.CountAsync();
+
+		return await _dbSet.CountAsync(predicate);
+	}
 }

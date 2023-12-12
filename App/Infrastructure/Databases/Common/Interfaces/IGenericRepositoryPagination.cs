@@ -6,4 +6,5 @@ public interface IGenericRepositoryPagination<TEntity> where TEntity : class
 {
 	Task<ICollection<TEntity>> GetAllAsync(Expression<Func<TEntity, object>> orderBySelector, int pageNumber, int itemsPerPageCount);
 	Task<ICollection<TEntity>> GetAllByFilterAsync(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, object>> orderBySelector, int pageNumber, int itemsPerPageCount);
+	Task<int> CountAsync(Expression<Func<TEntity, bool>>? predicate = null);
 }
