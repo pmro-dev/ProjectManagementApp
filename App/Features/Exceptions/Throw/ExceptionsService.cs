@@ -10,7 +10,7 @@ namespace App.Features.Exceptions.Throw;
 /// </summary>
 public static class ExceptionsService
 {
-	public const int IdBottomBoundry = 0;
+	public const int DefaultBottomBoundry = 0;
 	public const int BoundryValueOne = 1;
 
 	public static void WhenRoleNotFoundInDbThrow(string operationName, IRoleModel? roleModel, string roleName, ILogger logger)
@@ -111,7 +111,7 @@ public static class ExceptionsService
 		}
 		else if (argument is int idInt)
 		{
-			if (idInt < IdBottomBoundry)
+			if (idInt < DefaultBottomBoundry)
 			{
 				logger.LogError(ExceptionsMessages.LogOutOfRange, operationName, argumentName, argument);
 				throw new ArgumentOutOfRangeException(argumentName, ExceptionsMessages.ProvidedArgumentIsOutOfRange);
@@ -149,12 +149,6 @@ public static class ExceptionsService
 		}
 	}
 
-	/// <summary>
-	/// Throws and Logs exception when id value is lower than bottom boundry.
-	/// </summary>
-	/// <param name="operationName">Name of operation during exception could occured.</param>
-	/// <param name="logger">Logger from class that invokes method.</param>
-	/// <exception cref="ArgumentOutOfRangeException">Occured when id is lower than bottom boundry.</exception>
 	public static void WhenValueLowerThanBottomBoundryThrow(string operationName, int value, string paramName, ILogger logger)
 	{
 		if (IsValueLessThanBottomBoundry(value, DefaultBottomBoundry))
@@ -163,6 +157,19 @@ public static class ExceptionsService
 			throw new ArgumentOutOfRangeException(paramName, value, ExceptionsMessages.ArgumentOutOfRange(operationName, nameof(value), value));
 		}
 	}
+
+	public static void WhenValueLowerThanBottomBoundryThrow(string operationName, int value, int bottomBoundry, string paramName, ILogger logger)
+	{
+		if (IsValueLessThanBottomBoundry(value, bottomBoundry))
+		{
+			logger.LogError(ExceptionsMessages.LogOutOfRange, operationName, paramName, value);
+			throw new ArgumentOutOfRangeException(paramName, value, ExceptionsMessages.ArgumentOutOfRange(operationName, nameof(value), value));
+		}
+	}
+
+	public static void WhenValueNotInRangeThrow(string operationName, int value, int startRange, int endRange, string paramName, ILogger logger)
+	{
+		if (value < startRange || value > endRange)
 		{
 			logger.LogError(ExceptionsMessages.LogOutOfRange, operationName, paramName, value);
 			throw new ArgumentOutOfRangeException(paramName, value, ExceptionsMessages.ArgumentOutOfRange(operationName, nameof(value), value));

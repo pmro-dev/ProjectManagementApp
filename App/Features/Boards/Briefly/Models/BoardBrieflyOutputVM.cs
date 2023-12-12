@@ -1,4 +1,5 @@
 ﻿using App.Features.Boards.Briefly.Interfaces;
+using App.Features.Pagination;
 using App.Features.Tasks.Common.Helpers;
 using App.Features.Tasks.Common.Models;
 using App.Features.TodoLists.Common.Models;
@@ -12,14 +13,22 @@ public class BoardBrieflyOutputVM : IBoardBrieflyOutputVM
 {
     private readonly int ValueIndicatedEquality = 0;
 
-    public List<Tuple<TodoListDto, int, int>> TupleDtos { get; set; } = new();
+    public List<Tuple<TodoListDto, int, int>> TupleDtos { get; }
 
-    /// <summary>
-    /// Check that a specific ToDoList has any Task's reminder set for a present day.
-    /// </summary>
-    /// <param name="todoList">Targeted ToDoList object.</param>
-    /// <returns>True when ToDoList has any Task's reminder, otherwise false.</returns>
-    public bool IsReminderForToday(TodoListDto todoList)
+    public PaginationData PaginData { get; }
+
+	public BoardBrieflyOutputVM(List<Tuple<TodoListDto, int, int>> tupleDtos, PaginationData paginData)
+	{
+		TupleDtos = tupleDtos;
+		PaginData = paginData;
+	}
+
+	/// <summary>
+	/// Check that a specific ToDoList has any Task's reminder set for a present day.
+	/// </summary>
+	/// <param name="todoList">Targeted ToDoList object.</param>
+	/// <returns>True when ToDoList has any Task's reminder, otherwise false.</returns>
+	public bool IsReminderForToday(TodoListDto todoList)
     {
         return todoList.Tasks.Any(t =>
         {
