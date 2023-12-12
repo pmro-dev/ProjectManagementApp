@@ -22,6 +22,7 @@ public class EditTaskHandler :
 	private readonly ITaskEntityMapper _taskEntityMapper;
 	private readonly ITodoListMapper _todoListMapper;
 	private readonly ITaskViewModelsFactory _taskViewModelsFactory;
+	private const int SingleItemIndicator = 1;
 
 	public EditTaskHandler(IDataUnitOfWork dataUnitOfWork, ITaskRepository taskRepository, ITodoListRepository todoListRepository,
 		ILogger<TaskController> logger, ITaskEntityMapper taskEntityMapper, ITodoListMapper todoListMapper,
@@ -70,13 +71,13 @@ public class EditTaskHandler :
 	{
 		TaskEditInputDto taskEditInputDto = _taskEntityMapper.TransferToDto(request.InputVM);
 
-		if (await _taskRepository.ContainsAny(task => task.Title == taskEditInputDto.Title && task.UserId == taskEditInputDto.UserId))
-			return new EditTaskCommandResponse(null, ExceptionsMessages.NameTaken, StatusCodesExtension.EntityNameTaken);
-
 		TaskModel? taskDbModel = await _taskRepository.GetAsync(taskEditInputDto.Id);
 
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(EditTaskCommand), taskDbModel, _logger, taskEditInputDto.Id);
 		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(EditTaskCommand), taskDbModel!.Id, nameof(taskDbModel.Id), taskEditInputDto.Id, nameof(taskEditInputDto.Id), _logger);
+
+		if (await _taskRepository.ContainsAny(task => task.Title == taskEditInputDto.Title && task.UserId == taskEditInputDto.UserId && task.Title != taskEditInputDto.Title))
+			return new EditTaskCommandResponse(null, ExceptionsMessages.NameTaken, StatusCodesExtension.EntityNameTaken);
 
 		_taskEntityMapper.UpdateModel(taskDbModel, taskEditInputDto);
 		_taskRepository.Update(taskDbModel);
