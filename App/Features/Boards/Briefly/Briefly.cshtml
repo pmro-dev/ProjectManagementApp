@@ -53,3 +53,40 @@
 	<!-- Delete Modal -->
 	<partial name=@BoardsViews.DeleteModal model="@todoList" />
 }
+
+<p>
+	@if (paginData.AreTherePagesToShow)
+	{
+		<nav aria-label="...">
+			<ul class="pagination">
+
+				@if (paginData.IsCurrentPageFirstPage)
+				{
+					<li class="page-item">
+						<a class="page-link" asp-action="@BoardsCtrl.BrieflyAction" asp-route-pageNumber="@paginData.PreviousPageNumber" asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">Previous</a>
+					</li>
+					<li class="page-item">
+						<a class="page-link" asp-action="@BoardsCtrl.BrieflyAction" asp-route-pageNumber="@paginData.PreviousPageNumber" asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">@paginData.PreviousPageNumber</a>
+					</li>
+				}
+
+				<li class="page-item active">
+					<span class="page-link">
+						@paginData.CurrentPageNumber
+					</span>
+				</li>
+
+				@if (paginData.IsThereNextPage)
+				{
+					<li class="page-item">
+						<a class="page-link" asp-action="@BoardsCtrl.BrieflyAction" asp-route-pageNumber="@paginData.NextPageNumber" asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">@paginData.NextPageNumber</a>
+					</li>
+					<li class="page-item">
+						<a class="page-link" asp-action="@BoardsCtrl.BrieflyAction" asp-route-pageNumber="@paginData.NextPageNumber" asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">Next</a>
+					</li>
+				}
+
+			</ul>
+		</nav>
+	}
+</p>
