@@ -128,7 +128,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 		return todoListFromDb;
 	}
 
-	public async Task<TodoListModel?> GetSingleWithDetailsAsync(int todoListId, Func<TaskModel, object> orderDetailsBySelector, int pageNumber, int itemsPerPageCount)
+	public async Task<TodoListModel?> GetSingleWithDetailsAsync(int todoListId, Expression<Func<TaskModel, object>> orderDetailsBySelector, int pageNumber, int itemsPerPageCount)
 	{
 		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetSingleWithDetailsAsync), todoListId, nameof(todoListId), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(GetSingleWithDetailsAsync), pageNumber, nameof(pageNumber), _logger);
@@ -139,6 +139,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 		var query = _dbSet
 			.Where(todoList => todoList.Id == todoListId)
 			.Include(todoList => todoList.Tasks
+				.AsQueryable()
 				.OrderBy(orderDetailsBySelector)
 				.Skip(skipAmount)
 				.Take(itemsPerPageCount));
