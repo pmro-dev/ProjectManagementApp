@@ -14,4 +14,8 @@ public class DeleteTaskCommand : IRequest<DeleteTaskCommandResponse>
     }
 }
 
-public record DeleteTaskCommandResponse(CustomRouteValues? Data, string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }
+public record DeleteTaskCommandResponse(
+    CustomRouteValues? Data, 
+    string? ErrorMessage = null, 
+    int StatusCode = StatusCodes.Status200OK
+){}

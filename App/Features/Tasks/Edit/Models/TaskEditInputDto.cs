@@ -1,7 +1,7 @@
 ﻿using App.Common.Helpers;
-using App.Features.Tasks.Common.Helpers;
 using App.Features.Tasks.Edit.Interfaces;
 using System.ComponentModel.DataAnnotations;
+using static App.Features.Tasks.Common.Helpers.TaskStatusHelper;
 
 namespace App.Features.Tasks.Edit.Models;
 
@@ -18,7 +18,7 @@ public class TaskEditInputDto : ITaskEditInputDto
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
     public DateTime? ReminderDate { get; set; }
-    public TaskStatusHelper.TaskStatusType Status { get; set; }
+    public TaskStatusType Status { get; set; }
     public int TodoListId { get; set; }
     public string UserId { get; set; } = string.Empty;
 

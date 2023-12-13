@@ -13,4 +13,7 @@ public class LoginUserQuery : IRequest<LoginUserQueryResponse>
 	}
 }
 
-public record LoginUserQueryResponse(string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }
+public record LoginUserQueryResponse(
+	string? ErrorMessage = null, 
+	int StatusCode = StatusCodes.Status200OK
+){}

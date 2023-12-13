@@ -1,4 +1,6 @@
-﻿using App.Features.Users.Authentication.Interfaces;
+﻿using App.Common.Views;
+using App.Features.Exceptions.Throw;
+using App.Features.Users.Authentication.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace App.Features.Users.Authentication;
@@ -16,14 +18,19 @@ public static class AuthenticationWebBuilderExtensions
 	/// <exception cref="ArgumentException">Occurs when Principle object of CookieContext is null.</exception>
 	public static void SetupBasicAuthenticationWithCookie(this WebApplicationBuilder builder)
 	{
+		//TODO try to get service in a different way if possible
 		var cookieService = builder.Services
 			.BuildServiceProvider()
 			.CreateScope().ServiceProvider
 			.GetRequiredService<ICookieService>();
 
+		var logger = new LoggerFactory().CreateLogger<WebApplicationBuilder>();
+
+
 		//TODO add error loggin
 		if (cookieService is null)
 		{
+			logger.LogCritical(ExceptionsMessages.LackOfRequiredService(nameof(SetupBasicAuthenticationWithCookie), nameof(ICookieService)), nameof(SetupBasicAuthenticationWithCookie), nameof(ICookieService));
 			throw new InvalidOperationException();
 		}
 

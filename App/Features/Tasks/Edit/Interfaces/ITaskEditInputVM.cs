@@ -1,6 +1,6 @@
 ﻿using App.Common.Helpers;
-using App.Features.Tasks.Common.Helpers;
 using System.ComponentModel.DataAnnotations;
+using static App.Features.Tasks.Common.Helpers.TaskStatusHelper;
 
 namespace App.Features.Tasks.Edit.Interfaces;
 
@@ -23,7 +23,7 @@ public interface ITaskEditInputVM
 	[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
 	DateTime LastModificationDate { get; set; }
 
-	TaskStatusHelper.TaskStatusType Status { get; set; }
+	TaskStatusType Status { get; set; }
 	int TodoListId { get; set; }
 	string UserId { get; set; }
 }

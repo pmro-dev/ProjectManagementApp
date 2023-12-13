@@ -15,5 +15,9 @@ public class ShowTaskQuery : IRequest<ShowTaskQueryResponse>
 	}
 }
 
-public record ShowTaskQueryResponse(ShowTaskOutputVM? Data, string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }
+public record ShowTaskQueryResponse(
+	ShowTaskOutputVM? Data, 
+	string? ErrorMessage = null, 
+	int StatusCode = StatusCodes.Status200OK
+){}
 

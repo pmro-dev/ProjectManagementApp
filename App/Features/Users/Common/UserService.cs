@@ -46,7 +46,13 @@ public class UserService : IUserService
 
 	public ClaimsPrincipal GetSignedInUser()
 	{
-		var httpContext = _httpContextAccessor.HttpContext ?? throw new ArgumentException("Unable to get current HttpContext - accessor returned null HttpContext object!");
+		var httpContext = _httpContextAccessor.HttpContext;
+
+		if (httpContext is null)
+		{
+			_logger.LogCritical(ExceptionsMessages.LogHttpContextObjectIsNull, nameof(GetSignedInUser));
+			throw new ArgumentException(ExceptionsMessages.HttpContextObjectIsNull(nameof(GetSignedInUser)));
+		}
 
 		ClaimsPrincipal? user = httpContext.User;
 		ExceptionsService.WhenPrincipalIsNullThrowCritical(nameof(GetSignedInUser), user, _logger);

@@ -1,6 +1,5 @@
 ﻿using App.Common.ViewModels;
 using App.Features.Tasks.Common;
-using App.Features.Tasks.Common.Helpers;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
 using App.Features.TodoLists.Create.Models;
@@ -56,14 +55,12 @@ public class TodoListViewModelsFactory : ITodoListViewModelsFactory
 			TasksExpired = tasksExpiredDtos.ToList()
 		};
 
-		var tasksComparer = new TasksComparer();
-
 		var sortingTasksTasks = new Task[]
 		{
-			Task.Run(() => detailsOutputVM.TasksNotCompleted = detailsOutputVM.TasksNotCompleted.OrderBy(t => t, tasksComparer).ToList()),
-			Task.Run(() => detailsOutputVM.TasksForToday = detailsOutputVM.TasksForToday.OrderBy(t => t, tasksComparer).ToList()),
-			Task.Run(() => detailsOutputVM.TasksCompleted = detailsOutputVM.TasksCompleted.OrderBy(t => t, tasksComparer).ToList()),
-			Task.Run(() => detailsOutputVM.TasksExpired = detailsOutputVM.TasksExpired.OrderBy(t => t, tasksComparer).ToList())
+			Task.Run(() => detailsOutputVM.TasksNotCompleted = detailsOutputVM.TasksNotCompleted.OrderBy(t => t.DueDate).ToList()),
+			Task.Run(() => detailsOutputVM.TasksForToday = detailsOutputVM.TasksForToday.OrderBy(t => t.DueDate).ToList()),
+			Task.Run(() => detailsOutputVM.TasksCompleted = detailsOutputVM.TasksCompleted.OrderBy(t => t.DueDate).ToList()),
+			Task.Run(() => detailsOutputVM.TasksExpired = detailsOutputVM.TasksExpired.OrderBy(t => t.DueDate).ToList())
 		};
 
 		Task.WaitAll(sortingTasksTasks);

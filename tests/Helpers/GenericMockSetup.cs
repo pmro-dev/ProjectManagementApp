@@ -7,6 +7,8 @@ namespace Project_UnitTests.Helpers;
 
 public static class GenericMockSetup<IModel, TModel> where TModel : class, IModel where IModel : IBasicModelWithTitle
 {
+    private const int _valueIndicatedSuccess = 1;
+
     public static void SetupDbContextSaveChangesAsync(Mock<CustomAppDbContext> AppDbContextMock, List<Action> DbOperationsToExecute)
     {
         AppDbContextMock.Setup(ctx => ctx.SaveChangesAsync(default))
@@ -16,7 +18,7 @@ public static class GenericMockSetup<IModel, TModel> where TModel : class, IMode
                 {
                     dbOperation.Invoke();
                 }
-            }).ReturnsAsync(1);
+            }).ReturnsAsync(_valueIndicatedSuccess);
     }
 
     public static async Task SetupAddEntity(TModel assertEntity, List<TModel> AllEntities, Mock<DbSet<TModel>> DbSetTaskMock, List<Action> DbOperationsToExecute)
@@ -51,7 +53,7 @@ public static class GenericMockSetup<IModel, TModel> where TModel : class, IMode
     {
         await Task.Run(() =>
         {
-            DbSetEntityMock.Setup(x => x.FindAsync(It.IsAny<object>())).Returns(new ValueTask<TModel?>((TModel?) AllEntities.Find(entity => entity.Id == assertEntityId)));
+            DbSetEntityMock.Setup(x => x.FindAsync(It.IsAny<object>())).Returns(new ValueTask<TModel?>(AllEntities.Find(entity => entity.Id == assertEntityId)));
         });
     }
 

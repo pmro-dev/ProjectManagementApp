@@ -3,7 +3,7 @@ using Project_UnitTests.Helpers;
 using Project_UnitTests.Services;
 using App.Features.Tasks.Common.Interfaces;
 using App.Features.Tasks.Common.Models;
-using App.Features.Tasks.Common.Helpers;
+using static App.Features.Tasks.Common.Helpers.TaskStatusHelper;
 
 namespace Project_UnitTests;
 
@@ -12,7 +12,12 @@ namespace Project_UnitTests;
 /// </summary>
 public class DatabaseOperationsTests : BaseOperationsSetup
 {
-    private static void ModifyTaskData(TaskModel taskToUpdate)
+    private static readonly Index _firstIndex = 1;
+    private static readonly Index _lastIndex = ^1;
+	private static readonly int _valueOneIndicator = 1;
+	private static readonly int _defaultId = 0;
+
+	private static void ModifyTaskData(TaskModel taskToUpdate)
     {
         taskToUpdate.Title = "New Title Set";
         taskToUpdate.Description = "Lorem Ipsum lorem lorem ipsum Lorem Ipsum lorem lorem ipsum";
@@ -21,17 +26,16 @@ public class DatabaseOperationsTests : BaseOperationsSetup
 
     private static TaskModel PrepareTask(string taskTitle, string taskDescription, DateTime taskDueDate)
     {
-        int IndexValueOne = 1;
         string TitleSuffix = "NEW";
 
         return new TaskModel()
         {
-            Id = TasksCollection.Last().Id + IndexValueOne,
+            Id = TasksCollection[_lastIndex].Id + _valueOneIndicator,
             Title = taskTitle + TitleSuffix,
             Description = taskDescription,
             DueDate = taskDueDate,
-            TodoListId = 0
-        };
+            TodoListId = _defaultId
+		};
     }
 
     private static readonly object[] ValidTasksExamples = TasksDataService.ValidTasksForCreateOperation;
@@ -39,7 +43,7 @@ public class DatabaseOperationsTests : BaseOperationsSetup
     [Test]
     public async Task ContainsAnyShouldSucceed()
     {
-        var result = await TaskRepo.ContainsAny();
+        bool result = await TaskRepo.ContainsAny();
 
         Assert.That(result, Is.True);
     }
@@ -116,9 +120,9 @@ public class DatabaseOperationsTests : BaseOperationsSetup
     }
 
     [Test]
-    [TestCase(TaskStatusHelper.TaskStatusType.InProgress)]
-    [TestCase(TaskStatusHelper.TaskStatusType.NotStarted)]
-    public async Task GetTasksByFilterShouldSucceed(TaskStatus taskStatus)
+    [TestCase(TaskStatusType.InProgress)]
+    [TestCase(TaskStatusType.NotStarted)]
+    public async Task GetTasksByFilterShouldSucceed(TaskStatusType taskStatus)
     {
         var assertTasks = TasksCollection.Where(t => t.Status.ToString() == taskStatus.ToString());
 
@@ -134,7 +138,7 @@ public class DatabaseOperationsTests : BaseOperationsSetup
     [TestCase(-5, typeof(ArgumentOutOfRangeException))]
     public async Task AttemptToGetTaskByInvalidIdShouldThrowException(object id, Type exceptionType)
     {
-        int taskIdForMockSetup = TasksCollection.First().Id;
+        int taskIdForMockSetup = TasksCollection[_firstIndex].Id;
 
         await GenericMockSetup<ITaskModel, TaskModel>.SetupGetEntity(taskIdForMockSetup, DbSetTaskMock, TasksCollection);
 
@@ -155,7 +159,7 @@ public class DatabaseOperationsTests : BaseOperationsSetup
     [Test]
     public async Task UpdateTaskShouldSucceed()
     {
-        int taskToUpdateId = TasksCollection.First().Id;
+        int taskToUpdateId = TasksCollection[_firstIndex].Id;
         await GenericMockSetup<ITaskModel, TaskModel>.SetupGetEntity(taskToUpdateId, DbSetTaskMock, TasksCollection);
         TaskModel taskToUpdate = await TaskRepo.GetAsync(taskToUpdateId) ?? throw new AssertionException(Messages.MessageInvalidRepositoryResult);
 
@@ -238,7 +242,7 @@ public class DatabaseOperationsTests : BaseOperationsSetup
     [Test]
     public async Task AddTasksAsRangeShouldSucceed()
     {
-        var tasksRange = TasksDataService.NewTasksRange.Cast<TaskModel>().ToList();
+        var tasksRange = TasksDataService.NewTasksRange.ToList();
 
         await GenericMockSetup<ITaskModel, TaskModel>.SetupAddEntitiesRange(tasksRange, TasksCollection, DbSetTaskMock, DbOperationsToExecute);
         await TaskRepo.AddRangeAsync(tasksRange);
@@ -249,17 +253,7 @@ public class DatabaseOperationsTests : BaseOperationsSetup
         Assert.Multiple(() =>
         {
             DbSetTaskMock.Verify(x => x.AddRangeAsync(It.IsAny<ICollection<TaskModel>>(), default), Times.Once);
-            Assert.That(tasksFromDb.Count, Is.EqualTo(tasksRange.Count));
+            Assert.That(tasksFromDb, Has.Count.EqualTo(tasksRange.Count));
         });
     }
-
-    //[Test]
-    //public async Task AttempToAddTasksAsRangeByNullObjectShouldThrowException()
-    //{
-    //    List<TaskModel>? nullRange = null;
-
-    //    await GenericMockSetup<ITaskModel, TaskModel>.SetupAddEntitiesRange(nullRange!, TasksCollection, DbSetTaskMock, DbOperationsToExecute);
-
-    //    Assert.ThrowsAsync<ArgumentNullException>(async () => await TaskRepo.AddRangeAsync(nullRange!));
-    //}
 }

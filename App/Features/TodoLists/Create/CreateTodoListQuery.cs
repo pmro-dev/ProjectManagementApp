@@ -14,4 +14,8 @@ public class CreateTodoListQuery : IRequest<CreateTodoListQueryResponse>
 	}
 }
 
-public record CreateTodoListQueryResponse(WrapperViewModel<TodoListCreateInputVM, TodoListCreateOutputVM>? Data, string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }
+public record CreateTodoListQueryResponse(
+	WrapperViewModel<TodoListCreateInputVM, TodoListCreateOutputVM>? Data, 
+	string? ErrorMessage = null, 
+	int StatusCode = StatusCodes.Status200OK
+){}

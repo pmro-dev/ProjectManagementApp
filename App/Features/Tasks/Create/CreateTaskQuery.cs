@@ -14,4 +14,8 @@ public class CreateTaskQuery : IRequest<CreateTaskQueryResponse>
     }
 }
 
-public record CreateTaskQueryResponse(WrapperViewModel<TaskCreateInputVM, TaskCreateOutputVM>? Data, string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }
+public record CreateTaskQueryResponse(
+    WrapperViewModel<TaskCreateInputVM, TaskCreateOutputVM>? Data, 
+    string? ErrorMessage = null, 
+    int StatusCode = StatusCodes.Status200OK
+){}

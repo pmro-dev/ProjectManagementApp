@@ -21,12 +21,12 @@ public class DbOperationsForTodoListTests : BaseOperationsSetup
 
 	private static TodoListModel PrepareTodoList(string todoListTitle)
 	{
-		int IndexValueOne = 1;
+		int positionIncrementor = 1;
 		string TitleSuffix = "NEW";
 
 		return new TodoListModel()
 		{
-			Id = TodoListsCollection[LastIndex].Id + IndexValueOne,
+			Id = TodoListsCollection[LastIndex].Id + positionIncrementor,
 			Title = todoListTitle + TitleSuffix,
 		};
 	}

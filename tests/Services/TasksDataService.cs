@@ -1,5 +1,4 @@
-﻿using App.Features.Tasks.Common.Interfaces;
-using App.Features.Tasks.Common.Models;
+﻿using App.Features.Tasks.Common.Models;
 using App.Infrastructure.Databases.App.Seeds;
 using Castle.Core.Internal;
 using Project_UnitTests.Data;
@@ -8,12 +7,12 @@ namespace Project_UnitTests.Services;
 
 public static class TasksDataService
 {
-    private static List<TaskModel> TasksUX { get; set; } = new List<TaskModel>();
-    private static List<TaskModel> TasksBackend { get; set; } = new List<TaskModel>();
-    private static List<TaskModel> TasksTesting { get; set; } = new List<TaskModel>();
-    private static List<TaskModel> TasksProjectManagement { get; set; } = new List<TaskModel>();
+    private static List<TaskModel> TasksUX { get; set; } = new();
+    private static List<TaskModel> TasksBackend { get; set; } = new();
+    private static List<TaskModel> TasksTesting { get; set; } = new();
+    private static List<TaskModel> TasksProjectManagement { get; set; } = new();
 
-    private static List<TaskModel> tasksCollection = new List<TaskModel>();
+    private static List<TaskModel> tasksCollection = new();
     private static int AllTasksCount;
 
     public static List<TaskModel> NewTasksRange { get; private set; } = TasksData.NewTasksRange.ToList();
@@ -104,7 +103,7 @@ public static class TasksDataService
 
             if (taskIndex == boundaryIndexForCurrentTasks)
             {
-                taskIndex = 0;
+                taskIndex = startingIndex;
             }
         }
     }
@@ -113,7 +112,10 @@ public static class TasksDataService
     {
         var sameAmountOfTasks = TasksUX.Count;
 
-        if (TasksBackend.Count == sameAmountOfTasks && TasksTesting.Count == sameAmountOfTasks && TasksProjectManagement.Count == sameAmountOfTasks)
+        if (TasksBackend.Count == sameAmountOfTasks && 
+            TasksTesting.Count == sameAmountOfTasks && 
+            TasksProjectManagement.Count == sameAmountOfTasks
+            && sameAmountOfTasks == 3)
         {
             for (int i = 0; i < 3; i++)
             {

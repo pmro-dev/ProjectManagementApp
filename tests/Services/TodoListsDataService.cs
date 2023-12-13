@@ -1,5 +1,4 @@
-﻿using App.Features.TodoLists.Common.Interfaces;
-using App.Features.TodoLists.Common.Models;
+﻿using App.Features.TodoLists.Common.Models;
 using App.Infrastructure.Databases.App.Seeds;
 using Project_UnitTests.Data;
 
@@ -23,11 +22,11 @@ public static class TodoListsDataService
 
 	private static void SetIdsForTodoLists(SeedData seedData)
 	{
-		int startingIdForLists = 1;
+		int startingId = 1;
 
 		foreach (var todoList in seedData.TodoLists)
 		{
-			todoList.Id = startingIdForLists++;
+			todoList.Id = startingId++;
 		}
 	}
 }

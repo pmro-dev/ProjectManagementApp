@@ -17,5 +17,9 @@ public class CreateTaskCommand : IRequest<CreateTaskCommandResponse>
     }
 }
 
-public record CreateTaskCommandResponse(CustomRouteValues? Data = null, string? ErrorMessage = null, int StatusCode = StatusCodes.Status201Created) { }
+public record CreateTaskCommandResponse(
+    CustomRouteValues? Data = null, 
+    string? ErrorMessage = null, 
+    int StatusCode = StatusCodes.Status201Created
+){}
 

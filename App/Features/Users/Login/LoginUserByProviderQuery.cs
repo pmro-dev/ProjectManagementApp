@@ -13,4 +13,8 @@ public class LoginUserByProviderQuery : IRequest<LoginUserByProviderQueryRespons
 	}
 }
 
-public record LoginUserByProviderQueryResponse(IActionResult? Data = null, string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }
+public record LoginUserByProviderQueryResponse(
+	IActionResult? Data = null, 
+	string? ErrorMessage = null, 
+	int StatusCode = StatusCodes.Status200OK
+){}

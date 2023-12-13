@@ -12,4 +12,7 @@ public class DeleteTodoListCommand : IRequest<DeleteTodoListCommandResponse>
 	}
 }
 
-public record DeleteTodoListCommandResponse(string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }
+public record DeleteTodoListCommandResponse(
+	string? ErrorMessage = null, 
+	int StatusCode = StatusCodes.Status200OK
+){}

@@ -1,7 +1,7 @@
 ﻿using App.Common.Helpers;
-using App.Features.Tasks.Common.Helpers;
 using App.Features.Tasks.Common.Models;
 using System.ComponentModel.DataAnnotations;
+using static App.Features.Tasks.Common.Helpers.TaskStatusHelper;
 
 namespace App.Features.Tasks.Common;
 
@@ -24,7 +24,7 @@ public static class TasksFilterService
 
 		static bool tasksForTodayPredicate(TaskDto task) =>
 		task.DueDate.ToShortDateString() == todayDate.ToShortDateString() &&
-		task.Status != TaskStatusHelper.TaskStatusType.Completed;
+		task.Status != TaskStatusType.Completed;
 
 		return ExecuteFilter(tasks, tasksForTodayPredicate);
 	}
@@ -34,7 +34,7 @@ public static class TasksFilterService
 		todayDate = DateTime.Today;
 
 		static bool tasksCompletedPredicate(TaskDto task) =>
-		task.Status == TaskStatusHelper.TaskStatusType.Completed &&
+		task.Status == TaskStatusType.Completed &&
 		task.DueDate.CompareTo(todayDate) > DateCompareValueEarlier;
 
 		return ExecuteFilter(tasks, tasksCompletedPredicate);
@@ -48,10 +48,10 @@ public static class TasksFilterService
 		{
 			if (filterDueDate is null)
 			{
-				return task.Status != TaskStatusHelper.TaskStatusType.Completed && task.DueDate.CompareTo(todayDate) > DateCompareValueEarlier;
+				return task.Status != TaskStatusType.Completed && task.DueDate.CompareTo(todayDate) > DateCompareValueEarlier;
 			}
 
-			return task.Status != TaskStatusHelper.TaskStatusType.Completed && task.DueDate.CompareTo(filterDueDate) < DateCompareValueEarlier && task.DueDate.CompareTo(todayDate) > DateCompareValueEarlier;
+			return task.Status != TaskStatusType.Completed && task.DueDate.CompareTo(filterDueDate) < DateCompareValueEarlier && task.DueDate.CompareTo(todayDate) > DateCompareValueEarlier;
 		}
 
 		return ExecuteFilter(tasks, tasksNotCompletedPredicate);

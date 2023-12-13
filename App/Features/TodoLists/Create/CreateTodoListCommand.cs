@@ -13,4 +13,7 @@ public class CreateTodoListCommand : IRequest<CreateTodoListCommandResponse>
 	}
 }
 
-public record CreateTodoListCommandResponse(string? ErrorMessage = null, int StatusCode = StatusCodes.Status201Created) { }
+public record CreateTodoListCommandResponse(
+	string? ErrorMessage = null, 
+	int StatusCode = StatusCodes.Status201Created
+){}

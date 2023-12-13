@@ -1,13 +1,13 @@
 ﻿using App.Features.Boards.Common.Interfaces;
 using App.Features.Exceptions.Throw;
 using App.Features.Pagination;
-using App.Features.Tasks.Common.Helpers;
 using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Interfaces;
 using App.Infrastructure.Databases.App.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using static App.Features.Tasks.Common.Helpers.TaskStatusHelper;
 
 namespace App.Features.Boards.Briefly;
 
@@ -39,24 +39,24 @@ public class GetBoardBrieflyHandler : IRequestHandler<GetBoardBrieflyQuery, GetB
 				request.PageNumber,
 				request.ItemsPerPageCount);
 
-		var extendedOfTasksCountsQuery = paginatedTodoListsQuery.Select(todoList =>
+		var extendedQuery = paginatedTodoListsQuery.Select(todoList =>
 			Tuple.Create(
 				todoList,
-				todoList.Tasks.Count(task =>
-					task.Status == TaskStatusHelper.TaskStatusType.Completed),
+				todoList.Tasks
+					.Count(task => task.Status == TaskStatusType.Completed),
 				todoList.Tasks.Count)
 			);
 
-		var tuples = await extendedOfTasksCountsQuery.ToListAsync();
-		var tuplesDtos = TupleBrieflyMapper.MapToDto(tuples);
-		int allTodoListsCount = await _todoListRepository.CountAsync(_predicateItemsOwner);
+		var tuples = await extendedQuery.ToListAsync();
+		var tuplesDto = TupleBrieflyMapper.MapToDto(tuples);
+		int userTodoListsCount = await _todoListRepository.CountAsync(_predicateItemsOwner);
 
 		var data = _boardsVMFactory.CreateBrieflyOutputVM(
-			tuplesDtos,
+			tuplesDto,
 			new PaginationData(
 				request.PageNumber,
 				request.ItemsPerPageCount,
-				allTodoListsCount,
+				userTodoListsCount,
 				_logger)
 			);
 

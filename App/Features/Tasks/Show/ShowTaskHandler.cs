@@ -30,7 +30,12 @@ public class ShowTaskHandler : IRequestHandler<ShowTaskQuery, ShowTaskQueryRespo
 		TaskModel? taskModel = await _taskRepository.GetAsync(request.TaskId);
 
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(ShowTaskQuery), taskModel, _logger, request.TaskId);
-		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(ShowTaskQuery), request.TodoListId, nameof(request.TodoListId), taskModel!.TodoListId, nameof(taskModel.TodoListId), _logger);
+		ExceptionsService.WhenIdsAreNotEqualThrowCritical(
+			nameof(ShowTaskQuery), request.TodoListId,
+			nameof(request.TodoListId), 
+			taskModel!.TodoListId, 
+			nameof(taskModel.TodoListId), _logger
+		);
 
 		TaskDto taskDto = _taskEntityMapper.TransferToDto(taskModel);
 		var data = _taskViewModelsFactory.CreateDetailsOutputVM(taskDto);

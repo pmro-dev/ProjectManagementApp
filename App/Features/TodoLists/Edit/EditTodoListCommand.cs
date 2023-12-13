@@ -18,4 +18,7 @@ public class EditTodoListCommand : IRequest<EditTodoListCommandResponse>
 	}
 }
 
-public record EditTodoListCommandResponse(string? ErrorMessage = null, int StatusCode = StatusCodes.Status201Created) { }
+public record EditTodoListCommandResponse(
+	string? ErrorMessage = null, 
+	int StatusCode = StatusCodes.Status201Created
+){}

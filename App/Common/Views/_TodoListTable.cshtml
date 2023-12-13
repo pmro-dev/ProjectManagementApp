@@ -1,4 +1,5 @@
-﻿@model ICollection<TaskDto>
+﻿@using static App.Features.Tasks.Common.Helpers.TaskStatusHelper
+@model ICollection<TaskDto>
 
 @{
 	int iterator = 1;
@@ -34,7 +35,7 @@
 						{
 							classValue = "table-light";
 
-							if (task.Status == TaskStatusHelper.TaskStatusType.Completed)
+							if (task.Status == TaskStatusType.Completed)
 							{
 								classValue = "table-success";
 							}

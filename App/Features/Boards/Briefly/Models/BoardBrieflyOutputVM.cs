@@ -1,8 +1,8 @@
 ﻿using App.Features.Boards.Briefly.Interfaces;
 using App.Features.Pagination;
-using App.Features.Tasks.Common.Helpers;
 using App.Features.Tasks.Common.Models;
 using App.Features.TodoLists.Common.Models;
+using static App.Features.Tasks.Common.Helpers.TaskStatusHelper;
 
 namespace App.Features.Boards.Briefly.Models;
 
@@ -51,6 +51,6 @@ public class BoardBrieflyOutputVM : IBoardBrieflyOutputVM
 
     private static bool IsTaskNotCompleted(TaskDto task)
     {
-        return task.Status != TaskStatusHelper.TaskStatusType.Completed;
+        return task.Status != TaskStatusType.Completed;
     }
 }

@@ -1,5 +1,4 @@
-﻿using App.Features.Users.Login.Interfaces;
-using App.Features.Users.Login.Models;
+﻿using App.Features.Users.Login.Models;
 
 namespace App.Features.Users.Login;
 

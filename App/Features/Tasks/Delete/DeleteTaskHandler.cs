@@ -42,7 +42,13 @@ public class DeleteTaskHandler :
 
 		TaskDto taskToDeleteDto = _taskEntityMapper.TransferToDto(taskToDeleteModel!);
 
-		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(Delete), taskToDeleteDto.TodoListId, nameof(taskToDeleteDto.TodoListId), request.TodoListId, nameof(request.TodoListId), _logger);
+		ExceptionsService.WhenIdsAreNotEqualThrowCritical(
+			nameof(Delete), 
+			taskToDeleteDto.TodoListId, 
+			nameof(taskToDeleteDto.TodoListId), 
+			request.TodoListId, 
+			nameof(request.TodoListId), 
+			_logger);
 
 		var deleteOutputVM = _taskViewModelsFactory.CreateDeleteOutputVM(taskToDeleteDto);
 		var data = _taskViewModelsFactory.CreateWrapperDeleteVM();

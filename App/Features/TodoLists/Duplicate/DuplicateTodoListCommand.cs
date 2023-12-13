@@ -12,4 +12,7 @@ public class DuplicateTodoListCommand : IRequest<DuplicateTodoListCommandRespons
 	}
 }
 
-public record DuplicateTodoListCommandResponse(string? ErrorMessage = null, int StatusCode = StatusCodes.Status201Created) { }
+public record DuplicateTodoListCommandResponse(
+	string? ErrorMessage = null, 
+	int StatusCode = StatusCodes.Status201Created
+){}

@@ -32,7 +32,7 @@ public class UserRegisterService : IUserRegisterService
 
 	public async Task<bool> RegisterAsync(UserDto userDto)
 	{
-		bool isUsernameUnavailableToRegister = !await CheckIsUsernameAvailable(userDto.Username);
+		bool isUsernameUnavailableToRegister = !await _userRepository.IsNameTakenAsync(userDto.Username);
 
 		if (isUsernameUnavailableToRegister) return false;
 
@@ -54,20 +54,6 @@ public class UserRegisterService : IUserRegisterService
 		}
 	}
 
-
-	#region Local Methods
-
-	private async Task<bool> CheckIsUsernameAvailable(string userName)
-	{
-		bool isNameTaken = await _userRepository.IsNameTakenAsync(userName);
-
-		if (isNameTaken)
-		{
-			return false;
-		}
-		return true;
-	}
-
 	private async Task SetRoles(UserDto userDto)
 	{
 		RoleModel? roleForNewUser = await _roleRepository.GetByFilterAsync(role => role.Name == _defaultRole);
@@ -86,6 +72,4 @@ public class UserRegisterService : IUserRegisterService
 
 		userDto.UserRoles.Add(userRoleDto);
 	}
-
-	#endregion
 }

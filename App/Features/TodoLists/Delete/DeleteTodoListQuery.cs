@@ -13,4 +13,8 @@ public class DeleteTodoListQuery : IRequest<DeleteTodoListQueryResponse>
 	}
 }
 
-public record DeleteTodoListQueryResponse(TodoListDeleteOutputVM? Data, string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }
+public record DeleteTodoListQueryResponse(
+	TodoListDeleteOutputVM? Data, 
+	string? ErrorMessage = null, 
+	int StatusCode = StatusCodes.Status200OK
+){}

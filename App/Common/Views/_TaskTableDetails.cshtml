@@ -1,4 +1,5 @@
-﻿@model ITaskCommonOutputVM
+﻿@using static App.Features.Tasks.Common.Helpers.TaskStatusHelper
+@model ITaskCommonOutputVM
 
 @{
 	int iterator = 1;
@@ -36,7 +37,7 @@
 					@{
 						classValue = "table-light";
 
-						if (Model.Status == TaskStatusHelper.TaskStatusType.Completed)
+						if (Model.Status == TaskStatusType.Completed)
 						{
 							classValue = "table-success";
 						}

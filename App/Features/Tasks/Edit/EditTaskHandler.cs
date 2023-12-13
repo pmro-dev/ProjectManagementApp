@@ -22,7 +22,6 @@ public class EditTaskHandler :
 	private readonly ITaskEntityMapper _taskEntityMapper;
 	private readonly ITodoListMapper _todoListMapper;
 	private readonly ITaskViewModelsFactory _taskViewModelsFactory;
-	private const int SingleItemIndicator = 1;
 
 	public EditTaskHandler(IDataUnitOfWork dataUnitOfWork, ITaskRepository taskRepository, ITodoListRepository todoListRepository,
 		ILogger<TaskController> logger, ITaskEntityMapper taskEntityMapper, ITodoListMapper todoListMapper,
@@ -48,7 +47,14 @@ public class EditTaskHandler :
 		TodoListModel? targetTodoListModel = await _todoListRepository.GetAsync(request.TodoListId);
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(EditTaskQuery), targetTodoListModel, _logger, request.TodoListId);
 
-		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(Edit), taskModel!.TodoListId, nameof(taskModel.TodoListId), targetTodoListModel!.Id, nameof(targetTodoListModel.Id), _logger);
+		ExceptionsService.WhenIdsAreNotEqualThrowCritical(
+			nameof(Edit), 
+			taskModel!.TodoListId, 
+			nameof(taskModel.TodoListId), 
+			targetTodoListModel!.Id, 
+			nameof(targetTodoListModel.Id), 
+			_logger
+		);
 
 		TaskDto taskDto = _taskEntityMapper.TransferToDto(taskModel);
 
@@ -74,9 +80,20 @@ public class EditTaskHandler :
 		TaskModel? taskDbModel = await _taskRepository.GetAsync(taskEditInputDto.Id);
 
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(EditTaskCommand), taskDbModel, _logger, taskEditInputDto.Id);
-		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(EditTaskCommand), taskDbModel!.Id, nameof(taskDbModel.Id), taskEditInputDto.Id, nameof(taskEditInputDto.Id), _logger);
+		ExceptionsService.WhenIdsAreNotEqualThrowCritical(
+			nameof(EditTaskCommand), 
+			taskDbModel!.Id, 
+			nameof(taskDbModel.Id), 
+			taskEditInputDto.Id, 
+			nameof(taskEditInputDto.Id), 
+			_logger
+		);
 
-		if (await _taskRepository.ContainsAny(task => task.Title == taskEditInputDto.Title && task.UserId == taskEditInputDto.UserId && task.Title != taskEditInputDto.Title))
+		if (await _taskRepository
+				.ContainsAny(task => 
+					task.Title == taskEditInputDto.Title && 
+					task.UserId == taskEditInputDto.UserId && 
+					task.Title != taskEditInputDto.Title))
 			return new EditTaskCommandResponse(null, ExceptionsMessages.NameTaken, StatusCodesExtension.EntityNameTaken);
 
 		_taskEntityMapper.UpdateModel(taskDbModel, taskEditInputDto);

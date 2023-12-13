@@ -16,4 +16,8 @@ public class DeleteTaskQuery : IRequest<DeleteTaskQueryResponse>
     }
 }
 
-public record DeleteTaskQueryResponse(WrapperViewModel<TaskDeleteInputVM, TaskDeleteOutputVM>? Data, string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }
+public record DeleteTaskQueryResponse(
+    WrapperViewModel<TaskDeleteInputVM, TaskDeleteOutputVM>? Data, 
+    string? ErrorMessage = null, 
+    int StatusCode = StatusCodes.Status200OK
+){}

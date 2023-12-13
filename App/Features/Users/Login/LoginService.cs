@@ -37,6 +37,7 @@ public class LoginService : ILoginService
 
 	public async Task<bool> CheckIsUserAlreadyRegisteredAsync(LoginInputDto loginInputDto)
 	{
+		//TODO IMPLEMENT NEW METHOD FOR EXIST -> better performance
 		return await _userRepository.ContainsAny(dbUser => dbUser.Username == loginInputDto.Username && dbUser.Password == loginInputDto.Password);
 	}
 
@@ -51,13 +52,12 @@ public class LoginService : ILoginService
 		ClaimsPrincipal userPrincipal = _claimsService.CreateUserClaimsPrincipal(userDto);
 		AuthenticationProperties authProperties = _authenticationService.CreateDefaultAuthProperties();
 
-		//TODO write logging
 		HttpContext? httpContext = _httpContextAccessor.HttpContext;
 
 		if (httpContext is null)
 		{
 			_logger.LogCritical(ExceptionsMessages.LogHttpContextObjectIsNull, nameof(LogInUserAsync));
-			throw new ArgumentException("Unable to get current HttpContext - accessor returned null HttpContext object.");
+			throw new ArgumentException(ExceptionsMessages.HttpContextObjectIsNull(nameof(LogInUserAsync)));
 		}
 
 		await httpContext.SignInAsync(userPrincipal, authProperties);

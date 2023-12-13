@@ -30,12 +30,12 @@ public class AuthenticationCustomService : IAuthenticationCustomService
 	public AuthenticationProperties CreateDefaultAuthProperties()
 	{
 		Dictionary<string, string?> itemsForAuthProperties = new()
-				{
-					{
-						AuthenticationConsts.AuthSchemeClaimKey,
-						CookieAuthenticationDefaults.AuthenticationScheme
-					}
-				};
+		{
+			{
+				AuthenticationConsts.AuthSchemeClaimKey,
+				CookieAuthenticationDefaults.AuthenticationScheme
+			}
+		};
 
 		AuthenticationProperties authProperties = new(itemsForAuthProperties);
 

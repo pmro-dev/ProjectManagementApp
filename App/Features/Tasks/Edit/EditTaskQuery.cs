@@ -19,4 +19,8 @@ public class EditTaskQuery : IRequest<EditTaskQueryResponse>
 	}
 }
 
-public record EditTaskQueryResponse(WrapperViewModel<TaskEditInputVM, TaskEditOutputVM>? Data, string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK){}
+public record EditTaskQueryResponse(
+	WrapperViewModel<TaskEditInputVM, TaskEditOutputVM>? Data, 
+	string? ErrorMessage = null, 
+	int StatusCode = StatusCodes.Status200OK
+){}

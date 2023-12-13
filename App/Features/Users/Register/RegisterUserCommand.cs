@@ -13,4 +13,7 @@ public class RegisterUserCommand : IRequest<RegisterUserCommandResponse>
 	}
 }
 
-public record RegisterUserCommandResponse(string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }
+public record RegisterUserCommandResponse(
+	string? ErrorMessage = null, 
+	int StatusCode = StatusCodes.Status200OK
+){}

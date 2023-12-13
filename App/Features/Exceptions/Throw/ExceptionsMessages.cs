@@ -57,7 +57,12 @@ public static class ExceptionsMessages
         return $"{operationName} | Group of {entityTypeName} Entities not found in DbSet!";
     }
 
-    public const string ProvidedObjectIsNull = "Critical error! Provided object cannot be null!";
+	public static string LackOfRequiredService(string operationName, string reguiredServiceName)
+	{
+		return $"{operationName} - {reguiredServiceName} | Unable proceed because without a required service!";
+	}
+
+	public const string ProvidedObjectIsNull = "Critical error! Provided object cannot be null!";
     public const string ProvidedArgumentIsNullOrEmpty = "Passed argument cannot be null or empty!";
     public const string ProvidedArgumentIsOutOfRange = "Passed argument is out of range!";
     public const string ProvidedArgumentIsWithInvalidType = "The id parameter is not a valid type.";
@@ -102,7 +107,7 @@ public static class ExceptionsMessages
     public const string LogOptionsObjectIsNull = "{operationName} | Used options ( {optionsTypeName} ) object was null!";
     public const string LogCriticalModelObjectIsNull = "{operationName} | Object of given model ( {modelTypeName} ) is null!";
     public const string LogInvalidEntityIdCast = "{operationName} - {innerOperationName} | Unable to cast provided Entity Id to a string representation!";
+	public const string LogLackOfRequiredService = "{operationName} - {reguiredServiceName} | Unable proceed because without a required service!";
 
-
-    #endregion
+	#endregion
 }
