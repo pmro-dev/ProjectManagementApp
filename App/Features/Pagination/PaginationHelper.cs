@@ -23,7 +23,7 @@ public static class PaginationHelper
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(CountPages), itemsPerPageCount, BottomBoundryForPage, nameof(itemsPerPageCount), logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(CountPages), itemsCount, BottomBoundryForItems, nameof(itemsCount), logger);
 
-		return (int) Math.Ceiling((double) (itemsCount / itemsPerPageCount));
+		return (int) Math.Ceiling((double) itemsCount / itemsPerPageCount);
 	}
 
 	public static bool AreTherePagesToShow(int pagesCount)
