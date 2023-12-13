@@ -1,4 +1,5 @@
 ﻿using App.Common.ViewModels;
+using App.Features.Pagination;
 using App.Features.TodoLists.Common.Models;
 using App.Features.TodoLists.Create.Models;
 using App.Features.TodoLists.Delete.Models;
@@ -14,7 +15,7 @@ public interface ITodoListViewModelsFactory
 	TodoListEditOutputVM CreateEditOutputVM(TodoListDto todoListDto);
 	TodoListEditInputVM CreateEditInputVM(TodoListDto todoListDto);
 	TodoListDeleteOutputVM CreateDeleteOutputVM(TodoListDto todoListDto);
-	TodoListDetailsOutputVM CreateDetailsOutputVM(TodoListDto todoListDto, DateTime? filterDueDate);
+	TodoListDetailsOutputVM CreateDetailsOutputVM(TodoListDto todoListDto, PaginationData paginationData, DateTime? filterDueDate);
 	WrapperViewModel<TodoListCreateInputVM, TodoListCreateOutputVM> CreateWrapperCreateVM();
 	WrapperViewModel<TodoListEditInputVM, TodoListEditOutputVM> CreateWrapperEditVM();
 }

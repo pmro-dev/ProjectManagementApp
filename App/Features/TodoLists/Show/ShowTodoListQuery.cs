@@ -13,7 +13,8 @@ public class ShowTodoListQuery : IRequest<ShowTodoListQueryResponse>
 	public int ItemsPerPageCount { get; }
 	public Expression<Func<TaskModel, object>> OrderDetailsBySelector { get; }
 
-	public ShowTodoListQuery(int todoListId, DateTime? filterDueDate, Expression<Func<TaskModel, object>> orderDetailsBySelector, int pageNumber, int itemsPerPageCount)
+	public ShowTodoListQuery(int todoListId, DateTime? filterDueDate, Expression<Func<TaskModel, object>> orderDetailsBySelector, 
+		int pageNumber, int itemsPerPageCount)
 	{
 		TodoListId = todoListId;
 		FilterDueDate = filterDueDate;
@@ -23,4 +24,8 @@ public class ShowTodoListQuery : IRequest<ShowTodoListQueryResponse>
 	}
 }
 
-public record ShowTodoListQueryResponse(TodoListDetailsOutputVM? Data, string? ErrorMessage = null, int StatusCode = StatusCodes.Status200OK) { }
+public record ShowTodoListQueryResponse(
+	TodoListDetailsOutputVM? Data, 
+	string? ErrorMessage = null, 
+	int StatusCode = StatusCodes.Status200OK
+){}

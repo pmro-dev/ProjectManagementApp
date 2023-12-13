@@ -1,21 +1,32 @@
-﻿using App.Features.Tasks.Common.Models;
+﻿using App.Features.Pagination;
+using App.Features.Tasks.Common.Models;
 using App.Features.TodoLists.Show.Interfaces;
 
 namespace App.Features.TodoLists.Show.Models;
 
-/// <summary>
-/// Model for showing ToDoList.
-/// </summary>
 public class TodoListDetailsOutputVM : ITodoListDetailsOutputVM
 {
-    public int Id { get; set; }
+    public int Id { get; }
+    public string Name { get; }
+    public string UserId { get; }
+    public PaginationData PaginData { get; }
+    public IEnumerable<TaskDto> TasksForToday { get; }
+    public IEnumerable<TaskDto> TasksCompleted { get;}
+    public IEnumerable<TaskDto> TasksNotCompleted { get; }
+    public IEnumerable<TaskDto> TasksExpired { get; }
 
-    public string Name { get; set; } = string.Empty;
-
-    public string UserId { get; set; } = string.Empty;
-
-    public IEnumerable<TaskDto> TasksForToday { get; set; } = new List<TaskDto>();
-    public IEnumerable<TaskDto> TasksCompleted { get; set; } = new List<TaskDto>();
-    public IEnumerable<TaskDto> TasksNotCompleted { get; set; } = new List<TaskDto>();
-    public IEnumerable<TaskDto> TasksExpired { get; set; } = new List<TaskDto>();
+	public TodoListDetailsOutputVM(
+		int id, string name, string userId, PaginationData paginData, 
+		IEnumerable<TaskDto> tasksForToday, IEnumerable<TaskDto> tasksCompleted, 
+		IEnumerable<TaskDto> tasksNotCompleted, IEnumerable<TaskDto> tasksExpired)
+	{
+		Id = id;
+		Name = name;
+		UserId = userId;
+		PaginData = paginData;
+		TasksForToday = tasksForToday;
+		TasksCompleted = tasksCompleted;
+		TasksNotCompleted = tasksNotCompleted;
+		TasksExpired = tasksExpired;
+	}
 }

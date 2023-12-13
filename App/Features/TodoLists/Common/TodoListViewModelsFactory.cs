@@ -1,5 +1,7 @@
 ﻿using App.Common.ViewModels;
+using App.Features.Pagination;
 using App.Features.Tasks.Common;
+using App.Features.Tasks.Common.Models;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
 using App.Features.TodoLists.Create.Models;
@@ -38,32 +40,32 @@ public class TodoListViewModelsFactory : ITodoListViewModelsFactory
 		};
 	}
 
-	public TodoListDetailsOutputVM CreateDetailsOutputVM(TodoListDto todoListDto, DateTime? filterDueDate)
+	public TodoListDetailsOutputVM CreateDetailsOutputVM(TodoListDto todoListDto, PaginationData paginationData, DateTime? filterDueDate)
 	{
-		var tasksForTodayDtos = TasksFilterService.FilterForTasksForToday(todoListDto.Tasks);
-		var tasksCompletedDtos = TasksFilterService.FilterForTasksCompleted(todoListDto.Tasks);
-		var tasksNotCompletedDtos = TasksFilterService.FilterForTasksNotCompleted(todoListDto.Tasks, filterDueDate);
-		var tasksExpiredDtos = TasksFilterService.FilterForTasksExpired(todoListDto.Tasks);
+		IEnumerable<TaskDto> tasksForTodayDtos = Enumerable.Empty<TaskDto>();
+		IEnumerable<TaskDto> tasksCompletedDtos = Enumerable.Empty<TaskDto>();
+		IEnumerable<TaskDto> tasksNotCompletedDtos = Enumerable.Empty<TaskDto>();
+		IEnumerable<TaskDto> tasksExpiredDtos = Enumerable.Empty<TaskDto>();
 
-		var detailsOutputVM = new TodoListDetailsOutputVM
-		{
-			Id = todoListDto.Id,
-			Name = todoListDto.Title,
-			TasksForToday = tasksForTodayDtos.ToList(),
-			TasksCompleted = tasksCompletedDtos.ToList(),
-			TasksNotCompleted = tasksNotCompletedDtos.ToList(),
-			TasksExpired = tasksExpiredDtos.ToList()
+		//TODO create query with groupby by due date and task status type and get those groups
+		Action[] filterTasks = {
+					() => tasksForTodayDtos = TasksFilterService.FilterForTasksForToday(todoListDto.Tasks),
+					() => tasksCompletedDtos = TasksFilterService.FilterForTasksCompleted(todoListDto.Tasks),
+					() => tasksNotCompletedDtos = TasksFilterService.FilterForTasksNotCompleted(todoListDto.Tasks, filterDueDate),
+					() => tasksExpiredDtos = TasksFilterService.FilterForTasksExpired(todoListDto.Tasks)
 		};
 
-		var sortingTasksTasks = new Task[]
-		{
-			Task.Run(() => detailsOutputVM.TasksNotCompleted = detailsOutputVM.TasksNotCompleted.OrderBy(t => t.DueDate).ToList()),
-			Task.Run(() => detailsOutputVM.TasksForToday = detailsOutputVM.TasksForToday.OrderBy(t => t.DueDate).ToList()),
-			Task.Run(() => detailsOutputVM.TasksCompleted = detailsOutputVM.TasksCompleted.OrderBy(t => t.DueDate).ToList()),
-			Task.Run(() => detailsOutputVM.TasksExpired = detailsOutputVM.TasksExpired.OrderBy(t => t.DueDate).ToList())
-		};
+		Parallel.Invoke(filterTasks);
 
-		Task.WaitAll(sortingTasksTasks);
+		var detailsOutputVM = new TodoListDetailsOutputVM(
+			todoListDto.Id,
+			todoListDto.Title,
+			todoListDto.UserId,
+			paginationData,
+			tasksForTodayDtos.ToList(),
+			tasksCompletedDtos.ToList(),
+			tasksNotCompletedDtos.ToList(),
+			tasksExpiredDtos.ToList());
 
 		return detailsOutputVM;
 	}

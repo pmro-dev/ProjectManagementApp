@@ -1,4 +1,5 @@
 ﻿using App.Features.Exceptions.Throw;
+using App.Features.Pagination;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
 using App.Infrastructure.Databases.App.Interfaces;
@@ -14,7 +15,8 @@ public class ShowTodoListHandler : IRequestHandler<ShowTodoListQuery, ShowTodoLi
 	private readonly ITodoListMapper _todoListMapper;
 	private readonly ITodoListViewModelsFactory _todoListViewModelsFactory;
 
-	public ShowTodoListHandler(IDataUnitOfWork dataUnitOfWork, ILogger<ShowTodoListHandler> logger, ITodoListMapper todoListMapper, ITodoListViewModelsFactory todoListViewModelsFactory)
+	public ShowTodoListHandler(IDataUnitOfWork dataUnitOfWork, ILogger<ShowTodoListHandler> logger, 
+		ITodoListMapper todoListMapper, ITodoListViewModelsFactory todoListViewModelsFactory)
 	{
 		_logger = logger;
 		_dataUnitOfWork = dataUnitOfWork;
@@ -31,7 +33,10 @@ public class ShowTodoListHandler : IRequestHandler<ShowTodoListQuery, ShowTodoLi
 		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(ShowTodoListQuery), todoListDbModel, _logger, request.TodoListId);
 
 		var todoListDto = _todoListMapper.TransferToDto(todoListDbModel!);
-		var data = _todoListViewModelsFactory.CreateDetailsOutputVM(todoListDto, request.FilterDueDate);
+
+		PaginationData paginData = new(request.PageNumber, request.ItemsPerPageCount, todoListDto.Tasks.Count, _logger);
+
+		var data = _todoListViewModelsFactory.CreateDetailsOutputVM(todoListDto, paginData, request.FilterDueDate);
 
 		return new ShowTodoListQueryResponse(data);
 	}
