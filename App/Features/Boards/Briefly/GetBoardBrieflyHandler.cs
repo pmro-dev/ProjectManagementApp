@@ -49,16 +49,12 @@ public class GetBoardBrieflyHandler : IRequestHandler<GetBoardBrieflyQuery, GetB
 
 		var tuples = await extendedQuery.ToListAsync();
 		var tuplesDto = TupleBrieflyMapper.MapToDto(tuples);
+
 		int userTodoListsCount = await _todoListRepository.CountAsync(_predicateItemsOwner);
 
-		var data = _boardsVMFactory.CreateBrieflyOutputVM(
-			tuplesDto,
-			new PaginationData(
-				request.PageNumber,
-				request.ItemsPerPageCount,
-				userTodoListsCount,
-				_logger)
-			);
+		PaginationData paginData = new(request.PageNumber, request.ItemsPerPageCount, userTodoListsCount, _logger);
+
+		var data = _boardsVMFactory.CreateBrieflyOutputVM(tuplesDto, paginData);
 
 		return new GetBoardBrieflyQueryResponse(data);
 	}

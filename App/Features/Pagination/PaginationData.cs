@@ -21,7 +21,6 @@ public class PaginationData
 	{
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(PaginationData), currentPageNumber, ValueOneIndicator, nameof(currentPageNumber), logger);
 		ExceptionsService.WhenValueNotInRangeThrow(nameof(PaginationData), itemsCount, ValueZeroIndicator, int.MaxValue, nameof(itemsCount), logger);
-		ExceptionsService.WhenValueNotInRangeThrow(nameof(PaginationData), itemsPerPageCount, ValueOneIndicator, itemsCount, nameof(itemsPerPageCount), logger);
 
 		CurrentPageNumber = currentPageNumber;
 		ItemsPerPageCount = itemsPerPageCount;
