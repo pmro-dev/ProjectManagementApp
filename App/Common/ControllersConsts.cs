@@ -10,6 +10,9 @@ public static class ControllersConsts
 {
 	public const int FirstPageNumber = 1;
 	public const int DefaultItemsPerPageCount = 5;
+	public const int FirstOptionItemsPerPageCount = 10;
+	public const int SecondOptionItemsPerPageCount = 15;
+	public const int ThirdOptionItemsPerPageCount = 30;
 
 	public readonly struct ExceptionCtrl
 	{

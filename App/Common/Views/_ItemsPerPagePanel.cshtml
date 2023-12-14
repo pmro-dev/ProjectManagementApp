@@ -1,0 +1,37 @@
+﻿@using App.Common
+
+@{
+	string? controllerName = ViewContext.RouteData.Values["controller"]?.ToString();
+	string? actionName = ViewContext.RouteData.Values["action"]?.ToString();
+
+	int firstPageIndicator = 1;
+	int defaultItemsPerPageCount = @ControllersConsts.DefaultItemsPerPageCount;
+	int firstOptionItemsPerPageCount = @ControllersConsts.FirstOptionItemsPerPageCount;
+	int secondOptionItemsPerPageCount = @ControllersConsts.SecondOptionItemsPerPageCount;
+	int thirdOptionItemsPerPageCount = @ControllersConsts.ThirdOptionItemsPerPageCount;
+}
+
+<label>Items Per Page</label>
+<dl class="row">
+	<dd class="col-sm-5">
+		<div class="btn-group" role="group" aria-label="Items Per Page">
+
+			<a asp-controller="@controllerName" asp-action="@actionName" asp-route-id="@Model?.Id" asp-route-pageNumber="@firstPageIndicator" asp-route-itemsPerPageCount="@defaultItemsPerPageCount" class="btn btn-primary">
+				@defaultItemsPerPageCount
+			</a>
+
+			<a asp-controller="@controllerName" asp-action="@actionName" asp-route-id="@Model?.Id" asp-route-pageNumber="@firstPageIndicator" asp-route-itemsPerPageCount="@firstOptionItemsPerPageCount" class="btn btn-primary">
+				@firstOptionItemsPerPageCount
+			</a>
+
+			<a asp-controller="@controllerName" asp-action="@actionName" asp-route-id="@Model?.Id" asp-route-pageNumber="@firstPageIndicator" asp-route-itemsPerPageCount="@secondOptionItemsPerPageCount" class="btn btn-primary">
+				@secondOptionItemsPerPageCount
+			</a>
+
+			<a asp-controller="@controllerName" asp-action="@actionName" asp-route-id="@Model?.Id" asp-route-pageNumber="@firstPageIndicator" asp-route-itemsPerPageCount="@thirdOptionItemsPerPageCount" class="btn btn-primary">
+				@thirdOptionItemsPerPageCount
+			</a>
+
+		</div>
+	</dd>
+</dl>
