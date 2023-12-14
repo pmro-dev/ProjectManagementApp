@@ -1,0 +1,25 @@
+﻿@using App.Common.Helpers
+@using App.Common.ViewModels
+@model FilterDueDatePanelModel
+
+@{
+	DateTime? filterDueDate = Model?.FilterDueDate;
+	string? actionName = Model?.ActionName;
+	string? controllerName = Model?.ControllerName;
+	int? ownerId = Model?.OwnerId;
+}
+
+<div class="row">
+	<div class="col-md-4">
+		<div class="card-group">
+			<form id="resetDate" asp-controller="@controllerName" asp-action="@actionName" asp-route-id="@ownerId" asp-route-filterDueDate="@null" method="get"></form>
+			<form id="filterDate" asp-controller="@controllerName" asp-action="@actionName" asp-route-id="@ownerId" asp-route-filterDueDate="@filterDueDate" method="get">
+				<input asp-for="@filterDueDate" asp-format="@AttributesHelper.DataFormat" class="form-control" />
+				<span asp-validation-for="@filterDueDate" class="text-danger" type="datetime-local"></span>
+			</form>
+			<button type="submit" class="btn btn-sm btn-warning" form="filterDate">Filter</button>
+			<button type="submit" class="btn btn-sm btn-danger" form="resetDate">Reset</button>
+		</div>
+	</div>
+</div>
+<br />

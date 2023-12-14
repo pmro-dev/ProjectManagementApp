@@ -40,7 +40,9 @@ public static class ViewsConsts
         public const string TodoListTableDetails = "_TodoListTableDetails";
         public const string ValidationPartial = "_ValidationScriptsPartial";
         public const string PaginationPanel = "_PaginationPanel";
-    }
+        public const string ItemsPerPagePanel = "_ItemsPerPagePanel";
+        public const string FilterDueDatePanel = "_FilterDueDatePanel";
+	}
 
     public readonly struct ExceptionViews
     {
