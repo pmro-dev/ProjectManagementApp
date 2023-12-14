@@ -28,11 +28,12 @@ public class PaginationData
 		AreTherePagesToShow = PaginationHelper.AreTherePagesToShow(PagesCount);
 
 		if (!AreTherePagesToShow) return;
-		CurrentPageNumber = currentPageNumber;
+
+		CurrentPageNumber = currentPageNumber > PagesCount ? PagesCount : currentPageNumber;
 		NextPageNumber = CurrentPageNumber + ValueOneIndicator;
-		ExceptionsService.WhenValueNotInRangeThrow(nameof(PaginationData), currentPageNumber, ValueOneIndicator, PagesCount, nameof(currentPageNumber), logger);
-		
-		IsNotCurrentPageFirstPage = PaginationHelper.IsNotCurrentPageFirstPage(currentPageNumber);
+		PreviousPageNumber = CurrentPageNumber - ValueOneIndicator;
+
+		IsNotCurrentPageFirstPage = PaginationHelper.IsNotCurrentPageFirstPage(CurrentPageNumber);
 		IsThereNextPage = PaginationHelper.IsThereNextPage(NextPageNumber, PagesCount);
 	}
 }
