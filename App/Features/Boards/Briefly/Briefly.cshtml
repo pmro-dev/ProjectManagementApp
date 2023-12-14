@@ -1,6 +1,7 @@
 ﻿@using App.Features.Boards.Briefly.Models;
-@using App.Features.Pagination
-@using App.Features.TodoLists.Common.Models
+@using App.Features.Pagination;
+@using App.Features.TodoLists.Common.Models;
+
 @model BoardBrieflyOutputVM
 
 @{
@@ -51,42 +52,12 @@
 	</div>
 
 	<!-- Delete Modal -->
-	<partial name=@BoardsViews.DeleteModal model="@todoList" />
+	<partial name="@BoardsViews.DeleteModal" model="@todoList" />
 }
 
-<p>
-	@if (paginData.AreTherePagesToShow)
-	{
-		<nav aria-label="...">
-			<ul class="pagination">
+@if (paginData.AreTherePagesToShow)
+{
+	var paginationPanel = new PaginationPanel(paginData, BoardsCtrl.Name, BoardsCtrl.BrieflyAction);
 
-				@if (paginData.IsCurrentPageFirstPage)
-				{
-					<li class="page-item">
-						<a class="page-link" asp-action="@BoardsCtrl.BrieflyAction" asp-route-pageNumber="@paginData.PreviousPageNumber" asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">Previous</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link" asp-action="@BoardsCtrl.BrieflyAction" asp-route-pageNumber="@paginData.PreviousPageNumber" asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">@paginData.PreviousPageNumber</a>
-					</li>
-				}
-
-				<li class="page-item active">
-					<span class="page-link">
-						@paginData.CurrentPageNumber
-					</span>
-				</li>
-
-				@if (paginData.IsThereNextPage)
-				{
-					<li class="page-item">
-						<a class="page-link" asp-action="@BoardsCtrl.BrieflyAction" asp-route-pageNumber="@paginData.NextPageNumber" asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">@paginData.NextPageNumber</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link" asp-action="@BoardsCtrl.BrieflyAction" asp-route-pageNumber="@paginData.NextPageNumber" asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">Next</a>
-					</li>
-				}
-
-			</ul>
-		</nav>
-	}
-</p>
+	<partial name="@SharedViews.PaginationPanel" model="@paginationPanel" />
+}

@@ -1,0 +1,43 @@
+﻿@using App.Features.Pagination;
+
+@model PaginationPanel
+
+@{
+	PaginationData paginData = Model.PaginData;
+	string controllerName = Model.ControllerName;
+	string actionName = Model.ActionName;
+}
+
+<p>
+	<nav aria-label="...">
+		<ul class="pagination">
+
+			@if (paginData.IsNotCurrentPageFirstPage)
+			{
+				<li class="page-item">
+					<a class="page-link" asp-controller="@controllerName" asp-action="@actionName" asp-route-pageNumber="@paginData.PreviousPageNumber" asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">Previous</a>
+				</li>
+				<li class="page-item">
+					<a class="page-link" asp-controller="@controllerName" asp-action="@actionName" asp-route-pageNumber="@paginData.PreviousPageNumber" asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">@paginData.PreviousPageNumber</a>
+				</li>
+			}
+
+			<li class="page-item active">
+				<span class="page-link">
+					@paginData.CurrentPageNumber
+				</span>
+			</li>
+
+			@if (paginData.IsThereNextPage)
+			{
+				<li class="page-item">
+					<a class="page-link" asp-controller="@controllerName" asp-action="@actionName" asp-route-pageNumber="@paginData.NextPageNumber" asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">@paginData.NextPageNumber</a>
+				</li>
+				<li class="page-item">
+					<a class="page-link" asp-controller="@controllerName" asp-action="@actionName" asp-route-pageNumber="@paginData.NextPageNumber" asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">Next</a>
+				</li>
+			}
+
+		</ul>
+	</nav>
+</p>
