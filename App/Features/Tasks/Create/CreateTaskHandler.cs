@@ -40,7 +40,7 @@ public class CreateTaskHandler :
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(CreateTaskQuery), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		TodoListModel? todoListModel = await _todoListRepository.GetAsync(request.TodoListId);
-		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(CreateTaskQuery), todoListModel, _logger, request.TodoListId);
+		ExceptionsService.WhenEntityIsNullThrow(nameof(CreateTaskQuery), todoListModel, _logger, request.TodoListId);
 
 		TodoListDto todoListDto = _todoListMapper.TransferToDto(todoListModel!);
 		var taskCreateOutputVM = _taskViewModelsFactory.CreateCreateOutputVM(todoListDto);

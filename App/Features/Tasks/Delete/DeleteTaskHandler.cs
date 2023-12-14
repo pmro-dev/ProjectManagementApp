@@ -38,11 +38,11 @@ public class DeleteTaskHandler :
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Delete), request.TaskId, nameof(request.TaskId), _logger);
 
 		TaskModel? taskToDeleteModel = await _taskRepository.GetAsync(request.TaskId);
-		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(DeleteTaskQuery), taskToDeleteModel, _logger, request.TaskId.ToString());
+		ExceptionsService.WhenEntityIsNullThrow(nameof(DeleteTaskQuery), taskToDeleteModel, _logger, request.TaskId.ToString());
 
 		TaskDto taskToDeleteDto = _taskEntityMapper.TransferToDto(taskToDeleteModel!);
 
-		ExceptionsService.WhenIdsAreNotEqualThrowCritical(
+		ExceptionsService.WhenIdsAreNotEqualThrow(
 			nameof(Delete), 
 			taskToDeleteDto.TodoListId, 
 			nameof(taskToDeleteDto.TodoListId), 
@@ -67,9 +67,9 @@ public class DeleteTaskHandler :
 		TaskDeleteInputDto taskInputDto = _taskEntityMapper.TransferToDto(inputVM);
 
 		TaskModel? taskModel = await _taskRepository.GetAsync(taskInputDto.Id);
-		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(DeleteTaskCommand), taskModel, _logger, taskInputDto.Id);
+		ExceptionsService.WhenEntityIsNullThrow(nameof(DeleteTaskCommand), taskModel, _logger, taskInputDto.Id);
 
-		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(DeleteTaskCommand), taskModel!.TodoListId, nameof(taskModel.TodoListId), taskInputDto.TodoListId, nameof(taskInputDto.TodoListId), _logger);
+		ExceptionsService.WhenIdsAreNotEqualThrow(nameof(DeleteTaskCommand), taskModel!.TodoListId, nameof(taskModel.TodoListId), taskInputDto.TodoListId, nameof(taskInputDto.TodoListId), _logger);
 
 		_taskRepository.Remove(taskModel);
 		await _dataUnitOfWork.SaveChangesAsync();

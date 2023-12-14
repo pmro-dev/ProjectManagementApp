@@ -29,6 +29,12 @@ public class ViewLocationExpander : IViewLocationExpander
 
         var viewPath = $"/{featureParts[1]}/{featureParts[2]}/{actionFolder}/{{0}}.cshtml";
 
-        return new[] { viewPath, "/Common/Views/{0}.cshtml", $"{featureParts[1]}/{featureParts[2]}/{actionFolder}/{{0}}.cshtml", $"{featureParts[1]}/{featureParts[2]}/Common/{{0}}.cshtml" }.Union(viewLocations);
+        return new[] { 
+                viewPath, 
+                "/Common/Views/{0}.cshtml", 
+                $"{featureParts[1]}/{featureParts[2]}/{actionFolder}/{{0}}.cshtml", 
+				$"{featureParts[1]}/{featureParts[2]}/Common/{{0}}.cshtml",
+				$"{featureParts[1]}/Common/{{0}}.cshtml"}
+            .Union(viewLocations);
     }
 }

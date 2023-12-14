@@ -59,7 +59,7 @@ public class CookieEventsService : ICookieEventsService
 	private ClaimsIdentity GetUserIdentity(CookieSigningInContext cookieSigningInContext)
 	{
 		ClaimsIdentity? identity = cookieSigningInContext.Principal?.Identity as ClaimsIdentity;
-		ExceptionsService.WhenIdentityIsNullThrowCritical(identity, _logger);
+		ExceptionsService.WhenIdentityIsNullThrow(identity, _logger);
 
 		return identity!;
 	}

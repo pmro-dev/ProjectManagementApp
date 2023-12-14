@@ -30,8 +30,8 @@ public class ShowTodoListHandler : IRequestHandler<ShowTodoListQuery, ShowTodoLi
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTodoListQuery), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		TodoListModel? todoListDbModel = await _todoListRepository.GetSingleWithDetailsAsync(request.TodoListId, request.OrderDetailsBySelector, request.PageNumber, request.ItemsPerPageCount);
-		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(ShowTodoListQuery), todoListDbModel, _logger, request.TodoListId);
-
+		PaginationData paginData = new(request.PageNumber, request.ItemsPerPageCount, tasksCount, _logger);
+		ExceptionsService.WhenEntityIsNullThrow(nameof(ShowTodoListQuery), todoListDbModel, _logger, request.TodoListId);
 		var todoListDto = _todoListMapper.TransferToDto(todoListDbModel!);
 
 		PaginationData paginData = new(request.PageNumber, request.ItemsPerPageCount, todoListDto.Tasks.Count, _logger);

@@ -40,7 +40,7 @@ public static class ExceptionsService
 		}
 	}
 
-	public static void WhenGroupOfRequiredEntitiesNotFoundInDb<T>(string operationName, ICollection<T> groupOfEntities, ILogger logger)
+	public static void WhenGroupOfRequiredEntitiesNotFoundInDbThrow<T>(string operationName, ICollection<T> groupOfEntities, ILogger logger)
 	{
 		if (!groupOfEntities.Any())
 		{
@@ -59,7 +59,7 @@ public static class ExceptionsService
 	/// <param name="modelName">Model name.</param>
 	/// <param name="logger">Logger from class that invokes method.</param>
 	/// <exception cref="ArgumentNullException">Occurs when model is null.</exception>
-	public static void WhenEntityIsNullThrowCritical<T>(string operationName, T? model, ILogger logger, object? entityId = null)
+	public static void WhenEntityIsNullThrow<T>(string operationName, T? model, ILogger logger, object? entityId = null)
 	{
 		string modelTypeName = typeof(T).Name;
 
@@ -74,8 +74,8 @@ public static class ExceptionsService
 
 			if (entityIdAsString is null)
 			{
-				logger.LogCritical(ExceptionsMessages.LogInvalidEntityIdCast, operationName, nameof(WhenEntityIsNullThrowCritical));
-				throw new InvalidCastException(ExceptionsMessages.InvalidEntityIdCast(operationName, nameof(WhenEntityIsNullThrowCritical)));
+				logger.LogCritical(ExceptionsMessages.LogInvalidEntityIdCast, operationName, nameof(WhenEntityIsNullThrow));
+				throw new InvalidCastException(ExceptionsMessages.InvalidEntityIdCast(operationName, nameof(WhenEntityIsNullThrow)));
 			}
 
 			logger.LogCritical(ExceptionsMessages.LogEntityNotFoundInDbSet, operationName, modelTypeName, entityIdAsString);
@@ -93,7 +93,7 @@ public static class ExceptionsService
 	/// <exception cref="ArgumentNullException"></exception>
 	/// <exception cref="ArgumentOutOfRangeException"></exception>
 	/// <exception cref="ArgumentException"></exception>
-	public static void WhenArgumentIsInvalidThrowError(string operationName, object argument, string argumentName, ILogger logger)
+	public static void WhenArgumentIsInvalidThrow(string operationName, object argument, string argumentName, ILogger logger)
 	{
 		if (argument is null)
 		{
@@ -176,7 +176,7 @@ public static class ExceptionsService
 		}
 	}
 
-	public static void WhenIdentityIsNullThrowCritical(ClaimsIdentity? identity, ILogger _logger)
+	public static void WhenIdentityIsNullThrow(ClaimsIdentity? identity, ILogger _logger)
 	{
 		if (identity == null)
 		{
@@ -185,7 +185,7 @@ public static class ExceptionsService
 		}
 	}
 
-	public static void WhenPrincipalIsNullThrowCritical(string operationName, ClaimsPrincipal? principal, ILogger _logger)
+	public static void WhenPrincipalIsNullThrow(string operationName, ClaimsPrincipal? principal, ILogger _logger)
 	{
 		if (principal == null)
 		{
@@ -194,17 +194,17 @@ public static class ExceptionsService
 		}
 	}
 
-	public static void WhenIdsAreNotEqualThrowCritical(string operationName, object firstId, string firstIdName, object secondId, string secondIdName, ILogger logger)
+	public static void WhenIdsAreNotEqualThrow(string operationName, object firstId, string firstIdName, object secondId, string secondIdName, ILogger logger)
 	{
 		if (firstId is null)
 		{
-			logger.LogCritical(ExceptionsMessages.LogArgumentIsNullOrEmpty, nameof(WhenIdsAreNotEqualThrowCritical), nameof(firstId));
+			logger.LogCritical(ExceptionsMessages.LogArgumentIsNullOrEmpty, nameof(WhenIdsAreNotEqualThrow), nameof(firstId));
 			throw new ArgumentNullException(nameof(firstId), ExceptionsMessages.ProvidedArgumentIsNullOrEmpty);
 		}
 
 		if (secondId is null)
 		{
-			logger.LogCritical(ExceptionsMessages.LogArgumentIsNullOrEmpty, nameof(WhenIdsAreNotEqualThrowCritical), nameof(secondId));
+			logger.LogCritical(ExceptionsMessages.LogArgumentIsNullOrEmpty, nameof(WhenIdsAreNotEqualThrow), nameof(secondId));
 			throw new ArgumentNullException(nameof(secondId), ExceptionsMessages.ProvidedArgumentIsNullOrEmpty);
 		}
 

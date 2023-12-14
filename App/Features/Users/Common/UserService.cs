@@ -55,7 +55,7 @@ public class UserService : IUserService
 		}
 
 		ClaimsPrincipal? user = httpContext.User;
-		ExceptionsService.WhenPrincipalIsNullThrowCritical(nameof(GetSignedInUser), user, _logger);
+		ExceptionsService.WhenPrincipalIsNullThrow(nameof(GetSignedInUser), user, _logger);
 
 		return user;
 	}
@@ -63,7 +63,7 @@ public class UserService : IUserService
 	public async Task UpdateUserModelAsync(UserDto userBasedOnProviderDataDto, Claim authenticationSchemeClaim)
 	{
 		UserModel? userFromDb = await _userRepository.GetAsync(userBasedOnProviderDataDto.NameIdentifier);
-		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(UpdateUserModelAsync), userFromDb, _logger, userBasedOnProviderDataDto.NameIdentifier);
+		ExceptionsService.WhenEntityIsNullThrow(nameof(UpdateUserModelAsync), userFromDb, _logger, userBasedOnProviderDataDto.NameIdentifier);
 
 		bool IsUserUsedExternalAuthProvider = userBasedOnProviderDataDto.Provider != CookieAuthenticationDefaults.AuthenticationScheme;
 		bool IsUserDataNotTheSame = !userBasedOnProviderDataDto.Equals(userFromDb);
@@ -74,8 +74,8 @@ public class UserService : IUserService
 
 	private void SetNewDataForUser(UserModel? userFromDb, UserDto? userBasedOnProviderDataDto, string providerName)
 	{
-		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(UpdateUserModelAsync), userFromDb, _logger);
-		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(UpdateUserModelAsync), userBasedOnProviderDataDto, _logger);
+		ExceptionsService.WhenEntityIsNullThrow(nameof(UpdateUserModelAsync), userFromDb, _logger);
+		ExceptionsService.WhenEntityIsNullThrow(nameof(UpdateUserModelAsync), userBasedOnProviderDataDto, _logger);
 		ExceptionsService.WhenArgumentIsNullOrEmptyThrow(nameof(UpdateUserModelAsync), providerName, nameof(providerName), _logger);
 
 		userFromDb!.FirstName = userBasedOnProviderDataDto!.FirstName;
@@ -89,8 +89,8 @@ public class UserService : IUserService
 
 	public async Task SetRolesForUserPrincipleAsync(string userId, ClaimsIdentity? identity)
 	{
-		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(SetRolesForUserPrincipleAsync), userId, nameof(userId), _logger);
-		ExceptionsService.WhenIdentityIsNullThrowCritical(identity, _logger);
+		ExceptionsService.WhenArgumentIsInvalidThrow(nameof(SetRolesForUserPrincipleAsync), userId, nameof(userId), _logger);
+		ExceptionsService.WhenIdentityIsNullThrow(identity, _logger);
 
 		IEnumerable<RoleModel> userRoles = await _userRepository.GetRolesAsync(userId);
 		IEnumerable<string> userRolesNames = userRoles.Select(userRole => userRole.Name).ToList();

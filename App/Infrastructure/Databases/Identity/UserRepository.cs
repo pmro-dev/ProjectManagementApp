@@ -23,7 +23,7 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 	///<inheritdoc />
 	public async Task<UserModel?> GetWithDetailsAsync(string userId)
 	{
-		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetWithDetailsAsync), userId, nameof(userId), _logger);
+		ExceptionsService.WhenArgumentIsInvalidThrow(nameof(GetWithDetailsAsync), userId, nameof(userId), _logger);
 
 		UserModel? userWithDetailsFromDb = await _identityContext
 			.Set<UserModel>()
@@ -50,7 +50,7 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 	///<inheritdoc />
 	public async Task<bool> IsNameTakenAsync(string userName)
 	{
-		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(IsNameTakenAsync), userName, nameof(userName), _logger);
+		ExceptionsService.WhenArgumentIsInvalidThrow(nameof(IsNameTakenAsync), userName, nameof(userName), _logger);
 
 		bool result = await _identityContext
 			.Set<UserModel>()
@@ -61,7 +61,7 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 
 	public async Task<bool> IsAccountExistedAsync(string userEmail)
 	{
-		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(IsAccountExistedAsync), userEmail, nameof(userEmail), _logger);
+		ExceptionsService.WhenArgumentIsInvalidThrow(nameof(IsAccountExistedAsync), userEmail, nameof(userEmail), _logger);
 
 		bool result = await _identityContext
 			.Set<UserModel>()
@@ -73,7 +73,7 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 	///<inheritdoc />
 	public async Task<ICollection<RoleModel>> GetRolesAsync(string userId)
 	{
-		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetRolesAsync), userId, nameof(userId), _logger);
+		ExceptionsService.WhenArgumentIsInvalidThrow(nameof(GetRolesAsync), userId, nameof(userId), _logger);
 
 		ICollection<RoleModel> userRoles = await _identityContext
 			.Set<UserRoleModel>()
@@ -84,35 +84,4 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 		return userRoles;
 	}
 
-
-	//TODO implement Update feature
-	//public async Task<bool> UpdateUserAsync(UserModel userToUpdate)
-	//{
-	//	operationName = HelperOther.CreateActionNameForLoggingAndExceptions(nameof(UpdateUserAsync), repoName);
-	//	HelperCheck.IfArgumentNullThrowException(operationName, userToUpdate, nameof(userToUpdate), _logger);
-
-	//	TryCatchBlockDelegateType operationsForDbTryCatchBlockAsync = new(async () =>
-	//	{
-	//		UserModel? userToUpdateFromDb = await _identityContext.GetUserWithDetailsAsync(userToUpdate.UserId);
-	//		//HelperCheck.IfInstanceNullThrowException(operationName, userToUpdateFromDb, nameof(userToUpdateFromDb), _logger);
-
-	//		userToUpdateFromDb.Username = userToUpdate.Username;
-	//		userToUpdateFromDb.Password = userToUpdate.Password;
-	//		userToUpdateFromDb.Email = userToUpdate.Email;
-	//		userToUpdateFromDb.FirstName = userToUpdate.FirstName;
-	//		userToUpdateFromDb.Lastname = userToUpdate.Lastname;
-	//		userToUpdateFromDb.Provider = userToUpdate.Provider;
-	//		userToUpdateFromDb.NameIdentifier = userToUpdate.NameIdentifier;
-
-	//		if (!userToUpdate.UserRoles.Any())
-	//		{
-	//			userToUpdateFromDb.UserRoles = userToUpdate.UserRoles;
-	//		}
-
-	//		await _identityContext.UpdateUserAsync(userToUpdateFromDb);
-	//	});
-
-	//	await ExecuteInTryCatchBlockToCatchEFCoreAndSQLExceptionsAsync(operationsForDbTryCatchBlockAsync);
-	//	return true;
-	//}
 }

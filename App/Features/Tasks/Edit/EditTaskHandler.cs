@@ -42,12 +42,12 @@ public class EditTaskHandler :
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), request.TaskId, nameof(request.TaskId), _logger);
 
 		TaskModel? taskModel = await _taskRepository.GetAsync(request.TaskId);
-		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(EditTaskQuery), taskModel, _logger, request.TaskId);
+		ExceptionsService.WhenEntityIsNullThrow(nameof(EditTaskQuery), taskModel, _logger, request.TaskId);
 
 		TodoListModel? targetTodoListModel = await _todoListRepository.GetAsync(request.TodoListId);
-		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(EditTaskQuery), targetTodoListModel, _logger, request.TodoListId);
+		ExceptionsService.WhenEntityIsNullThrow(nameof(EditTaskQuery), targetTodoListModel, _logger, request.TodoListId);
 
-		ExceptionsService.WhenIdsAreNotEqualThrowCritical(
+		ExceptionsService.WhenIdsAreNotEqualThrow(
 			nameof(Edit), 
 			taskModel!.TodoListId, 
 			nameof(taskModel.TodoListId), 
@@ -60,7 +60,7 @@ public class EditTaskHandler :
 
 		// TODO implement method that allow to get only concrete properties by Select expression, here I need only TodoLists Ids and Names
 		ICollection<TodoListModel> userTodoListModels = await _todoListRepository.GetAllByFilterAsync(todoList => todoList.UserId == request.SignedInUserId);
-		ExceptionsService.WhenGroupOfRequiredEntitiesNotFoundInDb(nameof(EditTaskQuery), userTodoListModels, _logger);
+		ExceptionsService.WhenGroupOfRequiredEntitiesNotFoundInDbThrow(nameof(EditTaskQuery), userTodoListModels, _logger);
 
 		ICollection<TodoListDto> userTodoListDtos = _todoListMapper.TransferToDto(userTodoListModels);
 		// END OF TO DO
@@ -79,8 +79,8 @@ public class EditTaskHandler :
 
 		TaskModel? taskDbModel = await _taskRepository.GetAsync(taskEditInputDto.Id);
 
-		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(EditTaskCommand), taskDbModel, _logger, taskEditInputDto.Id);
-		ExceptionsService.WhenIdsAreNotEqualThrowCritical(
+		ExceptionsService.WhenEntityIsNullThrow(nameof(EditTaskCommand), taskDbModel, _logger, taskEditInputDto.Id);
+		ExceptionsService.WhenIdsAreNotEqualThrow(
 			nameof(EditTaskCommand), 
 			taskDbModel!.Id, 
 			nameof(taskDbModel.Id), 

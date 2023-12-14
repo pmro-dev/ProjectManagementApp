@@ -5,7 +5,7 @@ namespace App.Features.Pagination;
 public class PaginationData
 {
 	public bool AreTherePagesToShow { get; }
-	public bool IsCurrentPageFirstPage { get; }
+	public bool IsNotCurrentPageFirstPage { get; }
 	public bool IsThereNextPage { get; }
 	public int CurrentPageNumber { get; }
 	public int ItemsPerPageCount { get; }
@@ -22,17 +22,17 @@ public class PaginationData
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(PaginationData), currentPageNumber, ValueOneIndicator, nameof(currentPageNumber), logger);
 		ExceptionsService.WhenValueNotInRangeThrow(nameof(PaginationData), itemsCount, ValueZeroIndicator, int.MaxValue, nameof(itemsCount), logger);
 
-		CurrentPageNumber = currentPageNumber;
 		ItemsPerPageCount = itemsPerPageCount;
 		ItemsCount = itemsCount;
-		NextPageNumber = currentPageNumber + ValueOneIndicator;
-		PreviousPageNumber = currentPageNumber - ValueOneIndicator;
-
 		PagesCount = PaginationHelper.CountPages(ItemsCount, ItemsPerPageCount, logger);
+		AreTherePagesToShow = PaginationHelper.AreTherePagesToShow(PagesCount);
+
+		if (!AreTherePagesToShow) return;
+		CurrentPageNumber = currentPageNumber;
+		NextPageNumber = CurrentPageNumber + ValueOneIndicator;
 		ExceptionsService.WhenValueNotInRangeThrow(nameof(PaginationData), currentPageNumber, ValueOneIndicator, PagesCount, nameof(currentPageNumber), logger);
 		
-		AreTherePagesToShow = PaginationHelper.AreTherePagesToShow(PagesCount);
-		IsCurrentPageFirstPage = PaginationHelper.IsCurrentPageFirstPage(currentPageNumber);
+		IsNotCurrentPageFirstPage = PaginationHelper.IsNotCurrentPageFirstPage(currentPageNumber);
 		IsThereNextPage = PaginationHelper.IsThereNextPage(NextPageNumber, PagesCount);
 	}
 }

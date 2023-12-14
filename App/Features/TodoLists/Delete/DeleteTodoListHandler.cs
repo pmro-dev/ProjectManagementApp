@@ -31,7 +31,7 @@ public class DeleteTodoListHandler :
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeleteTodoListQuery), request.RouteTodoListId, nameof(request.RouteTodoListId), _logger);
 
 		TodoListModel? todoListDbModel = await _todoListRepository.GetAsync(request.RouteTodoListId);
-		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(DeleteTodoListQuery), todoListDbModel, _logger, request.RouteTodoListId);
+		ExceptionsService.WhenEntityIsNullThrow(nameof(DeleteTodoListQuery), todoListDbModel, _logger, request.RouteTodoListId);
 
 		var todoListDto = _todoListMapper.TransferToDto(todoListDbModel!);
 		var data = _todoListViewModelsFactory.CreateDeleteOutputVM(todoListDto);
@@ -44,9 +44,9 @@ public class DeleteTodoListHandler :
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeleteTodoListCommand), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		TodoListModel? todoListDbModel = await _todoListRepository.GetAsync(request.TodoListId);
-		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(DeleteTodoListCommand), todoListDbModel, _logger, request.TodoListId);
+		ExceptionsService.WhenEntityIsNullThrow(nameof(DeleteTodoListCommand), todoListDbModel, _logger, request.TodoListId);
 
-		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(DeleteTodoListCommand), todoListDbModel!.Id, nameof(todoListDbModel.Id), request.TodoListId, nameof(request.TodoListId), _logger);
+		ExceptionsService.WhenIdsAreNotEqualThrow(nameof(DeleteTodoListCommand), todoListDbModel!.Id, nameof(todoListDbModel.Id), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		_todoListRepository.Remove(todoListDbModel);
 		await _dataUnitOfWork.SaveChangesAsync();

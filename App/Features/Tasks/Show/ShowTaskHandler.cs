@@ -29,8 +29,8 @@ public class ShowTaskHandler : IRequestHandler<ShowTaskQuery, ShowTaskQueryRespo
 
 		TaskModel? taskModel = await _taskRepository.GetAsync(request.TaskId);
 
-		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(ShowTaskQuery), taskModel, _logger, request.TaskId);
-		ExceptionsService.WhenIdsAreNotEqualThrowCritical(
+		ExceptionsService.WhenEntityIsNullThrow(nameof(ShowTaskQuery), taskModel, _logger, request.TaskId);
+		ExceptionsService.WhenIdsAreNotEqualThrow(
 			nameof(ShowTaskQuery), request.TodoListId,
 			nameof(request.TodoListId), 
 			taskModel!.TodoListId, 

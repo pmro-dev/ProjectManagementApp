@@ -31,7 +31,7 @@ public class EditTodoListHandler :
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		TodoListModel? todoListModel = await _todoListRepository.GetAsync(request.TodoListId);
-		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(EditTodoListQuery), todoListModel, _logger, request.TodoListId);
+		ExceptionsService.WhenEntityIsNullThrow(nameof(EditTodoListQuery), todoListModel, _logger, request.TodoListId);
 
 		var todoListDto = _todoListMapper.TransferToDto(todoListModel!);
 		var editOutputVM = _todoListViewModelsFactory.CreateEditOutputVM(todoListDto);
@@ -44,13 +44,13 @@ public class EditTodoListHandler :
 	public async Task<EditTodoListCommandResponse> Handle(EditTodoListCommand request, CancellationToken cancellationToken)
 	{
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), request.TodoListId, nameof(request.TodoListId), _logger);
-		ExceptionsService.WhenIdsAreNotEqualThrowCritical(nameof(Edit), request.RouteTodoListId, nameof(request.RouteTodoListId), request.TodoListId, nameof(request.TodoListId), _logger);
+		ExceptionsService.WhenIdsAreNotEqualThrow(nameof(Edit), request.RouteTodoListId, nameof(request.RouteTodoListId), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		if (await _todoListRepository.ContainsAny(todoList => todoList.Title == request.InputVM.Title && todoList.UserId == request.InputVM.UserId))
 			return new EditTodoListCommandResponse(ExceptionsMessages.NameTaken, StatusCodesExtension.EntityNameTaken);
 
 		TodoListModel? todoListDbModel = await _todoListRepository.GetAsync(request.TodoListId);
-		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(EditTodoListCommand), todoListDbModel, _logger, request.TodoListId);
+		ExceptionsService.WhenEntityIsNullThrow(nameof(EditTodoListCommand), todoListDbModel, _logger, request.TodoListId);
 
 		var editInputDto = _todoListMapper.TransferToDto(request.InputVM);
 		_todoListMapper.UpdateModel(todoListDbModel!, editInputDto);

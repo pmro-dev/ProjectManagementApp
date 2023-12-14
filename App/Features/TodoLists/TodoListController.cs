@@ -208,7 +208,6 @@ public class TodoListController : Controller
 		return BadRequest();
 	}
 
-
 	/// <summary>
 	/// Action GET with custom route to show specific To Do List with details.
 	/// </summary>
@@ -219,14 +218,14 @@ public class TodoListController : Controller
 	[Route(CustomRoutes.TodoListShowRoute)]
 	public async Task<IActionResult> Show(int id, DateTime? filterDueDate, int? pageNumber, int? itemsPerPageCount)
 	{
-		int pageNumberTemp = pageNumber ?? FirstPageNumber;
-		int itemsPerPageCountTemp = itemsPerPageCount ?? DefaultItemsPerPageCount;
+		int currentPageNumber = pageNumber ?? FirstPageNumber;
+		int itemsPerPageAmount = itemsPerPageCount ?? DefaultItemsPerPageCount;
 
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), id, nameof(id), _logger);
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), pageNumberTemp, nameof(pageNumberTemp), _logger);
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), itemsPerPageCountTemp, nameof(itemsPerPageCountTemp), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), currentPageNumber, nameof(currentPageNumber), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), itemsPerPageAmount, nameof(itemsPerPageAmount), _logger);
 
-		var response = await _mediator.Send(new ShowTodoListQuery(id, filterDueDate, task => task.DueDate, pageNumberTemp, itemsPerPageCountTemp));
+		var response = await _mediator.Send(new ShowTodoListQuery(id, filterDueDate, task => task.DueDate, currentPageNumber, itemsPerPageAmount));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
 			return View(TodoListViews.Show, response.Data);

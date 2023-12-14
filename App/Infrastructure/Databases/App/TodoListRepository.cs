@@ -41,7 +41,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 			.Where(todoList => todoList.Id == todoListId)
 			.Include(todoList => todoList.Tasks)
 			.SingleOrDefaultAsync();
-		ExceptionsService.WhenEntityIsNullThrowCritical(nameof(DuplicateSingleWithDetailsAsync), todoListWithDetails, _logger, todoListId);
+		ExceptionsService.WhenEntityIsNullThrow(nameof(DuplicateSingleWithDetailsAsync), todoListWithDetails, _logger, todoListId);
 
 		var duplicatedTasks = todoListWithDetails!.Tasks.Select(originTask => CreateNewTaskObject(originTask)).ToList();
 		var duplicatedTodoList = CreateNewTodoListObject(todoListWithDetails, duplicatedTasks);
@@ -118,7 +118,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	///<inheritdoc />
 	public async Task<TodoListModel?> GetSingleWithDetailsAsync(int todoListId)
 	{
-		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetSingleWithDetailsAsync), todoListId, nameof(todoListId), _logger);
+		ExceptionsService.WhenArgumentIsInvalidThrow(nameof(GetSingleWithDetailsAsync), todoListId, nameof(todoListId), _logger);
 
 		TodoListModel? todoListFromDb = await _dbSet
 			.Where(todoList => todoList.Id == todoListId)
@@ -130,7 +130,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 
 	public async Task<TodoListModel?> GetSingleWithDetailsAsync(int todoListId, Expression<Func<TaskModel, object>> orderDetailsBySelector, int pageNumber, int itemsPerPageCount)
 	{
-		ExceptionsService.WhenArgumentIsInvalidThrowError(nameof(GetSingleWithDetailsAsync), todoListId, nameof(todoListId), _logger);
+		ExceptionsService.WhenArgumentIsInvalidThrow(nameof(GetSingleWithDetailsAsync), todoListId, nameof(todoListId), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(GetSingleWithDetailsAsync), pageNumber, nameof(pageNumber), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(GetSingleWithDetailsAsync), itemsPerPageCount, nameof(itemsPerPageCount), _logger);
 
