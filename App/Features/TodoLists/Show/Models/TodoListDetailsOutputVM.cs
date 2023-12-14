@@ -14,6 +14,10 @@ public class TodoListDetailsOutputVM : ITodoListDetailsOutputVM
     public IEnumerable<TaskDto> TasksCompleted { get;}
     public IEnumerable<TaskDto> TasksNotCompleted { get; }
     public IEnumerable<TaskDto> TasksExpired { get; }
+	public int TasksForTodayCount { get; }
+	public int TasksCompletedCount { get; }
+	public int TasksNotCompletedCount { get; }
+	public int TasksExpiredCount { get; }
 
 	public TodoListDetailsOutputVM(
 		int id, string name, string userId, PaginationData paginData, 
@@ -28,5 +32,10 @@ public class TodoListDetailsOutputVM : ITodoListDetailsOutputVM
 		TasksCompleted = tasksCompleted;
 		TasksNotCompleted = tasksNotCompleted;
 		TasksExpired = tasksExpired;
+
+		TasksForTodayCount = TasksForToday.Count();
+		TasksCompletedCount = TasksCompleted.Count();
+		TasksNotCompletedCount = TasksNotCompleted.Count();
+		TasksExpiredCount = TasksExpired.Count();
 	}
 }
