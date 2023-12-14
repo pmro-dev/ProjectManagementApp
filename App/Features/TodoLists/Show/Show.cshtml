@@ -1,11 +1,16 @@
-﻿@using App.Features.TodoLists.Show;
+﻿@using App.Common
+@using App.Common.Helpers
+@using App.Features.TodoLists.Show;
 @using App.Features.TodoLists.Show.Models;
+@using App.Features.Pagination;
 @model TodoListDetailsOutputVM
 
 @{
 	ViewData["Title"] = "Details";
 	DateTime? filterDueDate = null;
 	Layout = SharedViews.DefaultLayout;
+
+	PaginationData paginData = Model.PaginData;
 }
 
 <div>
@@ -18,13 +23,17 @@
 	<dl class="row">
 		<dd class="col-sm-5">
 			<a asp-action=@TaskCtrl.CreateAction asp-controller=@TaskCtrl.Name asp-route-id="@Model?.Id" method="get" class="btn" style="background-color: #671dff; color: white; font-weight: 500;">New Task</a>
-			<a asp-action=@TodoListCtrl.EditAction asp-controller=@TodoListCtrl.Name asp-route-id ="@Model?.Id" class="btn btn-warning">Edit</a>
+			<a asp-action=@TodoListCtrl.EditAction asp-controller=@TodoListCtrl.Name asp-route-id="@Model?.Id" class="btn btn-warning">Edit</a>
 			<a asp-action=@BoardsCtrl.BrieflyAction asp-controller="@BoardsCtrl.Name" class="btn btn-primary">Back</a>
 		</dd>
 	</dl>
 
+
+	<partial name="@SharedViews.ItemsPerPagePanel" controller="@TodoListCtrl.Name" action="@TodoListCtrl.ShowAction" />
+
+
 	@{
-		if (Model != null && Model.TasksForToday.Count() > 0)
+		if (Model != null && Model.TasksForTodayCount > 0)
 		{
 			ViewData["SetClassReminder"] = null;
 			ViewData["TableTitle"] = "Tasks For Today";
@@ -32,46 +41,42 @@
 		}
 	}
 
-	<div class="row">
-		<div class="col-md-4">
-			<div class="card-group">
-				<form id="resetDate" asp-action=@TodoListCtrl.ShowAction asp-route-id="@Model?.Id" asp-route-filterDueDate="@null" method="get"></form>
-				<form id="filterDate" asp-action=@TodoListCtrl.ShowAction asp-route-id="@Model?.Id" asp-route-filterDueDate="@filterDueDate" method="get">
-					<input asp-for="@filterDueDate" asp-format="{0:dd'/'MM'/'yyyy}" class="form-control" />
-					<span asp-validation-for="@filterDueDate" class="text-danger"></span>
-				</form>
-				<button type="submit" class="btn btn-sm btn-warning" form="filterDate">Filter</button>
-				<button type="submit" class="btn btn-sm btn-danger" form="resetDate">Reset</button>
-			</div>
-		</div>
-	</div>
-	<br />
+
+	<partial name="@SharedViews.FilterDueDatePanel" model="@new FilterDueDatePanelModel(Model?.Id, filterDueDate, TodoListCtrl.Name, TodoListCtrl.ShowAction)" />
+
 
 	@{
 		ViewData["SetClassReminder"] = "IamNotNull";
 		ViewData["TableTitle"] = "Tasks Not Started & In Progress";
 	}
+
 	<partial name="@SharedViews.TodoListTable" model="@Model?.TasksNotCompleted" view-data="ViewData" />
 
+
 	@{
-		if (Model != null && Model.TasksCompleted.Count() > 0)
+		if (Model != null && Model.TasksCompletedCount > 0)
 		{
 			ViewData["SetClassReminder"] = null;
 			ViewData["TableTitle"] = "Tasks Completed";
 			<partial name=@SharedViews.TodoListTable model="@Model?.TasksCompleted" view-data="ViewData" />
 		}
-	}
 
-	@{
-		if (Model != null && Model.TasksExpired.Count() > 0)
+		if (Model != null && Model.TasksExpiredCount > 0)
 		{
 			ViewData["SetClassReminder"] = null;
 			ViewData["TableTitle"] = "Tasks Expired!";
 			<partial name=@SharedViews.TodoListTable model="@Model?.TasksExpired" view-data="ViewData" />
 		}
 	}
-
 </div>
+
+
+@if (paginData.AreTherePagesToShow)
+{
+	var paginationPanel = new PaginationPanel(paginData, TodoListCtrl.Name, TodoListCtrl.ShowAction);
+	<partial name="@SharedViews.PaginationPanel" model="@paginationPanel" />
+}
+
 
 @section Scripts {
 	@{
