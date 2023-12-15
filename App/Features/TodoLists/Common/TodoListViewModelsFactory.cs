@@ -42,18 +42,17 @@ public class TodoListViewModelsFactory : ITodoListViewModelsFactory
 
 	public TodoListDetailsOutputVM CreateDetailsOutputVM(TodoListDto todoListDto, PaginationData paginationData, DateTime? filterDueDate)
 	{
-		IEnumerable<TaskDto> tasksForTodayDtos = Enumerable.Empty<TaskDto>();
-		IEnumerable<TaskDto> tasksCompletedDtos = Enumerable.Empty<TaskDto>();
-		IEnumerable<TaskDto> tasksNotCompletedDtos = Enumerable.Empty<TaskDto>();
-		IEnumerable<TaskDto> tasksExpiredDtos = Enumerable.Empty<TaskDto>();
+		var tasksForTodayDtos = Enumerable.Empty<TaskDto>();
+		var tasksCompletedDtos = Enumerable.Empty<TaskDto>();
+		var tasksNotCompletedDtos = Enumerable.Empty<TaskDto>();
+		var tasksExpiredDtos = Enumerable.Empty<TaskDto>();
 
 		//TODO create query with groupby by due date and task status type and get those groups
 		Action[] filterTasks = {
 					() => tasksForTodayDtos = TasksFilterService.FilterForTasksForToday(todoListDto.Tasks),
 					() => tasksCompletedDtos = TasksFilterService.FilterForTasksCompleted(todoListDto.Tasks),
 					() => tasksNotCompletedDtos = TasksFilterService.FilterForTasksNotCompleted(todoListDto.Tasks, filterDueDate),
-					() => tasksExpiredDtos = TasksFilterService.FilterForTasksExpired(todoListDto.Tasks)
-		};
+					() => tasksExpiredDtos = TasksFilterService.FilterForTasksExpired(todoListDto.Tasks)};
 
 		Parallel.Invoke(filterTasks);
 
