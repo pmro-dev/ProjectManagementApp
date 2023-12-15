@@ -61,6 +61,7 @@ public class TodoListViewModelsFactory : ITodoListViewModelsFactory
 			todoListDto.Title,
 			todoListDto.UserId,
 			paginationData,
+			filterDueDate,
 			tasksForTodayDtos.ToList(),
 			tasksCompletedDtos.ToList(),
 			tasksNotCompletedDtos.ToList(),

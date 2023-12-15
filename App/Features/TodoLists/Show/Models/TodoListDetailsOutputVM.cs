@@ -9,6 +9,7 @@ public class TodoListDetailsOutputVM : ITodoListDetailsOutputVM
     public int Id { get; }
     public string Name { get; }
     public string UserId { get; }
+	public DateTime? FilterDueDate { get; }
     public PaginationData PaginData { get; }
     public IEnumerable<TaskDto> TasksForToday { get; }
     public IEnumerable<TaskDto> TasksCompleted { get;}
@@ -20,14 +21,15 @@ public class TodoListDetailsOutputVM : ITodoListDetailsOutputVM
 	public int TasksExpiredCount { get; }
 
 	public TodoListDetailsOutputVM(
-		int id, string name, string userId, PaginationData paginData, 
-		IEnumerable<TaskDto> tasksForToday, IEnumerable<TaskDto> tasksCompleted, 
+		int id, string name, string userId, PaginationData paginData, DateTime? filterDueDate,
+		IEnumerable<TaskDto> tasksForToday, IEnumerable<TaskDto> tasksCompleted,
 		IEnumerable<TaskDto> tasksNotCompleted, IEnumerable<TaskDto> tasksExpired)
 	{
 		Id = id;
 		Name = name;
 		UserId = userId;
 		PaginData = paginData;
+		FilterDueDate = filterDueDate;
 		TasksForToday = tasksForToday;
 		TasksCompleted = tasksCompleted;
 		TasksNotCompleted = tasksNotCompleted;

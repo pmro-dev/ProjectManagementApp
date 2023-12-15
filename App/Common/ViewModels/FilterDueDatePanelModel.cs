@@ -1,8 +1,10 @@
 ﻿namespace App.Common.ViewModels;
 
 public record FilterDueDatePanelModel(
-	int? OwnerId, 
+	int ParentId, 
 	DateTime? FilterDueDate, 
 	string ControllerName, 
-	string ActionName
+	string ActionName,
+	int PageNumber,
+	int ItemsPerPageCount
 ){}

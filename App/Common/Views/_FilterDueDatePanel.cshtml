@@ -3,22 +3,51 @@
 @model FilterDueDatePanelModel
 
 @{
-	DateTime? filterDueDate = Model?.FilterDueDate;
-	string? actionName = Model?.ActionName;
-	string? controllerName = Model?.ControllerName;
-	int? ownerId = Model?.OwnerId;
+	DateTime? filterDueDate = Model.FilterDueDate;
+	string actionName = Model.ActionName;
+	string controllerName = Model.ControllerName;
+	int parentId = Model.ParentId;
+	string filterFormId = "filterDate";
+	string resetFormId = "resetDate";
+	int pageNumber = Model.PageNumber;
+	int itemsPerPageCount = Model.ItemsPerPageCount;
 }
 
 <div class="row">
 	<div class="col-md-4">
 		<div class="card-group">
-			<form id="resetDate" asp-controller="@controllerName" asp-action="@actionName" asp-route-id="@ownerId" asp-route-filterDueDate="@null" method="get"></form>
-			<form id="filterDate" asp-controller="@controllerName" asp-action="@actionName" asp-route-id="@ownerId" asp-route-filterDueDate="@filterDueDate" method="get">
-				<input asp-for="@filterDueDate" asp-format="@AttributesHelper.DataFormat" class="form-control" />
-				<span asp-validation-for="@filterDueDate" class="text-danger" type="datetime-local"></span>
+
+			<form id="@resetFormId" method="get"
+				  asp-controller="@controllerName"
+				  asp-action="@actionName"
+				  asp-route-id="@parentId"
+				  asp-route-filterDueDate="@null"
+				  asp-route-pageNumber="@pageNumber"
+				  asp-route-itemsPerPageCount="@itemsPerPageCount">
 			</form>
-			<button type="submit" class="btn btn-sm btn-warning" form="filterDate">Filter</button>
-			<button type="submit" class="btn btn-sm btn-danger" form="resetDate">Reset</button>
+
+			<form id="@filterFormId" method="get"
+				  asp-controller="@controllerName"
+				  asp-action="@actionName"
+				  asp-route-id="@parentId"
+				  asp-route-filterDueDate="@filterDueDate" 
+				  asp-route-pageNumber="@pageNumber" 
+				  asp-route-itemsPerPageCount="@itemsPerPageCount">
+
+				<input asp-for="@filterDueDate" class="form-control"
+					   asp-format="@AttributesHelper.DataFormat"/>
+
+				<input asp-for="@pageNumber" type="hidden" />
+				<input asp-for="@itemsPerPageCount" type="hidden" />
+
+				<span asp-validation-for="@filterDueDate"
+					  class="text-danger" type="datetime-local">
+				</span>
+
+			</form>
+
+			<button type="submit" class="btn btn-sm btn-warning" form="@filterFormId">Filter</button>
+			<button type="submit" class="btn btn-sm btn-danger" form="@resetFormId">Reset</button>
 		</div>
 	</div>
 </div>

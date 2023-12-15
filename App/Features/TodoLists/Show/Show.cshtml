@@ -7,10 +7,17 @@
 
 @{
 	ViewData["Title"] = "Details";
-	DateTime? filterDueDate = null;
+	DateTime? filterDueDate = Model.FilterDueDate;
 	Layout = SharedViews.DefaultLayout;
 
 	PaginationData paginData = Model.PaginData;
+	FilterDueDatePanelModel filterDueDatePanelData = new(
+		Model.Id,
+		filterDueDate,
+		TodoListCtrl.Name,
+		TodoListCtrl.ShowAction,
+		paginData.CurrentPageNumber,
+		paginData.ItemsPerPageCount);
 }
 
 <div>
@@ -42,7 +49,7 @@
 	}
 
 
-	<partial name="@SharedViews.FilterDueDatePanel" model="@new FilterDueDatePanelModel(Model?.Id, filterDueDate, TodoListCtrl.Name, TodoListCtrl.ShowAction)" />
+	<partial name="@SharedViews.FilterDueDatePanel" model="@filterDueDatePanelData" />
 
 
 	@{
