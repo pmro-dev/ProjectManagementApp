@@ -50,6 +50,8 @@ public class GetBoardBrieflyHandler : IRequestHandler<GetBoardBrieflyQuery, GetB
 		var tuples = await extendedQuery.ToListAsync();
 		var tuplesDto = TupleBrieflyMapper.MapToDto(tuples);
 
+		tuplesDto.Sort(CompareTupleByTodoListTitle);
+
 		int userTodoListsCount = await _todoListRepository.CountAsync(_predicateItemsOwner);
 
 		PaginationData paginData = new(request.PageNumber, request.ItemsPerPageCount, userTodoListsCount, _logger);
@@ -57,5 +59,10 @@ public class GetBoardBrieflyHandler : IRequestHandler<GetBoardBrieflyQuery, GetB
 		var data = _boardsVMFactory.CreateBrieflyOutputVM(tuplesDto, paginData);
 
 		return new GetBoardBrieflyQueryResponse(data);
+	}
+
+	private static int CompareTupleByTodoListTitle(Tuple<TodoListDto, int, int> x, Tuple<TodoListDto, int, int> y)
+	{
+		return string.Compare(x.Item1.Title, y.Item1.Title);
 	}
 }
