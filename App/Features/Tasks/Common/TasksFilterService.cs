@@ -12,6 +12,7 @@ public static class TasksFilterService
 	[DataType(DataType.Date)]
 	[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
 	private static DateTime todayDate = DateTime.Today;
+
 	private static readonly Func<TaskDto, object> dueDayOrderSelector = task => task.DueDate;
 	private static bool NotOverDueTaskSelector(TaskDto task) => task.DueDate.CompareTo(todayDate) > EarlierDateIndicator;
 	private static bool OverDueTaskSelector(TaskDto task) => task.DueDate.CompareTo(todayDate) < EarlierDateIndicator;
@@ -34,11 +35,11 @@ public static class TasksFilterService
 		return ExecuteFilter(tasks, todayNotCompletedTaskFilter, dueDayOrderSelector);
 	}
 
-	public static IEnumerable<TaskDto> FilterForTasksCompleted(IEnumerable<TaskDto> tasks)
+	public static IEnumerable<TaskDto> FilterForTasksCompleted(IEnumerable<TaskDto> tasks, DateTime? filterDueDate)
 	{
 		todayDate = DateTime.Today;
 
-		static bool compoundFilter(TaskDto task) => TasksCompletedSelector(task) && NotOverDueTaskSelector(task);
+		bool compoundFilter(TaskDto task) => TasksCompletedSelector(task) && NotOverDueTaskSelector(task);
 
 		return ExecuteFilter(tasks, compoundFilter, dueDayOrderSelector);
 	}
@@ -63,10 +64,20 @@ public static class TasksFilterService
 		return ExecuteFilter(tasks, compoundFilter, dueDayOrderSelector);
 	}
 
-	public static IEnumerable<TaskDto> FilterForTasksExpired(IEnumerable<TaskDto> tasks)
+	public static IEnumerable<TaskDto> FilterForTasksExpired(IEnumerable<TaskDto> tasks, DateTime? filterDueDate)
 	{
 		todayDate = DateTime.Today;
 
-		return ExecuteFilter(tasks, OverDueTaskSelector, dueDayOrderSelector);
+		bool compoundFilter(TaskDto task)
+		{
+			if (filterDueDate is null)
+				return
+					OverDueTaskSelector(task);
+			else
+				return
+					OverDueTaskWithFilterSelector(task, filterDueDate);
+		}
+
+		return ExecuteFilter(tasks, compoundFilter, dueDayOrderSelector);
 	}
 }

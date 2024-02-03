@@ -50,9 +50,9 @@ public class TodoListViewModelsFactory : ITodoListViewModelsFactory
 		//TODO create query with groupby by due date and task status type and get those groups
 		Action[] filterTasks = {
 					() => tasksForTodayDtos = TasksFilterService.FilterForTasksForToday(todoListDto.Tasks),
-					() => tasksCompletedDtos = TasksFilterService.FilterForTasksCompleted(todoListDto.Tasks),
+					() => tasksCompletedDtos = TasksFilterService.FilterForTasksCompleted(todoListDto.Tasks, filterDueDate),
 					() => tasksNotCompletedDtos = TasksFilterService.FilterForTasksNotCompleted(todoListDto.Tasks, filterDueDate),
-					() => tasksExpiredDtos = TasksFilterService.FilterForTasksExpired(todoListDto.Tasks)};
+					() => tasksExpiredDtos = TasksFilterService.FilterForTasksExpired(todoListDto.Tasks, filterDueDate)};
 
 		Parallel.Invoke(filterTasks);
 
