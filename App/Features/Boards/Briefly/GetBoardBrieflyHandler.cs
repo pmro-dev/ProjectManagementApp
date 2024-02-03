@@ -18,6 +18,7 @@ public class GetBoardBrieflyHandler : IRequestHandler<GetBoardBrieflyQuery, GetB
 	private readonly ITodoListRepository _todoListRepository;
 	private readonly string _signedInUserId;
 	private readonly Expression<Func<TodoListModel, bool>> _predicateItemsOwner;
+	private readonly DateTime? NullFilterDueDate = null;
 
 	public GetBoardBrieflyHandler(IBoardViewModelsFactory boardsVMFactory, ITodoListRepository todoListRepository, IUserService userService,
 		ILogger<GetBoardBrieflyHandler> logger)
@@ -54,7 +55,7 @@ public class GetBoardBrieflyHandler : IRequestHandler<GetBoardBrieflyQuery, GetB
 
 		int userTodoListsCount = await _todoListRepository.CountAsync(_predicateItemsOwner);
 
-		PaginationData paginData = new(request.PageNumber, request.ItemsPerPageCount, userTodoListsCount, _logger);
+		PaginationData paginData = new(request.PageNumber, request.ItemsPerPageCount, userTodoListsCount, NullFilterDueDate, _logger);
 
 		var data = _boardsVMFactory.CreateBrieflyOutputVM(tuplesDto, paginData);
 

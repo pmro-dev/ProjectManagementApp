@@ -1,6 +1,8 @@
-﻿using App.Features.Tasks.Common.Models;
+﻿using App.Common.Helpers;
+using App.Features.Tasks.Common.Models;
 using App.Features.TodoLists.Show.Models;
 using MediatR;
+using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 
 namespace App.Features.TodoLists.Show;
@@ -8,6 +10,9 @@ namespace App.Features.TodoLists.Show;
 public class ShowTodoListQuery : IRequest<ShowTodoListQueryResponse>
 {
 	public int TodoListId { get; }
+
+	[DataType(DataType.Date)]
+	[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
 	public DateTime? FilterDueDate { get; }
 	public int PageNumber { get; }
 	public int ItemsPerPageCount { get; }

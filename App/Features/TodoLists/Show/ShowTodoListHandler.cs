@@ -32,7 +32,7 @@ public class ShowTodoListHandler : IRequestHandler<ShowTodoListQuery, ShowTodoLi
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTodoListQuery), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		int tasksCount = await _taskRepository.CountAsync(task => task.TodoListId == request.TodoListId);
-		PaginationData paginData = new(request.PageNumber, request.ItemsPerPageCount, tasksCount, _logger);
+		PaginationData paginData = new(request.PageNumber, request.ItemsPerPageCount, tasksCount, request.FilterDueDate, _logger);
 
 		TodoListModel? todoList = await _todoListRepository.GetSingleWithDetailsAsync(request.TodoListId, request.OrderDetailsBySelector, paginData.CurrentPageNumber, paginData.ItemsPerPageCount);
 		ExceptionsService.WhenEntityIsNullThrow(nameof(ShowTodoListQuery), todoList, _logger, request.TodoListId);

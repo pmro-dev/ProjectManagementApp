@@ -16,19 +16,39 @@
 	<dd class="col-sm-5">
 		<div class="btn-group" role="group" aria-label="Items Per Page">
 
-			<a asp-controller="@controllerName" asp-action="@actionName" asp-route-id="@Model?.Id" asp-route-pageNumber="@firstPageIndicator" asp-route-itemsPerPageCount="@defaultItemsPerPageCount" class="btn btn-primary">
+			<a asp-controller="@controllerName"
+			   asp-action="@actionName"
+			   asp-route-id="@Model?.Id"
+			   asp-route-pageNumber="@firstPageIndicator"
+			   asp-route-itemsPerPageCount="@defaultItemsPerPageCount"
+			   class="btn btn-primary">
 				@defaultItemsPerPageCount
 			</a>
 
-			<a asp-controller="@controllerName" asp-action="@actionName" asp-route-id="@Model?.Id" asp-route-pageNumber="@firstPageIndicator" asp-route-itemsPerPageCount="@firstOptionItemsPerPageCount" class="btn btn-primary">
+			<a asp-controller="@controllerName"
+			   asp-action="@actionName"
+			   asp-route-id="@Model?.Id"
+			   asp-route-pageNumber="@firstPageIndicator"
+			   asp-route-itemsPerPageCount="@firstOptionItemsPerPageCount"
+			   class="btn btn-primary">
 				@firstOptionItemsPerPageCount
 			</a>
 
-			<a asp-controller="@controllerName" asp-action="@actionName" asp-route-id="@Model?.Id" asp-route-pageNumber="@firstPageIndicator" asp-route-itemsPerPageCount="@secondOptionItemsPerPageCount" class="btn btn-primary">
+			<a asp-controller="@controllerName"
+			   asp-action="@actionName"
+			   asp-route-id="@Model?.Id"
+			   asp-route-pageNumber="@firstPageIndicator"
+			   asp-route-itemsPerPageCount="@secondOptionItemsPerPageCount"
+			   class="btn btn-primary">
 				@secondOptionItemsPerPageCount
 			</a>
 
-			<a asp-controller="@controllerName" asp-action="@actionName" asp-route-id="@Model?.Id" asp-route-pageNumber="@firstPageIndicator" asp-route-itemsPerPageCount="@thirdOptionItemsPerPageCount" class="btn btn-primary">
+			<a asp-controller="@controllerName"
+			   asp-action="@actionName"
+			   asp-route-id="@Model?.Id"
+			   asp-route-pageNumber="@firstPageIndicator"
+			   asp-route-itemsPerPageCount="@thirdOptionItemsPerPageCount"
+			   class="btn btn-primary">
 				@thirdOptionItemsPerPageCount
 			</a>
 

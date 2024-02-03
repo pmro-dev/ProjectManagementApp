@@ -4,5 +4,4 @@ public record PaginationPanel(
     PaginationData PaginData,
     string ControllerName,
     string ActionName
-)
-{ }
+);
