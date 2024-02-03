@@ -1,12 +1,14 @@
 ﻿@using App.Common
 @using App.Common.Helpers
+@using App.Features.Tasks.Common.Models
 @using App.Features.TodoLists.Show;
 @using App.Features.TodoLists.Show.Models;
 @using App.Features.Pagination;
+@using App.Features.TodoLists.Common.Helpers;
 @model TodoListDetailsOutputVM
 
 @{
-	ViewData["Title"] = "Details";
+	ViewData[TodoListViewData.ViewTitleKey] = "Details";
 	DateTime? filterDueDate = Model.FilterDueDate;
 	Layout = SharedViews.DefaultLayout;
 
@@ -18,6 +20,20 @@
 		TodoListCtrl.ShowAction,
 		paginData.CurrentPageNumber,
 		paginData.ItemsPerPageCount);
+
+	bool AreThereCompletedTasks = Model != null && Model.TasksCompletedCount > 0;
+	bool AreThereExpiredTasks = Model != null && Model.TasksExpiredCount > 0;
+	bool AreThereForTodayTasks = Model != null && Model.TasksForTodayCount > 0;
+
+	IEnumerable<TaskDto>? completedTasks = Model?.TasksCompleted;
+	IEnumerable<TaskDto>? expiredTasks = Model?.TasksExpired;
+	IEnumerable<TaskDto>? tasksNotCompleted = Model?.TasksNotCompleted;
+	IEnumerable<TaskDto>? tasksForToday = Model?.TasksForToday;
+	string tableTitleForCompleted = "Tasks Completed";
+	string tableTitleForExpired = "Tasks Expired!";
+	string tableTitleForNotStarted = "Tasks Not Started & In Progress";
+	string tableTitleForToday = "Tasks For Today";
+	string reminderNotNull = "IamNotNull";
 }
 
 <div>
@@ -40,12 +56,8 @@
 
 
 	@{
-		if (Model != null && Model.TasksForTodayCount > 0)
-		{
-			ViewData["SetClassReminder"] = null;
-			ViewData["TableTitle"] = "Tasks For Today";
-			<partial name="@SharedViews.TodoListTable" model="@Model?.TasksForToday" />
-		}
+		if (AreThereForTodayTasks)
+			await ShowTasksAsync(tableTitleForToday, tasksForToday);
 	}
 
 
@@ -53,28 +65,16 @@
 
 
 	@{
-		ViewData["SetClassReminder"] = "IamNotNull";
-		ViewData["TableTitle"] = "Tasks Not Started & In Progress";
+		ViewData[TodoListViewData.SetClassReminderKey] = reminderNotNull;
+		await ShowTasksAsync(tableTitleForNotStarted, tasksNotCompleted);
+
+		if (AreThereCompletedTasks)
+			await ShowTasksAsync(tableTitleForCompleted, completedTasks);
+
+		if (AreThereExpiredTasks)
+			await ShowTasksAsync(tableTitleForExpired, expiredTasks);
 	}
 
-	<partial name="@SharedViews.TodoListTable" model="@Model?.TasksNotCompleted" view-data="ViewData" />
-
-
-	@{
-		if (Model != null && Model.TasksCompletedCount > 0)
-		{
-			ViewData["SetClassReminder"] = null;
-			ViewData["TableTitle"] = "Tasks Completed";
-			<partial name=@SharedViews.TodoListTable model="@Model?.TasksCompleted" view-data="ViewData" />
-		}
-
-		if (Model != null && Model.TasksExpiredCount > 0)
-		{
-			ViewData["SetClassReminder"] = null;
-			ViewData["TableTitle"] = "Tasks Expired!";
-			<partial name=@SharedViews.TodoListTable model="@Model?.TasksExpired" view-data="ViewData" />
-		}
-	}
 </div>
 
 
@@ -82,6 +82,16 @@
 {
 	var paginationPanel = new PaginationPanel(paginData, TodoListCtrl.Name, TodoListCtrl.ShowAction);
 	<partial name="@SharedViews.PaginationPanel" model="@paginationPanel" />
+}
+
+
+@{
+	async Task ShowTasksAsync(string tableTitle, IEnumerable<TaskDto>? tasksSource)
+	{
+		ViewData[TodoListViewData.SetClassReminderKey] = null;
+		ViewData[TodoListViewData.TableTitleKey] = tableTitle;
+		<partial name=@SharedViews.TodoListTable model="@tasksSource" view-data="ViewData" />
+	}
 }
 
 
