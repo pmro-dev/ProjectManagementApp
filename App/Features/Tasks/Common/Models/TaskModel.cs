@@ -3,6 +3,7 @@ using App.Features.Tasks.Common.Helpers;
 using App.Features.Tasks.Common.Interfaces;
 using App.Features.Tasks.Common.TaskTags.Common;
 using App.Features.TodoLists.Common.Models;
+using App.Features.Users.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static App.Features.Tasks.Common.Helpers.TaskStatusHelper;
@@ -54,9 +55,14 @@ public class TaskModel : ITaskModel
     [Required]
     public int TodoListId { get; set; } = defaultId;
 
-    [ForeignKey(nameof(TodoListId))]
+	[Required]
+	[ForeignKey(nameof(TodoListId))]
     public virtual TodoListModel? TodoList { get; set; }
 
     [Required]
     public string UserId { get; set; } = string.Empty;
+
+	[Required]
+	[ForeignKey(nameof(UserId))]
+	public virtual UserModel? Owner { get; set; }
 }

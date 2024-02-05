@@ -1,7 +1,9 @@
 ﻿using App.Features.Tasks.Common.Models;
 using App.Features.TodoLists.Common.Helpers;
 using App.Features.TodoLists.Common.Interfaces;
+using App.Features.Users.Common.Models;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace App.Features.TodoLists.Common.Models;
 
@@ -30,6 +32,9 @@ public class TodoListModel : ITodoListModel
 	/// </summary>
 	[Required]
 	public string UserId { get; set; } = string.Empty;
+
+	[ForeignKey(nameof(UserId))]
+	public UserModel? Owner { get; set; }
 
 	/// <summary>
 	/// Gets or Sets
