@@ -1,8 +1,13 @@
 ﻿@using App.Common
+@using App.Common.Helpers
+@using App.Common.ViewModels
+@model ItemsPerPagePanelVM
 
 @{
 	string? controllerName = ViewContext.RouteData.Values["controller"]?.ToString();
 	string? actionName = ViewContext.RouteData.Values["action"]?.ToString();
+	int? todoListId = Model?.TodoListId;
+	string? filterDueDate = Model?.FilterDueDate?.ToString(AttributesHelper.DataFormat);
 
 	int firstPageIndicator = 1;
 	int defaultItemsPerPageCount = @ControllersConsts.DefaultItemsPerPageCount;
@@ -16,42 +21,29 @@
 	<dd class="col-sm-5">
 		<div class="btn-group" role="group" aria-label="Items Per Page">
 
-			<a asp-controller="@controllerName"
-			   asp-action="@actionName"
-			   asp-route-id="@Model?.Id"
-			   asp-route-pageNumber="@firstPageIndicator"
-			   asp-route-itemsPerPageCount="@defaultItemsPerPageCount"
-			   class="btn btn-primary">
-				@defaultItemsPerPageCount
-			</a>
-
-			<a asp-controller="@controllerName"
-			   asp-action="@actionName"
-			   asp-route-id="@Model?.Id"
-			   asp-route-pageNumber="@firstPageIndicator"
-			   asp-route-itemsPerPageCount="@firstOptionItemsPerPageCount"
-			   class="btn btn-primary">
-				@firstOptionItemsPerPageCount
-			</a>
-
-			<a asp-controller="@controllerName"
-			   asp-action="@actionName"
-			   asp-route-id="@Model?.Id"
-			   asp-route-pageNumber="@firstPageIndicator"
-			   asp-route-itemsPerPageCount="@secondOptionItemsPerPageCount"
-			   class="btn btn-primary">
-				@secondOptionItemsPerPageCount
-			</a>
-
-			<a asp-controller="@controllerName"
-			   asp-action="@actionName"
-			   asp-route-id="@Model?.Id"
-			   asp-route-pageNumber="@firstPageIndicator"
-			   asp-route-itemsPerPageCount="@thirdOptionItemsPerPageCount"
-			   class="btn btn-primary">
-				@thirdOptionItemsPerPageCount
-			</a>
+			@{
+				await ShowControllerAsync(defaultItemsPerPageCount);
+				await ShowControllerAsync(firstOptionItemsPerPageCount);
+				await ShowControllerAsync(secondOptionItemsPerPageCount);
+				await ShowControllerAsync(thirdOptionItemsPerPageCount);
+			}
 
 		</div>
 	</dd>
 </dl>
+
+
+@{
+	async Task ShowControllerAsync(int itemsPerPageCount)
+	{
+		<a class="btn btn-primary"
+		   asp-controller="@controllerName"
+		   asp-action="@actionName"
+		   asp-route-id="@todoListId"
+		   asp-route-pageNumber="@firstPageIndicator"
+		   asp-route-itemsPerPageCount="@itemsPerPageCount"
+		   asp-route-filterDueDate="@filterDueDate">
+			@itemsPerPageCount
+		</a>
+	}
+}

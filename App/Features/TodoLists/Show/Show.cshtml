@@ -9,13 +9,14 @@
 
 @{
 	ViewData[TodoListViewData.ViewTitleKey] = "Details";
-	DateTime? filterDueDate = Model.FilterDueDate;
 	Layout = SharedViews.DefaultLayout;
+	DateTime? filterDueDate = Model.FilterDueDate;
+	int todoListId = Model.Id;
 
 	PaginationData paginData = Model.PaginData;
 
 	FilterDueDatePanelModel filterDueDatePanelData = new(
-		Model.Id,
+		todoListId,
 		filterDueDate,
 		TodoListCtrl.Name,
 		TodoListCtrl.ShowAction,
@@ -47,14 +48,14 @@
 	</div>
 	<dl class="row">
 		<dd class="col-sm-5">
-			<a asp-action=@TaskCtrl.CreateAction asp-controller=@TaskCtrl.Name asp-route-id="@Model?.Id" method="get" class="btn" style="background-color: #671dff; color: white; font-weight: 500;">New Task</a>
-			<a asp-action=@TodoListCtrl.EditAction asp-controller=@TodoListCtrl.Name asp-route-id="@Model?.Id" class="btn btn-warning">Edit</a>
+			<a asp-action=@TaskCtrl.CreateAction asp-controller=@TaskCtrl.Name asp-route-id="@todoListId" method="get" class="btn" style="background-color: #671dff; color: white; font-weight: 500;">New Task</a>
+			<a asp-action=@TodoListCtrl.EditAction asp-controller=@TodoListCtrl.Name asp-route-id="@todoListId" class="btn btn-warning">Edit</a>
 			<a asp-action=@BoardsCtrl.BrieflyAction asp-controller="@BoardsCtrl.Name" class="btn btn-primary">Back</a>
 		</dd>
 	</dl>
 
 
-	<partial name="@SharedViews.ItemsPerPagePanel" controller="@TodoListCtrl.Name" action="@TodoListCtrl.ShowAction" />
+	<partial name="@SharedViews.ItemsPerPagePanel" controller="@TodoListCtrl.Name" action="@TodoListCtrl.ShowAction" model="@new ItemsPerPagePanelVM(todoListId, filterDueDate)" />
 
 
 	@{
