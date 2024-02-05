@@ -7,6 +7,12 @@
 	PaginationData paginData = Model.PaginData;
 	string controllerName = Model.ControllerName;
 	string actionName = Model.ActionName;
+	string? filterDueDateValue = paginData.FilterDueDate?.ToString(AttributesHelper.DataFormat);
+	int itemsPerPage = paginData.ItemsPerPageCount;
+	int previousPageNumber = paginData.PreviousPageNumber;
+	int nextPageNumber = paginData.NextPageNumber;
+	string buttonTextPrevious = "Previous";
+	string buttonTextNext = "Next";
 }
 
 <p>
@@ -15,50 +21,8 @@
 
 			@if (paginData.IsNotCurrentPageFirstPage)
 			{
-				if (paginData.FilterDueDate == null)
-				{
-					<li class="page-item">
-						<a class="page-link"
-						   asp-controller="@controllerName"
-						   asp-action="@actionName"
-						   asp-route-pageNumber="@paginData.PreviousPageNumber"
-						   asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">
-							Previous
-						</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link"
-						   asp-controller="@controllerName"
-						   asp-action="@actionName"
-						   asp-route-pageNumber="@paginData.PreviousPageNumber"
-						   asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">
-							@paginData.PreviousPageNumber
-						</a>
-					</li>
-				}
-				else
-				{
-					<li class="page-item">
-						<a class="page-link"
-						   asp-controller="@controllerName"
-						   asp-action="@actionName"
-						   asp-route-filterDueDate="@paginData.FilterDueDate?.ToString(AttributesHelper.DataFormat)"
-						   asp-route-pageNumber="@paginData.PreviousPageNumber"
-						   asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">
-							Previous
-						</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link"
-						   asp-controller="@controllerName"
-						   asp-action="@actionName"
-						   asp-route-filterDueDate="@paginData.FilterDueDate?.ToString(AttributesHelper.DataFormat)"
-						   asp-route-pageNumber="@paginData.PreviousPageNumber"
-						   asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">
-							@paginData.PreviousPageNumber
-						</a>
-					</li>
-				}
+				await ShowButtonAsync(previousPageNumber, itemsPerPage, filterDueDateValue, buttonTextPrevious);
+				await ShowButtonAsync(previousPageNumber, itemsPerPage, filterDueDateValue, previousPageNumber.ToString());
 			}
 
 			<li class="page-item active">
@@ -69,53 +33,27 @@
 
 			@if (paginData.IsThereNextPage)
 			{
-				if (paginData.FilterDueDate == null)
-				{
-					<li class="page-item">
-						<a class="page-link"
-						   asp-controller="@controllerName"
-						   asp-action="@actionName"
-						   asp-route-pageNumber="@paginData.NextPageNumber"
-						   asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">
-							@paginData.NextPageNumber
-						</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link"
-						   asp-controller="@controllerName"
-						   asp-action="@actionName"
-						   asp-route-pageNumber="@paginData.NextPageNumber"
-						   asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">
-							Next
-						</a>
-					</li>
-				}
-				else
-				{
-
-					<li class="page-item">
-						<a class="page-link"
-						   asp-controller="@controllerName"
-						   asp-action="@actionName"
-						   asp-route-filterDueDate="@paginData.FilterDueDate?.ToString(AttributesHelper.DataFormat)"
-						   asp-route-pageNumber="@paginData.NextPageNumber"
-						   asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">
-							@paginData.NextPageNumber
-						</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link"
-						   asp-controller="@controllerName"
-						   asp-action="@actionName"
-						   asp-route-filterDueDate="@paginData.FilterDueDate?.ToString(AttributesHelper.DataFormat)"
-						   asp-route-pageNumber="@paginData.NextPageNumber"
-						   asp-route-itemsPerPageCount="@paginData.ItemsPerPageCount">
-							Next
-						</a>
-					</li>
-				}
+				await ShowButtonAsync(nextPageNumber, itemsPerPage, filterDueDateValue, nextPageNumber.ToString());
+				await ShowButtonAsync(nextPageNumber, itemsPerPage, filterDueDateValue, buttonTextNext);
 			}
 
 		</ul>
 	</nav>
 </p>
+
+
+@{
+	async Task ShowButtonAsync(int pageNumber, int itemsPerPageCount, string? filterDueDate, string buttonValue)
+	{
+		<li class="page-item">
+			<a class="page-link"
+			   asp-controller="@controllerName"
+			   asp-action="@actionName"
+			   asp-route-pageNumber="@pageNumber"
+			   asp-route-itemsPerPageCount="@itemsPerPageCount"
+			   asp-route-filterDueDate="@filterDueDate">
+				@buttonValue
+			</a>
+		</li>
+	}
+}

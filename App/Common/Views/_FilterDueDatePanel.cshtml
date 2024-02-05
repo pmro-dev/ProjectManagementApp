@@ -21,24 +21,23 @@
 				  asp-controller="@controllerName"
 				  asp-action="@actionName"
 				  asp-route-id="@parentId"
-				  asp-route-filterDueDate="@null"
 				  asp-route-pageNumber="@pageNumber"
-				  asp-route-itemsPerPageCount="@itemsPerPageCount">
+				  asp-route-itemsPerPageCount="@itemsPerPageCount"
+				  asp-route-filterDueDate="@null">
 			</form>
 
 			<form id="@filterFormId" method="get"
 				  asp-controller="@controllerName"
 				  asp-action="@actionName"
 				  asp-route-id="@parentId"
-				  asp-route-filterDueDate="@filterDueDate"
-				  asp-route-pageNumber="@pageNumber" 
-				  asp-route-itemsPerPageCount="@itemsPerPageCount">
-
-				<input asp-for="@filterDueDate" class="form-control"
-					   asp-format="@AttributesHelper.DataFormat"/>
+				  asp-route-pageNumber="@pageNumber"
+				  asp-route-itemsPerPageCount="@itemsPerPageCount"
+				  asp-route-filterDueDate="@filterDueDate">
 
 				<input asp-for="@pageNumber" type="hidden" />
 				<input asp-for="@itemsPerPageCount" type="hidden" />
+				<input asp-for="@filterDueDate" class="form-control"
+					   asp-format="@AttributesHelper.DataFormat" />
 
 				<span asp-validation-for="@filterDueDate"
 					  class="text-danger" type="datetime-local">
