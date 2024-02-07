@@ -12,6 +12,9 @@ public class IncomeModel : IIncomeModel
 	public Guid Id { get; set; }
 
 	[Required]
+	public string DataVersion { get; set; }
+
+	[Required]
 	public string Name { get; set; }
 
 	[Required]
@@ -31,18 +34,15 @@ public class IncomeModel : IIncomeModel
 
 	public DateTime? PaymentDeadline { get; set; }
 
-	public IncomeModel(string name, string description, long value, Guid budgetId)
+	public IncomeModel(string name, string description, long value, Guid budgetId, DateTime? paymentDeadline = null, DateTime? paymentDate = null)
 	{
 		Id = Guid.NewGuid();
+		DataVersion = Guid.NewGuid().ToString();
 		Name = name;
 		Description = description;
 		Value = value;
 		BudgetId = budgetId;
-	}
-
-	public IncomeModel(string name, string description, long value, Guid budgetId, DateTime paymentDeadline)
-		: this(name, description, value, budgetId)
-	{
+		PaymentDate = paymentDate;
 		PaymentDeadline = paymentDeadline;
 	}
 }

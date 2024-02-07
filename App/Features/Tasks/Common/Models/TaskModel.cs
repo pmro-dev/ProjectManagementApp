@@ -1,4 +1,5 @@
-﻿using App.Common.Helpers;
+﻿#region USINGS
+using App.Common.Helpers;
 using App.Features.Tasks.Common.Helpers;
 using App.Features.Tasks.Common.Interfaces;
 using App.Features.Tasks.Common.TaskTags.Common;
@@ -7,6 +8,7 @@ using App.Features.Users.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static App.Features.Tasks.Common.Helpers.TaskStatusHelper;
+#endregion
 
 namespace App.Features.Tasks.Common.Models;
 
@@ -26,7 +28,10 @@ public class TaskModel : ITaskModel
     [MinLength(TaskAttributesHelper.TitleMinLength)]
     public string Title { get; set; } = string.Empty;
 
-    [Required]
+	[Required]
+	public string DataVersion { get; set; } = Guid.NewGuid().ToString();
+
+	[Required]
     [DataType(DataType.MultilineText)]
     [MaxLength(TaskAttributesHelper.DescriptionMaxLength)]
     [MinLength(TaskAttributesHelper.DescriptionMinLength)]
@@ -34,15 +39,15 @@ public class TaskModel : ITaskModel
 
     [Required]
     [DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
-    public DateTime DueDate { get; set; } = DateTime.Now;
+    public DateTime Deadline { get; set; } = DateTime.Now;
 
     [Required]
     [DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
-    public DateTime CreationDate { get; set; } = DateTime.Now;
+    public DateTime Created { get; set; } = DateTime.Now;
 
     [Required]
     [DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
-    public DateTime LastModificationDate { get; set; } = DateTime.Now;
+    public DateTime LastModified { get; set; } = DateTime.Now;
 
     [DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
     public DateTime? ReminderDate { get; set; } = null;
@@ -55,14 +60,12 @@ public class TaskModel : ITaskModel
     [Required]
     public int TodoListId { get; set; } = defaultId;
 
-	[Required]
 	[ForeignKey(nameof(TodoListId))]
     public virtual TodoListModel? TodoList { get; set; }
 
     [Required]
     public string UserId { get; set; } = string.Empty;
 
-	[Required]
 	[ForeignKey(nameof(UserId))]
 	public virtual UserModel? Owner { get; set; }
 }

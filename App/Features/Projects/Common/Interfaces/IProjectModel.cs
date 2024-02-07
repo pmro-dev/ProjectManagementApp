@@ -1,6 +1,5 @@
 ﻿#region USINGS
 using App.Features.Budgets.Common.Models;
-using App.Features.Clients.Common.Models;
 using App.Features.Projects.Common.Helpers;
 using App.Features.Teams.Common.Models;
 using App.Features.TodoLists.Common.Models;
@@ -18,6 +17,9 @@ public interface IProjectModel
 	public Guid Id { get; set; }
 
 	[Required]
+	public string DataVersion { get; set; }
+
+	[Required]
 	public string Title { get; set; }
 
 	[Required]
@@ -30,7 +32,7 @@ public interface IProjectModel
 	[ForeignKey(nameof(BudgetId))]
 	public BudgetModel? Budget { get; set; }
 
-	public ICollection<ClientModel> Clients { get; set; }
+	public ICollection<UserModel> Clients { get; set; }
 
 	[Required]
 	public string OwnerId { get; set; }

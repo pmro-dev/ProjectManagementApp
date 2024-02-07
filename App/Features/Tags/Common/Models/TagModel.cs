@@ -11,6 +11,9 @@ public class TagModel : ITagModel
     public int Id { get; set; }
 
     [Required]
+	public string DataVersion { get; set; } = Guid.NewGuid().ToString();
+
+	[Required]
     public string Title { get; set; } = string.Empty;
 
     public ICollection<TaskTagModel> TaskTags { get; set; } = new List<TaskTagModel>();

@@ -41,10 +41,10 @@ public static class TasksData
 
 	public static ICollection<TaskModel> NewTasksRange { get; private set; } = new List<TaskModel>()
 	{
-			new() { Title = "First " + TaskRangeSuffix, Description = "First Description", DueDate = DateTime.ParseExact("2023-10-27T10:30", DueDateFormat, _formatProvider) },
-			new() { Title = "Second " + TaskRangeSuffix, Description = "Second Description", DueDate = DateTime.ParseExact("2023-08-22T09:00", DueDateFormat, _formatProvider) },
-			new() { Title = "Third " + TaskRangeSuffix, Description = "Third Description", DueDate = DateTime.ParseExact("2023-09-12T09:30", DueDateFormat, _formatProvider) },
-			new() { Title = "Fourth " + TaskRangeSuffix, Description = "Fourth Description", DueDate = DateTime.ParseExact("2023-11-07T12:30", DueDateFormat, _formatProvider	) },
-			new() { Title = "Fifth " + TaskRangeSuffix, Description = "Fifth Description", DueDate = DateTime.ParseExact("2023-06-30T11:00", DueDateFormat, _formatProvider) }
+			new() { Title = "First " + TaskRangeSuffix, Description = "First Description", Deadline = DateTime.ParseExact("2023-10-27T10:30", DueDateFormat, _formatProvider) },
+			new() { Title = "Second " + TaskRangeSuffix, Description = "Second Description", Deadline = DateTime.ParseExact("2023-08-22T09:00", DueDateFormat, _formatProvider) },
+			new() { Title = "Third " + TaskRangeSuffix, Description = "Third Description", Deadline = DateTime.ParseExact("2023-09-12T09:30", DueDateFormat, _formatProvider) },
+			new() { Title = "Fourth " + TaskRangeSuffix, Description = "Fourth Description", Deadline = DateTime.ParseExact("2023-11-07T12:30", DueDateFormat, _formatProvider	) },
+			new() { Title = "Fifth " + TaskRangeSuffix, Description = "Fifth Description", Deadline = DateTime.ParseExact("2023-06-30T11:00", DueDateFormat, _formatProvider) }
 	};
 }

@@ -14,6 +14,8 @@ public class BillingModel : IBillingModel
 	[Key]
 	public Guid Id { get; set; }
 
+	public string DataVersion { get; set; } = Guid.NewGuid().ToString();
+
 	[Required]
 	public string Name { get; set; }
 
@@ -34,15 +36,14 @@ public class BillingModel : IBillingModel
 
 	public DateTime? PaymentDeadline { get; set; }
 
-	public BillingModel(string name, string description, long value, Guid budgetId)
+	public BillingModel(string name, string description, long value, Guid budgetId, DateTime? paymentDeadline = null, DateTime? paymentDate = null)
 	{
 		Id = Guid.NewGuid();
 		Name = name;
 		Description = description;
 		Value = value;
 		BudgetId = budgetId;
+		PaymentDeadline = paymentDeadline;
+		PaymentDate = paymentDate;
 	}
-	
-	public BillingModel(string name, string description, long value, Guid budgetId, DateTime paymentDeadline)
-		: this(name, description, value, budgetId) { PaymentDeadline = paymentDeadline; }
 }

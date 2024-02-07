@@ -17,7 +17,7 @@ public class TodoListModel : ITodoListModel
 	/// </summary>
 	[Key]
 	[Required]
-	public int Id { get; set; }
+	public Guid Id { get; set; }
 
 	/// <summary>
 	/// Gets or sets To Do List's name.
@@ -34,7 +34,7 @@ public class TodoListModel : ITodoListModel
 	public string UserId { get; set; } = string.Empty;
 
 	[ForeignKey(nameof(UserId))]
-	public UserModel? Owner { get; set; }
+	public virtual UserModel? Owner { get; set; }
 
 	/// <summary>
 	/// Gets or Sets
@@ -86,7 +86,7 @@ public class TodoListModel : ITodoListModel
 	/// </summary>
 	/// <param name="obj">Second To Do List compare to.</param>
 	/// <returns>Result of compare -> true if Names of objects, tasks numbers and ids are equal, otherwise false.</returns>
-	public bool IsTheSame(TodoListModel obj)
+	public bool IsTheSame(ITodoListModel obj)
 	{
 		if (obj == null || !GetType().Equals(obj.GetType()))
 		{

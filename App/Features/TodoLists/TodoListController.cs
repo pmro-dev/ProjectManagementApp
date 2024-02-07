@@ -225,7 +225,7 @@ public class TodoListController : Controller
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), currentPageNumber, nameof(currentPageNumber), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), itemsPerPageAmount, nameof(itemsPerPageAmount), _logger);
 
-		var response = await _mediator.Send(new ShowTodoListQuery(id, filterDueDate, task => task.DueDate, currentPageNumber, itemsPerPageAmount));
+		var response = await _mediator.Send(new ShowTodoListQuery(id, filterDueDate, task => task.Deadline, currentPageNumber, itemsPerPageAmount));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
 			return View(TodoListViews.Show, response.Data);

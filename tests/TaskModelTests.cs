@@ -30,7 +30,7 @@ public class TaskModelTests
 		{
 			Title = title,
 			Description = description,
-			DueDate = dueDate,
+			Deadline = dueDate,
 			UserId = AdminId
 		};
 
@@ -60,7 +60,7 @@ public class TaskModelTests
 		{
 			Title = title,
 			Description = description,
-			DueDate = dueDate,
+			Deadline = dueDate,
 			UserId = AdminId
 		};
 

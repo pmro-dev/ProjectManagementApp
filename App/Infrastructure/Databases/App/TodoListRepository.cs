@@ -58,7 +58,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 		newTask.UserId = originTask.UserId;
 		newTask.Title = originTask.Title;
 		newTask.Description = originTask.Description;
-		newTask.DueDate = originTask.DueDate;
+		newTask.Deadline = originTask.Deadline;
 		newTask.ReminderDate = originTask.ReminderDate;
 		newTask.Status = originTask.Status;
 

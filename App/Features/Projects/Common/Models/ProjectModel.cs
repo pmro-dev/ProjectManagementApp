@@ -2,7 +2,6 @@
 
 using App.Common.Helpers;
 using App.Features.Budgets.Common.Models;
-using App.Features.Clients.Common.Models;
 using App.Features.Projects.Common.Helpers;
 using App.Features.Projects.Common.Interfaces;
 using App.Features.Teams.Common.Models;
@@ -22,6 +21,9 @@ public class ProjectModel : IProjectModel
 	public Guid Id { get; set; }
 
 	[Required]
+	public string DataVersion { get; set; }
+
+	[Required]
 	public string Title { get; set; }
 
 	[Required]
@@ -34,7 +36,7 @@ public class ProjectModel : IProjectModel
 	[ForeignKey(nameof(BudgetId))]
 	public virtual BudgetModel? Budget { get; set; }
 
-	public ICollection<ClientModel> Clients { get; set; }
+	public ICollection<UserModel> Clients { get; set; }
 
 	[Required]
 	public string OwnerId {  get; set; }
@@ -58,13 +60,13 @@ public class ProjectModel : IProjectModel
 	[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
 	public DateTime LastUpdated { get; set; }
 
-	public ICollection<TodoListModel> TodoLists { get; set; } = new List<TodoListModel>();
+	public ICollection<TodoListModel> TodoLists { get; set; }
+	public ICollection<TeamModel> Teams { get; set; }
 
-	public ICollection<TeamModel> Teams { get; set; } = new List<TeamModel>();
-
-	public ProjectModel(string title, string description, string ownerId, DateTime deadline, Guid budgetId)
+	public ProjectModel(string title, string description, string ownerId, DateTime deadline, Guid budgetId, ICollection<TeamModel>? teams = null)
 	{
 		Id = Guid.NewGuid();
+		DataVersion = Guid.NewGuid().ToString();
 		Title = title;
 		Description = description;
 		OwnerId = ownerId;
@@ -73,9 +75,8 @@ public class ProjectModel : IProjectModel
 		LastUpdated = DateTime.Now;
 		BudgetId = budgetId;
 
-		Clients = new List<ClientModel>();
+		Clients = new List<UserModel>();
+		TodoLists = new List<TodoListModel>();
+		Teams = teams ?? new List<TeamModel>();
 	}
-
-	public ProjectModel(ICollection<TeamModel> teams, string title, string description, string ownerId, DateTime deadline, Guid budgetId)
-		: this(title, description, ownerId, deadline, budgetId) { Teams = teams; }
 }

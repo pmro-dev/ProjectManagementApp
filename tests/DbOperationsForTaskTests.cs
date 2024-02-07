@@ -21,7 +21,7 @@ public class DatabaseOperationsTests : BaseOperationsSetup
     {
         taskToUpdate.Title = "New Title Set";
         taskToUpdate.Description = "Lorem Ipsum lorem lorem ipsum Lorem Ipsum lorem lorem ipsum";
-        taskToUpdate.DueDate = DateTime.Now;
+        taskToUpdate.Deadline = DateTime.Now;
     }
 
     private static TaskModel PrepareTask(string taskTitle, string taskDescription, DateTime taskDueDate)
@@ -33,7 +33,7 @@ public class DatabaseOperationsTests : BaseOperationsSetup
             Id = TasksCollection[_lastIndex].Id + _valueOneIndicator,
             Title = taskTitle + TitleSuffix,
             Description = taskDescription,
-            DueDate = taskDueDate,
+            Deadline = taskDueDate,
             TodoListId = _defaultId
 		};
     }
@@ -174,7 +174,7 @@ public class DatabaseOperationsTests : BaseOperationsSetup
         {
             Assert.That(updatedTask.Title, Is.EqualTo(taskToUpdate.Title));
             Assert.That(updatedTask.Description, Is.EqualTo(taskToUpdate.Description));
-            Assert.That(updatedTask.DueDate, Is.EqualTo(taskToUpdate.DueDate));
+            Assert.That(updatedTask.Deadline, Is.EqualTo(taskToUpdate.Deadline));
         });
     }
 

@@ -77,10 +77,10 @@ public class TaskEntityMapper : ITaskEntityMapper
 
 		TaskDto taskDto = _taskEntityFactory.CreateDto();
 		taskDto.Id = taskModel.Id;
-		taskDto.CreationDate = taskModel.CreationDate;
+		taskDto.CreationDate = taskModel.Created;
 		taskDto.Description = taskModel.Description;
-		taskDto.DueDate = taskModel.DueDate;
-		taskDto.LastModificationDate = taskModel.LastModificationDate;
+		taskDto.DueDate = taskModel.Deadline;
+		taskDto.LastModificationDate = taskModel.LastModified;
 		taskDto.ReminderDate = taskModel.ReminderDate;
 		taskDto.Status = taskModel.Status;
 		taskDto.Title = taskModel.Title;
@@ -160,10 +160,10 @@ public class TaskEntityMapper : ITaskEntityMapper
 
 		TaskModel taskModel = _taskEntityFactory.CreateModel();
 		taskModel.Id = taskDto.Id;
-		taskModel.CreationDate = taskDto.CreationDate;
+		taskModel.Created = taskDto.CreationDate;
 		taskModel.Description = taskDto.Description;
-		taskModel.DueDate = taskDto.DueDate;
-		taskModel.LastModificationDate = taskDto.LastModificationDate;
+		taskModel.Deadline = taskDto.DueDate;
+		taskModel.LastModified = taskDto.LastModificationDate;
 		taskModel.ReminderDate = taskDto.ReminderDate;
 		taskModel.Status = taskDto.Status;
 		taskModel.Title = taskDto.Title;
@@ -229,7 +229,7 @@ public class TaskEntityMapper : ITaskEntityMapper
         taskDbModel.Id = taskEditInputDto.Id;
         taskDbModel.Title = taskEditInputDto.Title;
         taskDbModel.Description = taskEditInputDto.Description;
-        taskDbModel.DueDate = taskEditInputDto.DueDate;
+        taskDbModel.Deadline = taskEditInputDto.DueDate;
         taskDbModel.ReminderDate = taskEditInputDto.ReminderDate;
         taskDbModel.Status = taskEditInputDto.Status;
         taskDbModel.TodoListId = taskEditInputDto.TodoListId;

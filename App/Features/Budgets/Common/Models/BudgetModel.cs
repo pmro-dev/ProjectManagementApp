@@ -17,6 +17,9 @@ public class BudgetModel : IBudgetModel
 	public Guid Id { get; set; }
 
 	[Required]
+	public string DataVersion { get; set; }
+
+	[Required]
 	public string Title { get; set; }
 
 	[Required]
@@ -42,6 +45,7 @@ public class BudgetModel : IBudgetModel
 	public BudgetModel(string title, string description, Guid projectId, string ownerId)
 	{
 		Id = Guid.NewGuid();
+		DataVersion = Guid.NewGuid().ToString();
 		Title = title;
 		Description = description;
 		ProjectId = projectId;
