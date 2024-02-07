@@ -7,9 +7,7 @@ namespace App.Features.Tasks.Edit.Models;
 
 public class TaskEditInputVM : ITaskEditInputVM
 {
-    private const int defaultId = 0;
-
-    public int Id { get; set; }
+    public Guid Id { get; set; } = Guid.Empty;
     public string UserId { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
 
@@ -18,7 +16,7 @@ public class TaskEditInputVM : ITaskEditInputVM
 
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
-    public DateTime DueDate { get; set; } = DateTime.Now;
+    public DateTime Deadline { get; set; } = DateTime.Now;
 
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
@@ -26,9 +24,9 @@ public class TaskEditInputVM : ITaskEditInputVM
 
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
-    public DateTime LastModificationDate { get; set; } = DateTime.Now;
+    public DateTime LastModified { get; set; } = DateTime.Now;
 
     public TaskStatusType Status { get; set; } = TaskStatusType.NotStarted;
 
-    public int TodoListId { get; set; } = defaultId;
+    public Guid TodoListId { get; set; } = Guid.Empty;
 }

@@ -6,9 +6,9 @@ namespace App.Features.TodoLists.Edit;
 
 public class EditTodoListQuery : IRequest<EditTodoListQueryResponse>
 {
-	public int TodoListId { get; }
+	public Guid TodoListId { get; }
 
-	public EditTodoListQuery(int todoListId)
+	public EditTodoListQuery(Guid todoListId)
 	{
 		TodoListId = todoListId;
 	}

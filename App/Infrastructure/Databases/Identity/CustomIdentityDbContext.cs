@@ -12,10 +12,8 @@ public class CustomIdentityDbContext : DbContext
 {
 	private readonly ILogger<CustomIdentityDbContext>? _logger;
 
-	public CustomIdentityDbContext(DbContextOptions<CustomIdentityDbContext> options, ILogger<CustomIdentityDbContext> logger) : base(options)
-	{
-		_logger = logger;
-	}
+	public CustomIdentityDbContext(DbContextOptions<CustomIdentityDbContext> options, ILogger<CustomIdentityDbContext> logger)
+		: base(options) { _logger = logger; }
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{

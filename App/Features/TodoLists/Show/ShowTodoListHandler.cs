@@ -29,7 +29,8 @@ public class ShowTodoListHandler : IRequestHandler<ShowTodoListQuery, ShowTodoLi
 
 	public async Task<ShowTodoListQueryResponse> Handle(ShowTodoListQuery request, CancellationToken cancellationToken)
 	{
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTodoListQuery), request.TodoListId, nameof(request.TodoListId), _logger);
+		// TODO write GUID exception valudation
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTodoListQuery), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		int tasksCount = await _taskRepository.CountAsync(task => task.TodoListId == request.TodoListId);
 		PaginationData paginData = new(request.PageNumber, request.ItemsPerPageCount, tasksCount, request.FilterDueDate, _logger);

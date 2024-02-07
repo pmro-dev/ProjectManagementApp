@@ -5,7 +5,7 @@ namespace App.Features.TodoLists.Show.Interfaces;
 
 public interface ITodoListDetailsOutputVM
 {
-	int Id { get; }
+	Guid Id { get; }
 	string Name { get; }
 	string UserId { get; }
 	public PaginationData PaginData { get; }

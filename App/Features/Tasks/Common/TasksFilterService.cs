@@ -13,11 +13,11 @@ public static class TasksFilterService
 	[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
 	private static DateTime todayDate = DateTime.Today;
 
-	private static readonly Func<TaskDto, object> dueDayOrderSelector = task => task.DueDate;
-	private static bool NotOverDueTaskSelector(TaskDto task) => task.DueDate.CompareTo(todayDate) > EarlierDateIndicator;
-	private static bool OverDueTaskSelector(TaskDto task) => task.DueDate.CompareTo(todayDate) < EarlierDateIndicator;
-	private static bool TodayTaskSelector(TaskDto task) => task.DueDate.ToShortDateString() == todayDate.ToShortDateString();
-	private static bool OverDueTaskWithFilterSelector(TaskDto task, DateTime? filterDueDate) => task.DueDate.CompareTo(filterDueDate) < EarlierDateIndicator;
+	private static readonly Func<TaskDto, object> dueDayOrderSelector = task => task.Deadline;
+	private static bool NotOverDueTaskSelector(TaskDto task) => task.Deadline.CompareTo(todayDate) > EarlierDateIndicator;
+	private static bool OverDueTaskSelector(TaskDto task) => task.Deadline.CompareTo(todayDate) < EarlierDateIndicator;
+	private static bool TodayTaskSelector(TaskDto task) => task.Deadline.ToShortDateString() == todayDate.ToShortDateString();
+	private static bool OverDueTaskWithFilterSelector(TaskDto task, DateTime? filterDueDate) => task.Deadline.CompareTo(filterDueDate) < EarlierDateIndicator;
 	private static bool TasksCompletedSelector(TaskDto task) => task.Status == TaskStatusType.Completed;
 	private static bool TaskNotCompletedSelector(TaskDto task) => task.Status != TaskStatusType.Completed;
 

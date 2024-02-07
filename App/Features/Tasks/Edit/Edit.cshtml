@@ -9,10 +9,10 @@
 	TaskEditInputVM inputVM = Model.InputVM;
 	TaskEditOutputVM outputVM = Model.OutputVM;
 	inputVM.Description = outputVM.Description;
-	inputVM.DueDate = outputVM.DueDate;
+	inputVM.Deadline = outputVM.Deadline;
 	inputVM.Status = outputVM.Status;
 	inputVM.TodoListId = outputVM.TodoListId;
-	string dueDateString = outputVM.DueDate.ToString(AttributesHelper.DataFormat);
+	string dueDateString = outputVM.Deadline.ToString(AttributesHelper.DataFormat);
 	string reminderDateString = outputVM.ReminderDate?.ToString(AttributesHelper.DataFormat) ?? string.Empty;
 
 	DateTime LastModificationDate = DateTime.Now;
@@ -20,7 +20,7 @@
 	object SetLastModificationDate(object sender, EventArgs e)
 	{
 		LastModificationDate = DateTime.Now;
-		inputVM.LastModificationDate = LastModificationDate;
+		inputVM.LastModified = LastModificationDate;
 		return sender;
 	}
 }
@@ -31,7 +31,7 @@
 	<div class="col-md-4">
 		<form asp-controller="@TaskCtrl.Name" asp-action="@TaskCtrl.EditPostAction" asp-route-todoListId="@outputVM.TodoListId" asp-route-taskId="@outputVM.Id" method="post">
 			<input asp-for="@inputVM.Id" type="hidden" value="@outputVM.Id"/>
-			<input asp-for="@inputVM.UserId" type="hidden" value="@outputVM.UserId" />
+			<input asp-for="@inputVM.UserId" type="hidden" value="@outputVM.OwnerId" />
 			<div class="form-group">
 				<label asp-for="@inputVM.Title" class="control-label" style="font-weight: 600;"></label>
 				<input asp-for="@inputVM.Title" class="form-control" value="@outputVM.Title"/>
@@ -43,9 +43,9 @@
 				<span asp-validation-for="@inputVM.Description" class="text-danger"></span>
 			</div>
 			<div class="form-group">
-				<label asp-for="@inputVM.DueDate" class="control-label" style="font-weight: 600;">Deadline</label>
-				<input asp-for="@inputVM.DueDate" class="form-control" value="@dueDateString" type="datetime-local" />
-				<span asp-validation-for="@inputVM.DueDate" class="text-danger"></span>
+				<label asp-for="@inputVM.Deadline" class="control-label" style="font-weight: 600;">Deadline</label>
+				<input asp-for="@inputVM.Deadline" class="form-control" value="@dueDateString" type="datetime-local" />
+				<span asp-validation-for="@inputVM.Deadline" class="text-danger"></span>
 			</div>
 			<div class="form-group">
 				<label asp-for="@inputVM.ReminderDate" class="control-label" style="font-weight: 600;">Reminder</label>

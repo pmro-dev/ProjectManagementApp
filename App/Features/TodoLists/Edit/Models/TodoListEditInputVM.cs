@@ -5,6 +5,6 @@ namespace App.Features.TodoLists.Edit.Models;
 public class TodoListEditInputVM : ITodoListEditInputVM
 {
     public string Title { get; set; } = string.Empty;
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public string UserId { get; set; } = string.Empty;
 }

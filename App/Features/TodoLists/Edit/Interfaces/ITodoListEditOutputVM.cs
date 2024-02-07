@@ -2,7 +2,7 @@
 
 public interface ITodoListEditOutputVM
 {
-	int Id { get; set; }
+	Guid Id { get; set; }
 	string Title { get; set; }
 	string UserId { get; set; }
 }

@@ -6,9 +6,9 @@ namespace App.Features.Tasks.Common.TaskTags.Common;
 
 public class TaskTagDto : ITaskTagDto
 {
-	public int TaskId { get; set; }
+	public Guid TaskId { get; set; } = Guid.NewGuid();
 	public TaskDto Task { get; set; } = new TaskDto();
 
-	public int TagId { get; set; }
+	public Guid TagId { get; set; } = Guid.NewGuid();
 	public TagDto Tag { get; set; } = new TagDto();
 }

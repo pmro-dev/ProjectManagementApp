@@ -4,9 +4,9 @@ namespace App.Features.TodoLists.Duplicate;
 
 public class DuplicateTodoListCommand : IRequest<DuplicateTodoListCommandResponse>
 {
-	public int TodoListId { get; }
+	public Guid TodoListId { get; }
 
-	public DuplicateTodoListCommand(int todoListId)
+	public DuplicateTodoListCommand(Guid todoListId)
 	{
 		TodoListId = todoListId;
 	}

@@ -7,25 +7,25 @@ namespace App.Features.Tasks.Delete.Models;
 
 public class TaskDeleteOutputVM : ITaskDeleteOutputVM
 {
-	public int Id { get; set; }
+	public Guid Id { get; set; } = Guid.Empty;
 	public string Title { get; set; } = string.Empty;
 	public string Description { get; set; } = string.Empty;
 
 	[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
-	public DateTime DueDate { get; set; } = DateTime.Now;
+	public DateTime Deadline { get; set; } = DateTime.Now;
 
 	[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
-	public DateTime CreationDate { get; set; } = DateTime.Now;
+	public DateTime Created { get; set; } = DateTime.Now;
 
 	[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
-	public DateTime LastModificationDate { get; set; } = DateTime.Now;
+	public DateTime LastModified { get; set; } = DateTime.Now;
 
 	[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
 	public DateTime? ReminderDate { get; set; } = null;
 
 	public TaskStatusType Status { get; set; } = TaskStatusType.NotStarted;
 
-	public int TodoListId { get; set; }
+	public Guid TodoListId { get; set; } = Guid.Empty;
 
 	public string UserId { get; set; } = string.Empty;
 }

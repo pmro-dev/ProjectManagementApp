@@ -17,11 +17,9 @@ namespace App.Features.Tasks.Common.Models;
 /// </summary>
 public class TaskModel : ITaskModel
 {
-    private const int defaultId = 0;
-
     [Key]
     [Required]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     [Required]
     [MaxLength(TaskAttributesHelper.TitleMaxLength)]
@@ -58,7 +56,7 @@ public class TaskModel : ITaskModel
     public ICollection<TaskTagModel> TaskTags { get; set; } = new List<TaskTagModel>();
 
     [Required]
-    public int TodoListId { get; set; } = defaultId;
+    public Guid TodoListId { get; set; } = Guid.NewGuid();
 
 	[ForeignKey(nameof(TodoListId))]
     public virtual TodoListModel? TodoList { get; set; }

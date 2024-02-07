@@ -33,9 +33,10 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	}
 
 	///<inheritdoc />
-	public async Task DuplicateSingleWithDetailsAsync(int todoListId)
+	public async Task DuplicateSingleWithDetailsAsync(Guid todoListId)
 	{
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DuplicateSingleWithDetailsAsync), todoListId, nameof(todoListId), _logger);
+		// TODO write GUID exception valudation
+	//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DuplicateSingleWithDetailsAsync), todoListId, nameof(todoListId), _logger);
 
 		TodoListModel? todoListWithDetails = await _dbSet
 			.Where(todoList => todoList.Id == todoListId)
@@ -116,9 +117,10 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	}
 
 	///<inheritdoc />
-	public async Task<TodoListModel?> GetSingleWithDetailsAsync(int todoListId)
+	public async Task<TodoListModel?> GetSingleWithDetailsAsync(Guid todoListId)
 	{
-		ExceptionsService.WhenArgumentIsInvalidThrow(nameof(GetSingleWithDetailsAsync), todoListId, nameof(todoListId), _logger);
+		// TODO write GUID exception valudation
+		//ExceptionsService.WhenArgumentIsInvalidThrow(nameof(GetSingleWithDetailsAsync), todoListId, nameof(todoListId), _logger);
 
 		TodoListModel? todoListFromDb = await _dbSet
 			.Where(todoList => todoList.Id == todoListId)
@@ -128,9 +130,10 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 		return todoListFromDb;
 	}
 
-	public async Task<TodoListModel?> GetSingleWithDetailsAsync(int todoListId, Expression<Func<TaskModel, object>> orderDetailsBySelector, int pageNumber, int itemsPerPageCount)
+	public async Task<TodoListModel?> GetSingleWithDetailsAsync(Guid todoListId, Expression<Func<TaskModel, object>> orderDetailsBySelector, int pageNumber, int itemsPerPageCount)
 	{
-		ExceptionsService.WhenArgumentIsInvalidThrow(nameof(GetSingleWithDetailsAsync), todoListId, nameof(todoListId), _logger);
+		// TODO write GUID exception valudation
+		//ExceptionsService.WhenArgumentIsInvalidThrow(nameof(GetSingleWithDetailsAsync), todoListId, nameof(todoListId), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(GetSingleWithDetailsAsync), pageNumber, nameof(pageNumber), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(GetSingleWithDetailsAsync), itemsPerPageCount, nameof(itemsPerPageCount), _logger);
 

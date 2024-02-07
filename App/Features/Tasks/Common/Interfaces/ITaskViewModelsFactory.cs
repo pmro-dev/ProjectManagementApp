@@ -24,5 +24,5 @@ public interface ITaskViewModelsFactory
 	public TaskEditInputVM CreateEditInputVM(TaskDto taskDto);
 	public TaskEditOutputVM CreateEditOutputVM(TaskDto taskDto, ICollection<TodoListDto> userTodoListDtos);
 	public TaskDeleteOutputVM CreateDeleteOutputVM(TaskDto taskDto);
-	public TaskDeleteInputVM CreateDeleteInputVM(int id, int todoListId);
+	public TaskDeleteInputVM CreateDeleteInputVM(Guid id, Guid todoListId);
 }

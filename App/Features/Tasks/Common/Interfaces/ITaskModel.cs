@@ -1,4 +1,5 @@
-﻿using App.Common.Helpers;
+﻿#region USINGS
+using App.Common.Helpers;
 using App.Common.Interfaces;
 using App.Features.Tasks.Common.TaskTags.Common;
 using App.Features.TodoLists.Common.Models;
@@ -6,6 +7,7 @@ using App.Features.Users.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static App.Features.Tasks.Common.Helpers.TaskStatusHelper;
+#endregion
 
 namespace App.Features.Tasks.Common.Interfaces;
 
@@ -38,7 +40,7 @@ public interface ITaskModel : IBasicModelWithTitle
 	public TaskStatusType Status { get; set; }
 
 	[Required]
-	public int TodoListId { get; set; }
+	public Guid TodoListId { get; set; }
 
 	[ForeignKey(nameof(TodoListId))]
 	public TodoListModel? TodoList { get; set; }

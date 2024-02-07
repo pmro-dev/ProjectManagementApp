@@ -12,7 +12,7 @@ public interface ITodoListRepository : IGenericRepository<TodoListModel>, ITodoL
 	/// </summary>
 	/// <param name="todoListId">Targeted list id.</param>
 	/// <returns>ToDoList with details from Db.</returns>
-	Task<TodoListModel?> GetSingleWithDetailsAsync(int todoListId);
+	Task<TodoListModel?> GetSingleWithDetailsAsync(Guid todoListId);
 
 	/// <summary>
 	/// Get All ToDoLists with details (where details are related data in other tables).
@@ -33,5 +33,5 @@ public interface ITodoListRepository : IGenericRepository<TodoListModel>, ITodoL
 	/// </summary>
 	/// <param name="todoListId">Targeted list id.</param>
 	/// <returns></returns>
-	Task DuplicateSingleWithDetailsAsync(int todoListId);
+	Task DuplicateSingleWithDetailsAsync(Guid todoListId);
 }

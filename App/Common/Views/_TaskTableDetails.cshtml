@@ -19,7 +19,7 @@
 						<th scope="col">Title</th>
 						<th scope="col">Description</th>
 						<th scope="col">Status</th>
-						@if (Model.DueDate.CompareTo(DateTime.Today) < 0)
+						@if (Model.Deadline.CompareTo(DateTime.Today) < 0)
 						{
 							<th scope="col">Expired Days</th>
 						}
@@ -42,7 +42,7 @@
 							classValue = "table-success";
 						}
 
-						if (Model.DueDate.CompareTo(DateTime.Today) < 0)
+						if (Model.Deadline.CompareTo(DateTime.Today) < 0)
 						{
 							classValue = "table-dark";
 						}
@@ -54,7 +54,7 @@
 							<td class="col-1">@Model.Status.ToString()</td>
 							<td class="col-1">
 								@{
-									var days = Model.DueDate.Subtract(DateTime.Now).Days;
+									var days = Model.Deadline.Subtract(DateTime.Now).Days;
 
 									switch(days)
 									{
@@ -70,10 +70,10 @@
 									}
 								}
 							</td>
-							<td class="col-1">@Model.DueDate.ToString("HH:mm dddd dd MM")</td>
+							<td class="col-1">@Model.Deadline.ToString("HH:mm dddd dd MM")</td>
 							<td class="col-1">@Model.ReminderDate?.ToString("HH:mm dddd dd MM")</td>
-							<td class="col-1">@Model.LastModificationDate.ToString("HH:mm dddd dd MM")</td>
-							<td class="col-1">@Model.CreationDate.ToString("HH:mm dddd dd MM")</td>
+							<td class="col-1">@Model.LastModified.ToString("HH:mm dddd dd MM")</td>
+							<td class="col-1">@Model.Created.ToString("HH:mm dddd dd MM")</td>
 						</tr>
 					}
 				</tbody>

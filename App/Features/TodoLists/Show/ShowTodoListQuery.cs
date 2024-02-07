@@ -9,7 +9,7 @@ namespace App.Features.TodoLists.Show;
 
 public class ShowTodoListQuery : IRequest<ShowTodoListQueryResponse>
 {
-	public int TodoListId { get; }
+	public Guid TodoListId { get; }
 
 	[DataType(DataType.Date)]
 	[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
@@ -18,7 +18,7 @@ public class ShowTodoListQuery : IRequest<ShowTodoListQueryResponse>
 	public int ItemsPerPageCount { get; }
 	public Expression<Func<TaskModel, object>> OrderDetailsBySelector { get; }
 
-	public ShowTodoListQuery(int todoListId, DateTime? filterDueDate, Expression<Func<TaskModel, object>> orderDetailsBySelector, 
+	public ShowTodoListQuery(Guid todoListId, DateTime? filterDueDate, Expression<Func<TaskModel, object>> orderDetailsBySelector, 
 		int pageNumber, int itemsPerPageCount)
 	{
 		TodoListId = todoListId;

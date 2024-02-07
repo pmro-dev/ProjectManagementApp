@@ -25,10 +25,10 @@ public class TaskViewModelsFactory : ITaskViewModelsFactory
 		{
 			Title = taskDto.Title,
 			Description = taskDto.Description,
-			DueDate = taskDto.DueDate,
+			Deadline = taskDto.Deadline,
 			ReminderDate = taskDto.ReminderDate,
 			TodoListId = taskDto.TodoListId,
-			UserId = taskDto.UserId,
+			UserId = taskDto.OwnerId,
 		};
 	}
 
@@ -58,13 +58,13 @@ public class TaskViewModelsFactory : ITaskViewModelsFactory
 			Id = taskDto.Id,
 			Title = taskDto.Title,
 			Description = taskDto.Description,
-			CreationDate = taskDto.CreationDate,
-			DueDate = taskDto.DueDate,
-			LastModificationDate = taskDto.LastModificationDate,
+			Created = taskDto.Created,
+			Deadline = taskDto.Deadline,
+			LastModified = taskDto.LastModified,
 			ReminderDate = taskDto.ReminderDate,
 			Status = taskDto.Status,
 			TodoListId = taskDto.TodoListId,
-			UserId = taskDto.UserId
+			UserId = taskDto.OwnerId
 		};
 	}
 
@@ -75,13 +75,13 @@ public class TaskViewModelsFactory : ITaskViewModelsFactory
 			Id = taskDto.Id,
 			Title = taskDto.Title,
 			Description = taskDto.Description,
-			CreationDate = taskDto.CreationDate,
-			DueDate = taskDto.DueDate,
+			Created = taskDto.Created,
+			Deadline = taskDto.Deadline,
 			ReminderDate = taskDto.ReminderDate,
-			LastModificationDate = taskDto.LastModificationDate,
+			LastModified = taskDto.LastModified,
 			Status = taskDto.Status,
 			TodoListId = taskDto.TodoListId,
-			UserId = taskDto.UserId
+			UserId = taskDto.OwnerId
 		};
 	}
 
@@ -91,12 +91,12 @@ public class TaskViewModelsFactory : ITaskViewModelsFactory
 		{
 			Id = taskDto.Id,
 			Description = taskDto.Description,
-			DueDate = taskDto.DueDate,
+			Deadline = taskDto.Deadline,
 			Status = taskDto.Status,
 			ReminderDate = taskDto.ReminderDate,
 			Title = taskDto.Title,
 			TodoListId = taskDto.TodoListId,
-			UserId = taskDto.UserId
+			UserId = taskDto.OwnerId
 		};
 	}
 
@@ -116,11 +116,11 @@ public class TaskViewModelsFactory : ITaskViewModelsFactory
 			Id = taskDto.Id,
 			Title = taskDto.Title,
 			Description = taskDto.Description,
-			DueDate = taskDto.DueDate,
+			Deadline = taskDto.Deadline,
 			ReminderDate = taskDto.ReminderDate,
 			Status = taskDto.Status,
 			TodoListId = taskDto.TodoListId,
-			UserId = taskDto.UserId,
+			OwnerId = taskDto.OwnerId,
 			StatusSelector = taskStatusSelectorDto,
 			TodoListSelector = todoListSelectorDto
 		};

@@ -16,7 +16,8 @@ public class GetBoardAllHandler : IRequestHandler<GetBoardAllQuery, GetBoardAllQ
 	private readonly ITodoListRepository _todoListRepository;
 	private readonly string _signedInUserId;
 
-	public GetBoardAllHandler(IBoardViewModelsFactory boardsVMFactory, ITodoListMapper todoListMapper, ITodoListRepository todoListRepository, IUserService userService, ILogger<GetBoardAllHandler> logger)
+	public GetBoardAllHandler(IBoardViewModelsFactory boardsVMFactory, ITodoListMapper todoListMapper, ITodoListRepository todoListRepository, 
+		IUserService userService, ILogger<GetBoardAllHandler> logger)
 	{
 		_logger = logger;
 		_boardsVMFactory = boardsVMFactory;

@@ -5,7 +5,7 @@ namespace App.Features.Tags.Common.Models
 {
     public class TagDto : ITagDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         public string Title { get; set; } = string.Empty;
 

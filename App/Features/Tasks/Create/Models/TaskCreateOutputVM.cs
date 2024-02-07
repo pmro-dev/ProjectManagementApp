@@ -4,7 +4,7 @@ namespace App.Features.Tasks.Create.Models;
 
 public class TaskCreateOutputVM : ITaskCreateOutputVM
 {
-    public int TodoListId { get; set; }
+    public Guid TodoListId { get; set; } = Guid.NewGuid();
 
     public string UserId { get; set; } = string.Empty;
 

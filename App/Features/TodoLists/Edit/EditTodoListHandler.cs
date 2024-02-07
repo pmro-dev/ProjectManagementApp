@@ -17,7 +17,8 @@ public class EditTodoListHandler :
 	private readonly ITodoListMapper _todoListMapper;
 	private readonly ITodoListViewModelsFactory _todoListViewModelsFactory;
 
-	public EditTodoListHandler(ILogger<EditTodoListHandler> logger, IDataUnitOfWork dataUnitOfWork, ITodoListRepository todoListRepository, ITodoListMapper todoListMapper, ITodoListViewModelsFactory todoListViewModelsFactory)
+	public EditTodoListHandler(ILogger<EditTodoListHandler> logger, IDataUnitOfWork dataUnitOfWork, ITodoListRepository todoListRepository, 
+		ITodoListMapper todoListMapper, ITodoListViewModelsFactory todoListViewModelsFactory)
 	{
 		_logger = logger;
 		_dataUnitOfWork = dataUnitOfWork;
@@ -28,7 +29,8 @@ public class EditTodoListHandler :
 
 	public async Task<EditTodoListQueryResponse> Handle(EditTodoListQuery request, CancellationToken cancellationToken)
 	{
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), request.TodoListId, nameof(request.TodoListId), _logger);
+		// TODO write GUID exception valudation
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		TodoListModel? todoListModel = await _todoListRepository.GetAsync(request.TodoListId);
 		ExceptionsService.WhenEntityIsNullThrow(nameof(EditTodoListQuery), todoListModel, _logger, request.TodoListId);
@@ -43,7 +45,8 @@ public class EditTodoListHandler :
 
 	public async Task<EditTodoListCommandResponse> Handle(EditTodoListCommand request, CancellationToken cancellationToken)
 	{
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), request.TodoListId, nameof(request.TodoListId), _logger);
+		// TODO write GUID exception valudation
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), request.TodoListId, nameof(request.TodoListId), _logger);
 		ExceptionsService.WhenIdsAreNotEqualThrow(nameof(Edit), request.RouteTodoListId, nameof(request.RouteTodoListId), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		if (await _todoListRepository.ContainsAny(todoList => todoList.Title == request.InputVM.Title && todoList.UserId == request.InputVM.UserId))

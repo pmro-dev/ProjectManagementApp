@@ -4,7 +4,7 @@ namespace App.Features.Tags.Common.Interfaces
 {
 	public interface ITagDto
 	{
-		int Id { get; set; }
+		Guid Id { get; set; }
 		ICollection<TaskTagDto> TaskTags { get; set; }
 		string Title { get; set; }
 	}

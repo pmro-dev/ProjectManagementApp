@@ -7,9 +7,9 @@ public interface ITaskTagDto
 {
 	TagDto Tag { get; set; }
 
-	int TagId { get; set; }
+	Guid TagId { get; set; }
 
 	TaskDto Task { get; set; }
 
-	int TaskId { get; set; }
+	Guid TaskId { get; set; }
 }

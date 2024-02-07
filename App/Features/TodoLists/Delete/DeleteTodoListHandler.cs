@@ -28,7 +28,8 @@ public class DeleteTodoListHandler :
 
 	public async Task<DeleteTodoListQueryResponse> Handle(DeleteTodoListQuery request, CancellationToken cancellationToken)
 	{
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeleteTodoListQuery), request.RouteTodoListId, nameof(request.RouteTodoListId), _logger);
+		// TODO write GUID exception valudation
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeleteTodoListQuery), request.RouteTodoListId, nameof(request.RouteTodoListId), _logger);
 
 		TodoListModel? todoListDbModel = await _todoListRepository.GetAsync(request.RouteTodoListId);
 		ExceptionsService.WhenEntityIsNullThrow(nameof(DeleteTodoListQuery), todoListDbModel, _logger, request.RouteTodoListId);
@@ -41,7 +42,8 @@ public class DeleteTodoListHandler :
 
 	public async Task<DeleteTodoListCommandResponse> Handle(DeleteTodoListCommand request, CancellationToken cancellationToken)
 	{
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeleteTodoListCommand), request.TodoListId, nameof(request.TodoListId), _logger);
+		// TODO write GUID exception valudation
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeleteTodoListCommand), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		TodoListModel? todoListDbModel = await _todoListRepository.GetAsync(request.TodoListId);
 		ExceptionsService.WhenEntityIsNullThrow(nameof(DeleteTodoListCommand), todoListDbModel, _logger, request.TodoListId);

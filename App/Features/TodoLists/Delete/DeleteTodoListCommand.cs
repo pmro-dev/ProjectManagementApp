@@ -4,9 +4,9 @@ namespace App.Features.TodoLists.Delete;
 
 public class DeleteTodoListCommand : IRequest<DeleteTodoListCommandResponse>
 {
-	public int TodoListId { get; }
+	public Guid TodoListId { get; }
 
-	public DeleteTodoListCommand(int todoListId)
+	public DeleteTodoListCommand(Guid todoListId)
 	{
 		TodoListId = todoListId;
 	}

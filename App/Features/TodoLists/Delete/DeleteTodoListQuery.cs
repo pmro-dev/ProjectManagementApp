@@ -5,9 +5,9 @@ namespace App.Features.TodoLists.Delete;
 
 public class DeleteTodoListQuery : IRequest<DeleteTodoListQueryResponse>
 {
-	public int RouteTodoListId { get; }
+	public Guid RouteTodoListId { get; }
 
-	public DeleteTodoListQuery(int routeTodoListId)
+	public DeleteTodoListQuery(Guid routeTodoListId)
 	{
 		RouteTodoListId = routeTodoListId;
 	}

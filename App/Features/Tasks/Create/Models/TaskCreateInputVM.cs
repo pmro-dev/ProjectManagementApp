@@ -8,7 +8,7 @@ namespace App.Features.Tasks.Create.Models;
 public class TaskCreateInputVM : ITaskCreateInputVM
 {
     [Required]
-    public int TodoListId { get; set; } = -1;
+    public Guid TodoListId { get; set; } = Guid.Empty;
 
     [Required]
     public string UserId { get; set; } = string.Empty;
@@ -26,7 +26,7 @@ public class TaskCreateInputVM : ITaskCreateInputVM
     [Required]
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
-    public DateTime DueDate { get; set; } = DateTime.Now;
+    public DateTime Deadline { get; set; } = DateTime.Now;
 
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]

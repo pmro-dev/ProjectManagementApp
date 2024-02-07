@@ -94,9 +94,10 @@ public class TodoListController : Controller
 	/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
 	[HttpGet]
 	[Route(CustomRoutes.TodoListEditRoute)]
-	public async Task<IActionResult> Edit(int id)
+	public async Task<IActionResult> Edit(Guid id)
 	{
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), id, nameof(id), _logger);
+		// TODO write GUID exception valudation
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), id, nameof(id), _logger);
 		ModelStateHelper.SetModelStateErrorMessageWhenSomeHappendOnPost(ModelState, TempData);
 
 		var response = await _mediator.Send(new EditTodoListQuery(id));
@@ -120,10 +121,11 @@ public class TodoListController : Controller
 	[HttpPost]
 	[Route(CustomRoutes.TodoListEditRoute)]
 	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> Edit(int id, [FromForm] TodoListEditInputVM inputVM)
+	public async Task<IActionResult> Edit(Guid id, [FromForm] TodoListEditInputVM inputVM)
 	{
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), id, nameof(id), _logger);
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), inputVM.Id, nameof(inputVM.Id), _logger);
+		// TODO write GUID exception valudation
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), id, nameof(id), _logger);
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), inputVM.Id, nameof(inputVM.Id), _logger);
 
 		var response = await _mediator.Send(new EditTodoListCommand(inputVM, id));
 
@@ -153,9 +155,10 @@ public class TodoListController : Controller
 	/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
 	[HttpGet]
 	[Route(CustomRoutes.TodoListDeleteRoute)]
-	public async Task<IActionResult> Delete(int id)
+	public async Task<IActionResult> Delete(Guid id)
 	{
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Delete), id, nameof(id), _logger);
+		// TODO write GUID exception valudation
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Delete), id, nameof(id), _logger);
 
 		var response = await _mediator.Send(new DeleteTodoListQuery(id));
 
@@ -177,9 +180,10 @@ public class TodoListController : Controller
 	[HttpPost]
 	[Route(CustomRoutes.TodoListDeletePostRoute)]
 	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> DeletePost(int id)
+	public async Task<IActionResult> DeletePost(Guid id)
 	{
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeletePost), id, nameof(id), _logger);
+		// TODO write GUID exception valudation
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeletePost), id, nameof(id), _logger);
 
 		var response = await _mediator.Send(new DeleteTodoListCommand(id));
 
@@ -196,9 +200,10 @@ public class TodoListController : Controller
 	/// <returns>Redirect to view.</returns>
 	/// <exception cref="ArgumentOutOfRangeException">Occurs when To Do List's id is out of range.</exception>
 	[Route(CustomRoutes.TodoListDuplicateRoute)]
-	public async Task<IActionResult> Duplicate(int todoListId)
+	public async Task<IActionResult> Duplicate(Guid todoListId)
 	{
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Duplicate), todoListId, nameof(todoListId), _logger);
+		// TODO write GUID exception valudation
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Duplicate), todoListId, nameof(todoListId), _logger);
 
 		var response = await _mediator.Send(new DuplicateTodoListCommand(todoListId));
 
@@ -216,12 +221,13 @@ public class TodoListController : Controller
 	/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
 	[HttpGet]
 	[Route(CustomRoutes.TodoListShowRoute)]
-	public async Task<IActionResult> Show(int id, DateTime? filterDueDate, int? pageNumber, int? itemsPerPageCount)
+	public async Task<IActionResult> Show(Guid id, DateTime? filterDueDate, int? pageNumber, int? itemsPerPageCount)
 	{
 		int currentPageNumber = pageNumber ?? FirstPageNumber;
 		int itemsPerPageAmount = itemsPerPageCount ?? DefaultItemsPerPageCount;
 
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), id, nameof(id), _logger);
+		// TODO write GUID exception valudation
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), id, nameof(id), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), currentPageNumber, nameof(currentPageNumber), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), itemsPerPageAmount, nameof(itemsPerPageAmount), _logger);
 

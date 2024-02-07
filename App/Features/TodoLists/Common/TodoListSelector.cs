@@ -6,7 +6,7 @@ namespace App.Features.TodoLists.Common;
 
 public class TodoListSelector : ITodoListSelector
 {
-	public SelectList Create(ICollection<TodoListDto> userTodoListDtos, int defaultSelectedTodoListId)
+	public SelectList Create(ICollection<TodoListDto> userTodoListDtos, Guid defaultSelectedTodoListId)
 	{
 		SelectList todoListSelectorDto = new(userTodoListDtos, nameof(TodoListDto.Id), nameof(TodoListDto.Title), defaultSelectedTodoListId);
 

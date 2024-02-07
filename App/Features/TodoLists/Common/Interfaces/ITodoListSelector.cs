@@ -5,5 +5,5 @@ namespace App.Features.TodoLists.Common.Interfaces;
 
 public interface ITodoListSelector
 {
-	SelectList Create(ICollection<TodoListDto> userTodoListDtos, int defaultSelectedTodoListId);
+	SelectList Create(ICollection<TodoListDto> userTodoListDtos, Guid defaultSelectedTodoListId);
 }

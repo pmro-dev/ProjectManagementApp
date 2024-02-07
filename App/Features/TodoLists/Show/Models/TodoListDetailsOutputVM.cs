@@ -6,7 +6,7 @@ namespace App.Features.TodoLists.Show.Models;
 
 public class TodoListDetailsOutputVM : ITodoListDetailsOutputVM
 {
-    public int Id { get; }
+    public Guid Id { get; }
     public string Name { get; }
     public string UserId { get; }
 	public DateTime? FilterDueDate { get; }
@@ -21,7 +21,7 @@ public class TodoListDetailsOutputVM : ITodoListDetailsOutputVM
 	public int TasksExpiredCount { get; }
 
 	public TodoListDetailsOutputVM(
-		int id, string name, string userId, PaginationData paginData, DateTime? filterDueDate,
+		Guid id, string name, string userId, PaginationData paginData, DateTime? filterDueDate,
 		IEnumerable<TaskDto> tasksForToday, IEnumerable<TaskDto> tasksCompleted,
 		IEnumerable<TaskDto> tasksNotCompleted, IEnumerable<TaskDto> tasksExpired)
 	{

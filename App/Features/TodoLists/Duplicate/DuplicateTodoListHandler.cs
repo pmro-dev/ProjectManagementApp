@@ -1,5 +1,4 @@
-﻿using App.Features.Exceptions.Throw;
-using App.Infrastructure.Databases.App.Interfaces;
+﻿using App.Infrastructure.Databases.App.Interfaces;
 using MediatR;
 
 namespace App.Features.TodoLists.Duplicate;
@@ -19,7 +18,8 @@ public class DuplicateTodoListHandler : IRequestHandler<DuplicateTodoListCommand
 
 	public async Task<DuplicateTodoListCommandResponse> Handle(DuplicateTodoListCommand request, CancellationToken cancellationToken)
 	{
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Duplicate), request.TodoListId, nameof(request.TodoListId), _logger);
+		// TODO write GUID exception 
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Duplicate), request.TodoListId, nameof(request.TodoListId), _logger);
 
 		await _todoListRepository.DuplicateSingleWithDetailsAsync(request.TodoListId);
 		await _dataUnitOfWork.SaveChangesAsync();

@@ -7,7 +7,7 @@ public interface ITagModel
 {
 	[Required]
 	[Key]
-	int Id { get; set; }
+	Guid Id { get; set; }
 
 	[Required]
 	string DataVersion { get; set; }

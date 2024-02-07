@@ -8,6 +8,6 @@ namespace App.Features.TodoLists.Delete.Models;
 public class TodoListDeleteOutputVM : ITodoListDeleteOutputVM
 {
     public int TasksCount { get; set; } = 0;
-    public int Id { get; set; } = 0;
+    public Guid Id { get; set; } = Guid.Empty;
     public string Title { get; set; } = string.Empty;
 }
