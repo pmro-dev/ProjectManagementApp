@@ -1,15 +1,18 @@
-﻿using App.Features.Budgets.Common.Interfaces;
+﻿#region USINGS
+using App.Common.Interfaces;
+using App.Features.Billings.Common.Interfaces;
 using App.Features.Budgets.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+#endregion 
 
 namespace App.Features.Billings.Common.Models;
 
-public class BillingModel : IBillingBase
+public class BillingModel : IBillingModel
 {
 	[Required]
 	[Key]
-	public int Id { get; set; }
+	public Guid Id { get; set; }
 
 	[Required]
 	public string Name { get; set; }
@@ -21,7 +24,7 @@ public class BillingModel : IBillingBase
 	public long Value { get; set; }
 
 	[Required]
-	public int BudgetId { get; set; }
+	public Guid BudgetId { get; set; }
 
 	[Required]
 	[ForeignKey(nameof(BudgetId))]
@@ -31,17 +34,15 @@ public class BillingModel : IBillingBase
 
 	public DateTime? PaymentDeadline { get; set; }
 
-	public BillingModel(string name, string description, long value, int budgetId)
+	public BillingModel(string name, string description, long value, Guid budgetId)
 	{
+		Id = Guid.NewGuid();
 		Name = name;
 		Description = description;
 		Value = value;
 		BudgetId = budgetId;
 	}
 	
-	public BillingModel(string name, string description, long value, int budgetId, DateTime paymentDeadline)
-		: this(name, description, value, budgetId)
-	{
-		PaymentDeadline = paymentDeadline;
-	}
+	public BillingModel(string name, string description, long value, Guid budgetId, DateTime paymentDeadline)
+		: this(name, description, value, budgetId) { PaymentDeadline = paymentDeadline; }
 }

@@ -1,10 +1,12 @@
-﻿using App.Features.Billings.Common.Models;
+﻿#region USINGS
+using App.Features.Billings.Common.Models;
 using App.Features.Budgets.Common.Interfaces;
 using App.Features.Incomes.Common.Models;
 using App.Features.Projects.Common.Models;
 using App.Features.Users.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+#endregion
 
 namespace App.Features.Budgets.Common.Models;
 
@@ -12,7 +14,7 @@ public class BudgetModel : IBudgetModel
 {
 	[Required]
 	[Key]
-	public int Id { get; set; }
+	public Guid Id { get; set; }
 
 	[Required]
 	public string Title { get; set; }
@@ -21,7 +23,7 @@ public class BudgetModel : IBudgetModel
 	public string Description { get; set; }
 
 	[Required]
-	public int ProjectId { get; set; }
+	public Guid ProjectId { get; set; }
 
 	[Required]
 	[ForeignKey(nameof(ProjectId))]
@@ -37,8 +39,9 @@ public class BudgetModel : IBudgetModel
 	public ICollection<BillingModel> Billings { get; set; }
 	public ICollection<IncomeModel> Incomes { get; set; }
 
-	public BudgetModel(string title, string description, int projectId, string ownerId)
+	public BudgetModel(string title, string description, Guid projectId, string ownerId)
 	{
+		Id = Guid.NewGuid();
 		Title = title;
 		Description = description;
 		ProjectId = projectId;

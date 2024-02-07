@@ -9,7 +9,7 @@ public interface IClientModel
 {
 	[Required]
 	[Key]
-	public int Id { get; set; }
+	public Guid Id { get; set; }
 
 	[Required]
 	public string CompanyName { get; set; }

@@ -11,7 +11,7 @@ public interface IBudgetModel
 {
 	[Required]
 	[Key]
-	public int Id { get; set; }
+	public Guid Id { get; set; }
 
 	[Required]
 	public string Title { get; set; }
@@ -20,7 +20,7 @@ public interface IBudgetModel
 	public string Description { get; set; }
 
 	[Required]
-	public int ProjectId { get; set; }
+	public Guid ProjectId { get; set; }
 
 	[Required]
 	[ForeignKey(nameof(ProjectId))]
