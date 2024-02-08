@@ -174,22 +174,22 @@ public class SeedData : ISeedData
 			new TodoListModel{
 				Title = "App UX",
 				Tasks = TasksUX,
-				UserId = AdminId
+				OwnerId = AdminId
 			},
 			new TodoListModel{
 				Title = "App Backend",
 				Tasks = TasksBackend,
-				UserId = AdminId
+				OwnerId = AdminId
 			},
 			new TodoListModel{
 				Title = "App Testing",
 				Tasks = TasksTesting,
-				UserId = AdminId
+				OwnerId = AdminId
 			},
 			new TodoListModel{
 				Title = "Project Management",
 				Tasks = TasksProjectManagement,
-				UserId = AdminId
+				OwnerId = AdminId
 			},
 		};
 	}

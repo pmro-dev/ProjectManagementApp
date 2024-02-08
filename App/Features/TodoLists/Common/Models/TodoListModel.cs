@@ -1,9 +1,13 @@
-﻿using App.Features.Tasks.Common.Models;
+﻿#region USINGS
+using App.Features.Projects.Common.Models;
+using App.Features.Tasks.Common.Models;
+using App.Features.Teams.Common.Models;
 using App.Features.TodoLists.Common.Helpers;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.Users.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+#endregion
 
 namespace App.Features.TodoLists.Common.Models;
 
@@ -27,14 +31,32 @@ public class TodoListModel : ITodoListModel
 	[MinLength(TodoListAttributesHelper.NameMinLength)]
 	public string Title { get; set; } = string.Empty;
 
+	[Required]
+	public string CreatorId { get; set; } = string.Empty;
+
+	[ForeignKey(nameof(CreatorId))]
+	public UserModel? Creator { get; set; }
+
 	/// <summary>
 	/// Owner id.
 	/// </summary>
 	[Required]
-	public string UserId { get; set; } = string.Empty;
+	public string OwnerId { get; set; } = string.Empty;
 
-	[ForeignKey(nameof(UserId))]
-	public virtual UserModel? Owner { get; set; }
+	[ForeignKey(nameof(OwnerId))]
+	public UserModel? Owner { get; set; }
+
+	[Required]
+	public Guid ProjectId { get; set; } = Guid.Empty;
+
+	[ForeignKey(nameof(ProjectId))]
+	public ProjectModel? Project { get; set; }
+
+	[Required]
+	public Guid TeamId { get; set; }
+
+	[ForeignKey(nameof(TeamId))]
+	public TeamModel? Team { get; set; }
 
 	/// <summary>
 	/// Gets or Sets

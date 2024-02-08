@@ -4,6 +4,7 @@ using App.Features.Projects.Common.Helpers;
 using App.Features.Teams.Common.Models;
 using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Models;
+using App.Features.Users.Common.Projects.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 #endregion
@@ -33,6 +34,13 @@ public interface IProjectModel
 	public BudgetModel? Budget { get; set; }
 
 	public ICollection<UserModel> Clients { get; set; }
+	public ICollection<UserProjectModel> ProjectClients { get; set; }
+
+	public ICollection<TodoListModel> TodoLists { get; set; }
+	public ICollection<ProjectTodolistModel> ProjectTodoLists { get; set; }
+
+	public ICollection<TeamModel> Teams { get; set; }
+	public ICollection<ProjectTeamModel> ProjectTeams { get; set; }
 
 	[Required]
 	public string OwnerId { get; set; }
@@ -53,7 +61,4 @@ public interface IProjectModel
 	[Required]
 	public DateTime LastUpdated { get; set; }
 
-	public ICollection<TodoListModel> TodoLists { get; set; }
-
-	public ICollection<TeamModel> Teams { get; set; }
 }

@@ -59,7 +59,7 @@ public class EditTaskHandler :
 		TaskDto taskDto = _taskEntityMapper.TransferToDto(taskModel);
 
 		// TODO implement method that allow to get only concrete properties by Select expression, here I need only TodoLists Ids and Names
-		ICollection<TodoListModel> userTodoListModels = await _todoListRepository.GetAllByFilterAsync(todoList => todoList.UserId == request.SignedInUserId);
+		ICollection<TodoListModel> userTodoListModels = await _todoListRepository.GetAllByFilterAsync(todoList => todoList.OwnerId == request.SignedInUserId);
 		ExceptionsService.WhenGroupOfRequiredEntitiesNotFoundInDbThrow(nameof(EditTaskQuery), userTodoListModels, _logger);
 
 		ICollection<TodoListDto> userTodoListDtos = _todoListMapper.TransferToDto(userTodoListModels);

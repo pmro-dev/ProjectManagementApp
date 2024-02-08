@@ -28,7 +28,7 @@ public class GetBoardBrieflyHandler : IRequestHandler<GetBoardBrieflyQuery, GetB
 		_todoListRepository = todoListRepository;
 		_signedInUserId = userService.GetSignedInUserId();
 		ExceptionsService.WhenPropertyIsNullOrEmptyThrow(nameof(GetBoardBrieflyHandler), _signedInUserId, nameof(_signedInUserId), _logger);
-		_predicateItemsOwner = todoList => todoList.UserId == _signedInUserId;
+		_predicateItemsOwner = todoList => todoList.OwnerId == _signedInUserId;
 	}
 
 	public async Task<GetBoardBrieflyQueryResponse> Handle(GetBoardBrieflyQuery request, CancellationToken cancellationToken)

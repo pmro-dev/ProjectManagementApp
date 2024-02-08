@@ -1,11 +1,19 @@
 ﻿using App.Features.Users.Common.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace App.Features.Users.Common.Roles.Models.Interfaces;
 
 public interface IUserRoleModel
 {
-    RoleModel Role { get; set; }
-    string RoleId { get; set; }
-    UserModel User { get; set; }
-    string UserId { get; set; }
+    [Key]
+    [Required]
+    Guid RoleId { get; set; }
+
+    RoleModel? Role { get; set; }
+
+	[Key]
+	[Required]
+	string UserId { get; set; }
+
+    UserModel? User { get; set; }
 }

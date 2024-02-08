@@ -34,7 +34,7 @@ public class TodoListMapper : ITodoListMapper
 		var todoListModel = _todoListFactory.CreateModel();
 		todoListModel.Id = todoListDto.Id;
 		todoListModel.Title = todoListDto.Title;
-		todoListModel.UserId = todoListDto.UserId;
+		todoListModel.OwnerId = todoListDto.UserId;
 
 		mappedObjects[todoListDto] = todoListModel;
 
@@ -93,7 +93,7 @@ public class TodoListMapper : ITodoListMapper
 		var todoListDto = _todoListFactory.CreateDto();
 		todoListDto.Id = todoListModel.Id;
 		todoListDto.Title = todoListModel.Title;
-		todoListDto.UserId = todoListModel.UserId;
+		todoListDto.UserId = todoListModel.OwnerId;
 
 		mappedObjects[todoListModel] = todoListDto;
 

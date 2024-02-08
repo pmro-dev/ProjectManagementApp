@@ -82,7 +82,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 		TodoListModel newTodoList = _todoListFactory.CreateModel();
 		newTodoList.Title = originTodoList.Title + "###";
 		newTodoList.Tasks = newTasks;
-		newTodoList.UserId = originTodoList.UserId;
+		newTodoList.OwnerId = originTodoList.OwnerId;
 
 		return newTodoList;
 	}
@@ -96,7 +96,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 		ExceptionsService.WhenArgumentIsNullOrEmptyThrow(nameof(GetMultipleWithDetailsAsync), userId, nameof(userId), _logger);
 
 		ICollection<TodoListModel> allTodoListsWithDetails = await _dbSet
-			.Where(todoList => todoList.UserId == userId)
+			.Where(todoList => todoList.OwnerId == userId)
 			.Include(todoList => todoList.Tasks)
 			.ToListAsync();
 
@@ -160,7 +160,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 		int skipAmount = PaginationHelper.CountItemsToSkip(pageNumber, itemsPerPageCount, _logger);
 
 		IQueryable<TodoListModel> query = _dbSet
-					.Where(todoList => todoList.UserId == userId)
+					.Where(todoList => todoList.OwnerId == userId)
 					.Include(todoList => todoList.Tasks.AsQueryable()
 						.OrderBy(orderDetailsBySelector))
 					.OrderBy(orderBySelector)

@@ -7,6 +7,7 @@ using App.Features.Projects.Common.Interfaces;
 using App.Features.Teams.Common.Models;
 using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Models;
+using App.Features.Users.Common.Projects.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -37,6 +38,7 @@ public class ProjectModel : IProjectModel
 	public virtual BudgetModel? Budget { get; set; }
 
 	public ICollection<UserModel> Clients { get; set; }
+	public ICollection<UserProjectModel> ProjectClients { get; set; }
 
 	[Required]
 	public string OwnerId {  get; set; }

@@ -21,10 +21,8 @@ public class CustomAppDbContext : DbContext
 	/// <summary>
 	/// Initilizes object and Ensures that database is created.
 	/// </summary>
-	public CustomAppDbContext(DbContextOptions<CustomAppDbContext> options, ILogger<CustomAppDbContext> logger) : base(options)
-	{
-		_logger = logger;
-	}
+	public CustomAppDbContext(DbContextOptions<CustomAppDbContext> options, ILogger<CustomAppDbContext> logger) 
+		: base(options) { _logger = logger; }
 
 	public CustomAppDbContext() { }
 
@@ -34,7 +32,7 @@ public class CustomAppDbContext : DbContext
 
 		modelBuilder.Entity<TodoListModel>()
 			.HasMany(list => list.Tasks)
-			.WithOne()
+			.WithOne(t => t.TodoList)
 			.HasForeignKey(x => x.Id);
 
 		modelBuilder.Entity<TodoListModel>()
@@ -53,7 +51,8 @@ public class CustomAppDbContext : DbContext
 			.HasForeignKey(x => x.TodoListId);
 
 		modelBuilder.Entity<TaskModel>()
-			.ToTable("Tasks").HasKey(t => t.Id);
+			.ToTable("Tasks")
+			.HasKey(t => t.Id);
 
 		modelBuilder.Entity<TagModel>()
 			.HasMany(tag => tag.TaskTags)

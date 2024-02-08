@@ -27,7 +27,7 @@ public class TodoListModelTests
 		TodoListModel newValidTodoList = new()
 		{
 			Title = name,
-			UserId = AdminId
+			OwnerId = AdminId
 		};
 
 		var propertiesThatViolatedValidations = DataAnnotationValidator.ValidNewObject(newValidTodoList);
@@ -50,7 +50,7 @@ public class TodoListModelTests
 		TodoListModel newInvalidTodoList = new()
 		{
 			Title = name,
-			UserId = AdminId
+			OwnerId = AdminId
 		};
 
 		var propertiesThatViolatedValidations = DataAnnotationValidator.ValidNewObject(newInvalidTodoList);

@@ -49,7 +49,7 @@ public class EditTodoListHandler :
 		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), request.TodoListId, nameof(request.TodoListId), _logger);
 		ExceptionsService.WhenIdsAreNotEqualThrow(nameof(Edit), request.RouteTodoListId, nameof(request.RouteTodoListId), request.TodoListId, nameof(request.TodoListId), _logger);
 
-		if (await _todoListRepository.ContainsAny(todoList => todoList.Title == request.InputVM.Title && todoList.UserId == request.InputVM.UserId))
+		if (await _todoListRepository.ContainsAny(todoList => todoList.Title == request.InputVM.Title && todoList.OwnerId == request.InputVM.UserId))
 			return new EditTodoListCommandResponse(ExceptionsMessages.NameTaken, StatusCodesExtension.EntityNameTaken);
 
 		TodoListModel? todoListDbModel = await _todoListRepository.GetAsync(request.TodoListId);

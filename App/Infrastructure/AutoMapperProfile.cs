@@ -50,19 +50,19 @@ public class AutoMapperProfile : Profile
             .ConstructUsing((src, context) => context.Mapper.Map<UserRoleDto, UserRoleModel>((UserRoleDto)src));
 
         CreateMap<RoleDto, RoleModel>()
-            .ForMember(dest => dest.UserRoles, opt => opt.MapFrom(src => src.UserRoles));
+            .ForMember(dest => dest.RoleUsers, opt => opt.MapFrom(src => src.UserRoles));
 
         CreateMap<IRoleDto, IRoleModel>()
             .Include<RoleDto, RoleModel>()
-            .ForMember(dest => dest.UserRoles, opt => opt.MapFrom(src => src.UserRoles))
+            .ForMember(dest => dest.RoleUsers, opt => opt.MapFrom(src => src.UserRoles))
             .ConstructUsing((src, context) => context.Mapper.Map<RoleDto, RoleModel>((RoleDto)src));
 
         CreateMap<RoleModel, RoleDto>()
-            .ForMember(dest => dest.UserRoles, opt => opt.MapFrom(src => src.UserRoles));
+            .ForMember(dest => dest.UserRoles, opt => opt.MapFrom(src => src.RoleUsers));
 
         CreateMap<IRoleModel, IRoleDto>()
             .Include<RoleModel, RoleDto>()
-            .ForMember(dest => dest.UserRoles, opt => opt.MapFrom(src => src.UserRoles))
+            .ForMember(dest => dest.UserRoles, opt => opt.MapFrom(src => src.RoleUsers))
             .ConstructUsing((src, context) => context.Mapper.Map<RoleModel, RoleDto>((RoleModel)src));
 
         CreateMap<LoginInputVM, LoginInputDto>()

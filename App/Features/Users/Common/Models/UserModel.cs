@@ -2,9 +2,15 @@
 using App.Features.Budgets.Common.Models;
 using App.Features.Projects.Common.Models;
 using App.Features.Teams.Common.Models;
+using App.Features.TodoLists.Common.Models;
+using App.Features.Users.Common.Budgets.Models;
 using App.Features.Users.Common.Helpers;
 using App.Features.Users.Common.Models.Interfaces;
+using App.Features.Users.Common.Projects.Models;
 using App.Features.Users.Common.Roles.Models;
+using App.Features.Users.Common.Teams.Models;
+using App.Features.Users.Common.TodoLists.Interfaces;
+using App.Features.Users.Common.TodoLists.Models;
 using System.ComponentModel.DataAnnotations;
 #endregion
 
@@ -15,8 +21,8 @@ public sealed class UserModel : IUserModel
 	[Key]
 	[Required]
 	public string Id { get; set; } = Guid.NewGuid().ToString();
+
 	[Required]
-	// ConcurrencyStamp
 	public string DataVersion { get; set; } = Guid.NewGuid().ToString();
 
 	[Required]
@@ -58,10 +64,20 @@ public sealed class UserModel : IUserModel
 	[DataType(DataType.PhoneNumber)]
 	public string Phone { get; set; } = string.Empty;
 
+	public ICollection<TodoListModel> TodoLists { get; set; } = new List<TodoListModel>();
+	public ICollection<UserTodoListModel> UserTodoLists { get; set; } = new List<UserTodoListModel>();
+
+	public ICollection<RoleModel> Roles { get; set; } = new List<RoleModel>();
 	public ICollection<UserRoleModel> UserRoles { get; set; } = new List<UserRoleModel>();
-	public ICollection<TeamModel> UserTeams { get; set; } = new List<TeamModel>();
-	public ICollection<ProjectModel> UserProjects { get; set; } = new List<ProjectModel>();
-	public ICollection<BudgetModel> UserBudgets { get; set; } = new List<BudgetModel>();
+
+	public ICollection<TeamModel> Teams { get; set; } = new List<TeamModel>();
+	public ICollection<UserTeamModel> UserTeams { get; set; } = new List<UserTeamModel>();
+
+	public ICollection<ProjectModel> Projects { get; set; } = new List<ProjectModel>();
+	public ICollection<UserProjectModel> UserProjects { get; set; } = new List<UserProjectModel>();
+
+	public ICollection<BudgetModel> Budgets { get; set; } = new List<BudgetModel>();
+	public ICollection<UserBudgetModel> UserBudgets { get; set; } = new List<UserBudgetModel>();
 
 	public override bool Equals(object? obj)
 	{
