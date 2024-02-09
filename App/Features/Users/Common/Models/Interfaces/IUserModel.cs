@@ -1,7 +1,6 @@
 ﻿using App.Features.Budgets.Common.Models;
 using App.Features.Projects.Common.Models;
 using App.Features.Teams.Common.Models;
-using App.Features.Users.Common.Budgets.Models;
 using App.Features.Users.Common.Projects.Models;
 using App.Features.Users.Common.Roles.Models;
 using App.Features.Users.Common.Teams.Models;
@@ -58,8 +57,7 @@ public interface IUserModel : IEquatable<IUserModel>
 	ICollection<UserTeamModel> UserTeams { get; set; }
 
 	ICollection<ProjectModel> Projects { get; set; }
-	ICollection<UserProjectModel> UserProjects { get; set; }
+	ICollection<UserProjectModel> ClientProjects { get; set; }
 
 	ICollection<BudgetModel> Budgets { get; set; }
-	ICollection<UserBudgetModel> UserBudgets { get; set; }
 }

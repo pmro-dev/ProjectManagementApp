@@ -1,6 +1,4 @@
 ﻿using App.Features.Exceptions.Throw;
-using App.Features.Projects.Common.Models;
-using App.Features.Teams.Common.Models;
 using App.Features.Users.Common.Models;
 using App.Features.Users.Common.Projects.Models;
 using App.Features.Users.Common.Roles.Models;
@@ -30,13 +28,11 @@ public class CustomIdentityDbContext : DbContext
 			.WithMany(r => r.Users)
 			.UsingEntity<UserRoleModel>();
 
-		//modelBuilder.Entity<RoleModel>()
-		//	.HasMany(r => r.Users)
-		//	.WithMany(u => u.Roles)
-		//	.UsingEntity<UserRoleModel>();
-
 		modelBuilder.Entity<RoleModel>()
 			.ToTable("Roles");
+
+		modelBuilder.Entity<UserRoleModel>()
+			.ToTable("UserRoles");
 		#endregion
 
 
@@ -46,13 +42,14 @@ public class CustomIdentityDbContext : DbContext
 			.HasMany(u => u.Teams)
 			.WithMany(r => r.Members)
 			.UsingEntity<UserTeamModel>(
-				l => l.HasOne<TeamModel>(ut => ut.Team)
+				l => l.HasOne(ut => ut.Team)
 				.WithMany(t => t.TeamMembers)
 				.HasForeignKey(ut => ut.TeamId),
-				p => p.HasOne<UserModel>(ut => ut.Member)
+				p => p.HasOne(ut => ut.Member)
 				.WithMany(u => u.UserTeams)
 				.HasForeignKey(ut => ut.MemberId)
-			);
+			)
+			.ToTable("MemberTeams");
 		#endregion
 
 
@@ -62,13 +59,14 @@ public class CustomIdentityDbContext : DbContext
 			.HasMany(u => u.Projects)
 			.WithMany(r => r.Clients)
 			.UsingEntity<UserProjectModel>(
-				l => l.HasOne<ProjectModel>(up => up.Project)
+				l => l.HasOne(up => up.Project)
 				.WithMany(t => t.ProjectClients)
 				.HasForeignKey(ut => ut.ProjectId),
-				p => p.HasOne<UserModel>(ut => ut.Owner)
-				.WithMany(u => u.UserProjects)
+				p => p.HasOne(ut => ut.Owner)
+				.WithMany(u => u.ClientProjects)
 				.HasForeignKey(ut => ut.OwnerId)
-			);
+			)
+			.ToTable("ClientProjects");
 
 		modelBuilder.Entity<UserModel>()
 			.HasMany(u => u.Projects)
@@ -81,19 +79,23 @@ public class CustomIdentityDbContext : DbContext
 
 		modelBuilder.Entity<UserModel>()
 			.HasMany(u => u.TodoLists)
-			.WithMany(t => t.use);
+			.WithOne(t => t.Owner)
+			.HasForeignKey(t => t.OwnerId);
+
+		modelBuilder.Entity<UserModel>()
+			.HasMany(u => u.TodoLists)
+			.WithOne(t => t.Creator)
+			.HasForeignKey(t => t.CreatorId);
 		#endregion
 
 
-		modelBuilder.Entity<UserModel>()
-			.HasMany(user => user.UserProjects)
-			.WithOne(p => p.Owner)
-			.HasForeignKey(p => p.OwnerId);
+		#region User - Budget
 
 		modelBuilder.Entity<UserModel>()
-			.HasMany(user => user.UserBudgets)
+			.HasMany(u => u.Budgets)
 			.WithOne(b => b.Owner)
 			.HasForeignKey(b => b.OwnerId);
+		#endregion
 
 		modelBuilder.Entity<UserModel>()
 			.ToTable("Users")
@@ -110,11 +112,10 @@ public class CustomIdentityDbContext : DbContext
 			.WithMany(u => u.UserRoles)
 			.HasForeignKey(ur => ur.UserId);
 
-		modelBuilder.Entity<UserRoleModel>()
-			.HasKey(ur => new { ur.UserId, ur.RoleId });
 
-		modelBuilder.Entity<UserRoleModel>()
-			.ToTable("UserRoles");
+		modelBuilder.Entity<UserModel>()
+			.ToTable("Users")
+			.HasKey(u => u.Id);
 
 		_logger?.LogInformation(ExceptionsMessages.LogBuildingSucceed, nameof(OnModelCreating), nameof(CustomIdentityDbContext));
 	}

@@ -3,13 +3,11 @@ using App.Features.Budgets.Common.Models;
 using App.Features.Projects.Common.Models;
 using App.Features.Teams.Common.Models;
 using App.Features.TodoLists.Common.Models;
-using App.Features.Users.Common.Budgets.Models;
 using App.Features.Users.Common.Helpers;
 using App.Features.Users.Common.Models.Interfaces;
 using App.Features.Users.Common.Projects.Models;
 using App.Features.Users.Common.Roles.Models;
 using App.Features.Users.Common.Teams.Models;
-using App.Features.Users.Common.TodoLists.Interfaces;
 using App.Features.Users.Common.TodoLists.Models;
 using System.ComponentModel.DataAnnotations;
 #endregion
@@ -74,7 +72,7 @@ public sealed class UserModel : IUserModel
 	public ICollection<UserTeamModel> UserTeams { get; set; } = new List<UserTeamModel>();
 
 	public ICollection<ProjectModel> Projects { get; set; } = new List<ProjectModel>();
-	public ICollection<UserProjectModel> UserProjects { get; set; } = new List<UserProjectModel>();
+	public ICollection<UserProjectModel> ClientProjects { get; set; } = new List<UserProjectModel>();
 
 	public ICollection<BudgetModel> Budgets { get; set; } = new List<BudgetModel>();
 	public ICollection<UserBudgetModel> UserBudgets { get; set; } = new List<UserBudgetModel>();
