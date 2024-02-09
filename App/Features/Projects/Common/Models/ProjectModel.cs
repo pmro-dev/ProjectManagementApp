@@ -64,6 +64,7 @@ public class ProjectModel : IProjectModel
 
 	public ICollection<TodoListModel> TodoLists { get; set; }
 	public ICollection<TeamModel> Teams { get; set; }
+	public ICollection<ProjectTeamModel> ProjectTeams { get; set; }
 
 	public ProjectModel(string title, string description, string ownerId, DateTime deadline, Guid budgetId, ICollection<TeamModel>? teams = null)
 	{

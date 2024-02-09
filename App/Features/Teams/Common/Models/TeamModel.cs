@@ -35,7 +35,7 @@ public class TeamModel : ITeamModel
 	public ICollection<UserTeamModel> TeamMembers { get; set; }
 
 	public ICollection<ProjectModel> Projects { get; set; }
-	public ICollection<UserProjectModel> UserProjects { get; set; }
+	public ICollection<ProjectTeamModel> TeamProjects { get; set; }
 
 	public ICollection<TodoListModel> TodoLists { get; set; }
 	public ICollection<UserTodoListModel> UserTodoLists { get; set; }
