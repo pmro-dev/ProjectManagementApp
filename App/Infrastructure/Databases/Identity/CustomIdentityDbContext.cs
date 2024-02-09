@@ -97,20 +97,23 @@ public class CustomIdentityDbContext : DbContext
 			.HasForeignKey(b => b.OwnerId);
 		#endregion
 
+
+		#region User - Billings
+
 		modelBuilder.Entity<UserModel>()
-			.ToTable("Users")
-			.HasKey(u => u.Id);
+			.HasMany(u => u.Billings)
+			.WithOne(b => b.Executor)
+			.HasForeignKey(b => b.ExecutorId);
+		#endregion
 
 
-		modelBuilder.Entity<UserRoleModel>()
-			.HasOne(userRole => userRole.Role)
-			.WithMany(r => r.RoleUsers)
-			.HasForeignKey(ur => ur.RoleId);
+		#region User - Incomes
 
-		modelBuilder.Entity<UserRoleModel>()
-			.HasOne(userRole => userRole.User)
-			.WithMany(u => u.UserRoles)
-			.HasForeignKey(ur => ur.UserId);
+		modelBuilder.Entity<UserModel>()
+			.HasMany(u => u.Incomes)
+			.WithOne(b => b.Executor)
+			.HasForeignKey(b => b.ExecutorId);
+		#endregion
 
 
 		modelBuilder.Entity<UserModel>()

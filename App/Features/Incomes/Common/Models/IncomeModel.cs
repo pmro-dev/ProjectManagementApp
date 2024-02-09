@@ -1,5 +1,6 @@
 ﻿using App.Features.Budgets.Common.Models;
 using App.Features.Incomes.Common.Interfaces;
+using App.Features.Users.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -30,11 +31,18 @@ public class IncomeModel : IIncomeModel
 	[ForeignKey(nameof(BudgetId))]
 	public virtual BudgetModel? Budget { get; set; }
 
+	[Required]
+	public string ExecutorId { get; set; }
+
+	[Required]
+	[ForeignKey(nameof(ExecutorId))]
+	public virtual UserModel? Executor { get; set; }
+
 	public DateTime? PaymentDate { get; set; }
 
 	public DateTime? PaymentDeadline { get; set; }
 
-	public IncomeModel(string name, string description, long value, Guid budgetId, DateTime? paymentDeadline = null, DateTime? paymentDate = null)
+	public IncomeModel(string name, string description, long value, Guid budgetId, DateTime? paymentDeadline = null, DateTime? paymentDate = null, string executorId)
 	{
 		Id = Guid.NewGuid();
 		DataVersion = Guid.NewGuid().ToString();
@@ -44,5 +52,6 @@ public class IncomeModel : IIncomeModel
 		BudgetId = budgetId;
 		PaymentDate = paymentDate;
 		PaymentDeadline = paymentDeadline;
+		ExecutorId = executorId;
 	}
 }

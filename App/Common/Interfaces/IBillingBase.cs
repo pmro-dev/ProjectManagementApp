@@ -1,5 +1,6 @@
 ﻿#region USINGS
 using App.Features.Budgets.Common.Models;
+using App.Features.Users.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 #endregion
@@ -21,7 +22,14 @@ public interface IBillingBase
     [Required]
     public long Value { get; set; }
 
-    [Required]
+	[Required]
+	public string ExecutorId { get; set; }
+
+	[Required]
+	[ForeignKey(nameof(ExecutorId))]
+	public UserModel? Executor { get; set; }
+
+	[Required]
     public Guid BudgetId { get; set; }
 
     [Required]

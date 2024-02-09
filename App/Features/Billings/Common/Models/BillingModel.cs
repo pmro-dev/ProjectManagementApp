@@ -1,7 +1,7 @@
 ﻿#region USINGS
-using App.Common.Interfaces;
 using App.Features.Billings.Common.Interfaces;
 using App.Features.Budgets.Common.Models;
+using App.Features.Users.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 #endregion 
@@ -32,11 +32,18 @@ public class BillingModel : IBillingModel
 	[ForeignKey(nameof(BudgetId))]
 	public virtual BudgetModel? Budget { get; set; }
 
+	[Required]
+	public string ExecutorId { get; set; }
+
+	[Required]
+	[ForeignKey(nameof(ExecutorId))]
+	public virtual UserModel? Executor { get; set; }
+
 	public DateTime? PaymentDate { get; set; }
 
 	public DateTime? PaymentDeadline { get; set; }
 
-	public BillingModel(string name, string description, long value, Guid budgetId, DateTime? paymentDeadline = null, DateTime? paymentDate = null)
+	public BillingModel(string name, string description, long value, Guid budgetId, DateTime? paymentDeadline = null, DateTime? paymentDate = null, string executorId)
 	{
 		Id = Guid.NewGuid();
 		Name = name;
@@ -45,5 +52,6 @@ public class BillingModel : IBillingModel
 		BudgetId = budgetId;
 		PaymentDeadline = paymentDeadline;
 		PaymentDate = paymentDate;
+		ExecutorId = executorId;
 	}
 }

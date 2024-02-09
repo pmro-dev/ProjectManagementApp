@@ -1,5 +1,7 @@
 ﻿#region USINGS
+using App.Features.Billings.Common.Models;
 using App.Features.Budgets.Common.Models;
+using App.Features.Incomes.Common.Models;
 using App.Features.Projects.Common.Models;
 using App.Features.Teams.Common.Models;
 using App.Features.TodoLists.Common.Models;
@@ -75,7 +77,10 @@ public sealed class UserModel : IUserModel
 	public ICollection<UserProjectModel> ClientProjects { get; set; } = new List<UserProjectModel>();
 
 	public ICollection<BudgetModel> Budgets { get; set; } = new List<BudgetModel>();
-	public ICollection<UserBudgetModel> UserBudgets { get; set; } = new List<UserBudgetModel>();
+	
+	public ICollection<BillingModel> Billings { get; set; } = new List<BillingModel>();
+	
+	public ICollection<IncomeModel> Incomes { get; set; } = new List<IncomeModel>();
 
 	public override bool Equals(object? obj)
 	{
