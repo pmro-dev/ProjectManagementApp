@@ -7,6 +7,9 @@ namespace App.Features.Users.Common.Teams.Interfaces;
 
 public interface IUserTeamModel
 {
+	[Timestamp]
+	byte[] RowVersion { get; set; }
+
 	[Key]
 	[Required]
 	public string MemberId { get; set; }

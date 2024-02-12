@@ -7,6 +7,9 @@ namespace App.Features.Users.Common.Projects.Interfaces;
 
 public interface IUserProjectModel
 {
+	[Timestamp]
+	byte[] RowVersion { get; set; }
+
 	[Key]
 	[Required]
 	public string OwnerId { get; set; }

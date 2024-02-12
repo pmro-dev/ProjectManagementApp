@@ -7,6 +7,9 @@ namespace App.Features.Tasks.Common.TaskTags.Common.Interfaces;
 
 public interface ITaskTagModel
 {
+	[Timestamp]
+	byte[] RowVersion { get; set; }
+
 	[Required]
 	Guid TagId { get; set; }
 

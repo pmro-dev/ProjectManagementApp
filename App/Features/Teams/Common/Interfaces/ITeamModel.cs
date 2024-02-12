@@ -1,30 +1,43 @@
-﻿using App.Features.Projects.Common.Models;
+﻿#region USINGS
+using App.Features.Projects.Common.Models;
 using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Models;
 using App.Features.Users.Common.Teams.Models;
 using App.Features.Users.Common.TodoLists.Models;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+#endregion
 
 namespace App.Features.Teams.Common.Interfaces;
 
 public interface ITeamModel
 {
-	[Required]
 	[Key]
-	public Guid Id { get; set; }
+	[Required]
+	Guid Id { get; set; }
+
+	[Timestamp]
+	byte[] RowVersion { get; set; }
 
 	[Required]
-	public string Name { get; set; }
+	string Name { get; set; }
 
 	[Required]
-	public string Description { get; set; }
+	string Description { get; set; }
 
-	public ICollection<UserModel> Members { get; set; }
-	public ICollection<UserTeamModel> TeamMembers { get; set; }
+	[Required]
+	string LiderId { get; set; }
 
-	public ICollection<ProjectModel> Projects { get; set; }
-	public ICollection<ProjectTeamModel> TeamProjects { get; set; }
+	[Required]
+	[ForeignKey(nameof(LiderId))]
+	UserModel? Lider { get; set; }
 
-	public ICollection<TodoListModel> TodoLists { get; set; }
-	public ICollection<UserTodoListModel> UserTodoLists { get; set; }
+	ICollection<UserModel> Members { get; set; }
+	ICollection<UserTeamModel> TeamMembers { get; set; }
+
+	ICollection<ProjectModel> Projects { get; set; }
+	ICollection<ProjectTeamModel> TeamProjects { get; set; }
+
+	ICollection<TodoListModel> TodoLists { get; set; }
+	ICollection<UserTodoListModel> UserTodoLists { get; set; }
 }

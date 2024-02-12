@@ -3,6 +3,7 @@ using App.Features.Billings.Common.Models;
 using App.Features.Budgets.Common.Models;
 using App.Features.Incomes.Common.Models;
 using App.Features.Projects.Common.Models;
+using App.Features.Tasks.Common.Models;
 using App.Features.Teams.Common.Models;
 using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Helpers;
@@ -22,8 +23,8 @@ public sealed class UserModel : IUserModel
 	[Required]
 	public string Id { get; set; } = Guid.NewGuid().ToString();
 
-	[Required]
-	public string DataVersion { get; set; } = Guid.NewGuid().ToString();
+	[Timestamp]
+	public byte[] RowVersion { get; set; } = { 1, 1, 1 };
 
 	[Required]
 	public string Provider { get; set; } = string.Empty;
@@ -75,6 +76,8 @@ public sealed class UserModel : IUserModel
 
 	public ICollection<ProjectModel> Projects { get; set; } = new List<ProjectModel>();
 	public ICollection<UserProjectModel> ClientProjects { get; set; } = new List<UserProjectModel>();
+
+	public ICollection<TaskModel> Tasks { get; set; } = new List<TaskModel>();
 
 	public ICollection<BudgetModel> Budgets { get; set; } = new List<BudgetModel>();
 	

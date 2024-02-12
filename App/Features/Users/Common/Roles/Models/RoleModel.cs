@@ -11,10 +11,10 @@ public class RoleModel : IRoleModel
 	[Required]
 	public Guid Id { get; set; }
 
-    [Required]
-    public string DataVersion { get; set; }
+	[Timestamp]
+	public byte[] RowVersion { get; set; }
 
-    [Required]
+	[Required]
     [MinLength(UserAttributesHelper.RoleNameMinLength)]
     [MaxLength(UserAttributesHelper.RoleNameMaxLength)]
     public string Name { get; set; }
@@ -28,8 +28,8 @@ public class RoleModel : IRoleModel
     public RoleModel()
     {
         Id = Guid.NewGuid();
-        DataVersion = Guid.NewGuid().ToString();
-        Name = string.Empty;
+		RowVersion = new byte[] { 1, 1, 1 };
+		Name = string.Empty;
         Description = string.Empty;
         RoleUsers = new List<UserRoleModel>();
 		Users = new List<UserModel>();

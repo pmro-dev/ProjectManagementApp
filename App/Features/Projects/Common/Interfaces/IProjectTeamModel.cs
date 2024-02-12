@@ -7,6 +7,9 @@ namespace App.Features.Projects.Common.Interfaces;
 
 public interface IProjectTeamModel
 {
+	[Timestamp]
+	byte[] RowVersion { get; set; }
+
 	[Key]
 	[Required]
 	Guid ProjectId { get; set; }

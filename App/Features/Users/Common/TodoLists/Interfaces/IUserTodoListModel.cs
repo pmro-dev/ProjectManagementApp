@@ -7,6 +7,9 @@ namespace App.Features.Users.Common.TodoLists.Interfaces;
 
 public interface IUserTodoListModel
 {
+	[Timestamp]
+	public byte[] RowVersion { get; set; }
+
 	[Key]
 	[Required]
 	public string OwnerId { get; set; }

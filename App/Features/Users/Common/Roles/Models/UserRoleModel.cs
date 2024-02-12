@@ -6,6 +6,8 @@ namespace App.Features.Users.Common.Roles.Models;
 
 public class UserRoleModel : IUserRoleModel
 {
+	[Timestamp]
+	public byte[] RowVersion { get; set; }
 
 	[Key]
 	[Required]
@@ -20,11 +22,13 @@ public class UserRoleModel : IUserRoleModel
     {
         User = new UserModel();
         Role = new RoleModel();
-    }
+		RowVersion = new byte[] { 1, 1, 1 };
+	}
 
     public UserRoleModel(UserModel userModel, RoleModel roleModel)
     {
         User = userModel;
         Role = roleModel;
-    }
+		RowVersion = new byte[] { 1, 1, 1 };
+	}
 }

@@ -11,31 +11,31 @@ public interface IBudgetModel
 {
 	[Required]
 	[Key]
-	public Guid Id { get; set; }
+	Guid Id { get; set; }
+
+	[Timestamp]
+	byte[] RowVersion { get; set; }
 
 	[Required]
-	public string DataVersion { get; set; }
+	string Title { get; set; }
 
 	[Required]
-	public string Title { get; set; }
+	string Description { get; set; }
 
 	[Required]
-	public string Description { get; set; }
-
-	[Required]
-	public Guid ProjectId { get; set; }
+	Guid ProjectId { get; set; }
 
 	[Required]
 	[ForeignKey(nameof(ProjectId))]
-	public ProjectModel? Project { get; set; }
+	ProjectModel? Project { get; set; }
 
 	[Required]
-	public string OwnerId { get; set; }
+	string OwnerId { get; set; }
 
 	[Required]
 	[ForeignKey(nameof(OwnerId))]
-	public UserModel? Owner { get; set; }
+	UserModel? Owner { get; set; }
 
-	public ICollection<BillingModel> Billings { get; set; }
-	public ICollection<IncomeModel> Incomes { get; set; }
+	ICollection<BillingModel> Billings { get; set; }
+	ICollection<IncomeModel> Incomes { get; set; }
 }

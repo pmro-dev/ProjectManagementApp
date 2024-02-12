@@ -5,19 +5,19 @@ namespace App.Features.Users.Common.Roles.Models.Interfaces;
 
 public interface IRoleModel
 {
-    [Key]
-    [Required]
-    Guid Id { get; set; }
-
+	[Key]
 	[Required]
-	string DataVersion { get; set; }
+	Guid Id { get; set; }
+
+	[Timestamp]
+	byte[] RowVersion { get; set; }
 
 	string Description { get; set; }
 
 	[Required]
 	string Name { get; set; }
 
-    ICollection<UserModel> Users { get; set; }
+	ICollection<UserModel> Users { get; set; }
 
-    ICollection<UserRoleModel> RoleUsers { get; set; }
+	ICollection<UserRoleModel> RoleUsers { get; set; }
 }

@@ -7,6 +7,9 @@ namespace App.Features.Projects.Common.Models;
 
 public class ProjectTeamModel : IProjectTeamModel
 {
+	[Timestamp]
+	public byte[] RowVersion { get; set; } = { 1, 1, 1 };
+
 	[Key]
 	[Required]
 	public Guid ProjectId { get; set; }

@@ -8,6 +8,9 @@ namespace App.Features.Users.Common.Teams.Models;
 
 public class UserTeamModel : IUserTeamModel
 {
+	[Timestamp]
+	public byte[] RowVersion { get; set; } = { 1, 1, 1 };
+
 	[Key]
 	[Required]
 	public string MemberId { get; set; }

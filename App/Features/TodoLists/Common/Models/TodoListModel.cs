@@ -23,6 +23,9 @@ public class TodoListModel : ITodoListModel
 	[Required]
 	public Guid Id { get; set; }
 
+	[Timestamp]
+	public byte[] RowVersion { get; set; } = { 1, 1, 1 };
+
 	/// <summary>
 	/// Gets or sets To Do List's name.
 	/// </summary>

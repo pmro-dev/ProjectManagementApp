@@ -10,11 +10,12 @@ namespace App.Features.Billings.Common.Models;
 
 public class BillingModel : IBillingModel
 {
-	[Required]
 	[Key]
+	[Required]
 	public Guid Id { get; set; }
 
-	public string DataVersion { get; set; } = Guid.NewGuid().ToString();
+	[Timestamp]
+	public byte[] RowVersion { get; set; }
 
 	[Required]
 	public string Name { get; set; }
@@ -43,9 +44,10 @@ public class BillingModel : IBillingModel
 
 	public DateTime? PaymentDeadline { get; set; }
 
-	public BillingModel(string name, string description, long value, Guid budgetId, DateTime? paymentDeadline = null, DateTime? paymentDate = null, string executorId)
+	public BillingModel(string name, string description, long value, Guid budgetId, string executorId, DateTime? paymentDeadline = null, DateTime? paymentDate = null)
 	{
 		Id = Guid.NewGuid();
+		RowVersion = new byte[] { 1, 1, 1 };
 		Name = name;
 		Description = description;
 		Value = value;

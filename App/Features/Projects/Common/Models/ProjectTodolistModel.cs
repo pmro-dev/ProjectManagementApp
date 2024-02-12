@@ -7,6 +7,9 @@ namespace App.Features.Projects.Common.Models;
 
 public class ProjectTodolistModel : IProjectTodolistModel
 {
+	[Timestamp]
+	public byte[] RowVersion { get; set; }
+
 	[Key]
 	[Required]
 	public string OwnerId { get; set; }
@@ -24,5 +27,6 @@ public class ProjectTodolistModel : IProjectTodolistModel
 	public ProjectTodolistModel(string ownerId)
 	{
 		OwnerId = ownerId;
+		RowVersion = new byte[] { 1, 1, 1 };
 	}
 }

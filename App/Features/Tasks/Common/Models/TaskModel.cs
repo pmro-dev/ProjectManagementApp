@@ -17,53 +17,53 @@ namespace App.Features.Tasks.Common.Models;
 /// </summary>
 public class TaskModel : ITaskModel
 {
-    [Key]
-    [Required]
-    public Guid Id { get; set; }
-
-    [Required]
-    [MaxLength(TaskAttributesHelper.TitleMaxLength)]
-    [MinLength(TaskAttributesHelper.TitleMinLength)]
-    public string Title { get; set; } = string.Empty;
+	[Key]
+	[Required]
+	public Guid Id { get; set; }
 
 	[Required]
-	public string DataVersion { get; set; } = Guid.NewGuid().ToString();
+	[MaxLength(TaskAttributesHelper.TitleMaxLength)]
+	[MinLength(TaskAttributesHelper.TitleMinLength)]
+	public string Title { get; set; } = string.Empty;
+
+	[Timestamp]
+	public byte[] RowVersion { get; set; } = { 1, 1, 1 };
 
 	[Required]
-    [DataType(DataType.MultilineText)]
-    [MaxLength(TaskAttributesHelper.DescriptionMaxLength)]
-    [MinLength(TaskAttributesHelper.DescriptionMinLength)]
-    public string Description { get; set; } = string.Empty;
+	[DataType(DataType.MultilineText)]
+	[MaxLength(TaskAttributesHelper.DescriptionMaxLength)]
+	[MinLength(TaskAttributesHelper.DescriptionMinLength)]
+	public string Description { get; set; } = string.Empty;
 
-    [Required]
-    [DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
-    public DateTime Deadline { get; set; } = DateTime.Now;
+	[Required]
+	[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
+	public DateTime Deadline { get; set; } = DateTime.Now;
 
-    [Required]
-    [DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
-    public DateTime Created { get; set; } = DateTime.Now;
+	[Required]
+	[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
+	public DateTime Created { get; set; } = DateTime.Now;
 
-    [Required]
-    [DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
-    public DateTime LastModified { get; set; } = DateTime.Now;
+	[Required]
+	[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
+	public DateTime LastModified { get; set; } = DateTime.Now;
 
-    [DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
-    public DateTime? ReminderDate { get; set; } = null;
+	[DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]
+	public DateTime? ReminderDate { get; set; } = null;
 
-    [Required]
-    public TaskStatusType Status { get; set; } = TaskStatusType.NotStarted;
+	[Required]
+	public TaskStatusType Status { get; set; } = TaskStatusType.NotStarted;
 
-    public ICollection<TaskTagModel> TaskTags { get; set; } = new List<TaskTagModel>();
+	public ICollection<TaskTagModel> TaskTags { get; set; } = new List<TaskTagModel>();
 
-    [Required]
-    public Guid TodoListId { get; set; } = Guid.NewGuid();
+	[Required]
+	public Guid TodoListId { get; set; } = Guid.NewGuid();
 
 	[ForeignKey(nameof(TodoListId))]
-    public virtual TodoListModel? TodoList { get; set; }
+	public virtual TodoListModel? TodoList { get; set; }
 
-    [Required]
-    public string UserId { get; set; } = string.Empty;
+	[Required]
+	public string OwnerId { get; set; } = string.Empty;
 
-	[ForeignKey(nameof(UserId))]
+	[ForeignKey(nameof(OwnerId))]
 	public virtual UserModel? Owner { get; set; }
 }

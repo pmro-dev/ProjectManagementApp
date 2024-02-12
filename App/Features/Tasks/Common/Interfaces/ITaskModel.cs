@@ -11,45 +11,45 @@ using static App.Features.Tasks.Common.Helpers.TaskStatusHelper;
 
 namespace App.Features.Tasks.Common.Interfaces;
 
-public interface ITaskModel : IBasicModelWithTitle
+interface ITaskModel : IBasicModelWithTitle
 {
 	private const string DataFormat = AttributesHelper.DataFormat;
 
-	[Required]
-	public string DataVersion { get; set; }
+	[Timestamp]
+	byte[] RowVersion { get; set; }
 
 	[Required]
-	public string Description { get; set; }
-
-	[Required]
-	[DisplayFormat(DataFormatString = DataFormat, ApplyFormatInEditMode = true)]
-	public DateTime Deadline { get; set; }
+	string Description { get; set; }
 
 	[Required]
 	[DisplayFormat(DataFormatString = DataFormat, ApplyFormatInEditMode = true)]
-	public DateTime Created { get; set; }
+	DateTime Deadline { get; set; }
 
 	[Required]
 	[DisplayFormat(DataFormatString = DataFormat, ApplyFormatInEditMode = true)]
-	public DateTime LastModified { get; set; }
+	DateTime Created { get; set; }
+
+	[Required]
+	[DisplayFormat(DataFormatString = DataFormat, ApplyFormatInEditMode = true)]
+	DateTime LastModified { get; set; }
 
 	[DisplayFormat(DataFormatString = DataFormat, ApplyFormatInEditMode = true)]
-	public DateTime? ReminderDate { get; set; }
+	DateTime? ReminderDate { get; set; }
 
 	[Required]
-	public TaskStatusType Status { get; set; }
+	TaskStatusType Status { get; set; }
 
 	[Required]
-	public Guid TodoListId { get; set; }
+	Guid TodoListId { get; set; }
 
 	[ForeignKey(nameof(TodoListId))]
-	public TodoListModel? TodoList { get; set; }
+	TodoListModel? TodoList { get; set; }
 
 	[Required]
-	public string UserId { get; set; }
+	string OwnerId { get; set; }
 
-	[ForeignKey(nameof(UserId))]
-	public UserModel? Owner { get; set; }
+	[ForeignKey(nameof(OwnerId))]
+	UserModel? Owner { get; set; }
 
-	public ICollection<TaskTagModel> TaskTags { get; set; }
+	ICollection<TaskTagModel> TaskTags { get; set; }
 }

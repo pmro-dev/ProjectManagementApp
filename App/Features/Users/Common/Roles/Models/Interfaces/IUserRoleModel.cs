@@ -5,7 +5,10 @@ namespace App.Features.Users.Common.Roles.Models.Interfaces;
 
 public interface IUserRoleModel
 {
-    [Key]
+	[Timestamp]
+	byte[] RowVersion { get; set; }
+
+	[Key]
     [Required]
     Guid RoleId { get; set; }
 

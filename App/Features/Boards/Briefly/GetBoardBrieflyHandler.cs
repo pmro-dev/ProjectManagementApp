@@ -1,4 +1,5 @@
-﻿using App.Features.Boards.Common.Interfaces;
+﻿#region USINGS
+using App.Features.Boards.Common.Interfaces;
 using App.Features.Exceptions.Throw;
 using App.Features.Pagination;
 using App.Features.TodoLists.Common.Models;
@@ -8,6 +9,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using static App.Features.Tasks.Common.Helpers.TaskStatusHelper;
+#endregion
 
 namespace App.Features.Boards.Briefly;
 

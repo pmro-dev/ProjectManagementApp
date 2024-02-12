@@ -5,12 +5,12 @@ namespace App.Features.Tags.Common.Interfaces;
 
 public interface ITagModel
 {
-	[Required]
 	[Key]
+	[Required]
 	Guid Id { get; set; }
 
-	[Required]
-	string DataVersion { get; set; }
+	[Timestamp]
+	byte[] RowVersion { get; set; }
 
 	[Required]
 	string Title { get; set; }

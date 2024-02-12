@@ -8,6 +8,9 @@ namespace App.Features.Users.Common.TodoLists.Models;
 
 public class UserTodoListModel : IUserTodoListModel	
 {
+	[Timestamp]
+	public byte[] RowVersion { get; set; } = { 1, 1, 1 };
+
 	[Key]
 	[Required]
 	public string OwnerId { get; set; } = string.Empty;

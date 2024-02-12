@@ -10,8 +10,8 @@ public class TagModel : ITagModel
     [Key]
     public Guid Id { get; set; } = Guid.NewGuid();
 
-    [Required]
-	public string DataVersion { get; set; } = Guid.NewGuid().ToString();
+	[Timestamp]
+	public byte[] RowVersion { get; set; } = { 1, 1, 1 };
 
 	[Required]
     public string Title { get; set; } = string.Empty;

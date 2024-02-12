@@ -12,54 +12,52 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace App.Features.Projects.Common.Interfaces;
 
-public interface IProjectModel
+interface IProjectModel
 {
-	[Required]
 	[Key]
-	public Guid Id { get; set; }
+	[Required]
+	Guid Id { get; set; }
+
+	[Timestamp]
+	byte[] RowVersion { get; set; }
 
 	[Required]
-	public string DataVersion { get; set; }
+	string Title { get; set; }
 
 	[Required]
-	public string Title { get; set; }
+	string Description { get; set; }
 
 	[Required]
-	public string Description { get; set; }
-
-	[Required]
-	public Guid BudgetId { get; set; }
+	Guid BudgetId { get; set; }
 
 	[Required]
 	[ForeignKey(nameof(BudgetId))]
-	public BudgetModel? Budget { get; set; }
+	BudgetModel? Budget { get; set; }
 
-	public ICollection<UserModel> Clients { get; set; }
-	public ICollection<UserProjectModel> ProjectClients { get; set; }
+	ICollection<UserModel> Clients { get; set; }
+	ICollection<UserProjectModel> ProjectClients { get; set; }
 
-	public ICollection<TodoListModel> TodoLists { get; set; }
-	public ICollection<ProjectTodolistModel> ProjectTodoLists { get; set; }
+	ICollection<TodoListModel> TodoLists { get; set; }
 
-	public ICollection<TeamModel> Teams { get; set; }
-	public ICollection<ProjectTeamModel> ProjectTeams { get; set; }
+	ICollection<TeamModel> Teams { get; set; }
+	ICollection<ProjectTeamModel> ProjectTeams { get; set; }
 
 	[Required]
-	public string OwnerId { get; set; }
+	string OwnerId { get; set; }
 
 	[Required]
 	[ForeignKey(nameof(OwnerId))]
-	public UserModel? Owner { get; set; }
+	UserModel? Owner { get; set; }
 
 	[Required]
-	public ProjectStatusType Status { get; set; }
+	ProjectStatusType Status { get; set; }
 
 	[Required]
-	public DateTime Deadline { get; set; }
+	DateTime Deadline { get; set; }
 
 	[Required]
-	public DateTime Created { get; set; }
+	DateTime Created { get; set; }
 
 	[Required]
-	public DateTime LastUpdated { get; set; }
-
+	DateTime LastUpdated { get; set; }
 }

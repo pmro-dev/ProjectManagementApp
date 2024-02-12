@@ -7,6 +7,9 @@ namespace App.Features.Projects.Common.Interfaces;
 
 public interface IProjectTodolistModel
 {
+	[Timestamp]
+	byte[] RowVersion { get; set; }
+
 	[Key]
 	[Required]
 	string OwnerId { get; set; }

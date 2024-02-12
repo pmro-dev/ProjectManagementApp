@@ -8,6 +8,9 @@ namespace App.Features.Users.Common.Projects.Models;
 
 public class UserProjectModel : IUserProjectModel
 {
+	[Timestamp]
+	public byte[] RowVersion { get; set; }
+
 	[Key]
 	[Required]
 	public string OwnerId { get; set; }
@@ -28,5 +31,6 @@ public class UserProjectModel : IUserProjectModel
 	{
 		OwnerId = ownerId;
 		ProjectId = projectId;
+		RowVersion = new byte[] { 1, 1, 1 };
 	}
 }

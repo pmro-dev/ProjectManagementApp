@@ -11,32 +11,35 @@ public interface IBillingBase
 {
     [Required]
     [Key]
-    public Guid Id { get; set; }
+    Guid Id { get; set; }
 
-    [Required]
-    public string Name { get; set; }
-
-    [Required]
-    public string Description { get; set; }
-
-    [Required]
-    public long Value { get; set; }
+	[Timestamp]
+	byte[] RowVersion { get; set; }
 
 	[Required]
-	public string ExecutorId { get; set; }
+    string Name { get; set; }
+
+    [Required]
+    string Description { get; set; }
+
+    [Required]
+    long Value { get; set; }
+
+	[Required]
+	string ExecutorId { get; set; }
 
 	[Required]
 	[ForeignKey(nameof(ExecutorId))]
-	public UserModel? Executor { get; set; }
+	UserModel? Executor { get; set; }
 
 	[Required]
-    public Guid BudgetId { get; set; }
+    Guid BudgetId { get; set; }
 
     [Required]
     [ForeignKey(nameof(BudgetId))]
-    public BudgetModel? Budget { get; set; }
+    BudgetModel? Budget { get; set; }
 
-    public DateTime? PaymentDate { get; set; }
+    DateTime? PaymentDate { get; set; }
 
-    public DateTime? PaymentDeadline { get; set; }
+    DateTime? PaymentDeadline { get; set; }
 }

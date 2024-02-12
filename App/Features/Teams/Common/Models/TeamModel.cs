@@ -18,6 +18,9 @@ public class TeamModel : ITeamModel
 	[Required]
 	public Guid Id { get; set; }
 
+	[Timestamp]
+	public byte[] RowVersion { get; set; }
+
 	[Required]
 	public string Name { get; set; }
 
@@ -43,6 +46,7 @@ public class TeamModel : ITeamModel
 	public TeamModel(string name, string description, string liderId)
 	{
 		Id = Guid.NewGuid();
+		RowVersion = new byte[] { 1, 1, 1 };
 		Name = name;
 		Description = description;
 		LiderId = liderId;
@@ -50,7 +54,7 @@ public class TeamModel : ITeamModel
 		Members = new List<UserModel>();
 		TeamMembers = new List<UserTeamModel>();
 		Projects = new List<ProjectModel>();
-		UserProjects = new List<UserProjectModel>();
+		TeamProjects = new List<ProjectTeamModel>();
 		TodoLists = new List<TodoListModel>();
 		UserTodoLists = new List<UserTodoListModel>();
 	}

@@ -8,6 +8,9 @@ namespace App.Features.Tasks.Common.TaskTags.Common;
 
 public class TaskTagModel : ITaskTagModel
 {
+	[Timestamp]
+	public byte[] RowVersion { get; set; } = { 1, 1, 1 };
+
 	[Required]
 	public Guid TaskId { get; set; } = Guid.NewGuid();
 

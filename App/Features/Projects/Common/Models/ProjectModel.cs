@@ -17,12 +17,12 @@ namespace App.Features.Projects.Common.Models;
 
 public class ProjectModel : IProjectModel
 {
-	[Required]
 	[Key]
+	[Required]
 	public Guid Id { get; set; }
 
-	[Required]
-	public string DataVersion { get; set; }
+	[Timestamp]
+	public byte[] RowVersion { get; set; }
 
 	[Required]
 	public string Title { get; set; }
@@ -69,7 +69,7 @@ public class ProjectModel : IProjectModel
 	public ProjectModel(string title, string description, string ownerId, DateTime deadline, Guid budgetId, ICollection<TeamModel>? teams = null)
 	{
 		Id = Guid.NewGuid();
-		DataVersion = Guid.NewGuid().ToString();
+		RowVersion = new byte[]{1, 1, 1};
 		Title = title;
 		Description = description;
 		OwnerId = ownerId;
@@ -79,7 +79,9 @@ public class ProjectModel : IProjectModel
 		BudgetId = budgetId;
 
 		Clients = new List<UserModel>();
+		ProjectClients = new List<UserProjectModel>();
 		TodoLists = new List<TodoListModel>();
 		Teams = teams ?? new List<TeamModel>();
+		ProjectTeams = new List<ProjectTeamModel>();
 	}
 }

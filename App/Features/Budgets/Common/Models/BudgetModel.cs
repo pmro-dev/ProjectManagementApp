@@ -12,12 +12,12 @@ namespace App.Features.Budgets.Common.Models;
 
 public class BudgetModel : IBudgetModel
 {
-	[Required]
 	[Key]
+	[Required]
 	public Guid Id { get; set; }
 
-	[Required]
-	public string DataVersion { get; set; }
+	[Timestamp]
+	public byte[] RowVersion { get; set; }
 
 	[Required]
 	public string Title { get; set; }
@@ -45,7 +45,7 @@ public class BudgetModel : IBudgetModel
 	public BudgetModel(string title, string description, Guid projectId, string ownerId)
 	{
 		Id = Guid.NewGuid();
-		DataVersion = Guid.NewGuid().ToString();
+		RowVersion = new byte[] { 1, 1, 1 };
 		Title = title;
 		Description = description;
 		ProjectId = projectId;
