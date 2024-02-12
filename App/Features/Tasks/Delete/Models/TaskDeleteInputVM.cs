@@ -4,6 +4,6 @@ namespace App.Features.Tasks.Delete.Models;
 
 public class TaskDeleteInputVM : ITaskDeleteInputVM
 {
-	public int Id { get; set; }
-	public int TodoListId { get; set; }
+	public Guid Id { get; set; }
+	public Guid TodoListId { get; set; }
 }

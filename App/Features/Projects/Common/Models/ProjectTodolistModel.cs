@@ -24,9 +24,10 @@ public class ProjectTodolistModel : IProjectTodolistModel
 	[ForeignKey(nameof(ProjectId))]
 	public ProjectModel? Project { get; set; }
 
-	public ProjectTodolistModel(string ownerId)
+	public ProjectTodolistModel(string ownerId, Guid projectId)
 	{
 		OwnerId = ownerId;
+		ProjectId = projectId;
 		RowVersion = new byte[] { 1, 1, 1 };
 	}
 }

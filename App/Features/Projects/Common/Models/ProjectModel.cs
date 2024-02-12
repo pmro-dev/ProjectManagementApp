@@ -4,6 +4,7 @@ using App.Common.Helpers;
 using App.Features.Budgets.Common.Models;
 using App.Features.Projects.Common.Helpers;
 using App.Features.Projects.Common.Interfaces;
+using App.Features.Tags.Common.Models;
 using App.Features.Teams.Common.Models;
 using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Models;
@@ -66,6 +67,9 @@ public class ProjectModel : IProjectModel
 	public ICollection<TeamModel> Teams { get; set; }
 	public ICollection<ProjectTeamModel> ProjectTeams { get; set; }
 
+	public ICollection<TagModel> Tags { get; set; }
+	public ICollection<ProjectTagModel> ProjectTags { get; set; }
+
 	public ProjectModel(string title, string description, string ownerId, DateTime deadline, Guid budgetId, ICollection<TeamModel>? teams = null)
 	{
 		Id = Guid.NewGuid();
@@ -83,5 +87,7 @@ public class ProjectModel : IProjectModel
 		TodoLists = new List<TodoListModel>();
 		Teams = teams ?? new List<TeamModel>();
 		ProjectTeams = new List<ProjectTeamModel>();
+		Tags = new List<TagModel>();
+		ProjectTags = new List<ProjectTagModel>();
 	}
 }

@@ -1,11 +1,11 @@
 ﻿using App.Features.Projects.Common.Interfaces;
-using App.Features.Teams.Common.Models;
-using System.ComponentModel.DataAnnotations;
+using App.Features.Tags.Common.Models;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace App.Features.Projects.Common.Models;
 
-public class ProjectTeamModel : IProjectTeamModel
+public class ProjectTagModel : IProjectTagModel
 {
 	[Timestamp]
 	public byte[] RowVersion { get; set; }
@@ -19,15 +19,15 @@ public class ProjectTeamModel : IProjectTeamModel
 
 	[Key]
 	[Required]
-	public Guid TeamId { get; set; }
+	public Guid TagId { get; set; }
 
-	[ForeignKey(nameof(TeamId))]
-	public TeamModel? Team { get; set; }
+	[ForeignKey(nameof(TagId))]
+	public TagModel? Tag { get; set; }
 
-	public ProjectTeamModel(Guid teamId, Guid projectId)
+	public ProjectTagModel(Guid projectId, Guid tagId)
 	{
-		TeamId = teamId;
 		ProjectId = projectId;
-		RowVersion = new byte[]{ 1, 1, 1 };
+		TagId = tagId;
+		RowVersion = new byte[] { 1, 1, 1 };
 	}
 }

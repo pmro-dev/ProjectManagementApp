@@ -42,7 +42,7 @@ public class TaskViewModelsFactory : ITaskViewModelsFactory
 		};
 	}
 
-	public TaskDeleteInputVM CreateDeleteInputVM(int id, int todoListId)
+	public TaskDeleteInputVM CreateDeleteInputVM(Guid id, Guid todoListId)
 	{
 		return new TaskDeleteInputVM()
 		{

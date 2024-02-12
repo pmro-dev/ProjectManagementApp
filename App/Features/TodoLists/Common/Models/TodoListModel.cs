@@ -1,9 +1,11 @@
 ﻿#region USINGS
 using App.Features.Projects.Common.Models;
+using App.Features.Tags.Common.Models;
 using App.Features.Tasks.Common.Models;
 using App.Features.Teams.Common.Models;
 using App.Features.TodoLists.Common.Helpers;
 using App.Features.TodoLists.Common.Interfaces;
+using App.Features.TodoLists.Common.Tags;
 using App.Features.Users.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -21,7 +23,7 @@ public class TodoListModel : ITodoListModel
 	/// </summary>
 	[Key]
 	[Required]
-	public Guid Id { get; set; }
+	public Guid Id { get; set; } = Guid.NewGuid();
 
 	[Timestamp]
 	public byte[] RowVersion { get; set; } = { 1, 1, 1 };
@@ -56,7 +58,7 @@ public class TodoListModel : ITodoListModel
 	public ProjectModel? Project { get; set; }
 
 	[Required]
-	public Guid TeamId { get; set; }
+	public Guid TeamId { get; set; } = Guid.Empty;
 
 	[ForeignKey(nameof(TeamId))]
 	public TeamModel? Team { get; set; }
@@ -65,6 +67,10 @@ public class TodoListModel : ITodoListModel
 	/// Gets or Sets
 	/// </summary>
 	public ICollection<TaskModel> Tasks { get; set; } = new List<TaskModel>();
+
+	public ICollection<TagModel> Tags { get; set; } = new List<TagModel>();
+	public ICollection<TodoListTagModel> TodoListTags { get; set; } = new List<TodoListTagModel>();
+
 
 	/// <summary>
 	/// Compares properties of two To Do Lists and return result of that compare.

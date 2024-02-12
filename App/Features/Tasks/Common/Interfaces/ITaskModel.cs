@@ -11,12 +11,9 @@ using static App.Features.Tasks.Common.Helpers.TaskStatusHelper;
 
 namespace App.Features.Tasks.Common.Interfaces;
 
-interface ITaskModel : IBasicModelWithTitle
+public interface ITaskModel : IBasicModelWithTitle
 {
 	private const string DataFormat = AttributesHelper.DataFormat;
-
-	[Timestamp]
-	byte[] RowVersion { get; set; }
 
 	[Required]
 	string Description { get; set; }

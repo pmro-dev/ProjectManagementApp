@@ -5,9 +5,12 @@ using App.Features.Exceptions.Throw;
 using App.Features.Incomes.Common.Models;
 using App.Features.Projects.Common.Helpers;
 using App.Features.Projects.Common.Models;
+using App.Features.Tags.Common.Models;
 using App.Features.Tasks.Common.Models;
+using App.Features.Tasks.Common.TaskTags.Common;
 using App.Features.Teams.Common.Models;
 using App.Features.TodoLists.Common.Models;
+using App.Features.TodoLists.Common.Tags;
 using App.Features.Users.Common.Projects.Models;
 using App.Features.Users.Common.Teams.Models;
 using Microsoft.EntityFrameworkCore;
@@ -108,55 +111,89 @@ public class CustomAppDbContext : DbContext
 					.HasOne(p => p.Budget)
 					.WithOne(b => b.Project)
 					.HasForeignKey<BudgetModel>();
+		#endregion
+
+
+			#region Project - Tag
+
+			modelBuilder.Entity<ProjectModel>()
+				.HasMany(p => p.Tags)
+				.WithMany(tg => tg.Projects)
+				.UsingEntity<ProjectTagModel>(
+				l => l
+					.HasOne(pt => pt.Tag)
+					.WithMany(p => p.ProjectTags)
+					.HasForeignKey(pt => pt.TagId),
+				r => r
+					.HasOne(pt => pt.Project)
+					.WithMany(p => p.ProjectTags)
+					.HasForeignKey(pt => pt.ProjectId));
 			#endregion
 
 		#endregion
 
 
 		#region TodoList Entity
-
+		
 			#region TodoList - User 
 
-			modelBuilder.Entity<TodoListModel>()
-				.HasOne(tl => tl.Owner)
-				.WithMany(o => o.TodoLists)
-				.HasForeignKey(tl => tl.OwnerId);
+				modelBuilder.Entity<TodoListModel>()
+						.HasOne(tl => tl.Owner)
+						.WithMany(o => o.TodoLists)
+						.HasForeignKey(tl => tl.OwnerId);
 
-			modelBuilder.Entity<TodoListModel>()
-				.HasOne(tl => tl.Creator)
-				.WithMany(c => c.TodoLists)
-				.HasForeignKey(tl => tl.CreatorId);
+					modelBuilder.Entity<TodoListModel>()
+						.HasOne(tl => tl.Creator)
+						.WithMany(c => c.TodoLists)
+						.HasForeignKey(tl => tl.CreatorId);
 			#endregion
 
 
 			#region TodoList - Task
 
-			modelBuilder.Entity<TodoListModel>()
-				.HasMany(tl => tl.Tasks)
-				.WithOne(t => t.TodoList)
-				.HasForeignKey(t => t.TodoListId);
+				modelBuilder.Entity<TodoListModel>()
+					.HasMany(tl => tl.Tasks)
+					.WithOne(t => t.TodoList)
+					.HasForeignKey(t => t.TodoListId);
 			#endregion
 
 
 			#region TodoList - Team 
 
-			modelBuilder.Entity<TodoListModel>()
-				.HasOne(tl => tl.Team)
-				.WithMany(t => t.TodoLists)
-				.HasForeignKey(tl => tl.TeamId);
+				modelBuilder.Entity<TodoListModel>()
+					.HasOne(tl => tl.Team)
+					.WithMany(t => t.TodoLists)
+					.HasForeignKey(tl => tl.TeamId);
 			#endregion
 
 
 			#region TodoList - Project 
 
-			modelBuilder.Entity<TodoListModel>()
-				.HasOne(tl => tl.Project)
-				.WithMany(p => p.TodoLists)
-				.HasForeignKey(tl => tl.ProjectId);
+				modelBuilder.Entity<TodoListModel>()
+					.HasOne(tl => tl.Project)
+					.WithMany(p => p.TodoLists)
+					.HasForeignKey(tl => tl.ProjectId);
+		#endregion
+
+			
+			#region TodoList - Tag
+
+				modelBuilder.Entity<TodoListModel>()
+					.HasMany(tl => tl.Tags)
+					.WithMany(tg => tg.TodoLists)
+					.UsingEntity<TodoListTagModel>(
+						r => r
+							.HasOne(tt => tt.Tag)
+							.WithMany(tg => tg.TodoListTags)
+							.HasForeignKey(tt => tt.TagId),
+						l => l
+							.HasOne(tt => tt.TodoList)
+							.WithMany(tl => tl.TodoListTags)
+							.HasForeignKey(tt => tt.TodoListId));
+
 			#endregion
 
-
-			modelBuilder.Entity<TodoListModel>()
+		modelBuilder.Entity<TodoListModel>()
 				.ToTable("TodoLists")
 				.HasKey(t => t.Id);
 
@@ -188,16 +225,36 @@ public class CustomAppDbContext : DbContext
 				.HasOne(t => t.TodoList)
 				.WithMany(tl => tl.Tasks)
 				.HasForeignKey(t => t.TodoListId);
-			#endregion
+		#endregion
+
+
+			#region Task - Tag
+
+			modelBuilder.Entity<TaskModel>()
+				.HasMany(t => t.Tags)
+				.WithMany(tg => tg.Tasks)
+				.UsingEntity<TaskTagModel>(
+					l => l
+					.HasOne(tt => tt.Tag)
+					.WithMany(tg => tg.TaskTags)
+					.HasForeignKey(tt => tt.TagId),
+					r => r
+					.HasOne(tt => tt.Task)
+					.WithMany(t => t.TaskTags)
+					.HasForeignKey(tt => tt.TaskId));
+
+			modelBuilder.Entity<TaskTagModel>()
+				.ToTable("TaskTags");
+		#endregion
 
 		#endregion
 
 
 		#region Team Entity
 
-			#region Team - User
+		#region Team - User
 
-			modelBuilder.Entity<TeamModel>()
+		modelBuilder.Entity<TeamModel>()
 				.HasOne(t => t.Lider)
 				.WithMany(l => l.Teams)
 				.HasForeignKey(t => t.LiderId);

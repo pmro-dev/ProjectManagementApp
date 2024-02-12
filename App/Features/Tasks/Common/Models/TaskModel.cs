@@ -1,5 +1,6 @@
 ﻿#region USINGS
 using App.Common.Helpers;
+using App.Features.Tags.Common.Models;
 using App.Features.Tasks.Common.Helpers;
 using App.Features.Tasks.Common.Interfaces;
 using App.Features.Tasks.Common.TaskTags.Common;
@@ -19,7 +20,7 @@ public class TaskModel : ITaskModel
 {
 	[Key]
 	[Required]
-	public Guid Id { get; set; }
+	public Guid Id { get; set; } = Guid.NewGuid();
 
 	[Required]
 	[MaxLength(TaskAttributesHelper.TitleMaxLength)]
@@ -53,10 +54,11 @@ public class TaskModel : ITaskModel
 	[Required]
 	public TaskStatusType Status { get; set; } = TaskStatusType.NotStarted;
 
+	public ICollection<TagModel> Tags { get; set; } = new List<TagModel>();
 	public ICollection<TaskTagModel> TaskTags { get; set; } = new List<TaskTagModel>();
 
 	[Required]
-	public Guid TodoListId { get; set; } = Guid.NewGuid();
+	public Guid TodoListId { get; set; } = Guid.Empty;
 
 	[ForeignKey(nameof(TodoListId))]
 	public virtual TodoListModel? TodoList { get; set; }
