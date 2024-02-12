@@ -21,12 +21,21 @@ public class CustomIdentityDbContext : DbContext
 	{
 		base.OnModelCreating(modelBuilder);
 
+
 		#region User - Role
 
 		modelBuilder.Entity<UserModel>()
 			.HasMany(u => u.Roles)
 			.WithMany(r => r.Users)
-			.UsingEntity<UserRoleModel>();
+			.UsingEntity<UserRoleModel>(
+				l => l
+					.HasOne(ur => ur.Role)
+					.WithMany(r => r.RoleUsers)
+					.HasForeignKey(ur => ur.RoleId),
+				r => r
+					.HasOne(ur => ur.User)
+					.WithMany(u => u.UserRoles)
+					.HasForeignKey(ur => ur.UserId));
 
 		modelBuilder.Entity<RoleModel>()
 			.ToTable("Roles");
@@ -42,13 +51,16 @@ public class CustomIdentityDbContext : DbContext
 			.HasMany(u => u.Teams)
 			.WithMany(r => r.Members)
 			.UsingEntity<UserTeamModel>(
-				l => l.HasOne(ut => ut.Team)
-				.WithMany(t => t.TeamMembers)
-				.HasForeignKey(ut => ut.TeamId),
-				p => p.HasOne(ut => ut.Member)
-				.WithMany(u => u.UserTeams)
-				.HasForeignKey(ut => ut.MemberId)
-			)
+				l => l
+					.HasOne(ut => ut.Team)
+					.WithMany(t => t.TeamMembers)
+					.HasForeignKey(ut => ut.TeamId),
+				p => p
+					.HasOne(ut => ut.Member)
+					.WithMany(u => u.UserTeams)
+					.HasForeignKey(ut => ut.MemberId));
+
+		modelBuilder.Entity<UserTeamModel>()
 			.ToTable("MemberTeams");
 		#endregion
 
@@ -59,13 +71,16 @@ public class CustomIdentityDbContext : DbContext
 			.HasMany(u => u.Projects)
 			.WithMany(r => r.Clients)
 			.UsingEntity<UserProjectModel>(
-				l => l.HasOne(up => up.Project)
-				.WithMany(t => t.ProjectClients)
-				.HasForeignKey(ut => ut.ProjectId),
-				p => p.HasOne(ut => ut.Owner)
-				.WithMany(u => u.ClientProjects)
-				.HasForeignKey(ut => ut.OwnerId)
-			)
+				l => l
+					.HasOne(up => up.Project)
+					.WithMany(t => t.ProjectClients)
+					.HasForeignKey(ut => ut.ProjectId),
+				p => p
+					.HasOne(ut => ut.Owner)
+					.WithMany(u => u.ClientProjects)
+					.HasForeignKey(ut => ut.OwnerId));
+
+		modelBuilder.Entity<UserProjectModel>()
 			.ToTable("ClientProjects");
 
 		modelBuilder.Entity<UserModel>()
