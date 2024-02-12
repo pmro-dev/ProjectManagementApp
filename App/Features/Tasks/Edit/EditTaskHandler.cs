@@ -92,7 +92,7 @@ public class EditTaskHandler :
 		if (await _taskRepository
 				.ContainsAny(task => 
 					task.Title == taskEditInputDto.Title && 
-					task.UserId == taskEditInputDto.UserId && 
+					task.OwnerId == taskEditInputDto.OwnerId && 
 					task.Title != taskEditInputDto.Title))
 			return new EditTaskCommandResponse(null, ExceptionsMessages.NameTaken, StatusCodesExtension.EntityNameTaken);
 

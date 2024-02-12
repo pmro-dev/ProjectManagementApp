@@ -2,10 +2,10 @@
 
 public class ItemsPerPagePanelVM
 {
-	public int TodoListId { get; init; }
+	public Guid TodoListId { get; init; }
 	public DateTime? FilterDueDate { get; init; }
 
-	public ItemsPerPagePanelVM(int todoListId, DateTime? filterDueDate)
+	public ItemsPerPagePanelVM(Guid todoListId, DateTime? filterDueDate)
 	{
 		TodoListId = todoListId;
 		FilterDueDate = filterDueDate;

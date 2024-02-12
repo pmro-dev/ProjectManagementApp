@@ -2,6 +2,6 @@
 
 public interface ITaskDeleteInputDto
 {
-	int Id { get; set; }
-	int TodoListId { get; set; }
+	Guid Id { get; set; }
+	Guid TodoListId { get; set; }
 }

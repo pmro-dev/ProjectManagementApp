@@ -63,7 +63,7 @@ public class SeedData : ISeedData
 				Deadline = DateTime.ParseExact("2023-10-27T09:30", DueDateFormat, formatProvider),
 				LastModified = DateTime.ParseExact("2023-10-15T15:30", DueDateFormat, formatProvider),
 				Created = DateTime.ParseExact("2023-10-15T15:30", DueDateFormat, formatProvider),
-				UserId = AdminId
+				OwnerId = AdminId
 			},
 			new TaskModel{
 				Title = "Customer Profile",
@@ -71,7 +71,7 @@ public class SeedData : ISeedData
 				Deadline = DateTime.ParseExact("2023-08-15T10:30", DueDateFormat, formatProvider),
 				LastModified = DateTime.ParseExact("2023-08-01T15:30", DueDateFormat, formatProvider),
 				Created = DateTime.ParseExact("2023-08-01T15:30", DueDateFormat, formatProvider),
-				UserId = AdminId
+				OwnerId = AdminId
 			},
 			new TaskModel{
 				Title = "New Buttons Location",
@@ -79,7 +79,7 @@ public class SeedData : ISeedData
 				Deadline = DateTime.ParseExact("2023-02-04T14:00", DueDateFormat, formatProvider),
 				LastModified = DateTime.ParseExact("2023-01-15T15:30", DueDateFormat, formatProvider),
 				Created = DateTime.ParseExact("2023-01-15T15:30", DueDateFormat, formatProvider),
-				UserId = AdminId
+				OwnerId = AdminId
 			},
 		};
 
@@ -91,7 +91,7 @@ public class SeedData : ISeedData
 				Deadline = DateTime.ParseExact("2023-09-24T09:30", DueDateFormat, formatProvider),
 				LastModified = DateTime.ParseExact("2023-01-15T15:30", DueDateFormat, formatProvider),
 				Created = DateTime.ParseExact("2023-01-15T15:30", DueDateFormat, formatProvider),
-				UserId = AdminId
+				OwnerId = AdminId
 			},
 			new TaskModel{
 				Title = "Iimplement Database service",
@@ -99,7 +99,7 @@ public class SeedData : ISeedData
 				Deadline = DateTime.ParseExact("2023-09-13T10:30", DueDateFormat, formatProvider),
 				LastModified = DateTime.ParseExact("2023-09-02T15:30", DueDateFormat, formatProvider),
 				Created = DateTime.ParseExact("2023-09-02T15:30", DueDateFormat, formatProvider),
-				UserId = AdminId
+				OwnerId = AdminId
 			},
 			new TaskModel{
 				Title = "Live Team Chat",
@@ -107,7 +107,7 @@ public class SeedData : ISeedData
 				Deadline = DateTime.ParseExact("2023-08-29T14:00", DueDateFormat, formatProvider),
 				LastModified = DateTime.ParseExact("2023-08-03T15:30", DueDateFormat, formatProvider),
 				Created = DateTime.ParseExact("2023-08-03T15:30", DueDateFormat, formatProvider),
-				UserId = AdminId
+				OwnerId = AdminId
 			},
 		};
 
@@ -119,7 +119,7 @@ public class SeedData : ISeedData
 				Deadline = DateTime.ParseExact("2023-07-20T09:30", DueDateFormat,formatProvider),
 				LastModified = DateTime.ParseExact("2023-06-16T15:30", DueDateFormat, formatProvider),
 				Created = DateTime.ParseExact("2023-06-16T15:30", DueDateFormat, formatProvider),
-				UserId = AdminId
+				OwnerId = AdminId
 			},
 			new TaskModel{
 				Title = "Map Feature",
@@ -127,7 +127,7 @@ public class SeedData : ISeedData
 				Deadline = DateTime.ParseExact("2023-08-15T10:30", DueDateFormat, formatProvider),
 				LastModified = DateTime.ParseExact("2023-07-27T15:30", DueDateFormat, formatProvider),
 				Created = DateTime.ParseExact("2023-07-27T15:30", DueDateFormat, formatProvider),
-				UserId = AdminId
+				OwnerId = AdminId
 			},
 			new TaskModel{
 				Title = "Helper Validator",
@@ -135,7 +135,7 @@ public class SeedData : ISeedData
 				Deadline = DateTime.ParseExact("2023-02-04T14:00", DueDateFormat, formatProvider),
 				LastModified = DateTime.ParseExact("2023-01-20T15:30", DueDateFormat, formatProvider),
 				Created = DateTime.ParseExact("2023-01-20T15:30", DueDateFormat, formatProvider),
-				UserId = AdminId
+				OwnerId = AdminId
 			},
 		};
 		TasksProjectManagement = new List<TaskModel>()
@@ -146,7 +146,7 @@ public class SeedData : ISeedData
 				Deadline = DateTime.ParseExact("2023-10-15T09:30", DueDateFormat, formatProvider),
 				LastModified = DateTime.ParseExact("2023-10-02T15:30", DueDateFormat, formatProvider),
 				Created = DateTime.ParseExact("2023-10-02T15:30", DueDateFormat, formatProvider),
-				UserId = AdminId
+				OwnerId = AdminId
 			},
 			new TaskModel{
 				Title = "Meeting with Client",
@@ -154,7 +154,7 @@ public class SeedData : ISeedData
 				Deadline = DateTime.ParseExact("2023-10-10T10:30", DueDateFormat, formatProvider),
 				LastModified = DateTime.ParseExact("2023-09-19T15:30", DueDateFormat, formatProvider),
 				Created = DateTime.ParseExact("2023-09-19T15:30", DueDateFormat, formatProvider),
-				UserId = AdminId
+				OwnerId = AdminId
 			},
 			new TaskModel{
 				Title = "Risks for Project X",
@@ -162,7 +162,7 @@ public class SeedData : ISeedData
 				Deadline = DateTime.ParseExact("2023-09-28T14:00", DueDateFormat, formatProvider),
 				LastModified = DateTime.ParseExact("2023-09-15T15:30", DueDateFormat, formatProvider),
 				Created = DateTime.ParseExact("2023-09-15T15:30", DueDateFormat, formatProvider),
-				UserId = AdminId
+				OwnerId = AdminId
 			},
 		};
 	}

@@ -6,7 +6,7 @@
 @{
 	string? controllerName = ViewContext.RouteData.Values["controller"]?.ToString();
 	string? actionName = ViewContext.RouteData.Values["action"]?.ToString();
-	int? todoListId = Model?.TodoListId;
+	Guid? todoListId = Model?.TodoListId;
 	string? filterDueDate = Model?.FilterDueDate?.ToString(AttributesHelper.DataFormat);
 
 	int firstPageIndicator = 1;

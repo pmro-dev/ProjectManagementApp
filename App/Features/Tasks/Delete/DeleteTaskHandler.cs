@@ -61,8 +61,9 @@ public class DeleteTaskHandler :
 	{
 		TaskDeleteInputVM inputVM = request.InputVM;
 
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeleteTaskCommand), inputVM.TodoListId, nameof(inputVM.TodoListId), _logger);
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeleteTaskCommand), inputVM.Id, nameof(inputVM.Id), _logger);
+		// TODO guid check
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeleteTaskCommand), inputVM.TodoListId, nameof(inputVM.TodoListId), _logger);
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeleteTaskCommand), inputVM.Id, nameof(inputVM.Id), _logger);
 
 		TaskDeleteInputDto taskInputDto = _taskEntityMapper.TransferToDto(inputVM);
 

@@ -11,7 +11,7 @@
 	ViewData[TodoListViewData.ViewTitleKey] = "Details";
 	Layout = SharedViews.DefaultLayout;
 	DateTime? filterDueDate = Model.FilterDueDate;
-	int todoListId = Model.Id;
+	Guid todoListId = Model.Id;
 
 	PaginationData paginData = Model.PaginData;
 

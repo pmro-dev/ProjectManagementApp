@@ -26,5 +26,5 @@ public interface ITaskEditInputDto
 
 	TaskStatusType Status { get; set; }
 	Guid TodoListId { get; set; }
-	string UserId { get; set; }
+	string OwnerId { get; set; }
 }

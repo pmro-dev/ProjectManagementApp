@@ -54,7 +54,7 @@ public class CreateTaskHandler :
 	{
 		TaskDto taskDto = _taskEntityMapper.TransferToDto(request.InputVM);
 
-        if (await _taskRepository.ContainsAny(task => task.Title == taskDto.Title && task.UserId == taskDto.OwnerId))
+        if (await _taskRepository.ContainsAny(task => task.Title == taskDto.Title && task.OwnerId == taskDto.OwnerId))
             return new CreateTaskCommandResponse(null, ExceptionsMessages.NameTaken, StatusCodesExtension.EntityNameTaken);
 
 		TaskModel taskModel = _taskEntityMapper.TransferToModel(taskDto);

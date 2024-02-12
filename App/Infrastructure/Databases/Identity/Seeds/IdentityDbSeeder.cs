@@ -112,12 +112,13 @@ public class IdentityDbSeeder : IIdentityDbSeeder
 
 			foreach (KeyValuePair<string, string> pair in BasicRoles)
 			{
-				idBuilder.Append(pair.Key.ToLower());
-				idBuilder.Append(RoleIdSuffix);
+				//idBuilder.Append(pair.Key.ToLower());
+				//idBuilder.Append(RoleIdSuffix);
 
 				defaultRoles.Add(new RoleModel()
 				{
-					Id = idBuilder.ToString(),
+					//Id = idBuilder.ToString(),
+					Id = Guid.NewGuid(),
 					Name = pair.Key,
 					Description = pair.Value
 				});
@@ -139,6 +140,7 @@ public class IdentityDbSeeder : IIdentityDbSeeder
 		}
 	}
 
+	// Here need to change role admin id to guid - REWORK
 	private async Task SetRoleForAdmin()
 	{
 		IUserRepository userRepository = _identityUnitOfWork.UserRepository;

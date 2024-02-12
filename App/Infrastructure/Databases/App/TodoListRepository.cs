@@ -56,7 +56,7 @@ public class TodoListRepository : GenericRepository<TodoListModel>, ITodoListRep
 	private TaskModel CreateNewTaskObject(TaskModel originTask)
 	{
 		var newTask = _taskEntityFactory.CreateModel();
-		newTask.UserId = originTask.UserId;
+		newTask.OwnerId = originTask.OwnerId;
 		newTask.Title = originTask.Title;
 		newTask.Description = originTask.Description;
 		newTask.Deadline = originTask.Deadline;

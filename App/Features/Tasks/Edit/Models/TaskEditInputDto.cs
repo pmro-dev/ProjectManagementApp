@@ -23,7 +23,7 @@ public class TaskEditInputDto : ITaskEditInputDto
 
     public Guid TodoListId { get; set; } = Guid.Empty;
 
-    public string UserId { get; set; } = string.Empty;
+    public string OwnerId { get; set; } = string.Empty;
 
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = AttributesHelper.DataFormat, ApplyFormatInEditMode = true)]

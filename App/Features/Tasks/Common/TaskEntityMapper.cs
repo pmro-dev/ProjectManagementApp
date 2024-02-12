@@ -57,7 +57,7 @@ public class TaskEntityMapper : ITaskEntityMapper
 		editInputDto.ReminderDate = taskEditInputVM.ReminderDate;
 		editInputDto.Status = taskEditInputVM.Status;
 		editInputDto.TodoListId = taskEditInputVM.TodoListId;
-		editInputDto.UserId = taskEditInputVM.UserId;
+		editInputDto.OwnerId = taskEditInputVM.UserId;
 
 		return editInputDto;
 	}
@@ -85,7 +85,7 @@ public class TaskEntityMapper : ITaskEntityMapper
 		taskDto.Status = taskModel.Status;
 		taskDto.Title = taskModel.Title;
 		taskDto.TodoListId = taskModel.TodoListId;
-		taskDto.OwnerId = taskModel.UserId;
+		taskDto.OwnerId = taskModel.OwnerId;
 
 		mappedObjects[taskModel] = taskDto;
 
@@ -168,7 +168,7 @@ public class TaskEntityMapper : ITaskEntityMapper
 		taskModel.Status = taskDto.Status;
 		taskModel.Title = taskDto.Title;
 		taskModel.TodoListId = taskDto.TodoListId;
-		taskModel.UserId = taskDto.OwnerId;
+		taskModel.OwnerId = taskDto.OwnerId;
 
 		mappedObjects[taskDto] = taskModel;
 
@@ -233,6 +233,6 @@ public class TaskEntityMapper : ITaskEntityMapper
         taskDbModel.ReminderDate = taskEditInputDto.ReminderDate;
         taskDbModel.Status = taskEditInputDto.Status;
         taskDbModel.TodoListId = taskEditInputDto.TodoListId;
-        taskDbModel.UserId = taskEditInputDto.UserId;
+        taskDbModel.OwnerId = taskEditInputDto.OwnerId;
     }
 }

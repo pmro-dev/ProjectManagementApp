@@ -166,8 +166,9 @@ public class TaskController : Controller
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> EditPost([FromForm] TaskEditInputVM inputVM)
 	{
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(EditPost), inputVM.TodoListId, nameof(inputVM.TodoListId), _logger);
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(EditPost), inputVM.Id, nameof(inputVM.Id), _logger);
+		// TODO CHECK GUID
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(EditPost), inputVM.TodoListId, nameof(inputVM.TodoListId), _logger);
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(EditPost), inputVM.Id, nameof(inputVM.Id), _logger);
 
 		var response = await _mediator.Send(new EditTaskCommand(inputVM));
 
@@ -228,8 +229,9 @@ public class TaskController : Controller
 	{
 		TaskDeleteInputVM deleteInputVM = deleteWrapperVM.InputVM;
 
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeletePost), deleteInputVM.TodoListId, nameof(deleteInputVM.TodoListId), _logger);
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeletePost), deleteInputVM.Id, nameof(deleteInputVM.Id), _logger);
+		//TODO GUID CHECK
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeletePost), deleteInputVM.TodoListId, nameof(deleteInputVM.TodoListId), _logger);
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeletePost), deleteInputVM.Id, nameof(deleteInputVM.Id), _logger);
 
 		var response = await _mediator.Send(new DeleteTaskCommand(deleteInputVM));
 
