@@ -23,7 +23,7 @@ public class RoleModel : IRoleModel
 
     public ICollection<UserModel> Users { get; set; }
 
-    public ICollection<UserRoleModel> RoleUsers { get; set; }
+    public ICollection<UserRoleModel> UserRoles { get; set; }
 
     public RoleModel()
     {
@@ -31,7 +31,7 @@ public class RoleModel : IRoleModel
 		RowVersion = new byte[] { 1, 1, 1 };
 		Name = string.Empty;
         Description = string.Empty;
-        RoleUsers = new List<UserRoleModel>();
+        UserRoles = new List<UserRoleModel>();
 		Users = new List<UserModel>();
 	}
 }

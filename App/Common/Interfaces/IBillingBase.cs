@@ -25,10 +25,8 @@ public interface IBillingBase
     [Required]
     long Value { get; set; }
 
-	[Required]
-	string ExecutorId { get; set; }
+	string? ExecutorId { get; set; }
 
-	[Required]
 	[ForeignKey(nameof(ExecutorId))]
 	UserModel? Executor { get; set; }
 

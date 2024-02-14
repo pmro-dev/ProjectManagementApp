@@ -1,4 +1,5 @@
 ﻿using App.Features.Exceptions.Throw;
+using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Models;
 using App.Features.Users.Common.Roles.Models;
 using App.Infrastructure.Databases.Common;
@@ -13,11 +14,14 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 {
 	private readonly CustomIdentityDbContext _identityContext;
 	private readonly ILogger<UserRepository> _logger;
+	private readonly DbSet<UserModel> _dbSet;
 
 	public UserRepository(CustomIdentityDbContext identityContext, ILogger<UserRepository> logger) : base(identityContext, logger)
 	{
 		_identityContext = identityContext;
 		_logger = logger;
+
+		_dbSet = identityContext.Set<UserModel>();
 	}
 
 	///<inheritdoc />
@@ -70,18 +74,15 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 		return result;
 	}
 
+	//TODO CHECK THIS change
 	///<inheritdoc />
 	public async Task<ICollection<RoleModel>> GetRolesAsync(string userId)
 	{
 		ExceptionsService.WhenArgumentIsInvalidThrow(nameof(GetRolesAsync), userId, nameof(userId), _logger);
 
-		ICollection<RoleModel> userRoles = await _identityContext
-			.Set<UserRoleModel>()
-			.Where(user => user.UserId == userId)
-			.Select(user => user.Role)
-			.ToListAsync();
+		ICollection<RoleModel>? userRoles = await _dbSet
+			.Where(user => user.Id == userId).Include(user => user.Roles).Select(u => u.Roles).SingleOrDefaultAsync();
 
-		return userRoles;
+		return userRoles ?? new List<RoleModel>();
 	}
-
 }

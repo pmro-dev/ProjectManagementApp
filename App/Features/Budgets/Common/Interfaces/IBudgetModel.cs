@@ -1,6 +1,8 @@
 ﻿using App.Features.Billings.Common.Models;
+using App.Features.Budgets.Common.Models;
 using App.Features.Incomes.Common.Models;
 using App.Features.Projects.Common.Models;
+using App.Features.Tags.Common.Models;
 using App.Features.Users.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,8 +11,8 @@ namespace App.Features.Budgets.Common.Interfaces;
 
 public interface IBudgetModel
 {
-	[Required]
 	[Key]
+	[Required]
 	Guid Id { get; set; }
 
 	[Timestamp]
@@ -29,13 +31,14 @@ public interface IBudgetModel
 	[ForeignKey(nameof(ProjectId))]
 	ProjectModel? Project { get; set; }
 
-	[Required]
-	string OwnerId { get; set; }
+	string? OwnerId { get; set; }
 
-	[Required]
 	[ForeignKey(nameof(OwnerId))]
 	UserModel? Owner { get; set; }
 
 	ICollection<BillingModel> Billings { get; set; }
 	ICollection<IncomeModel> Incomes { get; set; }
+
+	ICollection<TagModel> Tags { get; set; }
+	ICollection<BudgetTagModel> BudgetTags { get; set; }
 }

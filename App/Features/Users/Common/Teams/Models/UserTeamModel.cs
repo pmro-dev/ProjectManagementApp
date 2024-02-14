@@ -11,7 +11,6 @@ public class UserTeamModel : IUserTeamModel
 	[Timestamp]
 	public byte[] RowVersion { get; set; } = { 1, 1, 1 };
 
-	[Key]
 	[Required]
 	public string MemberId { get; set; }
 
@@ -19,7 +18,6 @@ public class UserTeamModel : IUserTeamModel
 	[ForeignKey(nameof(MemberId))]
 	public virtual UserModel? Member { get; set; }
 
-	[Key]
 	[Required]
 	public Guid TeamId { get; set; }
 

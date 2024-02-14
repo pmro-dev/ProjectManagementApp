@@ -49,11 +49,11 @@ public static class GenericMockSetup<IModel, TModel> where TModel : class, IMode
         });
     }
 
-    public static async Task SetupGetEntity(int assertEntityId, Mock<DbSet<TModel>> DbSetEntityMock, List<TModel> AllEntities)
+    public static async Task SetupGetEntity(Guid assertEntityId, Mock<DbSet<TModel>> DbSetEntityMock, List<TModel> AllEntities)
     {
         await Task.Run(() =>
         {
-            DbSetEntityMock.Setup(x => x.FindAsync(It.IsAny<object>())).Returns(new ValueTask<TModel?>(AllEntities.Find(entity => entity.Id == assertEntityId)));
+            DbSetEntityMock.Setup(x => x.FindAsync(It.IsAny<object>())).Returns(new ValueTask<TModel?>(AllEntities.Find(entity => entity.Id.Equals(assertEntityId))));
         });
     }
 

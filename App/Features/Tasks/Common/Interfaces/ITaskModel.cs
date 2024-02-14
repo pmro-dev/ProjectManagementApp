@@ -42,8 +42,7 @@ public interface ITaskModel : IBasicModelWithTitle
 	[ForeignKey(nameof(TodoListId))]
 	TodoListModel? TodoList { get; set; }
 
-	[Required]
-	string OwnerId { get; set; }
+	string? OwnerId { get; set; }
 
 	[ForeignKey(nameof(OwnerId))]
 	UserModel? Owner { get; set; }

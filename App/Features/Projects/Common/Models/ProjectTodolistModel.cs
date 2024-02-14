@@ -10,14 +10,12 @@ public class ProjectTodolistModel : IProjectTodolistModel
 	[Timestamp]
 	public byte[] RowVersion { get; set; }
 
-	[Key]
 	[Required]
 	public string OwnerId { get; set; }
 
 	[ForeignKey(nameof(OwnerId))]
 	public UserModel? Owner { get; set; }
 
-	[Key]
 	[Required]
 	public Guid ProjectId { get; set; }
 

@@ -35,17 +35,15 @@ interface IProjectModel
 	BudgetModel? Budget { get; set; }
 
 	ICollection<UserModel> Clients { get; set; }
-	ICollection<UserProjectModel> ProjectClients { get; set; }
+	//ICollection<UserProjectModel> ProjectClients { get; set; }
 
 	ICollection<TodoListModel> TodoLists { get; set; }
 
 	ICollection<TeamModel> Teams { get; set; }
 	ICollection<ProjectTeamModel> ProjectTeams { get; set; }
 
-	[Required]
-	string OwnerId { get; set; }
+	string? OwnerId { get; set; }
 
-	[Required]
 	[ForeignKey(nameof(OwnerId))]
 	UserModel? Owner { get; set; }
 

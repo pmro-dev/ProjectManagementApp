@@ -10,7 +10,6 @@ public interface IUserTodoListModel
 	[Timestamp]
 	public byte[] RowVersion { get; set; }
 
-	[Key]
 	[Required]
 	public string OwnerId { get; set; }
 
@@ -18,7 +17,6 @@ public interface IUserTodoListModel
 	[ForeignKey(nameof(OwnerId))]
 	public UserModel? Owner { get; set; }
 
-	[Key]
 	[Required]
 	public Guid TodoListId { get; set; }
 

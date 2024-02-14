@@ -10,7 +10,6 @@ public interface IUserTeamModel
 	[Timestamp]
 	byte[] RowVersion { get; set; }
 
-	[Key]
 	[Required]
 	public string MemberId { get; set; }
 
@@ -18,7 +17,6 @@ public interface IUserTeamModel
 	[ForeignKey(nameof(MemberId))]
 	public UserModel? Member { get; set; }
 
-	[Key]
 	[Required]
 	public Guid TeamId { get; set; }
 

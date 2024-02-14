@@ -7,6 +7,7 @@ using App.Features.TodoLists.Common.Helpers;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Tags;
 using App.Features.Users.Common.Models;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 #endregion
@@ -36,8 +37,7 @@ public class TodoListModel : ITodoListModel
 	[MinLength(TodoListAttributesHelper.NameMinLength)]
 	public string Title { get; set; } = string.Empty;
 
-	[Required]
-	public string CreatorId { get; set; } = string.Empty;
+	public string? CreatorId { get; set; } = string.Empty;
 
 	[ForeignKey(nameof(CreatorId))]
 	public UserModel? Creator { get; set; }
@@ -45,8 +45,7 @@ public class TodoListModel : ITodoListModel
 	/// <summary>
 	/// Owner id.
 	/// </summary>
-	[Required]
-	public string OwnerId { get; set; } = string.Empty;
+	public string? OwnerId { get; set; } = string.Empty;
 
 	[ForeignKey(nameof(OwnerId))]
 	public UserModel? Owner { get; set; }

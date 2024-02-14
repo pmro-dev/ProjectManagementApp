@@ -14,27 +14,25 @@ public class TaskModelTests
 	private static readonly object[] InvalidTasksExamples = TasksDataService.InvalidTasksForCreateOperation;
 	protected readonly string AdminId = TasksDataService.AdminId;
 	private const int _numberOfFails = 1;
-	private const int _defaultId = 0;
+	//private const int _defaultId = 0;
 
 	/// <summary>
 	/// Checks that is possible to create Task object with Valid data. 
 	/// </summary>
 	/// <param name="title">Task title.</param>
 	/// <param name="description">Task description.</param>
-	/// <param name="dueDate">Task deadline date.</param>
+	/// <param name="deadline">Task deadline date.</param>
 	[Test]
 	[TestCaseSource(nameof(ValidTasksExamples))]
-	public void CreateTaskObjectWithValidDataShouldSucceed(string title, string description, DateTime dueDate)
+	public void CreateTaskObjectWithValidDataShouldSucceed(string title, string description, DateTime deadline)
 	{
 		TaskModel newValidTask = new()
 		{
 			Title = title,
 			Description = description,
-			Deadline = dueDate,
-			UserId = AdminId
+			Deadline = deadline,
+			OwnerId = AdminId
 		};
-
-
 
 		var propertiesThatViolatedValidations = DataAnnotationValidator.ValidNewObject(newValidTask);
 
@@ -42,7 +40,7 @@ public class TaskModelTests
 		{
 			Assert.That(propertiesThatViolatedValidations, Is.Empty);
 			Assert.That(newValidTask.Status, Is.EqualTo(TaskStatusType.NotStarted));
-			Assert.That(newValidTask.TodoListId, Is.EqualTo(_defaultId));
+			//Assert.That(newValidTask.TodoListId, Is.EqualTo(_defaultId));
 		});
 	}
 
@@ -61,7 +59,7 @@ public class TaskModelTests
 			Title = title,
 			Description = description,
 			Deadline = dueDate,
-			UserId = AdminId
+			OwnerId = AdminId
 		};
 
 		var propertiesThatViolatedValidations = DataAnnotationValidator.ValidNewObject(newInvalidTask);

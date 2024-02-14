@@ -10,14 +10,12 @@ public interface IProjectTodolistModel
 	[Timestamp]
 	byte[] RowVersion { get; set; }
 
-	[Key]
 	[Required]
 	string OwnerId { get; set; }
 
 	[ForeignKey(nameof(OwnerId))]
 	UserModel? Owner { get; set; }
 
-	[Key]
 	[Required]
 	Guid ProjectId { get; set; }
 

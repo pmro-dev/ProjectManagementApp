@@ -10,19 +10,15 @@ public interface IUserProjectModel
 	[Timestamp]
 	byte[] RowVersion { get; set; }
 
-	[Key]
 	[Required]
 	public string OwnerId { get; set; }
 
 	[Required]
-	[ForeignKey(nameof(OwnerId))]
 	public UserModel? Owner { get; set; }
 
 	[Required]
-	[Key]
 	public Guid ProjectId { get; set; }
 
 	[Required]
-	[ForeignKey(nameof(ProjectId))]
 	public ProjectModel? Project { get; set; }
 }

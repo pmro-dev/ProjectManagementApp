@@ -5,9 +5,11 @@ using App.Features.Incomes.Common.Models;
 using App.Features.Projects.Common.Models;
 using App.Features.Tasks.Common.Models;
 using App.Features.Teams.Common.Models;
+using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Projects.Models;
 using App.Features.Users.Common.Roles.Models;
 using App.Features.Users.Common.Teams.Models;
+using App.Features.Users.Common.TodoLists.Models;
 using System.ComponentModel.DataAnnotations;
 #endregion
 
@@ -55,20 +57,28 @@ public interface IUserModel : IEquatable<IUserModel>
 	[Required]
 	string Username { get; set; }
 
-    ICollection<RoleModel> Roles { get; set; }
-    ICollection<UserRoleModel> UserRoles { get; set; }
+	//public ICollection<TodoListModel> CreatedTodoLists { get; set; }
 
-	ICollection<TeamModel> Teams { get; set; }
-	ICollection<UserTeamModel> UserTeams { get; set; }
+	//public ICollection<TodoListModel> OwnedTodoLists { get; set; }
 
-	ICollection<ProjectModel> Projects { get; set; }
-	ICollection<UserProjectModel> ClientProjects { get; set; }
+	public ICollection<RoleModel> Roles { get; set; }
+	public ICollection<UserRoleModel> UserRoles { get; set; }
 
-	ICollection<TaskModel> Tasks { get; set; }
+	//public ICollection<TeamModel> ManagedTeams { get; set; }
 
-	ICollection<BudgetModel> Budgets { get; set; }
+	//public ICollection<TeamModel> Teams { get; set; }
+	//public ICollection<UserTeamModel> TeamMembers { get; set; }
 
-	ICollection<BillingModel> Billings { get; set; }
+	//public ICollection<ProjectModel> ManagedProjects { get; set; }
 
-	ICollection<IncomeModel> Incomes { get; set; } 
+	//public ICollection<ProjectModel> OwnedProjects { get; set; }
+	//public ICollection<UserProjectModel> ProjectClients { get; set; }
+
+	//public ICollection<TaskModel> Tasks { get; set; }
+
+	//public ICollection<BudgetModel> Budgets { get; set; }
+
+	//public ICollection<BillingModel> Billings { get; set; }
+
+	//public ICollection<IncomeModel> Incomes { get; set; }
 }

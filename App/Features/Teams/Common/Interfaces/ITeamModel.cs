@@ -25,19 +25,17 @@ public interface ITeamModel
 	[Required]
 	string Description { get; set; }
 
-	[Required]
-	string LiderId { get; set; }
+	string? LiderId { get; set; }
 
-	[Required]
 	[ForeignKey(nameof(LiderId))]
 	UserModel? Lider { get; set; }
 
 	ICollection<UserModel> Members { get; set; }
-	ICollection<UserTeamModel> TeamMembers { get; set; }
+	//ICollection<UserTeamModel> TeamMembers { get; set; }
 
 	ICollection<ProjectModel> Projects { get; set; }
 	ICollection<ProjectTeamModel> TeamProjects { get; set; }
 
 	ICollection<TodoListModel> TodoLists { get; set; }
-	ICollection<UserTodoListModel> UserTodoLists { get; set; }
+	//ICollection<UserTodoListModel> UserTodoLists { get; set; }
 }

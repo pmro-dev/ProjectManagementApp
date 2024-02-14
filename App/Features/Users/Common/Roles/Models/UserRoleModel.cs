@@ -1,6 +1,7 @@
 ﻿using App.Features.Users.Common.Models;
 using App.Features.Users.Common.Roles.Models.Interfaces;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace App.Features.Users.Common.Roles.Models;
 
@@ -9,15 +10,16 @@ public class UserRoleModel : IUserRoleModel
 	[Timestamp]
 	public byte[] RowVersion { get; set; }
 
-	[Key]
 	[Required]
 	public string UserId { get; set; } = string.Empty;
+	[ForeignKey(nameof(UserId))]
     public UserModel? User { get; set; }
 
-	[Key]
 	[Required]
 	public Guid RoleId { get; set; } = Guid.Empty;
+	[ForeignKey(nameof(RoleId))]
     public RoleModel? Role { get; set; }
+
     public UserRoleModel()
     {
         User = new UserModel();

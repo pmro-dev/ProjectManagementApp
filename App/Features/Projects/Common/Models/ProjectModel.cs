@@ -20,10 +20,10 @@ public class ProjectModel : IProjectModel
 {
 	[Key]
 	[Required]
-	public Guid Id { get; set; }
+	public Guid Id { get; set; } = Guid.NewGuid();
 
 	[Timestamp]
-	public byte[] RowVersion { get; set; }
+	public byte[] RowVersion { get; set; } = { 1, 1, 1 };
 
 	[Required]
 	public string Title { get; set; }
@@ -39,12 +39,10 @@ public class ProjectModel : IProjectModel
 	public virtual BudgetModel? Budget { get; set; }
 
 	public ICollection<UserModel> Clients { get; set; }
-	public ICollection<UserProjectModel> ProjectClients { get; set; }
+	//public ICollection<UserProjectModel> ProjectClients { get; set; }
 
-	[Required]
-	public string OwnerId {  get; set; }
+	public string? OwnerId {  get; set; }
 
-	[Required]
 	[ForeignKey(nameof(OwnerId))]
 	public virtual UserModel? Owner { get; set; }
 
@@ -70,10 +68,8 @@ public class ProjectModel : IProjectModel
 	public ICollection<TagModel> Tags { get; set; }
 	public ICollection<ProjectTagModel> ProjectTags { get; set; }
 
-	public ProjectModel(string title, string description, string ownerId, DateTime deadline, Guid budgetId, ICollection<TeamModel>? teams = null)
+	public ProjectModel(string title, string description, string ownerId, DateTime deadline, Guid budgetId)
 	{
-		Id = Guid.NewGuid();
-		RowVersion = new byte[]{1, 1, 1};
 		Title = title;
 		Description = description;
 		OwnerId = ownerId;
@@ -83,9 +79,9 @@ public class ProjectModel : IProjectModel
 		BudgetId = budgetId;
 
 		Clients = new List<UserModel>();
-		ProjectClients = new List<UserProjectModel>();
+		//ProjectClients = new List<UserProjectModel>();
 		TodoLists = new List<TodoListModel>();
-		Teams = teams ?? new List<TeamModel>();
+		Teams = new List<TeamModel>();
 		ProjectTeams = new List<ProjectTeamModel>();
 		Tags = new List<TagModel>();
 		ProjectTags = new List<ProjectTagModel>();

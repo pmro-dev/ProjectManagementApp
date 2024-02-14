@@ -10,14 +10,12 @@ namespace App.Features.TodoLists.Common.Interfaces;
 
 public interface ITodoListModel : IBasicModelWithTitle
 {
-	[Required]
-	string CreatorId { get; set; }
+	string? CreatorId { get; set; }
 
 	[ForeignKey(nameof(CreatorId))]
 	UserModel? Creator { get; set; }
 
-	[Required]
-	string OwnerId { get; set; }
+	string? OwnerId { get; set; }
 
 	[ForeignKey(nameof(OwnerId))]
 	UserModel? Owner { get; set; }

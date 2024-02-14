@@ -1,4 +1,5 @@
-﻿using App.Features.Projects.Common.Models;
+﻿using App.Features.Budgets.Common.Models;
+using App.Features.Projects.Common.Models;
 using App.Features.Tags.Common.Interfaces;
 using App.Features.Tasks.Common.Models;
 using App.Features.Tasks.Common.TaskTags.Common;
@@ -10,8 +11,8 @@ namespace App.Features.Tags.Common.Models;
 
 public class TagModel : ITagModel
 {
-    [Required]
     [Key]
+    [Required]
     public Guid Id { get; set; } = Guid.NewGuid();
 
 	[Timestamp]
@@ -28,4 +29,7 @@ public class TagModel : ITagModel
 
 	public ICollection<TodoListModel> TodoLists { get; set; } = new List<TodoListModel>();
 	public ICollection<TodoListTagModel> TodoListTags { get; set; } = new List<TodoListTagModel>();
+
+	public ICollection<BudgetModel> Budgets { get; set; } = new List<BudgetModel>();
+	public ICollection<BudgetTagModel> BudgetTags { get; set; } = new List<BudgetTagModel>();
 }

@@ -27,21 +27,19 @@ public class TeamModel : ITeamModel
 	[Required]
 	public string Description { get; set; }
 
-	[Required]
-	public string LiderId { get; set; }
+	public string? LiderId { get; set; }
 
-	[Required]
 	[ForeignKey(nameof(LiderId))]
 	public virtual UserModel? Lider { get; set; }
 
 	public ICollection<UserModel> Members { get; set; }
-	public ICollection<UserTeamModel> TeamMembers { get; set; }
+	//public ICollection<UserTeamModel> TeamMembers { get; set; }
 
 	public ICollection<ProjectModel> Projects { get; set; }
 	public ICollection<ProjectTeamModel> TeamProjects { get; set; }
 
 	public ICollection<TodoListModel> TodoLists { get; set; }
-	public ICollection<UserTodoListModel> UserTodoLists { get; set; }
+	//public ICollection<UserTodoListModel> UserTodoLists { get; set; }
 
 	public TeamModel(string name, string description, string liderId)
 	{
@@ -52,10 +50,10 @@ public class TeamModel : ITeamModel
 		LiderId = liderId;
 
 		Members = new List<UserModel>();
-		TeamMembers = new List<UserTeamModel>();
+		//TeamMembers = new List<UserTeamModel>();
 		Projects = new List<ProjectModel>();
 		TeamProjects = new List<ProjectTeamModel>();
 		TodoLists = new List<TodoListModel>();
-		UserTodoLists = new List<UserTodoListModel>();
+		//UserTodoLists = new List<UserTodoListModel>();
 	}
 }

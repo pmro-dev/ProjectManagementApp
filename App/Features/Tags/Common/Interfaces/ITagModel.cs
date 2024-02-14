@@ -1,4 +1,5 @@
-﻿using App.Features.Projects.Common.Models;
+﻿using App.Features.Budgets.Common.Models;
+using App.Features.Projects.Common.Models;
 using App.Features.Tasks.Common.Models;
 using App.Features.Tasks.Common.TaskTags.Common;
 using System.ComponentModel.DataAnnotations;
@@ -22,4 +23,7 @@ public interface ITagModel
 
 	ICollection<ProjectModel> Projects { get; set; }
 	ICollection<ProjectTagModel> ProjectTags { get; set; }
+
+	ICollection<BudgetModel> Budgets { get; set; }
+	ICollection<BudgetTagModel> BudgetTags { get; set; }
 }

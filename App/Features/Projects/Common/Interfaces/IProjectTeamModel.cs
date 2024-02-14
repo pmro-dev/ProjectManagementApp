@@ -10,14 +10,12 @@ public interface IProjectTeamModel
 	[Timestamp]
 	byte[] RowVersion { get; set; }
 
-	[Key]
 	[Required]
 	Guid ProjectId { get; set; }
 
 	[ForeignKey(nameof(ProjectId))]
 	ProjectModel? Project { get; set; }
 
-	[Key]
 	[Required]
 	Guid TeamId { get; set; }
 

@@ -14,6 +14,8 @@ public static class TodoListsDataService
 
 	public static readonly object[] InvalidTodoLists = TodoListsData.InvalidTodoLists;
 
+	private static readonly string _baseOfGuid = Guid.NewGuid().ToString();
+
 	public static List<TodoListModel> GetCollection(SeedData seedBaseData)
 	{
 		SetIdsForTodoLists(seedBaseData);
@@ -26,7 +28,22 @@ public static class TodoListsDataService
 
 		foreach (var todoList in seedData.TodoLists)
 		{
-			todoList.Id = startingId++;
+			todoList.Id = GetPreparedId(_baseOfGuid, startingId++);
+		}
+	}
+
+	private static Guid GetPreparedId(string baseGuid, int iterator)
+	{
+		if (iterator < 10)
+		{
+			return Guid.Parse(baseGuid.Insert(baseGuid.Length - 1, Convert.ToString(iterator)));
+		}
+		else
+		{
+			var temp = baseGuid.Insert(baseGuid.Length - 1, Convert.ToString(iterator));
+			temp = temp.Remove(baseGuid.Length - 1, 1);
+
+			return Guid.Parse(temp);
 		}
 	}
 }

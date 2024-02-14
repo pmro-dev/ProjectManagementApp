@@ -63,8 +63,7 @@ public class TaskModel : ITaskModel
 	[ForeignKey(nameof(TodoListId))]
 	public virtual TodoListModel? TodoList { get; set; }
 
-	[Required]
-	public string OwnerId { get; set; } = string.Empty;
+	public string? OwnerId { get; set; } = string.Empty;
 
 	[ForeignKey(nameof(OwnerId))]
 	public virtual UserModel? Owner { get; set; }

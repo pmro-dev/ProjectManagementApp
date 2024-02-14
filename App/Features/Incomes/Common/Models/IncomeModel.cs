@@ -31,10 +31,8 @@ public class IncomeModel : IIncomeModel
 	[ForeignKey(nameof(BudgetId))]
 	public virtual BudgetModel? Budget { get; set; }
 
-	[Required]
-	public string ExecutorId { get; set; }
+	public string? ExecutorId { get; set; }
 
-	[Required]
 	[ForeignKey(nameof(ExecutorId))]
 	public virtual UserModel? Executor { get; set; }
 

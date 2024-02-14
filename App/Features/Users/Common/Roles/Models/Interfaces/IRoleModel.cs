@@ -19,5 +19,5 @@ public interface IRoleModel
 
 	ICollection<UserModel> Users { get; set; }
 
-	ICollection<UserRoleModel> RoleUsers { get; set; }
+	ICollection<UserRoleModel> UserRoles { get; set; }
 }
