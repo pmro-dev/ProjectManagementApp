@@ -25,7 +25,7 @@ public class IdentityService : IIdentityService
 
 		UserDto userBasedOnClaims = _userFactory.CreateDto();
         userBasedOnClaims.NameIdentifier = identityClaims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value;
-        userBasedOnClaims.UserId = identityClaims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value;
+        userBasedOnClaims.Id = identityClaims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value;
         userBasedOnClaims.Username = identityClaims.Single(c => c.Type == ClaimTypes.GivenName).Value;
         userBasedOnClaims.Provider = authSchemeClaimWithProviderName.Value;
         userBasedOnClaims.Email = identityClaims.Single(c => c.Type == ClaimTypes.Email).Value;

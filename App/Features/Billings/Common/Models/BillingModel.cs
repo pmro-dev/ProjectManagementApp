@@ -35,8 +35,8 @@ public class BillingModel : IBillingModel
 
 	public string? ExecutorId { get; set; }
 
-	[ForeignKey(nameof(ExecutorId))]
-	public virtual UserModel? Executor { get; set; }
+	//[ForeignKey(nameof(ExecutorId))]
+	//public virtual UserModel? Executor { get; set; }
 
 	public DateTime? PaymentDate { get; set; }
 

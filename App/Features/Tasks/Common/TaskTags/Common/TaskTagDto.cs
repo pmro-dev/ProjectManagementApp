@@ -6,6 +6,8 @@ namespace App.Features.Tasks.Common.TaskTags.Common;
 
 public class TaskTagDto : ITaskTagDto
 {
+	public byte[] RowVersion { get; set; } = { 1, 1, 1 };
+
 	public Guid TaskId { get; set; } = Guid.NewGuid();
 	public TaskDto Task { get; set; } = new TaskDto();
 

@@ -2,9 +2,9 @@
 
 public interface IRoleDto
 {
-    string DataVersion { get; set; }
+    byte[] RowVersion { get; set; }
     string Description { get; set; }
-    string Id { get; set; }
+    Guid Id { get; set; }
     string Name { get; set; }
     ICollection<IUserRoleDto> UserRoles { get; set; }
 }

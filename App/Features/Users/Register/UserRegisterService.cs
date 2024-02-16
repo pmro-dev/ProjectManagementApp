@@ -67,7 +67,7 @@ public class UserRegisterService : IUserRegisterService
 		var roleDto = _mapper.Map<RoleDto>(roleForNewUser);
 
 		var userRoleDto = _userFactory.CreateUserRoleDto();
-		userRoleDto.UserId = userDto.UserId;
+		userRoleDto.UserId = userDto.Id;
 		userRoleDto.RoleId = roleDto.Id;
 
 		userDto.UserRoles.Add(userRoleDto);

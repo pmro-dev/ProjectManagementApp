@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace App.Migrations
+namespace App.Infrastructure.Databases.Identity.Migrations
 {
     [DbContext(typeof(CustomIdentityDbContext))]
-    [Migration("20240214174757_Initialize-ExtendedDb")]
-    partial class InitializeExtendedDb
+    [Migration("20240216160313_Init-Extended-Database")]
+    partial class InitExtendedDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

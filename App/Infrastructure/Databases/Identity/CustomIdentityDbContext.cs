@@ -1,9 +1,6 @@
 ﻿using App.Features.Exceptions.Throw;
-using App.Features.Incomes.Common.Models;
 using App.Features.Users.Common.Models;
-using App.Features.Users.Common.Projects.Models;
 using App.Features.Users.Common.Roles.Models;
-using App.Features.Users.Common.Teams.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace App.Infrastructure.Databases.Identity;

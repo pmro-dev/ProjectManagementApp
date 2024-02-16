@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace App.Migrations
+namespace App.Infrastructure.Databases.Identity.Migrations
 {
-    public partial class InitializeExtendedDb : Migration
+    public partial class InitExtendedDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

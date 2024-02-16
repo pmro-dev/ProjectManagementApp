@@ -1,4 +1,5 @@
-﻿using App.Features.Budgets.Common.Models;
+﻿#region USINGS
+using App.Features.Budgets.Common.Models;
 using App.Features.Projects.Common.Models;
 using App.Features.Tags.Common.Interfaces;
 using App.Features.Tasks.Common.Models;
@@ -6,6 +7,7 @@ using App.Features.Tasks.Common.TaskTags.Common;
 using App.Features.TodoLists.Common.Models;
 using App.Features.TodoLists.Common.Tags;
 using System.ComponentModel.DataAnnotations;
+#endregion
 
 namespace App.Features.Tags.Common.Models;
 

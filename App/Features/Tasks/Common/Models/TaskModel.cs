@@ -65,6 +65,5 @@ public class TaskModel : ITaskModel
 
 	public string? OwnerId { get; set; } = string.Empty;
 
-	[ForeignKey(nameof(OwnerId))]
-	public virtual UserModel? Owner { get; set; }
+	//public virtual UserModel? Owner { get; set; }
 }

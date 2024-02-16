@@ -1,6 +1,7 @@
 ﻿#region USINGS
 using App.Common.Helpers;
 using App.Common.Interfaces;
+using App.Features.Tags.Common.Models;
 using App.Features.Tasks.Common.TaskTags.Common;
 using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Models;
@@ -43,9 +44,8 @@ public interface ITaskModel : IBasicModelWithTitle
 	TodoListModel? TodoList { get; set; }
 
 	string? OwnerId { get; set; }
+	//UserModel? Owner { get; set; }
 
-	[ForeignKey(nameof(OwnerId))]
-	UserModel? Owner { get; set; }
-
+	ICollection<TagModel> Tags { get; set; }
 	ICollection<TaskTagModel> TaskTags { get; set; }
 }

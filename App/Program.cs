@@ -21,11 +21,11 @@ using App.Features.Boards.Common;
 using App.Features.Users.Register.Interfaces;
 using Microsoft.AspNetCore.Mvc.Razor;
 using App.Common.Views;
-using App.Features.Users.Common.Roles;
 using App.Features.Users.Authentication.Interfaces;
 using App.Features.Boards.Common.Interfaces;
-using App.Features.Users.Common.Roles.Interfaces;
 using App.Common;
+using App.Features.Users.Common.Roles;
+using App.Features.Users.Common.Roles.Interfaces;
 
 #endregion
 

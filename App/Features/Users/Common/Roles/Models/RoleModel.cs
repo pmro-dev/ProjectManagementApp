@@ -7,19 +7,19 @@ namespace App.Features.Users.Common.Roles.Models;
 
 public class RoleModel : IRoleModel
 {
-	[Key]
-	[Required]
-	public Guid Id { get; set; }
+    [Key]
+    [Required]
+    public Guid Id { get; set; }
 
-	[Timestamp]
-	public byte[] RowVersion { get; set; }
+    [Timestamp]
+    public byte[] RowVersion { get; set; }
 
-	[Required]
+    [Required]
     [MinLength(UserAttributesHelper.RoleNameMinLength)]
     [MaxLength(UserAttributesHelper.RoleNameMaxLength)]
     public string Name { get; set; }
 
-	public string Description { get; set; }
+    public string Description { get; set; }
 
     public ICollection<UserModel> Users { get; set; }
 
@@ -28,10 +28,10 @@ public class RoleModel : IRoleModel
     public RoleModel()
     {
         Id = Guid.NewGuid();
-		RowVersion = new byte[] { 1, 1, 1 };
-		Name = string.Empty;
+        RowVersion = new byte[] { 1, 1, 1 };
+        Name = string.Empty;
         Description = string.Empty;
         UserRoles = new List<UserRoleModel>();
-		Users = new List<UserModel>();
-	}
+        Users = new List<UserModel>();
+    }
 }

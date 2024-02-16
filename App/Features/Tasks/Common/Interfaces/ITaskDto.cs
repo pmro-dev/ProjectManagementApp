@@ -1,16 +1,19 @@
-﻿using App.Features.Tasks.Common.TaskTags.Common;
+﻿#region USINGS
+using App.Features.Tags.Common.Models;
+using App.Features.Tasks.Common.TaskTags.Common;
 using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static App.Features.Tasks.Common.Helpers.TaskStatusHelper;
+#endregion
 
 namespace App.Features.Tasks.Common.Interfaces;
 
 public interface ITaskDto
 {
-	[Required]
 	[Key]
+	[Required]
 	public Guid Id { get; set; }
 
 	[Required]
@@ -42,5 +45,6 @@ public interface ITaskDto
 	[ForeignKey(nameof(OwnerId))]
 	public UserModel? Owner { get; set; }
 
+	public ICollection<TagModel> Tags { get; set; }
 	public ICollection<TaskTagDto> TaskTags { get; set; }
 }

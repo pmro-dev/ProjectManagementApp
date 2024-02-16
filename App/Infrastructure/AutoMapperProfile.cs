@@ -83,9 +83,9 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.Provider, opt => opt.Ignore())
             .ForMember(dest => dest.NameIdentifier, opt => opt.Ignore())
-            .ForMember(dest => dest.UserId, opt => opt.Ignore())
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.UserRoles, opt => opt.Ignore())
-            .ForMember(dest => dest.DataVersion, opt => opt.Ignore());
+            .ForMember(dest => dest.RowVersion, opt => opt.Ignore());
 
         CreateMap<RegisterInputVM, IUserDto>()
             .Include<RegisterInputVM, UserDto>()
@@ -96,9 +96,9 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.Provider, opt => opt.Ignore())
             .ForMember(dest => dest.NameIdentifier, opt => opt.Ignore())
-            .ForMember(dest => dest.UserId, opt => opt.Ignore())
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.UserRoles, opt => opt.Ignore())
-            .ForMember(dest => dest.DataVersion, opt => opt.Ignore())
+            .ForMember(dest => dest.RowVersion, opt => opt.Ignore())
             .ConstructUsing((src, context) => context.Mapper.Map<RegisterInputVM, UserDto>(src));
     }
 }

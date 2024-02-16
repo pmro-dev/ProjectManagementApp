@@ -1,17 +1,15 @@
 ﻿#region USINGS
-
 using App.Common.Helpers;
 using App.Features.Budgets.Common.Models;
 using App.Features.Projects.Common.Helpers;
 using App.Features.Projects.Common.Interfaces;
 using App.Features.Tags.Common.Models;
 using App.Features.Teams.Common.Models;
+using App.Features.TEMP.Projects.Models;
 using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Models;
-using App.Features.Users.Common.Projects.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 #endregion
 
 namespace App.Features.Projects.Common.Models;
@@ -38,13 +36,9 @@ public class ProjectModel : IProjectModel
 	[ForeignKey(nameof(BudgetId))]
 	public virtual BudgetModel? Budget { get; set; }
 
-	public ICollection<UserModel> Clients { get; set; }
-	//public ICollection<UserProjectModel> ProjectClients { get; set; }
+	public ICollection<UserProjectModel> Clients { get; set; }
 
 	public string? OwnerId {  get; set; }
-
-	[ForeignKey(nameof(OwnerId))]
-	public virtual UserModel? Owner { get; set; }
 
 	[Required]
 	public ProjectStatusType Status { get; set; } = ProjectStatusType.Planning;
@@ -78,8 +72,7 @@ public class ProjectModel : IProjectModel
 		LastUpdated = DateTime.Now;
 		BudgetId = budgetId;
 
-		Clients = new List<UserModel>();
-		//ProjectClients = new List<UserProjectModel>();
+		Clients = new List<UserProjectModel>();
 		TodoLists = new List<TodoListModel>();
 		Teams = new List<TeamModel>();
 		ProjectTeams = new List<ProjectTeamModel>();

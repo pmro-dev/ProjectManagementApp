@@ -1,23 +1,24 @@
 ﻿using App.Features.Users.Common.Models;
+using App.Features.Users.Common.Roles.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace App.Features.Users.Common.Roles.Models.Interfaces;
 
 public interface IRoleModel
 {
-	[Key]
-	[Required]
-	Guid Id { get; set; }
+    [Key]
+    [Required]
+    Guid Id { get; set; }
 
-	[Timestamp]
-	byte[] RowVersion { get; set; }
+    [Timestamp]
+    byte[] RowVersion { get; set; }
 
-	string Description { get; set; }
+    string Description { get; set; }
 
-	[Required]
-	string Name { get; set; }
+    [Required]
+    string Name { get; set; }
 
-	ICollection<UserModel> Users { get; set; }
+    ICollection<UserModel> Users { get; set; }
 
-	ICollection<UserRoleModel> UserRoles { get; set; }
+    ICollection<UserRoleModel> UserRoles { get; set; }
 }

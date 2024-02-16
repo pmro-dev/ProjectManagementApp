@@ -5,6 +5,8 @@ namespace App.Features.Tasks.Common.TaskTags.Common.Interfaces;
 
 public interface ITaskTagDto
 {
+	byte[] RowVersion { get; set; }
+
 	TagDto Tag { get; set; }
 
 	Guid TagId { get; set; }

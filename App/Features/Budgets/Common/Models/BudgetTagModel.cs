@@ -21,11 +21,4 @@ public class BudgetTagModel : IBudgetTagModel
 
 	[ForeignKey(nameof(TagId))]
 	public TagModel? Tag { get; set; }
-
-	//public BudgetTagModel(Guid budgetId, Guid tagId)
-	//{
-	//	BudgetId = budgetId;
-	//	TagId = tagId;
-	//	RowVersion = new byte[] { 1, 1, 1 };
-	//}
 }

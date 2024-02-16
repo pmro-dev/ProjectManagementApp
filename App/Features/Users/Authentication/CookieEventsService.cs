@@ -42,7 +42,7 @@ public class CookieEventsService : ICookieEventsService
 		}
 
 		await _identityUnitOfWork.SaveChangesAsync();
-		await _userService.SetRolesForUserPrincipleAsync(signingUserDto.UserId, identity);
+		await _userService.SetRolesForUserPrincipleAsync(signingUserDto.Id, identity);
 	}
 
 

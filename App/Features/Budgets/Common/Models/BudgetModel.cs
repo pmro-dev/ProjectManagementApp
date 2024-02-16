@@ -35,8 +35,8 @@ public class BudgetModel : IBudgetModel
 
 	public string? OwnerId { get; set; }
 
-	[ForeignKey(nameof(OwnerId))]
-	public virtual UserModel? Owner { get; set; }
+	//[ForeignKey(nameof(OwnerId))]
+	//public virtual UserModel? Owner { get; set; }
 
 	public ICollection<BillingModel> Billings { get; set; }
 	public ICollection<IncomeModel> Incomes { get; set; }

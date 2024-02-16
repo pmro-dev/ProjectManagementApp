@@ -34,7 +34,7 @@ public class TodoListMapper : ITodoListMapper
 		var todoListModel = _todoListFactory.CreateModel();
 		todoListModel.Id = todoListDto.Id;
 		todoListModel.Title = todoListDto.Title;
-		todoListModel.OwnerId = todoListDto.UserId;
+		todoListModel.OwnerId = todoListDto.OwnerId;
 
 		mappedObjects[todoListDto] = todoListModel;
 
@@ -54,7 +54,7 @@ public class TodoListMapper : ITodoListMapper
 	public TodoListDto TransferToDto(TodoListCreateInputVM createInputVM)
 	{
 		var todoListDto = _todoListFactory.CreateDto();
-		todoListDto.UserId = createInputVM.UserId;
+		todoListDto.OwnerId = createInputVM.UserId;
 		todoListDto.Title = createInputVM.Title;
 
 		return todoListDto;
@@ -93,7 +93,7 @@ public class TodoListMapper : ITodoListMapper
 		var todoListDto = _todoListFactory.CreateDto();
 		todoListDto.Id = todoListModel.Id;
 		todoListDto.Title = todoListModel.Title;
-		todoListDto.UserId = todoListModel.OwnerId;
+		todoListDto.OwnerId = todoListModel.OwnerId;
 
 		mappedObjects[todoListModel] = todoListDto;
 

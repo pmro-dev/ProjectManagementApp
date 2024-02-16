@@ -3,9 +3,8 @@ using App.Features.Budgets.Common.Models;
 using App.Features.Projects.Common.Helpers;
 using App.Features.Projects.Common.Models;
 using App.Features.Teams.Common.Models;
+using App.Features.TEMP.Projects.Models;
 using App.Features.TodoLists.Common.Models;
-using App.Features.Users.Common.Models;
-using App.Features.Users.Common.Projects.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 #endregion
@@ -34,8 +33,7 @@ interface IProjectModel
 	[ForeignKey(nameof(BudgetId))]
 	BudgetModel? Budget { get; set; }
 
-	ICollection<UserModel> Clients { get; set; }
-	//ICollection<UserProjectModel> ProjectClients { get; set; }
+	ICollection<UserProjectModel> Clients { get; set; }
 
 	ICollection<TodoListModel> TodoLists { get; set; }
 
@@ -44,8 +42,7 @@ interface IProjectModel
 
 	string? OwnerId { get; set; }
 
-	[ForeignKey(nameof(OwnerId))]
-	UserModel? Owner { get; set; }
+	//UserModel? Owner { get; set; }
 
 	[Required]
 	ProjectStatusType Status { get; set; }

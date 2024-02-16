@@ -19,7 +19,7 @@ public class TodoListViewModelsFactory : ITodoListViewModelsFactory
 	{
 		return new TodoListCreateInputVM()
 		{
-			UserId = todoListDto.UserId,
+			UserId = todoListDto.OwnerId,
 			Title = todoListDto.Title
 		};
 	}
@@ -61,7 +61,7 @@ public class TodoListViewModelsFactory : ITodoListViewModelsFactory
 		var detailsOutputVM = new TodoListDetailsOutputVM(
 			todoListDto.Id,
 			todoListDto.Title,
-			todoListDto.UserId,
+			todoListDto.OwnerId,
 			paginationData,
 			filterDueDate,
 			tasksForTodayDtos.ToList(),
@@ -86,7 +86,7 @@ public class TodoListViewModelsFactory : ITodoListViewModelsFactory
 		{
 			Id = todoListDto.Id,
 			Title = todoListDto.Title,
-			UserId = todoListDto.UserId
+			UserId = todoListDto.OwnerId
 		};
 	}
 

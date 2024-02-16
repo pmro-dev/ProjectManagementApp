@@ -37,7 +37,7 @@ public class TaskViewModelsFactory : ITaskViewModelsFactory
 		return new TaskCreateOutputVM
 		{
 			TodoListId = todoListDto.Id,
-			UserId = todoListDto.UserId,
+			UserId = todoListDto.OwnerId,
 			TodoListName = todoListDto.Title
 		};
 	}

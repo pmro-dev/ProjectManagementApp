@@ -27,10 +27,10 @@ public interface IBillingBase
 
 	string? ExecutorId { get; set; }
 
-	[ForeignKey(nameof(ExecutorId))]
-	UserModel? Executor { get; set; }
+    //[ForeignKey(nameof(ExecutorId))]
+    //UserModel? Executor { get; set; }
 
-	[Required]
+    [Required]
     Guid BudgetId { get; set; }
 
     [Required]

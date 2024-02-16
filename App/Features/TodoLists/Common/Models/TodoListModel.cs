@@ -38,17 +38,13 @@ public class TodoListModel : ITodoListModel
 	public string Title { get; set; } = string.Empty;
 
 	public string? CreatorId { get; set; } = string.Empty;
-
-	[ForeignKey(nameof(CreatorId))]
-	public UserModel? Creator { get; set; }
+	//public UserModel? Creator { get; set; }
 
 	/// <summary>
 	/// Owner id.
 	/// </summary>
 	public string? OwnerId { get; set; } = string.Empty;
-
-	[ForeignKey(nameof(OwnerId))]
-	public UserModel? Owner { get; set; }
+	//public UserModel? Owner { get; set; }
 
 	[Required]
 	public Guid ProjectId { get; set; } = Guid.Empty;
@@ -66,7 +62,6 @@ public class TodoListModel : ITodoListModel
 	/// Gets or Sets
 	/// </summary>
 	public ICollection<TaskModel> Tasks { get; set; } = new List<TaskModel>();
-
 	public ICollection<TagModel> Tags { get; set; } = new List<TagModel>();
 	public ICollection<TodoListTagModel> TodoListTags { get; set; } = new List<TodoListTagModel>();
 

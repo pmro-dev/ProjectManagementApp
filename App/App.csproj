@@ -41,6 +41,7 @@
 
   <ItemGroup>
     <Folder Include="Infrastructure\Databases\App\Migrations\" />
+    <Folder Include="Infrastructure\Databases\Identity\Migrations\" />
   </ItemGroup>
 
 </Project>
