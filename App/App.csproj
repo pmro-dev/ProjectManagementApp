@@ -40,8 +40,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure\Databases\App\Migrations\" />
     <Folder Include="Infrastructure\Databases\Identity\Migrations\" />
+    <Folder Include="Infrastructure\Databases\App\Migrations\" />
+
   </ItemGroup>
 
 </Project>

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace App.Migrations
+namespace App.Infrastructure.Databases.App.Migrations
 {
     public partial class MakeOwnedJoinRelationships : Migration
     {
