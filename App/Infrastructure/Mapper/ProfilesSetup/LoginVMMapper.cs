@@ -4,7 +4,7 @@ using AutoMapper;
 
 namespace App.Infrastructure.Mapper.ProfilesSetup;
 
-public static class LoginMapper
+public static class LoginVMMapper
 {
 	public static void SetProfiles(Profile profile)
 	{

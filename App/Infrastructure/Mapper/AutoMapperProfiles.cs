@@ -11,8 +11,8 @@ public class AutoMapperProfiles : Profile
 
 		RoleMapper.SetProfiles(this);
 
-		LoginMapper.SetProfiles(this);
+		LoginVMMapper.SetProfiles(this);
 	
-		RegisterMapper.SetProfiles(this);
+		RegisterVMMapper.SetProfiles(this);
 	}
 }

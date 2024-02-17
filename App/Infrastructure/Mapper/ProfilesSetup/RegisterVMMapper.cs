@@ -5,7 +5,7 @@ using AutoMapper;
 
 namespace App.Infrastructure.Mapper.ProfilesSetup;
 
-public static class RegisterMapper
+public static class RegisterVMMapper
 {
 	public static void SetProfiles(Profile profile)
 	{
