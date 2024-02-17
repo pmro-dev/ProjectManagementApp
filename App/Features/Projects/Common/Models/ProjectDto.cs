@@ -1,6 +1,7 @@
 ﻿using App.Features.Budgets.Common.Models;
 using App.Features.Projects.Common.Helpers;
 using App.Features.Projects.Common.Interfaces;
+using App.Features.Tags.Common.Models;
 using App.Features.Teams.Common.Models;
 using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Models;
@@ -27,6 +28,9 @@ public class ProjectDto : IProjectDto
 
 	public ICollection<TeamModel> Teams { get; set; } = new List<TeamModel>();
 	public ICollection<ProjectTeamModel> ProjectTeams { get; set; } = new List<ProjectTeamModel>();
+
+	public ICollection<TagModel> Tags { get; set; } = new List<TagModel>();
+	public ICollection<ProjectTagModel> ProjectTags { get; set; } = new List<ProjectTagModel>();
 
 	public string OwnerId { get; set; } = string.Empty;
 

@@ -2,6 +2,7 @@
 using App.Features.Budgets.Common.Models;
 using App.Features.Projects.Common.Helpers;
 using App.Features.Projects.Common.Models;
+using App.Features.Tags.Common.Models;
 using App.Features.Teams.Common.Models;
 using App.Features.TodoLists.Common.Models;
 using System.ComponentModel.DataAnnotations;
@@ -38,6 +39,9 @@ interface IProjectModel
 
 	ICollection<TeamModel> Teams { get; set; }
 	ICollection<ProjectTeamModel> ProjectTeams { get; set; }
+
+	ICollection<TagModel> Tags { get; set; }
+	ICollection<ProjectTagModel> ProjectTags { get; set; }
 
 	string? OwnerId { get; set; }
 

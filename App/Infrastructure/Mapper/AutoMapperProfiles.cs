@@ -14,5 +14,7 @@ public class AutoMapperProfiles : Profile
 		LoginVMMapper.SetProfiles(this);
 	
 		RegisterVMMapper.SetProfiles(this);
+
+		ProjectMapper.SetProfiles(this);
 	}
 }
