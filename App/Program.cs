@@ -68,7 +68,7 @@ public static class Program
 
 		#region MAPPERS
 
-		builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+		builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 		builder.Services.AddScoped<ITaskEntityMapper, TaskEntityMapper>();
 		builder.Services.AddScoped<ITodoListMapper, TodoListMapper>();
 
