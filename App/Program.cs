@@ -10,7 +10,6 @@ using App.Features.TodoLists.Common;
 using App.Features.Users.Logout;
 using App.Features.Tasks.Common;
 using App.Features.Users.Common;
-using App.Infrastructure;
 using App.Features.Users.Login;
 using App.Features.Users.Register;
 using App.Infrastructure.Databases.Identity.Seeds;
@@ -26,6 +25,7 @@ using App.Features.Boards.Common.Interfaces;
 using App.Common;
 using App.Features.Users.Common.Roles;
 using App.Features.Users.Common.Roles.Interfaces;
+using App.Infrastructure.Mapper;
 
 #endregion
 

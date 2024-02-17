@@ -7,7 +7,7 @@ using App.Features.Users.Login.Models.Interfaces;
 using App.Features.Users.Register.Models;
 using AutoMapper;
 
-namespace App.Infrastructure;
+namespace App.Infrastructure.Mapper;
 
 public class AutoMapperProfile : Profile
 {
