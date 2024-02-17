@@ -14,11 +14,37 @@ public class DataUnitOfWork : UnitOfWork<CustomAppDbContext>, IDataUnitOfWork
 	///<inheritdoc />
 	public ITaskRepository TaskRepository { get; }
 
-	public DataUnitOfWork(CustomAppDbContext context, ITodoListRepository todoListRepository, ITaskRepository taskRepository, ILogger<DataUnitOfWork> logger)
-		: base(context, logger)
+	///<inheritdoc />
+	public IProjectRepository ProjectRepository { get; }
+
+	///<inheritdoc />
+	public ITeamRepository TeamRepository { get; }
+
+	///<inheritdoc />
+	public IBudgetRepository BudgetRepository { get; }
+
+	///<inheritdoc />
+	public IBillingsRepository BillingsRepository { get; }
+
+	///<inheritdoc />
+	public IIncomeRepository IncomeRepository { get; }
+
+	///<inheritdoc />
+	public ITagRepository TagRepository { get; }
+
+	public DataUnitOfWork(CustomAppDbContext context, ITodoListRepository todoListRepository, ITaskRepository taskRepository, 
+		IProjectRepository projectRepository, ITeamRepository teamRepository, IBudgetRepository budgetRepository, 
+		IBillingsRepository billingsRepository, IIncomeRepository incomeRepository, ITagRepository tagRepository,
+		ILogger<DataUnitOfWork> logger) : base(context, logger)
 	{
 		TodoListRepository = todoListRepository;
 		TaskRepository = taskRepository;
 		_logger = logger;
+		ProjectRepository = projectRepository;
+		TeamRepository = teamRepository;
+		BudgetRepository = budgetRepository;
+		BillingsRepository = billingsRepository;
+		IncomeRepository = incomeRepository;
+		TagRepository = tagRepository;
 	}
 }
