@@ -3,7 +3,6 @@ using App.Features.Budgets.Common.Models;
 using App.Features.Projects.Common.Helpers;
 using App.Features.Projects.Common.Models;
 using App.Features.Teams.Common.Models;
-using App.Features.TEMP.Projects.Models;
 using App.Features.TodoLists.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -41,8 +40,6 @@ interface IProjectModel
 	ICollection<ProjectTeamModel> ProjectTeams { get; set; }
 
 	string? OwnerId { get; set; }
-
-	//UserModel? Owner { get; set; }
 
 	[Required]
 	ProjectStatusType Status { get; set; }

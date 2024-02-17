@@ -55,30 +55,9 @@ public sealed class UserModel : IUserModel
 	[DataType(DataType.PhoneNumber)]
 	public string Phone { get; set; } = string.Empty;
 
-	//public ICollection<TodoListModel> CreatedTodoLists { get; set; } = new List<TodoListModel>();
-
-	//public ICollection<TodoListModel> OwnedTodoLists { get; set; } = new List<TodoListModel>();
-
 	public ICollection<RoleModel> Roles { get; set; } = new List<RoleModel>();
+
 	public ICollection<UserRoleModel> UserRoles { get; set; } = new List<UserRoleModel>();
-
-	//public ICollection<TeamModel> ManagedTeams { get; set; } = new List<TeamModel>();
-
-	//public ICollection<TeamModel> Teams { get; set; } = new List<TeamModel>();
-	//public ICollection<UserTeamModel> TeamMembers { get; set; } = new List<UserTeamModel>();
-
-	//public ICollection<ProjectModel> ManagedProjects { get; set; } = new List<ProjectModel>();
-
-	//public ICollection<ProjectModel> OwnedProjects { get; set; } = new List<ProjectModel>();
-	//public ICollection<UserProjectModel> ProjectClients { get; set; } = new List<UserProjectModel>();
-
-	//public ICollection<TaskModel> Tasks { get; set; } = new List<TaskModel>();
-
-	//public ICollection<BudgetModel> Budgets { get; set; } = new List<BudgetModel>();
-
-	//public ICollection<BillingModel> Billings { get; set; } = new List<BillingModel>();
-
-	//public ICollection<IncomeModel> Incomes { get; set; } = new List<IncomeModel>();
 
 	public override bool Equals(object? obj)
 	{

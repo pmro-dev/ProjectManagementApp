@@ -1,8 +1,7 @@
 ﻿#region USINGS
 using App.Features.Projects.Common.Models;
-using App.Features.TEMP.Teams.Models;
+using App.Features.Teams.Common.Models;
 using App.Features.TodoLists.Common.Models;
-using App.Features.Users.Common.Models;
 using System.ComponentModel.DataAnnotations;
 #endregion
 
@@ -24,8 +23,6 @@ public interface ITeamModel
 	string Description { get; set; }
 
 	string? LiderId { get; set; }
-
-	UserModel? Lider { get; set; }
 
 	ICollection<UserTeamModel> TeamMembers { get; set; }
 

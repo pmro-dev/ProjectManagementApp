@@ -1,9 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace App.Features.TEMP.Teams.Interfaces;
+namespace App.Features.Teams.Common.Interfaces;
 
 public interface IUserTeamModel
 {
+    [Key]
+    [Required]
+    Guid Id { get; set; }
+
     [Timestamp]
     byte[] RowVersion { get; set; }
 

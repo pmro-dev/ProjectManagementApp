@@ -15,10 +15,8 @@ namespace App.Features.TodoLists.Common.Interfaces;
 public interface ITodoListModel : IBasicModelWithTitle
 {
 	string? CreatorId { get; set; }
-	//UserModel? Creator { get; set; }
 
 	string? OwnerId { get; set; }
-	//UserModel? Owner { get; set; }
 
 	[Required]
 	Guid ProjectId { get; set; }

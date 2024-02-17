@@ -35,9 +35,6 @@ public interface IBudgetModel
 
 	string? OwnerId { get; set; }
 
-	//[ForeignKey(nameof(OwnerId))]
-	//UserModel? Owner { get; set; }
-
 	ICollection<BillingModel> Billings { get; set; }
 	ICollection<IncomeModel> Incomes { get; set; }
 

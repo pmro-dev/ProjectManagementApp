@@ -1,11 +1,14 @@
-﻿using App.Features.Projects.Common.Models;
-using App.Features.TEMP.Projects.Interfaces;
+﻿using App.Features.Projects.Common.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace App.Features.TEMP.Projects.Models;
+namespace App.Features.Projects.Common.Models;
 
 public class UserProjectModel : IUserProjectModel
 {
+    [Key]
+    [Required]
+    public Guid Id { get; set; }
+
     [Timestamp]
     public byte[] RowVersion { get; set; }
 

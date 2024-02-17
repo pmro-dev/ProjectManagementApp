@@ -1,5 +1,4 @@
 ﻿using App.Features.Users.Common.Roles.Models;
-using System.ComponentModel.DataAnnotations;
 
 namespace App.Features.Users.Common.Models.Interfaces;
 

@@ -1,9 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace App.Features.TEMP.Projects.Interfaces;
+namespace App.Features.Projects.Common.Interfaces;
 
 public interface IUserProjectModel
 {
+    [Key]
+    [Required]
+    Guid Id { get; set; }
+
     [Timestamp]
     byte[] RowVersion { get; set; }
 

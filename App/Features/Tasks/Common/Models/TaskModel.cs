@@ -64,6 +64,4 @@ public class TaskModel : ITaskModel
 	public virtual TodoListModel? TodoList { get; set; }
 
 	public string? OwnerId { get; set; } = string.Empty;
-
-	//public virtual UserModel? Owner { get; set; }
 }

@@ -1,5 +1,5 @@
 ﻿using App.Features.Projects.Common.Models;
-using App.Features.Users.Common.Models;
+using App.Features.TodoLists.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -11,10 +11,10 @@ public interface IProjectTodolistModel
 	byte[] RowVersion { get; set; }
 
 	[Required]
-	string OwnerId { get; set; }
+	Guid TodoListId { get; set; }
 
-	[ForeignKey(nameof(OwnerId))]
-	UserModel? Owner { get; set; }
+	[ForeignKey(nameof(TodoListId))]
+	TodoListModel? TodoList { get; set; }
 
 	[Required]
 	Guid ProjectId { get; set; }

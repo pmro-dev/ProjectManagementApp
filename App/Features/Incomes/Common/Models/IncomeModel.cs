@@ -1,6 +1,5 @@
 ﻿using App.Features.Budgets.Common.Models;
 using App.Features.Incomes.Common.Interfaces;
-using App.Features.Users.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -32,9 +31,6 @@ public class IncomeModel : IIncomeModel
 	public virtual BudgetModel? Budget { get; set; }
 
 	public string? ExecutorId { get; set; }
-
-	//[ForeignKey(nameof(ExecutorId))]
-	//public virtual UserModel? Executor { get; set; }
 
 	public DateTime? PaymentDate { get; set; }
 

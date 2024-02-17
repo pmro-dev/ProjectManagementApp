@@ -44,7 +44,6 @@ public interface ITaskModel : IBasicModelWithTitle
 	TodoListModel? TodoList { get; set; }
 
 	string? OwnerId { get; set; }
-	//UserModel? Owner { get; set; }
 
 	ICollection<TagModel> Tags { get; set; }
 	ICollection<TaskTagModel> TaskTags { get; set; }

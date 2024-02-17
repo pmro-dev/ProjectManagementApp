@@ -20,7 +20,7 @@ public class TeamDto : ITeamDto
 	public virtual UserModel? Lider { get; set; }
 
 	public ICollection<UserModel> Members { get; set; }
-	//public ICollection<UserTeamModel> TeamMembers { get; set; }
+	public ICollection<UserTeamModel> TeamMembers { get; set; }
 
 	public ICollection<ProjectModel> Projects { get; set; }
 	public ICollection<ProjectTeamModel> TeamProjects { get; set; }
@@ -36,7 +36,7 @@ public class TeamDto : ITeamDto
 		LiderId = string.Empty;
 
 		Members = new List<UserModel>();
-		//TeamMembers = new List<UserTeamModel>();
+		TeamMembers = new List<UserTeamModel>();
 		Projects = new List<ProjectModel>();
 		TeamProjects = new List<ProjectTeamModel>();
 		TodoLists = new List<TodoListModel>();

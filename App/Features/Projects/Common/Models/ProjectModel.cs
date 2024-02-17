@@ -5,7 +5,6 @@ using App.Features.Projects.Common.Helpers;
 using App.Features.Projects.Common.Interfaces;
 using App.Features.Tags.Common.Models;
 using App.Features.Teams.Common.Models;
-using App.Features.TEMP.Projects.Models;
 using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Models;
 using System.ComponentModel.DataAnnotations;

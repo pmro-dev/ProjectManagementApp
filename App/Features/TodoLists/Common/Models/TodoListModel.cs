@@ -38,13 +38,11 @@ public class TodoListModel : ITodoListModel
 	public string Title { get; set; } = string.Empty;
 
 	public string? CreatorId { get; set; } = string.Empty;
-	//public UserModel? Creator { get; set; }
 
 	/// <summary>
 	/// Owner id.
 	/// </summary>
 	public string? OwnerId { get; set; } = string.Empty;
-	//public UserModel? Owner { get; set; }
 
 	[Required]
 	public Guid ProjectId { get; set; } = Guid.Empty;

@@ -46,29 +46,6 @@ public interface IUserModel : IEquatable<IUserModel>
 
 	[Required]
 	string Username { get; set; }
-
-	//public ICollection<TodoListModel> CreatedTodoLists { get; set; }
-
-	//public ICollection<TodoListModel> OwnedTodoLists { get; set; }
-
 	public ICollection<RoleModel> Roles { get; set; }
 	public ICollection<UserRoleModel> UserRoles { get; set; }
-
-	//public ICollection<TeamModel> ManagedTeams { get; set; }
-
-	//public ICollection<TeamModel> Teams { get; set; }
-	//public ICollection<UserTeamModel> TeamMembers { get; set; }
-
-	//public ICollection<ProjectModel> ManagedProjects { get; set; }
-
-	//public ICollection<ProjectModel> OwnedProjects { get; set; }
-	//public ICollection<UserProjectModel> ProjectClients { get; set; }
-
-	//public ICollection<TaskModel> Tasks { get; set; }
-
-	//public ICollection<BudgetModel> Budgets { get; set; }
-
-	//public ICollection<BillingModel> Billings { get; set; }
-
-	//public ICollection<IncomeModel> Incomes { get; set; }
 }

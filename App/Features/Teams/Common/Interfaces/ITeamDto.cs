@@ -1,4 +1,5 @@
 ﻿using App.Features.Projects.Common.Models;
+using App.Features.Teams.Common.Models;
 using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Models;
 
@@ -19,7 +20,7 @@ public interface ITeamDto
 	UserModel? Lider { get; set; }
 
 	ICollection<UserModel> Members { get; set; }
-	//ICollection<UserTeamModel> TeamMembers { get; set; }
+	ICollection<UserTeamModel> TeamMembers { get; set; }
 
 	ICollection<ProjectModel> Projects { get; set; }
 	ICollection<ProjectTeamModel> TeamProjects { get; set; }

@@ -1,12 +1,16 @@
-﻿using App.Features.TEMP.Teams.Interfaces;
+﻿using App.Features.Teams.Common.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace App.Features.TEMP.Teams.Models;
+namespace App.Features.Teams.Common.Models;
 
 public class UserTeamModel : IUserTeamModel
 {
+    [Key]
+    [Required]
+    public Guid Id { get; set; }
+
     [Timestamp]
-    public byte[] RowVersion { get; set; } = { 1, 1, 1 };
+    public byte[] RowVersion { get; set; }
 
     [Required]
     public string MemberId { get; set; }
@@ -18,5 +22,6 @@ public class UserTeamModel : IUserTeamModel
     {
         MemberId = memberId;
         TeamId = teamId;
+        RowVersion = new byte[] { 1, 1, 1 };
     }
 }
