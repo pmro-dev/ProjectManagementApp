@@ -18,5 +18,6 @@ public class AutoMapperProfiles : Profile
 		ProjectMapper.SetProfiles(this);
 
 		BudgetMapper.SetProfiles(this);
+		BillingMapper.SetProfiles(this);
 	}
 }
