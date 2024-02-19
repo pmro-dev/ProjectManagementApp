@@ -9,9 +9,9 @@ public class BudgetTagDto : IBudgetTagDto
 
 	public Guid BudgetId { get; set; } = Guid.Empty;
 
-	public BudgetModel? Budget { get; set; }
+	public BudgetDto? Budget { get; set; }
 
 	public Guid TagId { get; set; } = Guid.Empty;
 
-	public TagModel? Tag { get; set; }
+	public TagDto? Tag { get; set; }
 }

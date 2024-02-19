@@ -19,6 +19,6 @@ public class UserDto : IUserDto
 	public string CompanyName { get; set; } = string.Empty;
 	public string JobTitle { get; set; } = string.Empty;
 	public string Phone { get; set; } = string.Empty;
-	public ICollection<RoleModel> Roles { get; set; } = new List<RoleModel>();
+	public ICollection<RoleDto> Roles { get; set; } = new List<RoleDto>();
 	public ICollection<UserRoleDto> UserRoles { get; set; } = new List<UserRoleDto>();
 }

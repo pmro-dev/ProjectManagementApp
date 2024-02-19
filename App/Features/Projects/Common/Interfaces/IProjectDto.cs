@@ -24,19 +24,19 @@ public interface IProjectDto
 
 	BudgetModel? Budget { get; set; }
 
-	ICollection<UserModel> Clients { get; set; }
+	ICollection<UserDto> Clients { get; set; }
 
-	ICollection<TodoListModel> TodoLists { get; set; }
+	ICollection<TodoListDto> TodoLists { get; set; }
 
-	ICollection<TeamModel> Teams { get; set; }
-	ICollection<ProjectTeamModel> ProjectTeams { get; set; }
+	ICollection<TeamDto> Teams { get; set; }
+	ICollection<ProjectTeamDto> ProjectTeams { get; set; }
 
-	ICollection<TagModel> Tags { get; set; }
-	ICollection<ProjectTagModel> ProjectTags { get; set; }
+	ICollection<TagDto> Tags { get; set; }
+	ICollection<ProjectTagDto> ProjectTags { get; set; }
 
 	string OwnerId { get; set; }
 
-	UserModel? Owner { get; set; }
+	UserDto? Owner { get; set; }
 
 	ProjectStatusType Status { get; set; }
 

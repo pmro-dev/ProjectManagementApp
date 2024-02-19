@@ -56,8 +56,8 @@ public class TaskDto : ITaskDto
     public string OwnerId { get; set; } = string.Empty;
 
     [ForeignKey(nameof(OwnerId))]
-    public virtual UserModel? Owner { get; set; }
+    public virtual UserDto? Owner { get; set; }
 
-	public ICollection<TagModel> Tags { get; set; } = new List<TagModel>();
+	public ICollection<TagDto> Tags { get; set; } = new List<TagDto>();
 	public ICollection<TaskTagDto> TaskTags { get; set; } = new List<TaskTagDto>();
 }

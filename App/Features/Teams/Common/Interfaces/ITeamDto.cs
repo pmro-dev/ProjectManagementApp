@@ -17,13 +17,13 @@ public interface ITeamDto
 
 	string LiderId { get; set; }
 
-	UserModel? Lider { get; set; }
+	UserDto? Lider { get; set; }
 
-	ICollection<UserModel> Members { get; set; }
-	ICollection<UserTeamModel> TeamMembers { get; set; }
+	ICollection<UserDto> Members { get; set; }
+	ICollection<UserTeamDto> TeamMembers { get; set; }
 
-	ICollection<ProjectModel> Projects { get; set; }
-	ICollection<ProjectTeamModel> TeamProjects { get; set; }
+	ICollection<ProjectDto> Projects { get; set; }
+	ICollection<ProjectTeamDto> TeamProjects { get; set; }
 
-	ICollection<TodoListModel> TodoLists { get; set; }
+	ICollection<TodoListDto> TodoLists { get; set; }
 }

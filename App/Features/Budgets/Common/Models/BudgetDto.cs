@@ -19,15 +19,15 @@ public class BudgetDto : IBudgetDto
 
 	public Guid ProjectId { get; set; } = Guid.Empty;
 
-	public virtual ProjectModel? Project { get; set; }
+	public virtual ProjectDto? Project { get; set; }
 
 	public string OwnerId { get; set; } = string.Empty;
 
-	public virtual UserModel? Owner { get; set; }
+	public virtual UserDto? Owner { get; set; }
 
-	public ICollection<BillingModel> Billings { get; set; } = new List<BillingModel>();
-	public ICollection<IncomeModel> Incomes { get; set; } = new List<IncomeModel>();
+	public ICollection<BillingDto> Billings { get; set; } = new List<BillingDto>();
+	public ICollection<IncomeDto> Incomes { get; set; } = new List<IncomeDto>();
 
-	public ICollection<TagModel> Tags { get; set; } = new List<TagModel>();
-	public ICollection<BudgetTagModel> BudgetTags { get; set; } = new List<BudgetTagModel>();
+	public ICollection<TagDto> Tags { get; set; } = new List<TagDto>();
+	public ICollection<BudgetTagDto> BudgetTags { get; set; } = new List<BudgetTagDto>();
 }

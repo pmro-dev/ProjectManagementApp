@@ -22,19 +22,19 @@ public class ProjectDto : IProjectDto
 
 	public BudgetModel? Budget { get; set; }
 
-	public ICollection<UserModel> Clients { get; set; } = new List<UserModel>();
+	public ICollection<UserDto> Clients { get; set; } = new List<UserDto>();
 
-	public ICollection<TodoListModel> TodoLists { get; set; } = new List<TodoListModel>();
+	public ICollection<TodoListDto> TodoLists { get; set; } = new List<TodoListDto>();
 
-	public ICollection<TeamModel> Teams { get; set; } = new List<TeamModel>();
-	public ICollection<ProjectTeamModel> ProjectTeams { get; set; } = new List<ProjectTeamModel>();
+	public ICollection<TeamDto> Teams { get; set; } = new List<TeamDto>();
+	public ICollection<ProjectTeamDto> ProjectTeams { get; set; } = new List<ProjectTeamDto>();
 
-	public ICollection<TagModel> Tags { get; set; } = new List<TagModel>();
-	public ICollection<ProjectTagModel> ProjectTags { get; set; } = new List<ProjectTagModel>();
+	public ICollection<TagDto> Tags { get; set; } = new List<TagDto>();
+	public ICollection<ProjectTagDto> ProjectTags { get; set; } = new List<ProjectTagDto>();
 
 	public string OwnerId { get; set; } = string.Empty;
 
-	public UserModel? Owner { get; set; }
+	public UserDto? Owner { get; set; }
 
 	public ProjectStatusType Status { get; set; }
 

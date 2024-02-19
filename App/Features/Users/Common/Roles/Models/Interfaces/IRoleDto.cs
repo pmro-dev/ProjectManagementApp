@@ -6,5 +6,5 @@ public interface IRoleDto
     string Description { get; set; }
     Guid Id { get; set; }
     string Name { get; set; }
-    ICollection<IUserRoleDto> UserRoles { get; set; }
+    ICollection<UserRoleDto> UserRoles { get; set; }
 }

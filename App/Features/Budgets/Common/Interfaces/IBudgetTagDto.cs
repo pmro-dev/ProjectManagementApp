@@ -9,9 +9,9 @@ public interface IBudgetTagDto
 
 	Guid BudgetId { get; set; }
 
-	BudgetModel? Budget { get; set; }
+	BudgetDto? Budget { get; set; }
 
 	Guid TagId { get; set; }
 
-	TagModel? Tag { get; set; }
+	TagDto? Tag { get; set; }
 }

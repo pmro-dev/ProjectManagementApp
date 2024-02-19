@@ -18,11 +18,11 @@ public class BillingDto : IBillingDto
 
 	public string ExecutorId { get; set; } = string.Empty;
 
-	public UserModel? Executor { get; set; }
+	public UserDto? Executor { get; set; }
 
 	public Guid BudgetId { get; set; } = Guid.Empty;
 
-	public BudgetModel? Budget { get; set; }
+	public BudgetDto? Budget { get; set; }
 
 	public DateTime? PaymentDate { get; set; }
 

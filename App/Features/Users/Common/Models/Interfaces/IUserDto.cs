@@ -16,6 +16,6 @@ public interface IUserDto
 	string CompanyName { get; set; }
 	string JobTitle { get; set; }
 	string Phone { get; set; }
-	ICollection<RoleModel> Roles { get; set; }
+	ICollection<RoleDto> Roles { get; set; }
 	ICollection<UserRoleDto> UserRoles { get; set; }
 }

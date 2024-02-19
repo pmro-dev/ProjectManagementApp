@@ -17,15 +17,15 @@ public class TeamDto : ITeamDto
 
 	public string LiderId { get; set; }
 
-	public virtual UserModel? Lider { get; set; }
+	public virtual UserDto? Lider { get; set; }
 
-	public ICollection<UserModel> Members { get; set; }
-	public ICollection<UserTeamModel> TeamMembers { get; set; }
+	public ICollection<UserDto> Members { get; set; }
+	public ICollection<UserTeamDto> TeamMembers { get; set; }
 
-	public ICollection<ProjectModel> Projects { get; set; }
-	public ICollection<ProjectTeamModel> TeamProjects { get; set; }
+	public ICollection<ProjectDto> Projects { get; set; }
+	public ICollection<ProjectTeamDto> TeamProjects { get; set; }
 
-	public ICollection<TodoListModel> TodoLists { get; set; }
+	public ICollection<TodoListDto> TodoLists { get; set; }
 
 	public TeamDto(string name, string description)
 	{
@@ -35,10 +35,10 @@ public class TeamDto : ITeamDto
 		Description = description;
 		LiderId = string.Empty;
 
-		Members = new List<UserModel>();
-		TeamMembers = new List<UserTeamModel>();
-		Projects = new List<ProjectModel>();
-		TeamProjects = new List<ProjectTeamModel>();
-		TodoLists = new List<TodoListModel>();
+		Members = new List<UserDto>();
+		TeamMembers = new List<UserTeamDto>();
+		Projects = new List<ProjectDto>();
+		TeamProjects = new List<ProjectTeamDto>();
+		TodoLists = new List<TodoListDto>();
 	}
 }

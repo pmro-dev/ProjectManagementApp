@@ -17,19 +17,19 @@ public class TodoListDto : ITodoListDto
 	public string Title { get; set; } = string.Empty;
 
 	public string OwnerId { get; set; } = string.Empty;
-	public UserModel? Owner { get; set; }
+	public UserDto? Owner { get; set; }
 
 	public string CreatorId { get; set; } = string.Empty;
-	public UserModel? Creator { get; set; }
+	public UserDto? Creator { get; set; }
 
 	public Guid ProjectId { get; set; } = Guid.Empty;
-	public ProjectModel? Project { get; set; }
+	public ProjectDto? Project { get; set; }
 
 	public Guid TeamId { get; set; } = Guid.Empty;
-	public TeamModel? Team { get; set; }
+	public TeamDto? Team { get; set; }
 
 	public ICollection<TaskDto> Tasks { get; set; } = new List<TaskDto>();
 
-	public ICollection<TagModel> Tags { get; set; } = new List<TagModel>();
-	public ICollection<TodoListTagModel> TodoListTags { get; set; } = new List<TodoListTagModel>();
+	public ICollection<TagDto> Tags { get; set; } = new List<TagDto>();
+	public ICollection<TodoListTagDto> TodoListTags { get; set; } = new List<TodoListTagDto>();
 }

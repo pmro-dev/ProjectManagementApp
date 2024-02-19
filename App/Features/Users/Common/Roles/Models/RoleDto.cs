@@ -8,5 +8,5 @@ public class RoleDto : IRoleDto
     public string Description { get; set; } = string.Empty;
     public Guid Id { get; set; } = Guid.NewGuid();
     public string Name { get; set; } = string.Empty;
-    public ICollection<IUserRoleDto> UserRoles { get; set; } = new List<IUserRoleDto>();
+    public ICollection<UserRoleDto> UserRoles { get; set; } = new List<UserRoleDto>();
 }

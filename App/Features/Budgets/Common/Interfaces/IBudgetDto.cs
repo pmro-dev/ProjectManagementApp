@@ -19,15 +19,15 @@ public interface IBudgetDto
 
 	Guid ProjectId { get; set; }
 
-	ProjectModel? Project { get; set; }
+	ProjectDto? Project { get; set; }
 
 	string? OwnerId { get; set; }
 
-	UserModel? Owner { get; set; }
+	UserDto? Owner { get; set; }
 
-	ICollection<BillingModel> Billings { get; set; }
-	ICollection<IncomeModel> Incomes { get; set; }
+	ICollection<BillingDto> Billings { get; set; }
+	ICollection<IncomeDto> Incomes { get; set; }
 
-	ICollection<TagModel> Tags { get; set; }
-	ICollection<BudgetTagModel> BudgetTags { get; set; }
+	ICollection<TagDto> Tags { get; set; }
+	ICollection<BudgetTagDto> BudgetTags { get; set; }
 }

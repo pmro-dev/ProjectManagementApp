@@ -14,19 +14,19 @@ public interface ITodoListDto
 	string Title { get; set; }
 
 	string OwnerId { get; set; }
-	UserModel? Owner { get; set; }
+	UserDto? Owner { get; set; }
 
 	string CreatorId { get; set; }
-	UserModel? Creator { get; set; }
+	UserDto? Creator { get; set; }
 
 	Guid ProjectId { get; set; }
-	ProjectModel? Project { get; set; }
+	ProjectDto? Project { get; set; }
 
 	Guid TeamId { get; set; }
-	TeamModel? Team { get; set; }
+	TeamDto? Team { get; set; }
 
 	ICollection<TaskDto> Tasks { get; set; }
 
-	ICollection<TagModel> Tags { get; set; }
-	ICollection<TodoListTagModel> TodoListTags { get; set; }
+	ICollection<TagDto> Tags { get; set; }
+	ICollection<TodoListTagDto> TodoListTags { get; set; }
 }

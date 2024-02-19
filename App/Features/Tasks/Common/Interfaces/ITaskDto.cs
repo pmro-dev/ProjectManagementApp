@@ -43,8 +43,8 @@ public interface ITaskDto
 	public string OwnerId { get; set; }
 
 	[ForeignKey(nameof(OwnerId))]
-	public UserModel? Owner { get; set; }
+	public UserDto? Owner { get; set; }
 
-	public ICollection<TagModel> Tags { get; set; }
+	public ICollection<TagDto> Tags { get; set; }
 	public ICollection<TaskTagDto> TaskTags { get; set; }
 }

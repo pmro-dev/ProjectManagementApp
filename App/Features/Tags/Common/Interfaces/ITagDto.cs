@@ -12,13 +12,13 @@ namespace App.Features.Tags.Common.Interfaces
 		string Title { get; set; }
 		ICollection<TaskTagDto> TaskTags { get; set; }
 
-		ICollection<ProjectModel> Projects { get; set; }
-		ICollection<ProjectTagModel> ProjectTags { get; set; }
+		ICollection<ProjectDto> Projects { get; set; }
+		ICollection<ProjectTagDto> ProjectTags { get; set; }
 
-		ICollection<TodoListModel> TodoLists { get; set; }
-		ICollection<TodoListTagModel> TodoListTags { get; set; }
+		ICollection<TodoListDto> TodoLists { get; set; }
+		ICollection<TodoListTagDto> TodoListTags { get; set; }
 
-		ICollection<BudgetModel> Budgets { get; set; }
-		ICollection<BudgetTagModel> BudgetTags { get; set; }
+		ICollection<BudgetDto> Budgets { get; set; }
+		ICollection<BudgetTagDto> BudgetTags { get; set; }
 	}
 }

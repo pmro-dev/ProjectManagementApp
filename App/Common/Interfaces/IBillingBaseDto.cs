@@ -17,11 +17,11 @@ public interface IBillingBaseDto
 
     string ExecutorId { get; set; }
 
-    UserModel? Executor { get; set; }
+    UserDto? Executor { get; set; }
 
     Guid BudgetId { get; set; }
 
-    BudgetModel? Budget { get; set; }
+    BudgetDto? Budget { get; set; }
 
     DateTime? PaymentDate { get; set; }
 

@@ -14,11 +14,11 @@ namespace App.Features.Tags.Common.Models
         public string Title { get; set; } = string.Empty;
 
         public ICollection<TaskTagDto> TaskTags { get; set; } = new List<TaskTagDto>();
-		public ICollection<ProjectModel> Projects { get; set; } = new List<ProjectModel>();
-		public ICollection<ProjectTagModel> ProjectTags { get; set; } = new List<ProjectTagModel>();
-		public ICollection<TodoListModel> TodoLists { get; set; } = new List<TodoListModel>();
-		public ICollection<TodoListTagModel> TodoListTags { get; set; } = new List<TodoListTagModel>();
-		public ICollection<BudgetModel> Budgets { get; set; } = new List<BudgetModel>();
-		public ICollection<BudgetTagModel> BudgetTags { get; set; } = new List<BudgetTagModel>();
+		public ICollection<ProjectDto> Projects { get; set; } = new List<ProjectDto>();
+		public ICollection<ProjectTagDto> ProjectTags { get; set; } = new List<ProjectTagDto>();
+		public ICollection<TodoListDto> TodoLists { get; set; } = new List<TodoListDto>();
+		public ICollection<TodoListTagDto> TodoListTags { get; set; } = new List<TodoListTagDto>();
+		public ICollection<BudgetDto> Budgets { get; set; } = new List<BudgetDto>();
+		public ICollection<BudgetTagDto> BudgetTags { get; set; } = new List<BudgetTagDto>();
 	}
 }
