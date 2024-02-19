@@ -1,4 +1,5 @@
 ﻿using App.Features.Billings.Common.Models;
+using App.Features.Budgets.Common.Interfaces;
 using App.Features.Incomes.Common.Models;
 using App.Features.Projects.Common.Models;
 using App.Features.Tags.Common.Models;
@@ -6,7 +7,7 @@ using App.Features.Users.Common.Models;
 
 namespace App.Features.Budgets.Common.Models;
 
-public class BudgetDto
+public class BudgetDto : IBudgetDto
 {
 	public Guid Id { get; set; } = Guid.Empty;
 
