@@ -22,5 +22,7 @@ public class AutoMapperProfiles : Profile
 		IncomeMapper.SetProfiles(this);
 
 		BillingMapper.SetProfiles(this);
+
+		TagMapper.SetProfiles(this);
 	}
 }
