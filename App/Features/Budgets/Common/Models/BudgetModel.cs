@@ -5,6 +5,8 @@ using App.Features.Incomes.Common.Models;
 using App.Features.Projects.Common.Models;
 using App.Features.Tags.Common.Models;
 using App.Features.Users.Common.Models;
+using BenchmarkDotNet.Running;
+using Microsoft.CodeAnalysis;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 #endregion
@@ -41,7 +43,23 @@ public class BudgetModel : IBudgetModel
 	public ICollection<TagModel> Tags { get; set; }
 	public ICollection<BudgetTagModel> BudgetTags { get; set; }
 
-	public BudgetModel(string title, string description, Guid projectId, string ownerId)
+    public BudgetModel()
+	{
+		Id = Guid.NewGuid();
+		RowVersion = new byte[] { 1, 1, 1 };
+		Title = string.Empty;
+		Description = string.Empty;
+		ProjectId = Guid.Empty;
+		OwnerId = string.Empty;
+
+		Billings = new List<BillingModel>();
+		Incomes = new List<IncomeModel>();
+
+		Tags = new List<TagModel>();
+		BudgetTags = new List<BudgetTagModel>();
+	}
+
+    public BudgetModel(string title, string description, Guid projectId, string ownerId)
 	{
 		Id = Guid.NewGuid();
 		RowVersion = new byte[] { 1, 1, 1 };
