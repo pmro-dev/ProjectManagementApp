@@ -6,7 +6,7 @@ namespace App.Features.Incomes.Common.Models;
 
 public class IncomeDto : IIncomeDto
 {
-	public Guid Id { get; set; }
+	public Guid Id { get; set; } = Guid.Empty;
 
 	public byte[] RowVersion { get; set; } = { 1, 1, 1 };
 

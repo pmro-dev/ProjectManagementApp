@@ -7,8 +7,8 @@ namespace App.Features.Incomes.Common.Models;
 
 public class IncomeModel : IIncomeModel
 {
-	[Required]
 	[Key]
+	[Required]
 	public Guid Id { get; set; }
 
 	[Timestamp]
