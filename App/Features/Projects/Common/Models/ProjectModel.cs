@@ -7,6 +7,7 @@ using App.Features.Tags.Common.Models;
 using App.Features.Teams.Common.Models;
 using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Models;
+using BenchmarkDotNet.Running;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 #endregion
@@ -61,7 +62,25 @@ public class ProjectModel : IProjectModel
 	public ICollection<TagModel> Tags { get; set; }
 	public ICollection<ProjectTagModel> ProjectTags { get; set; }
 
-	public ProjectModel(string title, string description, string ownerId, DateTime deadline, Guid budgetId)
+    public ProjectModel()
+    {
+		Title = string.Empty;
+		Description = string.Empty;
+		OwnerId = string.Empty;
+		Deadline = DateTime.Today;
+		Created = DateTime.Now;
+		LastUpdated = DateTime.Now;
+		BudgetId = Guid.Empty;
+
+		Clients = new List<UserProjectModel>();
+		TodoLists = new List<TodoListModel>();
+		Teams = new List<TeamModel>();
+		ProjectTeams = new List<ProjectTeamModel>();
+		Tags = new List<TagModel>();
+		ProjectTags = new List<ProjectTagModel>();
+	}
+
+    public ProjectModel(string title, string description, string ownerId, DateTime deadline, Guid budgetId)
 	{
 		Title = title;
 		Description = description;
