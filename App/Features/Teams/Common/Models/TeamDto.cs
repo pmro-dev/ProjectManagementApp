@@ -27,7 +27,22 @@ public class TeamDto : ITeamDto
 
 	public ICollection<TodoListDto> TodoLists { get; set; }
 
-	public TeamDto(string name, string description)
+    public TeamDto()
+    {
+		Id = Guid.NewGuid();
+		RowVersion = new byte[] { 1, 1, 1 };
+		Name = string.Empty;
+		Description = string.Empty;
+		LiderId = string.Empty;
+
+		Members = new List<UserDto>();
+		TeamMembers = new List<UserTeamDto>();
+		Projects = new List<ProjectDto>();
+		TeamProjects = new List<ProjectTeamDto>();
+		TodoLists = new List<TodoListDto>();
+	}
+
+    public TeamDto(string name, string description)
 	{
 		Id = Guid.NewGuid();
 		RowVersion = new byte[] { 1, 1, 1 };
