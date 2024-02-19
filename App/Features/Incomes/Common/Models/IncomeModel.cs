@@ -36,7 +36,20 @@ public class IncomeModel : IIncomeModel
 
 	public DateTime? PaymentDeadline { get; set; }
 
-	public IncomeModel(string name, string description, long value, Guid budgetId, string executorId, DateTime? paymentDeadline = null, DateTime? paymentDate = null)
+    public IncomeModel()
+    {
+		Id = Guid.NewGuid();
+		RowVersion = new byte[] { 1, 1, 1 };
+		Name = string.Empty;
+		Description = string.Empty;
+		Value = 0;
+		BudgetId = Guid.Empty;
+		PaymentDeadline = null;
+		PaymentDate = null;
+		ExecutorId = string.Empty;
+	}
+
+    public IncomeModel(string name, string description, long value, Guid budgetId, string executorId, DateTime? paymentDeadline = null, DateTime? paymentDate = null)
 	{
 		Id = Guid.NewGuid();
 		RowVersion = new byte[] { 1, 1, 1 };
