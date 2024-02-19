@@ -1,7 +1,6 @@
 ﻿#region USINGS
 using App.Features.Billings.Common.Interfaces;
 using App.Features.Budgets.Common.Models;
-using App.Features.Users.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 #endregion 
@@ -39,7 +38,20 @@ public class BillingModel : IBillingModel
 
 	public DateTime? PaymentDeadline { get; set; }
 
-	public BillingModel(string name, string description, long value, Guid budgetId, string executorId, DateTime? paymentDeadline = null, DateTime? paymentDate = null)
+    public BillingModel()
+    {
+		Id = Guid.NewGuid();
+		RowVersion = new byte[] { 1, 1, 1 };
+		Name = string.Empty;
+		Description = string.Empty;
+		Value = 0;
+		BudgetId = Guid.Empty;
+		PaymentDeadline = null;
+		PaymentDate = null;
+		ExecutorId = string.Empty;
+	}
+
+    public BillingModel(string name, string description, long value, Guid budgetId, string executorId, DateTime? paymentDeadline = null, DateTime? paymentDate = null)
 	{
 		Id = Guid.NewGuid();
 		RowVersion = new byte[] { 1, 1, 1 };
