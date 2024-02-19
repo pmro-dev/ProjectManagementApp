@@ -1,7 +1,5 @@
-﻿using App.Features.Tags.Common.Models;
-using App.Features.Tasks.Common.Interfaces;
+﻿using App.Features.Tasks.Common.Interfaces;
 using App.Features.Tasks.Common.Models;
-using App.Features.Tasks.Common.TaskTags.Common;
 using App.Features.Tasks.Delete.Models;
 using App.Features.Tasks.Edit.Models;
 
@@ -27,25 +25,5 @@ public class TaskEntityFactory : ITaskEntityFactory
 	public TaskEditInputDto CreateEditInputDto()
 	{
 		return new TaskEditInputDto();
-	}
-
-	public TagDto CreateTagDto()
-	{
-		return new TagDto();
-	}
-
-	public TagModel CreateTagModel()
-	{
-		return new TagModel();
-	}
-
-	public TaskTagDto CreateTaskTagDto()
-	{
-		return new TaskTagDto();
-	}
-
-	public TaskTagModel CreateTaskTagModel()
-	{
-		return new TaskTagModel();
 	}
 }
