@@ -24,5 +24,9 @@ public class AutoMapperProfiles : Profile
 		BillingMapper.SetProfiles(this);
 
 		TagMapper.SetProfiles(this);
+
+		TeamMapper.SetProfiles(this);
+
+		// Task and TodoList entities use manual mapping
 	}
 }
