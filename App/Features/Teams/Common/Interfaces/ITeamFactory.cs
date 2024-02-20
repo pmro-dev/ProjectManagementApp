@@ -5,4 +5,6 @@ namespace App.Features.Teams.Common.Interfaces;
 
 public interface ITeamFactory : IBaseEntityFactory<TeamModel, TeamDto>
 {
+	TeamModel CreateModel(string name, string description);
+	TeamDto CreateDto(string name, string description);
 }
