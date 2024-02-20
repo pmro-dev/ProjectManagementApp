@@ -1,9 +1,15 @@
-﻿using App.Features.Tasks.Common.Interfaces;
+﻿using App.Features.Exceptions.Throw;
+using App.Features.Projects.Common.Models;
+using App.Features.Tags.Common.Models;
+using App.Features.Tasks.Common.Interfaces;
 using App.Features.Tasks.Common.Models;
+using App.Features.Teams.Common.Models;
 using App.Features.TodoLists.Common.Interfaces;
 using App.Features.TodoLists.Common.Models;
+using App.Features.TodoLists.Common.Tags;
 using App.Features.TodoLists.Create.Models;
 using App.Features.TodoLists.Edit.Models;
+using AutoMapper;
 
 namespace App.Features.TodoLists.Common;
 
@@ -11,11 +17,15 @@ public class TodoListMapper : ITodoListMapper
 {
 	private readonly ITaskEntityMapper _taskEntityMapper;
 	private readonly ITodoListFactory _todoListFactory;
+	private readonly IMapper _mapper;
+	private readonly ILogger<TodoListMapper> _logger;
 
-	public TodoListMapper(ITaskEntityMapper taskEntityMapper, ITodoListFactory todoListFactory)
+	public TodoListMapper(ITaskEntityMapper taskEntityMapper, ITodoListFactory todoListFactory, IMapper mapper, ILogger<TodoListMapper> logger)
 	{
 		_taskEntityMapper = taskEntityMapper;
 		_todoListFactory = todoListFactory;
+		_mapper = mapper;
+		_logger = logger;
 	}
 
 
@@ -92,8 +102,30 @@ public class TodoListMapper : ITodoListMapper
 
 		var todoListDto = _todoListFactory.CreateDto();
 		todoListDto.Id = todoListModel.Id;
+		todoListDto.RowVersion = todoListModel.RowVersion;
 		todoListDto.Title = todoListModel.Title;
-		todoListDto.OwnerId = todoListModel.OwnerId;
+
+
+		if (todoListModel.OwnerId is null)
+			ExceptionsService.WhenPropertyIsNullOrEmptyThrow(nameof(MapTodoListToDto), todoListModel.OwnerId, nameof(todoListModel.OwnerId), _logger);
+
+		todoListDto.OwnerId = todoListModel.OwnerId!;
+
+
+		if (todoListModel.CreatorId is null)
+			ExceptionsService.WhenPropertyIsNullOrEmptyThrow(nameof(MapTodoListToDto), todoListModel.CreatorId, nameof(todoListModel.CreatorId), _logger);
+
+		todoListDto.CreatorId = todoListModel.CreatorId!;
+
+
+		todoListDto.ProjectId = todoListModel.ProjectId;
+		todoListDto.Project = MapProjectToDto(todoListModel.Project);
+
+		todoListDto.TeamId = todoListModel.TeamId;
+		todoListDto.Team = MapTeamToDto(todoListModel.Team);
+
+		todoListDto.Tags = MapMultipleTagsToDtos(todoListModel.Tags);
+		todoListDto.TodoListTags = MapMultipleTodoListTagsToDtos(todoListModel.TodoListTags);
 
 		mappedObjects[todoListModel] = todoListDto;
 
@@ -105,6 +137,35 @@ public class TodoListMapper : ITodoListMapper
 	private ICollection<TaskDto> MapMultipleTasksToDtos(ICollection<TaskModel> taskModels, IDictionary<object, object> mappedObjects)
 	{
 		return taskModels.Select(task => _taskEntityMapper.TransferToDto(task, mappedObjects)).ToList();
+	}
+
+	private ProjectDto? MapProjectToDto(ProjectModel? projectModel)
+	{
+		if (projectModel is null) 
+			return null;
+
+		ProjectDto? projectDto = _mapper.Map<ProjectDto>(projectModel);
+
+		return projectDto;
+	}
+
+	private TeamDto? MapTeamToDto(TeamModel? teamModel)
+	{
+		if (teamModel is null)
+			return null;
+
+		TeamDto? teamDto = _mapper.Map<TeamDto>(teamModel);
+		return teamDto;
+	}
+
+	private ICollection<TagDto> MapMultipleTagsToDtos(ICollection<TagModel> tags)
+	{
+		return tags.Select(tag => _mapper.Map<TagDto>(tag)).ToList();
+	}
+
+	private ICollection<TodoListTagDto> MapMultipleTodoListTagsToDtos(ICollection<TodoListTagModel> todoListTags)
+	{
+		return todoListTags.Select(tltg => _mapper.Map<TodoListTagDto>(tltg)).ToList();
 	}
 
 	#endregion
