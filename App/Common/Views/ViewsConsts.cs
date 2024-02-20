@@ -18,7 +18,15 @@ public static class ViewsConsts
         public const string Show = "Show";
     }
 
-    public readonly struct BoardsViews
+	public readonly struct ProjectViews
+	{
+		public const string Create = "Create";
+		public const string Delete = "Delete";
+		public const string Edit = "Edit";
+		public const string Show = "Show";
+	}
+
+	public readonly struct BoardsViews
     {
         public const string All = "All";
         public const string Briefly = "Briefly";

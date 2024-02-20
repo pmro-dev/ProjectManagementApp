@@ -6,8 +6,6 @@ using App.Features.Projects.Common.Interfaces;
 using App.Features.Tags.Common.Models;
 using App.Features.Teams.Common.Models;
 using App.Features.TodoLists.Common.Models;
-using App.Features.Users.Common.Models;
-using BenchmarkDotNet.Running;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 #endregion

@@ -1,5 +1,6 @@
 ﻿using App.Features.Boards;
 using App.Features.Exceptions;
+using App.Features.Projects;
 using App.Features.Tasks;
 using App.Features.TodoLists;
 using App.Features.Users;
@@ -58,5 +59,15 @@ public static class ControllersConsts
 		public const string DeletePostAction = nameof(TodoListController.DeletePost);
 		public const string DuplicateAction = nameof(TodoListController.Duplicate);
 		public const string ShowAction = nameof(TodoListController.Show);
+	}
+
+	public readonly struct ProjectCtrl
+	{
+		public const string Name = "Project";
+		public const string CreateAction = nameof(ProjectController.Create);
+		public const string EditAction = nameof(ProjectController.Edit);
+		public const string DeleteAction = nameof(ProjectController.Delete);
+		public const string DeletePostAction = nameof(ProjectController.DeletePost);
+		public const string ShowAction = nameof(ProjectController.Show);
 	}
 }
