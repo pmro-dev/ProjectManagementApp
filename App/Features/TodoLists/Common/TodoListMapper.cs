@@ -106,15 +106,11 @@ public class TodoListMapper : ITodoListMapper
 		todoListDto.Title = todoListModel.Title;
 
 
-		if (todoListModel.OwnerId is null)
-			ExceptionsService.WhenPropertyIsNullOrEmptyThrow(nameof(MapTodoListToDto), todoListModel.OwnerId, nameof(todoListModel.OwnerId), _logger);
-
+		ExceptionsService.WhenPropertyIsNullOrEmptyThrow(nameof(MapTodoListToDto), todoListModel.OwnerId, nameof(todoListModel.OwnerId), _logger);
 		todoListDto.OwnerId = todoListModel.OwnerId!;
 
 
-		if (todoListModel.CreatorId is null)
-			ExceptionsService.WhenPropertyIsNullOrEmptyThrow(nameof(MapTodoListToDto), todoListModel.CreatorId, nameof(todoListModel.CreatorId), _logger);
-
+		ExceptionsService.WhenPropertyIsNullOrEmptyThrow(nameof(MapTodoListToDto), todoListModel.CreatorId, nameof(todoListModel.CreatorId), _logger);
 		todoListDto.CreatorId = todoListModel.CreatorId!;
 
 
@@ -141,7 +137,7 @@ public class TodoListMapper : ITodoListMapper
 
 	private ProjectDto? MapProjectToDto(ProjectModel? projectModel)
 	{
-		if (projectModel is null) 
+		if (projectModel is null)
 			return null;
 
 		ProjectDto? projectDto = _mapper.Map<ProjectDto>(projectModel);

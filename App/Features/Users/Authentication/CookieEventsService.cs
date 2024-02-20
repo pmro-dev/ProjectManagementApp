@@ -32,7 +32,7 @@ public class CookieEventsService : ICookieEventsService
 
 		UserDto signingUserDto = _identityService.CreateUser(identity, authenticationClaim);
 
-		if (await _userRepository.IsAccountExistedAsync(signingUserDto.Email))
+		if (await _userRepository.DoesAccountExistAsync(signingUserDto.Email))
 		{
 			await _userService.UpdateUserModelAsync(signingUserDto, authenticationClaim);
 		}

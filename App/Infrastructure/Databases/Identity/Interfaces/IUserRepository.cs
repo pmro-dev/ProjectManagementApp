@@ -43,7 +43,7 @@ public interface IUserRepository : IGenericRepository<UserModel>
 	/// </summary>
 	/// <param name="userEmail">User email to check.</param>
 	/// <returns>True when account for such email already exists, false otherwise.</returns>
-	Task<bool> IsAccountExistedAsync(string userEmail);
+	Task<bool> DoesAccountExistAsync(string userEmail);
 
 
 	/// <summary>

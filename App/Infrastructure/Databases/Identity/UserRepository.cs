@@ -1,5 +1,4 @@
 ﻿using App.Features.Exceptions.Throw;
-using App.Features.TodoLists.Common.Models;
 using App.Features.Users.Common.Models;
 using App.Features.Users.Common.Roles.Models;
 using App.Infrastructure.Databases.Common;
@@ -12,16 +11,13 @@ namespace App.Infrastructure.Databases.Identity;
 ///<inheritdoc />
 public class UserRepository : GenericRepository<UserModel>, IUserRepository
 {
-	private readonly CustomIdentityDbContext _identityContext;
 	private readonly ILogger<UserRepository> _logger;
 	private readonly DbSet<UserModel> _dbSet;
 
 	public UserRepository(CustomIdentityDbContext identityContext, ILogger<UserRepository> logger) : base(identityContext, logger)
 	{
-		_identityContext = identityContext;
-		_logger = logger;
-
 		_dbSet = identityContext.Set<UserModel>();
+		_logger = logger;
 	}
 
 	///<inheritdoc />
@@ -29,10 +25,9 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 	{
 		ExceptionsService.WhenArgumentIsInvalidThrow(nameof(GetWithDetailsAsync), userId, nameof(userId), _logger);
 
-		UserModel? userWithDetailsFromDb = await _identityContext
-			.Set<UserModel>()
+		UserModel? userWithDetailsFromDb = await _dbSet
 			.Where(user => user.Id == userId)
-			.Include(user => user.UserRoles)
+			.Include(user => user.Roles)
 			.SingleOrDefaultAsync();
 
 		return userWithDetailsFromDb;
@@ -46,9 +41,7 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 
 		Expression<Func<UserModel, bool>> userDataPredicateExpression = (UserModel user) => user.Username == userLogin && user.Password == userPassword;
 
-		return await _identityContext
-			.Set<UserModel>()
-			.SingleOrDefaultAsync(userDataPredicateExpression);
+		return await _dbSet.SingleOrDefaultAsync(userDataPredicateExpression);
 	}
 
 	///<inheritdoc />
@@ -56,19 +49,17 @@ public class UserRepository : GenericRepository<UserModel>, IUserRepository
 	{
 		ExceptionsService.WhenArgumentIsInvalidThrow(nameof(IsNameTakenAsync), userName, nameof(userName), _logger);
 
-		bool result = await _identityContext
-			.Set<UserModel>()
+		bool result = await _dbSet
 			.AnyAsync(user => user.Username == userName);
 
 		return result;
 	}
 
-	public async Task<bool> IsAccountExistedAsync(string userEmail)
+	public async Task<bool> DoesAccountExistAsync(string userEmail)
 	{
-		ExceptionsService.WhenArgumentIsInvalidThrow(nameof(IsAccountExistedAsync), userEmail, nameof(userEmail), _logger);
+		ExceptionsService.WhenArgumentIsInvalidThrow(nameof(DoesAccountExistAsync), userEmail, nameof(userEmail), _logger);
 
-		bool result = await _identityContext
-			.Set<UserModel>()
+		bool result = await _dbSet
 			.AnyAsync(user => user.Email == userEmail);
 
 		return result;

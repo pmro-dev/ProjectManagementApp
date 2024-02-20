@@ -32,7 +32,7 @@ public static class BudgetMapper
 		#endregion
 
 
-		#region Join Tables Mapping
+		#region Join Tables
 
 			#region Model - DTO
 				profile.CreateMap<BudgetTagModel, BudgetTagDto>();
