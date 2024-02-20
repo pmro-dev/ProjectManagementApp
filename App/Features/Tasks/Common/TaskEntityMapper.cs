@@ -1,7 +1,10 @@
-﻿using App.Features.Tags.Common.Models;
+﻿using App.Features.Exceptions.Throw;
+using App.Features.Tags.Common.Interfaces;
+using App.Features.Tags.Common.Models;
 using App.Features.Tasks.Common.Interfaces;
 using App.Features.Tasks.Common.Models;
 using App.Features.Tasks.Common.TaskTags.Common;
+using App.Features.Tasks.Common.TaskTags.Common.Interfaces;
 using App.Features.Tasks.Create.Models;
 using App.Features.Tasks.Delete.Models;
 using App.Features.Tasks.Edit.Models;
@@ -13,13 +16,18 @@ public class TaskEntityMapper : ITaskEntityMapper
 {
 	private readonly IServiceProvider _serviceProvider;
 	private readonly ITaskEntityFactory _taskEntityFactory;
+	private readonly ITaskTagFactory _taskTagFactory;
+	private readonly ITagFactory _tagFactory;
 	private readonly ILogger<TaskEntityMapper> _logger;
 
-	public TaskEntityMapper(IServiceProvider serviceProvider, ILogger<TaskEntityMapper> logger, ITaskEntityFactory taskEntityFactory)
+	public TaskEntityMapper(IServiceProvider serviceProvider, ITaskEntityFactory taskEntityFactory, ITaskTagFactory taskTagFactory, 
+		ITagFactory tagFactory, ILogger<TaskEntityMapper> logger)
 	{
 		_serviceProvider = serviceProvider;
 		_logger = logger;
 		_taskEntityFactory = taskEntityFactory;
+		_taskTagFactory = taskTagFactory;
+		_tagFactory = tagFactory;
 	}
 
 	public TaskDeleteInputDto TransferToDto(TaskDeleteInputVM deleteInputVM)
@@ -85,7 +93,11 @@ public class TaskEntityMapper : ITaskEntityMapper
 		taskDto.Status = taskModel.Status;
 		taskDto.Title = taskModel.Title;
 		taskDto.TodoListId = taskModel.TodoListId;
-		taskDto.OwnerId = taskModel.OwnerId;
+
+
+		ExceptionsService.WhenPropertyIsNullOrEmptyThrow(nameof(MapTaskToDto), taskModel.OwnerId, nameof(taskModel.OwnerId), _logger);
+		taskDto.OwnerId = taskModel.OwnerId!;
+
 
 		mappedObjects[taskModel] = taskDto;
 
@@ -115,7 +127,7 @@ public class TaskEntityMapper : ITaskEntityMapper
 		if (mappedObjects.TryGetValue(tagModel, out var mappedObject))
 			return (TagDto)mappedObject;
 
-		TagDto tagDto = _taskEntityFactory.CreateTagDto();
+		TagDto tagDto = _tagFactory.CreateDto();
 		tagDto.Id = tagModel.Id;
 		tagDto.Title = tagModel.Title;
 
@@ -131,7 +143,7 @@ public class TaskEntityMapper : ITaskEntityMapper
 		if (mappedObjects.TryGetValue(taskTagModel, out var mappedObject))
 			return (TaskTagDto)mappedObject;
 
-		var taskTagDto = _taskEntityFactory.CreateTaskTagDto();
+		var taskTagDto = _taskTagFactory.CreateDto();
 		taskTagDto.TaskId = taskTagModel.TaskId;
 		taskTagDto.TagId = taskTagModel.TagId;
 
@@ -193,7 +205,7 @@ public class TaskEntityMapper : ITaskEntityMapper
 		if (mappedObjects.TryGetValue(taskTagDto, out var mappedObject))
 			return (TaskTagModel)mappedObject;
 
-		TaskTagModel taskTagModel = _taskEntityFactory.CreateTaskTagModel();
+		TaskTagModel taskTagModel = _taskTagFactory.CreateModel();
 		taskTagModel.TagId = taskTagDto.TagId;
 		taskTagModel.TaskId = taskTagDto.TaskId;
 
@@ -210,7 +222,7 @@ public class TaskEntityMapper : ITaskEntityMapper
 		if (mappedObjects.TryGetValue(tagDto, out var mappedObject))
 			return (TagModel)mappedObject;
 
-		TagModel tagModel = _taskEntityFactory.CreateTagModel();
+		TagModel tagModel = _tagFactory.CreateModel();
 		tagModel.Id = tagDto.Id;
 		tagModel.Title = tagDto.Title;
 
