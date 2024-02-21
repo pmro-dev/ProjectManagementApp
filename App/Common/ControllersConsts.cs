@@ -69,5 +69,18 @@ public static class ControllersConsts
 		public const string DeleteAction = nameof(ProjectController.Delete);
 		public const string DeletePostAction = nameof(ProjectController.DeletePost);
 		public const string ShowAction = nameof(ProjectController.Show);
+
+		public const string DeleteClientPostAction = nameof(ProjectController.DeleteClient);
+		public const string DeleteTagPostAction = nameof(ProjectController.DeleteTag);
+	}
+
+	public readonly struct TagCtrl
+	{
+		public const string Name = "Tag";
+		public const string CreateAction = nameof(TagController.Create);
+		public const string EditAction = nameof(TagController.Edit);
+		public const string DeleteAction = nameof(TagController.Delete);
+		public const string DeletePostAction = nameof(TagController.DeletePost);
+		public const string ShowAction = nameof(TagController.Show);
 	}
 }

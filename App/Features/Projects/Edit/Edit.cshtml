@@ -1,0 +1,92 @@
+﻿@using App.Common.ViewModels
+@using App.Features.Projects.Edit.Models
+@using static App.Common.ControllersConsts
+@using static App.Common.Views.ViewsConsts
+@model WrapperViewModel<ProjectEditInputVM, ProjectEditOutputVM>
+
+@{
+	ViewData["Title"] = "Edit";
+	Layout = SharedViews.DefaultLayout;
+	ProjectEditInputVM inputVM = Model.InputVM;
+	ProjectEditOutputVM outputVM = Model.OutputVM;
+	string clientFullName = string.Empty;
+	string textGap = " ";
+}
+
+<h4>Edit Project</h4>
+<hr />
+
+<div class="row">
+	<div class="col-md-4">
+		<form asp-action=@ProjectCtrl.EditAction method="post">
+
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+			<input type="hidden" asp-for="@inputVM.Id" value="@outputVM.Id" />
+			<input asp-for="@inputVM.OwnerId" type="hidden" value="@outputVM.OwnerId" />
+
+			<div class="form-group">
+				<label asp-for="@inputVM.Title" class="control-label"></label>
+				<input asp-for="@inputVM.Title" class="form-control" value="@outputVM.Title" />
+				<span asp-validation-for="@inputVM.Title" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="@inputVM.Description" class="control-label"></label>
+				<input asp-for="@inputVM.Description" class="form-control" value="@outputVM.Title" />
+				<span asp-validation-for="@inputVM.Description" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="@inputVM.Deadline" class="control-label"></label>
+				<input asp-for="@inputVM.Deadline" class="form-control" value="@outputVM.Deadline" type="datetime-local" />
+				<span asp-validation-for="@inputVM.Deadline" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="@inputVM.Status" class="control-label" style="font-weight: 600;"></label>
+				<select asp-for="@inputVM.Status" class="form-select" asp-items="@outputVM.StatusSelector"></select>
+				<span asp-validation-for="@inputVM.Status" class="text-danger"></span>
+			</div>
+			<div class="input-group mb-3">
+				<button class="btn btn-outline-secondary" type="button" id="button-addon1">Add</button>
+				<input type="text" class="form-control" placeholder="Your-Tag-Name" aria-label="Tag to add" aria-describedby="button-add-tag">
+				<div class="form-group">
+					@{
+						foreach (var tag in outputVM.Tags)
+						{
+							<div class="form-group">
+								<label asp-for="@tag.Title">@tag.Title</label>
+								<button type="button" asp-controller="@ProjectCtrl.Name" asp-action="@ProjectCtrl.DeleteTagPostAction" asp-route-id="@tag.Id">X</button>
+							</div>
+						}
+					}
+				</div>
+			</div>
+			<div class="input-group mb-3">
+				<button class="btn btn-outline-secondary" type="button" id="button-addon1">Add</button>
+				<input type="text" class="form-control" placeholder="Your-Tag-Name" aria-label="Tag to add" aria-describedby="button-add-tag">
+				<div class="form-group">
+					@{
+						foreach (var client in outputVM.Clients)
+						{
+							<div class="form-group">
+								@clientFullName = @string.Concat(client.FirstName, textGap, client.LastName);
+								<label asp-for="@client">@clientFullName</label>
+								<button type="button" asp-controller="@ProjectCtrl.Name" asp-action="@ProjectCtrl.DeleteClientPostAction" asp-route-id="@client.Id">X</button>
+							</div>
+						}
+					}
+				</div>
+			</div>
+			<div class="form-group">
+				<input type="submit" value="Save" class="btn" style="background-color: #671dff; color: white; font-weight: 500;" />
+				<a asp-controller=@ProjectCtrl.Name asp-action=@ProjectCtrl.ShowAction asp-route-id="@outputVM.Id" class="btn btn-primary">Back</a>
+			</div>
+
+		</form>
+	</div>
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync(SharedViews.ValidationPartial);
+	}
+}
