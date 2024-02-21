@@ -19,10 +19,11 @@ public class ProjectEditOutputVM : IProjectEditOutputVM
 
     public Guid BudgetId { get; set; }
 
-    public ICollection<UserModel> Clients { get; set; } = new List<UserModel>();
+    public ICollection<UserModel> ActualClients { get; set; } = new List<UserModel>();
 	public ICollection<ProjectUserModel> ProjectClients { get; set; } = new List<ProjectUserModel>();
+	public ICollection<UserModel> OtherClients { get; set; } = new List<UserModel>();
 
-    public string OwnerId { get; set; } = string.Empty;
+	public string OwnerId { get; set; } = string.Empty;
 
     public ProjectStatusType Status { get; set; }
 

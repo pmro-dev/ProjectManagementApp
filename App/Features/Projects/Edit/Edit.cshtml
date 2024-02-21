@@ -1,5 +1,7 @@
 ﻿@using App.Common.ViewModels
 @using App.Features.Projects.Edit.Models
+@using App.Features.Tags.Common.Models
+@using App.Features.Users.Common.Models
 @using static App.Common.ControllersConsts
 @using static App.Common.Views.ViewsConsts
 @model WrapperViewModel<ProjectEditInputVM, ProjectEditOutputVM>
@@ -11,6 +13,17 @@
 	ProjectEditOutputVM outputVM = Model.OutputVM;
 	string clientFullName = string.Empty;
 	string textGap = " ";
+	UserModel? clientToAdd;
+	string tagToAdd = string.Empty;
+
+	object AddTagToProject(object sender, EventArgs args)
+	{
+		inputVM.Tags.Add(
+			new TagModel() { Title = tagToAdd }
+		);
+
+		return sender;
+	}
 }
 
 <h4>Edit Project</h4>
@@ -18,6 +31,7 @@
 
 <div class="row">
 	<div class="col-md-4">
+		<!-- BASIC DATA FORM -->
 		<form asp-action=@ProjectCtrl.EditAction method="post">
 
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -30,57 +44,88 @@
 				<input asp-for="@inputVM.Title" class="form-control" value="@outputVM.Title" />
 				<span asp-validation-for="@inputVM.Title" class="text-danger"></span>
 			</div>
+
 			<div class="form-group">
 				<label asp-for="@inputVM.Description" class="control-label"></label>
-				<input asp-for="@inputVM.Description" class="form-control" value="@outputVM.Title" />
+				<input asp-for="@inputVM.Description" class="form-control" value="@outputVM.Description" />
 				<span asp-validation-for="@inputVM.Description" class="text-danger"></span>
 			</div>
+
 			<div class="form-group">
 				<label asp-for="@inputVM.Deadline" class="control-label"></label>
 				<input asp-for="@inputVM.Deadline" class="form-control" value="@outputVM.Deadline" type="datetime-local" />
 				<span asp-validation-for="@inputVM.Deadline" class="text-danger"></span>
 			</div>
+
 			<div class="form-group">
 				<label asp-for="@inputVM.Status" class="control-label" style="font-weight: 600;"></label>
 				<select asp-for="@inputVM.Status" class="form-select" asp-items="@outputVM.StatusSelector"></select>
 				<span asp-validation-for="@inputVM.Status" class="text-danger"></span>
 			</div>
+
+
+			<!-- MANAGE CLIENTS FOR PROJECT -->
 			<div class="input-group mb-3">
-				<button class="btn btn-outline-secondary" type="button" id="button-addon1">Add</button>
-				<input type="text" class="form-control" placeholder="Your-Tag-Name" aria-label="Tag to add" aria-describedby="button-add-tag">
+				<div class="form-group">
+					<button class="btn btn-outline-secondary" type="button" id="button-add-client-to-project"
+							asp-controller="@ProjectCtrl.Name"
+							asp-action="@ProjectCtrl.AddClientPostAction"
+							asp-route-projectId="@inputVM.Id"
+							asp-route-clientId="@clientToAdd.Id">
+						Add
+					</button>
+					<label asp-for="@clientToAdd" class="control-label" style="font-weight: 600;"></label>
+					<select asp-for="@clientToAdd" class="form-select" asp-items="@outputVM.OtherClients"></select>
+					<span asp-validation-for="@clientToAdd" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					@{
+						foreach (var client in outputVM.ActualClients)
+						{
+							<div class="form-group">
+								@clientFullName = @string.Concat(client.FirstName, textGap, client.LastName);
+								<label asp-for="@client">@clientFullName</label>
+								<button type="button" asp-controller="@ProjectCtrl.Name"
+										asp-action="@ProjectCtrl.DeleteClientPostAction"
+										asp-route-projectId="@inputVM.Id"
+										asp-route-clientId="@client.Id">
+									X
+								</button>
+							</div>
+						}
+					}
+				</div>
+			</div>
+
+
+			<!-- MANAGE TAGS FOR PROJECT -->
+			<div class="input-group mb-3">
+				<button class="btn btn-outline-secondary" type="button" id="button-addon1" onclick="@AddTagToProject(this, EventArgs.Empty)">
+					Add
+				</button>
+				<input type="text" class="form-control" placeholder="Your-Tag-Name" aria-label="Tag to add" aria-describedby="button-add-tag" asp-for="@tagToAdd">
 				<div class="form-group">
 					@{
 						foreach (var tag in outputVM.Tags)
 						{
 							<div class="form-group">
 								<label asp-for="@tag.Title">@tag.Title</label>
-								<button type="button" asp-controller="@ProjectCtrl.Name" asp-action="@ProjectCtrl.DeleteTagPostAction" asp-route-id="@tag.Id">X</button>
+								<button type="button" asp-controller="@ProjectCtrl.Name"
+										asp-action="@ProjectCtrl.DeleteTagPostAction"
+										asp-route-id="@tag.Id">
+									X
+								</button>
 							</div>
 						}
 					}
 				</div>
 			</div>
-			<div class="input-group mb-3">
-				<button class="btn btn-outline-secondary" type="button" id="button-addon1">Add</button>
-				<input type="text" class="form-control" placeholder="Your-Tag-Name" aria-label="Tag to add" aria-describedby="button-add-tag">
-				<div class="form-group">
-					@{
-						foreach (var client in outputVM.Clients)
-						{
-							<div class="form-group">
-								@clientFullName = @string.Concat(client.FirstName, textGap, client.LastName);
-								<label asp-for="@client">@clientFullName</label>
-								<button type="button" asp-controller="@ProjectCtrl.Name" asp-action="@ProjectCtrl.DeleteClientPostAction" asp-route-id="@client.Id">X</button>
-							</div>
-						}
-					}
-				</div>
-			</div>
+
+
 			<div class="form-group">
 				<input type="submit" value="Save" class="btn" style="background-color: #671dff; color: white; font-weight: 500;" />
 				<a asp-controller=@ProjectCtrl.Name asp-action=@ProjectCtrl.ShowAction asp-route-id="@outputVM.Id" class="btn btn-primary">Back</a>
 			</div>
-
 		</form>
 	</div>
 </div>

@@ -2,6 +2,7 @@
 using App.Features.Projects.Common.Helpers;
 using App.Features.Projects.Common.Models;
 using App.Features.Tags.Common.Models;
+using App.Features.Users.Common.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
@@ -17,9 +18,11 @@ public interface IProjectEditOutputVM
 
     Guid BudgetId { get; set; }
 
-    ICollection<ProjectUserModel> ProjectClients { get; set; }
+	ICollection<UserModel> ActualClients { get; set; } 
+	ICollection<ProjectUserModel> ProjectClients { get; set; }
+	ICollection<UserModel> OtherClients { get; set; }
 
-    string OwnerId { get; set; }
+	string OwnerId { get; set; }
 
     ProjectStatusType Status { get; set; }
 

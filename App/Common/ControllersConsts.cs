@@ -72,6 +72,9 @@ public static class ControllersConsts
 
 		public const string DeleteClientPostAction = nameof(ProjectController.DeleteClient);
 		public const string DeleteTagPostAction = nameof(ProjectController.DeleteTag);
+
+		public const string AddClientPostAction = nameof(ProjectController.AddClient);
+		public const string AddTagPostAction = nameof(ProjectController.AddTag);
 	}
 
 	public readonly struct TagCtrl
