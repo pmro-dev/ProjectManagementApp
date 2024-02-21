@@ -33,7 +33,7 @@ interface IProjectModel
 	[ForeignKey(nameof(BudgetId))]
 	BudgetModel? Budget { get; set; }
 
-	ICollection<UserProjectModel> Clients { get; set; }
+	ICollection<ProjectUserModel> ProjectClients { get; set; }
 
 	ICollection<TodoListModel> TodoLists { get; set; }
 

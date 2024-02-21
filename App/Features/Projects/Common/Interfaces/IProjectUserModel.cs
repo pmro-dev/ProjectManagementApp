@@ -2,7 +2,7 @@
 
 namespace App.Features.Projects.Common.Interfaces;
 
-public interface IUserProjectModel
+public interface IProjectUserModel
 {
     [Key]
     [Required]

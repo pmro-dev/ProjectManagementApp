@@ -47,7 +47,7 @@ public class CustomAppDbContext : DbContext
 		#region Project - User (separate table entity)
 
 			modelBuilder.Entity<ProjectModel>().OwnsMany(
-				p => p.Clients, owned =>
+				p => p.ProjectClients, owned =>
 				{
 					owned.WithOwner().HasForeignKey(up => up.ProjectId);
 					owned.Property<Guid>(up => up.Id);

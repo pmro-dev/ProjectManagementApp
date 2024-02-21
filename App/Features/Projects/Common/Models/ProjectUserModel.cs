@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace App.Features.Projects.Common.Models;
 
-public class UserProjectModel : IUserProjectModel
+public class ProjectUserModel : IProjectUserModel
 {
     [Key]
     [Required]
@@ -18,7 +18,7 @@ public class UserProjectModel : IUserProjectModel
     [Required]
     public Guid ProjectId { get; set; }
 
-    public UserProjectModel(string ownerId, Guid projectId)
+    public ProjectUserModel(string ownerId, Guid projectId)
     {
         OwnerId = ownerId;
         ProjectId = projectId;

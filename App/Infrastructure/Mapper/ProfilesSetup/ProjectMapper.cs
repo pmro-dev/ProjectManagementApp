@@ -25,7 +25,7 @@ public static class ProjectMapper
 			.ForMember(dest => dest.ProjectTeams, opt => opt.MapFrom(src => src.ProjectTeams))
 			//.ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags))
 			.ForMember(dest => dest.ProjectTags, opt => opt.MapFrom(src => src.ProjectTags))
-			.ForMember(dest => dest.Clients, opt => opt.MapFrom(src => src.Clients))
+			.ForMember(dest => dest.Clients, opt => opt.MapFrom(src => src.ProjectClients))
 			.ForMember(dest => dest.Owner, opt => opt.Ignore());
 
 
@@ -33,21 +33,21 @@ public static class ProjectMapper
 			.Include<ProjectModel, ProjectDto>()
 			.ForMember(dest => dest.ProjectTeams, opt => opt.MapFrom(src => src.ProjectTeams))
 			.ForMember(dest => dest.ProjectTags, opt => opt.MapFrom(src => src.ProjectTags))
-			.ForMember(dest => dest.Clients, opt => opt.MapFrom(src => src.Clients))
+			.ForMember(dest => dest.Clients, opt => opt.MapFrom(src => src.ProjectClients))
 			.ConstructUsing((src, context) => context.Mapper.Map<ProjectModel, ProjectDto>((ProjectModel)src));
 
 
 		profile.CreateMap<ProjectDto, ProjectModel>()
 			.ForMember(dest => dest.ProjectTeams, opt => opt.MapFrom(src => src.ProjectTeams))
 			.ForMember(dest => dest.ProjectTags, opt => opt.MapFrom(src => src.ProjectTags))
-			.ForMember(dest => dest.Clients, opt => opt.MapFrom(src => src.Clients));
+			.ForMember(dest => dest.ProjectClients, opt => opt.MapFrom(src => src.Clients));
 
 
 		profile.CreateMap<IProjectDto, IProjectModel>()
 			.Include<ProjectDto, ProjectModel>()
 			.ForMember(dest => dest.ProjectTeams, opt => opt.MapFrom(src => src.ProjectTeams))
 			.ForMember(dest => dest.ProjectTags, opt => opt.MapFrom(src => src.ProjectTags))
-			.ForMember(dest => dest.Clients, opt => opt.MapFrom(src => src.Clients))
+			.ForMember(dest => dest.ProjectClients, opt => opt.MapFrom(src => src.Clients))
 			.ConstructUsing((src, context) => context.Mapper.Map<ProjectDto, ProjectModel>((ProjectDto)src));
 
 
@@ -83,19 +83,19 @@ public static class ProjectMapper
 			.ConstructUsing((src, context) => context.Mapper.Map<ProjectTagDto, ProjectTagModel>((ProjectTagDto)src));
 
 
-		profile.CreateMap<UserProjectModel, UserProjectDto>();
+		profile.CreateMap<ProjectUserModel, UserProjectDto>();
 
 
-		profile.CreateMap<IUserProjectModel, IUserProjectDto>()
-			.Include<UserProjectModel, UserProjectDto>()
-			.ConstructUsing((src, context) => context.Mapper.Map<UserProjectModel, UserProjectDto>((UserProjectModel)src));
+		profile.CreateMap<IProjectUserModel, IUserProjectDto>()
+			.Include<ProjectUserModel, UserProjectDto>()
+			.ConstructUsing((src, context) => context.Mapper.Map<ProjectUserModel, UserProjectDto>((ProjectUserModel)src));
 
 
-		profile.CreateMap<UserProjectDto, UserProjectModel>();
+		profile.CreateMap<UserProjectDto, ProjectUserModel>();
 
 
-		profile.CreateMap<IUserProjectDto, IUserProjectModel>()
-			.Include<UserProjectDto, UserProjectModel>()
-			.ConstructUsing((src, context) => context.Mapper.Map<UserProjectDto, UserProjectModel>((UserProjectDto)src));
+		profile.CreateMap<IUserProjectDto, IProjectUserModel>()
+			.Include<UserProjectDto, ProjectUserModel>()
+			.ConstructUsing((src, context) => context.Mapper.Map<UserProjectDto, ProjectUserModel>((UserProjectDto)src));
 	}
 }

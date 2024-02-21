@@ -34,7 +34,7 @@ public class ProjectModel : IProjectModel
 	[ForeignKey(nameof(BudgetId))]
 	public virtual BudgetModel? Budget { get; set; }
 
-	public ICollection<UserProjectModel> Clients { get; set; }
+	public ICollection<ProjectUserModel> ProjectClients { get; set; }
 
 	public string? OwnerId {  get; set; }
 
@@ -70,7 +70,7 @@ public class ProjectModel : IProjectModel
 		LastUpdated = DateTime.Now;
 		BudgetId = Guid.Empty;
 
-		Clients = new List<UserProjectModel>();
+		ProjectClients = new List<ProjectUserModel>();
 		TodoLists = new List<TodoListModel>();
 		Teams = new List<TeamModel>();
 		ProjectTeams = new List<ProjectTeamModel>();
@@ -88,7 +88,7 @@ public class ProjectModel : IProjectModel
 		LastUpdated = DateTime.Now;
 		BudgetId = budgetId;
 
-		Clients = new List<UserProjectModel>();
+		ProjectClients = new List<ProjectUserModel>();
 		TodoLists = new List<TodoListModel>();
 		Teams = new List<TeamModel>();
 		ProjectTeams = new List<ProjectTeamModel>();
