@@ -137,19 +137,19 @@ public class ProjectController : Controller
 
 	[HttpGet]
 	[Route(CustomRoutes.ProjectShowTodoListsBoardRoute)]
-	public async Task<IActionResult> ShowTodoListsBoard(Guid id, int? pageNumber, int? itemsPerPageCount)
+	public async Task<IActionResult> ShowTodoLists(Guid id, int? pageNumber, int? itemsPerPageCount)
 	{
 		int currentPageNumber = pageNumber ?? FirstPageNumber;
 		int itemsPerPageAmount = itemsPerPageCount ?? DefaultItemsPerPageCount;
 
 		// TODO write GUID exception valudation
 		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), id, nameof(id), _logger);
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTodoListsBoard), currentPageNumber, nameof(currentPageNumber), _logger);
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTodoListsBoard), itemsPerPageAmount, nameof(itemsPerPageAmount), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTodoLists), currentPageNumber, nameof(currentPageNumber), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTodoLists), itemsPerPageAmount, nameof(itemsPerPageAmount), _logger);
 
 		//TODO
 		// Here is specified selector for sorting to do lists by progress made but in the final version, user should choose: sort by the name, best or worst progress... 
-		var response = await _mediator.Send(new ShowProjectTodoListsQuery(id, brieflyTodoList => brieflyTodoList.ProgressMade, currentPageNumber, itemsPerPageAmount));
+		var response = await _mediator.Send(new ShowProjectTodoListsBoardQuery(id, brieflyTodoList => brieflyTodoList.ProgressMade, currentPageNumber, itemsPerPageAmount));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
 			return View(ProjectViews.Show, response.Data);
@@ -159,20 +159,43 @@ public class ProjectController : Controller
 
 	[HttpGet]
 	[Route(CustomRoutes.ProjectShowStatisticsBoardRoute)]
-	public async Task<IActionResult> ShowStatisticsBoard(Guid id, int? pageNumber, int? itemsPerPageCount)
+	public async Task<IActionResult> ShowStatistics(Guid id, int? pageNumber, int? itemsPerPageCount)
 	{
 		int currentPageNumber = pageNumber ?? FirstPageNumber;
 		int itemsPerPageAmount = itemsPerPageCount ?? DefaultItemsPerPageCount;
 
 		// TODO write GUID exception valudation
 		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), id, nameof(id), _logger);
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTodoListsBoard), currentPageNumber, nameof(currentPageNumber), _logger);
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTodoListsBoard), itemsPerPageAmount, nameof(itemsPerPageAmount), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowStatistics), currentPageNumber, nameof(currentPageNumber), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowStatistics), itemsPerPageAmount, nameof(itemsPerPageAmount), _logger);
 
 		//TODO
 		// Here is specified selector for sorting to do lists, in the final version, user should choose: sort by the name, best or worst progress... 
 		// Here is specified selector for sorting teams, in the final version, user should choose: sort by the name, best or worst progress... 
-		var response = await _mediator.Send(new ShowProjectStatisticsQuery(id, brieflyTodoList => brieflyTodoList.ProgressMade, brieflyTeams => brieflyTeams.Name, currentPageNumber, itemsPerPageAmount));
+		var response = await _mediator.Send(new ShowProjectStatisticsBoardQuery(id, brieflyTodoList => brieflyTodoList.ProgressMade, brieflyTeams => brieflyTeams.Name, currentPageNumber, itemsPerPageAmount));
+
+		if (response.StatusCode == StatusCodes.Status200OK)
+			return View(ProjectViews.Show, response.Data);
+
+		return BadRequest();
+	}
+
+	[HttpGet]
+	[Route(CustomRoutes.ProjectShowTeamsBoardRoute)]
+	public async Task<IActionResult> ShowTeams(Guid id, int? pageNumber, int? itemsPerPageCount)
+	{
+		int currentPageNumber = pageNumber ?? FirstPageNumber;
+		int itemsPerPageAmount = itemsPerPageCount ?? DefaultItemsPerPageCount;
+
+		// TODO write GUID exception valudation
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), id, nameof(id), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTeams), currentPageNumber, nameof(currentPageNumber), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTeams), itemsPerPageAmount, nameof(itemsPerPageAmount), _logger);
+
+		//TODO
+		// Here is specified selector for sorting to do lists, in the final version, user should choose: sort by the name, best or worst progress... 
+		// Here is specified selector for sorting teams, in the final version, user should choose: sort by the name, best or worst progress... 
+		var response = await _mediator.Send(new ShowProjectTeamsBoardQuery(id, team => team.Name, currentPageNumber, itemsPerPageAmount));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
 			return View(ProjectViews.Show, response.Data);
