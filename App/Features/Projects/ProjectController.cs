@@ -10,6 +10,7 @@ using App.Features.Projects.Edit.Models;
 using App.Features.Projects.Create;
 using App.Features.Projects.Edit;
 using App.Features.Projects.Delete;
+using App.Features.Projects.Show;
 
 namespace App.Features.Projects;
 
@@ -46,7 +47,7 @@ public class ProjectController : Controller
 		var response = await _mediator.Send(new CreateProjectCommand(inputVM));
 
 		if (response.StatusCode == StatusCodes.Status201Created)
-			return RedirectToAction(ProjectCtrl.ShowAction, ProjectCtrl.Name, response.Data);
+			return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
 
 		if (response.StatusCode == StatusCodesExtension.EntityNameTaken)
 		{
@@ -135,18 +136,43 @@ public class ProjectController : Controller
 	}
 
 	[HttpGet]
-	[Route(CustomRoutes.ProjectShowRoute)]
-	public async Task<IActionResult> Show(Guid id, DateTime? filterDueDate, int? pageNumber, int? itemsPerPageCount)
+	[Route(CustomRoutes.ProjectShowTodoListsBoardRoute)]
+	public async Task<IActionResult> ShowTodoListsBoard(Guid id, int? pageNumber, int? itemsPerPageCount)
 	{
 		int currentPageNumber = pageNumber ?? FirstPageNumber;
 		int itemsPerPageAmount = itemsPerPageCount ?? DefaultItemsPerPageCount;
 
 		// TODO write GUID exception valudation
 		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), id, nameof(id), _logger);
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), currentPageNumber, nameof(currentPageNumber), _logger);
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), itemsPerPageAmount, nameof(itemsPerPageAmount), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTodoListsBoard), currentPageNumber, nameof(currentPageNumber), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTodoListsBoard), itemsPerPageAmount, nameof(itemsPerPageAmount), _logger);
 
-		var response = await _mediator.Send(new ShowProjectQuery(id, filterDueDate, task => task.Deadline, currentPageNumber, itemsPerPageAmount));
+		//TODO
+		// Here is specified selector for sorting to do lists by progress made but in the final version, user should choose: sort by the name, best or worst progress... 
+		var response = await _mediator.Send(new ShowProjectTodoListsQuery(id, brieflyTodoList => brieflyTodoList.ProgressMade, currentPageNumber, itemsPerPageAmount));
+
+		if (response.StatusCode == StatusCodes.Status200OK)
+			return View(ProjectViews.Show, response.Data);
+
+		return BadRequest();
+	}
+
+	[HttpGet]
+	[Route(CustomRoutes.ProjectShowStatisticsBoardRoute)]
+	public async Task<IActionResult> ShowStatisticsBoard(Guid id, int? pageNumber, int? itemsPerPageCount)
+	{
+		int currentPageNumber = pageNumber ?? FirstPageNumber;
+		int itemsPerPageAmount = itemsPerPageCount ?? DefaultItemsPerPageCount;
+
+		// TODO write GUID exception valudation
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), id, nameof(id), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTodoListsBoard), currentPageNumber, nameof(currentPageNumber), _logger);
+		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTodoListsBoard), itemsPerPageAmount, nameof(itemsPerPageAmount), _logger);
+
+		//TODO
+		// Here is specified selector for sorting to do lists, in the final version, user should choose: sort by the name, best or worst progress... 
+		// Here is specified selector for sorting teams, in the final version, user should choose: sort by the name, best or worst progress... 
+		var response = await _mediator.Send(new ShowProjectStatisticsQuery(id, brieflyTodoList => brieflyTodoList.ProgressMade, brieflyTeams => brieflyTeams.Name, currentPageNumber, itemsPerPageAmount));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
 			return View(ProjectViews.Show, response.Data);

@@ -57,7 +57,9 @@ public static class CustomRoutes
 	#region Project Routes
 
 	public const string ProjectControllerRoute = ProjectCtrl.Name;
-	public const string ProjectShowRoute = "/Boards/[action]/[controller]/{projectId:guid}";
+	//public const string ProjectShowRoute = "/Boards/[action]/[controller]/{projectId:guid}";
+	public const string ProjectShowTodoListsBoardRoute = "[controller]/{projectId:guid}/Board/[action]";
+	public const string ProjectShowStatisticsBoardRoute = "[controller]/{projectId:guid}/Board/[action]";
 	public const string ProjectCreateRoute = "/[controller]/[action]";
 	public const string ProjectEditRoute = "/[controller]/{projectId:guid}/[action]";
 
