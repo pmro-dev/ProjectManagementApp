@@ -7,7 +7,8 @@ using static App.Common.ControllersConsts;
 using static App.Common.Views.ViewsConsts;
 using App.Features.Projects.Create.Models;
 using App.Features.Projects.Edit.Models;
-using App.Features.Tags.Common.Models;
+using App.Features.Projects.Create;
+using App.Features.Projects.Edit;
 using App.Features.Projects.Delete;
 
 namespace App.Features.Projects;
