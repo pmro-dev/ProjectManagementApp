@@ -58,9 +58,9 @@ public static class CustomRoutes
 
 	public const string ProjectControllerRoute = ProjectCtrl.Name;
 	//public const string ProjectShowRoute = "/Boards/[action]/[controller]/{projectId:guid}";
-	public const string ProjectShowTodoListsBoardRoute = "[controller]/{projectId:guid}/Board/[action]";
-	public const string ProjectShowStatisticsBoardRoute = "[controller]/{projectId:guid}/Board/[action]";
-	public const string ProjectShowTeamsBoardRoute = "[controller]/{projectId:guid}/Board/[action]";
+	public const string ProjectShowTodoListsBoardRoute = "/[controller]/{projectId:guid}/Board/[action]";
+	public const string ProjectShowStatisticsBoardRoute = "/[controller]/{projectId:guid}/Board/[action]";
+	public const string ProjectShowTeamsBoardRoute = "/[controller]/{projectId:guid}/Board/[action]";
 	public const string ProjectCreateRoute = "/[controller]/[action]";
 	public const string ProjectEditRoute = "/[controller]/{projectId:guid}/[action]";
 
@@ -69,6 +69,24 @@ public static class CustomRoutes
 	public const string ProjectDeleteClientPostRoute = "/[controller]/{projectId:guid}/[action]/{clientId:string}";
 
 	public const string ProjectAddTagPostRoute = "/[controller]/{projectId:guid}/[action]";
+
+	#endregion
+
+
+	#region Team Routes
+
+	private const string _SchemesPrefix = "schemes";
+	private const string _ProjectsPrefix = "projects";
+
+	public const string CreateTeamScheme = $"/[controller]/{_SchemesPrefix}/[action]";
+	public const string CreateTeamWithinProjectScope = $"/{_ProjectsPrefix}/{{projectId:guid}}/[controller]/[action]";
+	public const string EditTeamWithinProjectScope = $"/{_ProjectsPrefix}/{{projectId:guid}}/[controller]/{{teamId:guid}}/[action]";
+	public const string EditTeamScheme = $"/[controller]/{_SchemesPrefix}/{{teamId:guid}}/[action]";
+
+	public const string DeleteTeamWithinProjectScope = $"/{_ProjectsPrefix}/{{projectId:guid}}/[controller]/{{teamId:guid}}/[action]";
+	public const string DeleteTeamScheme = $"/[controller]/{_SchemesPrefix}/{{teamId:guid}}/[action]";
+	public const string ShowTeamsSchemes = $"/[controller]/{_SchemesPrefix}/[action]";
+	public const string ShowTeamsOfProject = $"{_ProjectsPrefix}/{{projectId:guid}}/[controller]/{{teamId:guid}}/[action]";
 
 	#endregion
 }

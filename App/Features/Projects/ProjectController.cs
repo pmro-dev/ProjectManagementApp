@@ -195,69 +195,10 @@ public class ProjectController : Controller
 		//TODO
 		// Here is specified selector for sorting to do lists, in the final version, user should choose: sort by the name, best or worst progress... 
 		// Here is specified selector for sorting teams, in the final version, user should choose: sort by the name, best or worst progress... 
-		var response = await _mediator.Send(new ShowProjectTeamsBoardQuery(id, team => team.Name, currentPageNumber, itemsPerPageAmount));
+		var response = await _mediator.Send(new ShowTeamsOfProjectQuery(id, team => team.Name, currentPageNumber, itemsPerPageAmount));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
 			return View(ProjectViews.Show, response.Data);
-
-		return BadRequest();
-	}
-
-	[HttpPost]
-	[Route(CustomRoutes.ProjectAddTagPostRoute)]
-	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> AddClient(Guid projectId, string clientId)
-	{
-		var response = await _mediator.Send(new AddProjectClientCommand(projectId, clientId));
-
-		if (response.StatusCode == StatusCodes.Status201Created)
-			return RedirectToAction(ProjectCtrl.ShowAction, ProjectCtrl.Name, response.Data);
-
-		if (response.StatusCode == StatusCodesExtension.EntityNameTaken)
-		{
-			ModelState.AddModelError(string.Empty, response.ErrorMessage!);
-			TempData[ModelStateHelper.ModelStateMessageKey] = response.ErrorMessage!;
-
-			return RedirectToAction(ProjectCtrl.CreateAction);
-		}
-
-		return BadRequest();
-	}
-
-	[HttpPost]
-	[Route(CustomRoutes.ProjectDeleteClientPostRoute)]
-	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> DeleteClient(Guid projectId, string clientId)
-	{
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeletePost), id, nameof(id), _logger);
-
-		var response = await _mediator.Send(new DeleteProjectClientCommand(projectId, clientId));
-
-		//TODO REDIRECT TO MAIN BOARD OF PROJECTS
-		if (response.StatusCode == StatusCodes.Status200OK)
-			return RedirectToAction(BoardsCtrl.BrieflyAction, BoardsCtrl.Name);
-
-		return BadRequest();
-	}
-
-	[HttpPost]
-	[Route(CustomRoutes.ProjectAddTagPostRoute)]
-	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> AddTag(Guid projectId, string tagTitle)
-	{
-		var response = await _mediator.Send(new CreateProjectCommand(inputVM));
-
-		if (response.StatusCode == StatusCodes.Status201Created)
-			return RedirectToAction(ProjectCtrl.ShowAction, ProjectCtrl.Name, response.Data);
-
-		if (response.StatusCode == StatusCodesExtension.EntityNameTaken)
-		{
-			ModelState.AddModelError(string.Empty, response.ErrorMessage!);
-			TempData[ModelStateHelper.ModelStateMessageKey] = response.ErrorMessage!;
-
-			return RedirectToAction(ProjectCtrl.CreateAction);
-		}
 
 		return BadRequest();
 	}

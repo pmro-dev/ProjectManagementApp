@@ -2,6 +2,7 @@
 using App.Features.Exceptions;
 using App.Features.Projects;
 using App.Features.Tasks;
+using App.Features.Teams;
 using App.Features.TodoLists;
 using App.Features.Users;
 
@@ -76,6 +77,16 @@ public static class ControllersConsts
 		public const string AddClientPostAction = nameof(ProjectController.AddClient);
 		public const string AddTagPostAction = nameof(ProjectController.AddTag);
 	}
+
+	public readonly struct TeamCtrl
+	{
+		public const string Name = "Team";
+		public const string CreateAction = nameof(TeamController.Create);
+		public const string EditAction = nameof(TeamController.Edit);
+		public const string DeleteAction = nameof(TeamController.Delete);
+		public const string DeletePostAction = nameof(TeamController.DeletePost);
+		public const string ShowAction = nameof(TeamController.Show);
+	
 
 	public readonly struct TagCtrl
 	{

@@ -4,14 +4,14 @@ using System.Linq.Expressions;
 
 namespace App.Features.Projects.Show;
 
-public class ShowProjectTeamsBoardQuery : IRequest<ShowProjectTeamsBoardQueryResponse>
+public class ShowTeamsOfProjectQuery : IRequest<ShowTeamsOfProjectQueryResponse>
 {
 	public Guid ProjectId { get; set; }
 	public int PageNumber { get; }
 	public int ItemsPerPageCount { get; }
 	public Expression<Func<TeamsBoardTeamVM, object>> OrderSelector { get; set; }
 
-	public ShowProjectTeamsBoardQuery(Guid projectId, Expression<Func<TeamsBoardTeamVM, object>> orderSelector, int pageNumber, int itemsPerPageCount)
+	public ShowTeamsOfProjectQuery(Guid projectId, Expression<Func<TeamsBoardTeamVM, object>> orderSelector, int pageNumber, int itemsPerPageCount)
 	{
 		ProjectId = projectId;
 		PageNumber = pageNumber;
@@ -20,7 +20,7 @@ public class ShowProjectTeamsBoardQuery : IRequest<ShowProjectTeamsBoardQueryRes
 	}
 }
 
-public record ShowProjectTeamsBoardQueryResponse(
+public record ShowTeamsOfProjectQueryResponse(
 	TeamsBoardOutputVM? Data,
 	string? ErrorMessage = null,
 	int StatusCode = StatusCodes.Status200OK

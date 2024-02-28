@@ -94,7 +94,7 @@ public static class Program
 		builder.Services.AddScoped<ITaskSelector, TaskSelector>();
 		builder.Services.AddScoped<ITodoListSelector, TodoListSelector>();
 
-		builder.SetupSeedDataServices();
+		//builder.SetupSeedDataServices();
 
 
 		#region SETUP AUTHENNTICATION
@@ -130,18 +130,18 @@ public static class Program
 		#endregion
 
 
-		#region POPULATE DATABASES
+		//#region POPULATE DATABASES
 
-		using (var serviceScope = app.Services.CreateScope())
-		{
-			IIdentityDbSeeder identityDbSeeder = serviceScope.ServiceProvider.GetRequiredService<IIdentityDbSeeder>();
-			await identityDbSeeder.EnsurePopulated();
+		//using (var serviceScope = app.Services.CreateScope())
+		//{
+		//	IIdentityDbSeeder identityDbSeeder = serviceScope.ServiceProvider.GetRequiredService<IIdentityDbSeeder>();
+		//	await identityDbSeeder.EnsurePopulated();
 
-			IDbSeeder dbSeeder = serviceScope.ServiceProvider.GetRequiredService<IDbSeeder>();
-			await dbSeeder.EnsurePopulated();
-		}
+		//	IDbSeeder dbSeeder = serviceScope.ServiceProvider.GetRequiredService<IDbSeeder>();
+		//	await dbSeeder.EnsurePopulated();
+		//}
 
-		#endregion
+		//#endregion
 
 
 		app.Run();
