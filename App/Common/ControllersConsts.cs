@@ -1,4 +1,5 @@
 ﻿using App.Features.Boards;
+using App.Features.Budgets;
 using App.Features.Exceptions;
 using App.Features.Projects;
 using App.Features.Tasks;
@@ -46,7 +47,7 @@ public static class ControllersConsts
 		public const string DetailsAction = nameof(TaskController.Show);
 		public const string CreateAction = nameof(TaskController.Create);
 		public const string EditGetAction = nameof(TaskController.Edit);
-		public const string EditPostAction = nameof(TaskController.EditPost);
+		public const string EditPostAction = nameof(TaskController.Edit);
 		public const string DeleteAction = nameof(TaskController.Delete);
 		public const string DeletePostAction = nameof(TaskController.DeletePost);
 	}
@@ -86,7 +87,7 @@ public static class ControllersConsts
 		public const string DeleteAction = nameof(TeamController.Delete);
 		public const string DeletePostAction = nameof(TeamController.DeletePost);
 		public const string ShowAction = nameof(TeamController.Show);
-	
+	}
 
 	public readonly struct TagCtrl
 	{
@@ -96,5 +97,15 @@ public static class ControllersConsts
 		public const string DeleteAction = nameof(TagController.Delete);
 		public const string DeletePostAction = nameof(TagController.DeletePost);
 		public const string ShowAction = nameof(TagController.Show);
+	}
+
+	public readonly struct BudgetCtrl
+	{
+		public const string Name = "Budget";
+		public const string CreateAction = nameof(BudgetController.Create);
+		public const string EditAction = nameof(BudgetController.Edit);
+		public const string DeleteAction = nameof(BudgetController.Delete);
+		public const string DeletePostAction = nameof(BudgetController.Delete);
+		public const string ShowAction = nameof(BudgetController.Show);
 	}
 }

@@ -48,7 +48,16 @@ public static class ViewsConsts
         public const string DefaultLayout = "_LoginLayout";
     }
 
-    public readonly struct SharedViews
+    public readonly struct BudgetViews
+    {
+		public const string Create = "Create";
+		public const string Delete = "Delete";
+		public const string Edit = "Edit";
+		public const string Show = "Show";
+	}
+
+
+	public readonly struct SharedViews
     {
         public const string DefaultLayout = "_Layout";
         public const string TaskTableDetails = "_TaskTableDetails";

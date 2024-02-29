@@ -13,7 +13,8 @@ public static class CustomRoutes
     public static readonly string ExceptionHandlerPath = string.Concat("/", ExceptionCtrl.Name, "/", ExceptionCtrl.ShowAction, "/", ViewsConsts.ExceptionViews.Error);
 
     public const string UserControllerRoute = UserCtrl.Name;
-
+	private const string _SchemesPrefix = "schemes";
+	private const string _ProjectsPrefix = "projects";
 
 	#region Board Routes
 
@@ -75,9 +76,6 @@ public static class CustomRoutes
 
 	#region Team Routes
 
-	private const string _SchemesPrefix = "schemes";
-	private const string _ProjectsPrefix = "projects";
-
 	public const string CreateTeamScheme = $"/[controller]/{_SchemesPrefix}/[action]";
 	public const string CreateTeamWithinProjectScope = $"/{_ProjectsPrefix}/{{projectId:guid}}/[controller]/[action]";
 	public const string EditTeamWithinProjectScope = $"/{_ProjectsPrefix}/{{projectId:guid}}/[controller]/{{teamId:guid}}/[action]";
@@ -88,5 +86,16 @@ public static class CustomRoutes
 	public const string ShowTeamsSchemes = $"/[controller]/{_SchemesPrefix}/[action]";
 	public const string ShowTeamsOfProject = $"{_ProjectsPrefix}/{{projectId:guid}}/[controller]/{{teamId:guid}}/[action]";
 
+	#endregion
+
+
+	#region Budget Routes
+
+	public const string BudgetControllerName = BudgetCtrl.Name;
+	public const string ShowBudget = "/[controller]/{projectId:guid}/Board/[action]";
+	public const string CreateBudget = $"{_ProjectsPrefix}/{{guid:projectId}}/[controller]/[action]";
+	public const string EditBudget = "/[controller]/{budgetId:guid}/[action]";
+
+	public const string DeleteBudget = "/[controller]/{budgetId:guid}/[action]";
 	#endregion
 }
