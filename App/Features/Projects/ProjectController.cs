@@ -29,7 +29,7 @@ public class ProjectController : Controller
 	[Route(CustomRoutes.ProjectCreateRoute)]
 	public async Task<IActionResult> Create()
 	{
-		ModelStateHelper.SetModelStateErrorMessageWhenSomeHappendOnPost(ModelState, TempData);
+		ModelStateHelper.SetErrorOnPost(ModelState, TempData);
 
 		var respond = await _mediator.Send(new CreateProjectQuery());
 
@@ -66,7 +66,7 @@ public class ProjectController : Controller
 	{
 		// TODO write GUID exception valudation
 		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), id, nameof(id), _logger);
-		ModelStateHelper.SetModelStateErrorMessageWhenSomeHappendOnPost(ModelState, TempData);
+		ModelStateHelper.SetErrorOnPost(ModelState, TempData);
 
 		var response = await _mediator.Send(new EditProjectQuery(id));
 

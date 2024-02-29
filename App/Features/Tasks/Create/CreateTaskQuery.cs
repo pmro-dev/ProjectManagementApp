@@ -6,9 +6,9 @@ namespace App.Features.Tasks.Create;
 
 public class CreateTaskQuery : IRequest<CreateTaskQueryResponse>
 {
-    public int TodoListId { get; }
+    public Guid TodoListId { get; }
 
-    public CreateTaskQuery(int todoListId)
+    public CreateTaskQuery(Guid todoListId)
     {
         TodoListId = todoListId;
     }

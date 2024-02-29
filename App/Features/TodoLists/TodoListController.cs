@@ -49,7 +49,7 @@ public class TodoListController : Controller
 	[Route(CustomRoutes.TodoListCreateRoute)]
 	public async Task<IActionResult> Create()
 	{
-		ModelStateHelper.SetModelStateErrorMessageWhenSomeHappendOnPost(ModelState, TempData);
+		ModelStateHelper.SetErrorOnPost(ModelState, TempData);
 
 		var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -98,7 +98,7 @@ public class TodoListController : Controller
 	{
 		// TODO write GUID exception valudation
 		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), id, nameof(id), _logger);
-		ModelStateHelper.SetModelStateErrorMessageWhenSomeHappendOnPost(ModelState, TempData);
+		ModelStateHelper.SetErrorOnPost(ModelState, TempData);
 
 		var response = await _mediator.Send(new EditTodoListQuery(id));
 

@@ -6,12 +6,12 @@ namespace App.Features.Tasks.Edit;
 
 public class EditTaskQuery : IRequest<EditTaskQueryResponse>
 {
-	public int TodoListId { get; }
-	public int TaskId { get; }
+	public Guid TodoListId { get; }
+	public Guid TaskId { get; }
 
 	public string? SignedInUserId { get; }
 
-	public EditTaskQuery(int todoListId, int taskId, string? signedInUserId)
+	public EditTaskQuery(Guid todoListId, Guid taskId, string? signedInUserId)
 	{
 		TodoListId = todoListId;
 		TaskId = taskId;

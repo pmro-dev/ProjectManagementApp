@@ -6,11 +6,11 @@ namespace App.Features.Tasks.Create;
 
 public class CreateTaskCommand : IRequest<CreateTaskCommandResponse>
 {
-    public int TodoListId { get; }
+    public Guid TodoListId { get; }
 
     public TaskCreateInputVM InputVM { get; }
 
-    public CreateTaskCommand(TaskCreateInputVM inputVM, int todoListId)
+    public CreateTaskCommand(TaskCreateInputVM inputVM, Guid todoListId)
     {
         TodoListId = todoListId;
         InputVM = inputVM;

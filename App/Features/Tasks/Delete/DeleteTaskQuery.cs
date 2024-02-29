@@ -6,10 +6,10 @@ namespace App.Features.Tasks.Delete;
 
 public class DeleteTaskQuery : IRequest<DeleteTaskQueryResponse>
 {
-    public int TodoListId { get; }
-    public int TaskId { get; }
+    public Guid TodoListId { get; }
+    public Guid TaskId { get; }
 
-    public DeleteTaskQuery(int todoListId, int taskId)
+    public DeleteTaskQuery(Guid todoListId, Guid taskId)
     {
         TodoListId = todoListId;
         TaskId = taskId;

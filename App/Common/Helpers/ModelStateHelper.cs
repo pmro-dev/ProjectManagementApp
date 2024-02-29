@@ -7,7 +7,7 @@ public static class ModelStateHelper
 {
 	public const string ModelStateMessageKey = "ModelStateErrorMessage";
 
-	public static void SetModelStateErrorMessageWhenSomeHappendOnPost(ModelStateDictionary modelState, ITempDataDictionary tempData)
+	public static void SetErrorOnPost(ModelStateDictionary modelState, ITempDataDictionary tempData)
 	{
 		if (tempData.TryGetValue(ModelStateMessageKey, out var modelErrorMessage) && modelErrorMessage != null)
 		{

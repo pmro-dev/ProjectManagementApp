@@ -57,10 +57,11 @@ public class TaskController : Controller
 	/// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
 	[HttpGet]
 	[Route(CustomRoutes.TaskShowRoute)]
-	public async Task<IActionResult> Show([FromRoute] int routeTodoListId, [FromRoute] int routeTaskId)
+	public async Task<IActionResult> Show([FromRoute] Guid routeTodoListId, [FromRoute] Guid routeTaskId)
 	{
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), routeTodoListId, nameof(routeTodoListId), _logger);
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), routeTaskId, nameof(routeTaskId), _logger);
+		//TODO
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), routeTodoListId, nameof(routeTodoListId), _logger);
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), routeTaskId, nameof(routeTaskId), _logger);
 
 		var response = await _mediator.Send(new ShowTaskQuery(routeTodoListId, routeTaskId));
 
@@ -81,10 +82,10 @@ public class TaskController : Controller
 	/// <exception cref="ArgumentOutOfRangeException">Occurs when id value is invalid.</exception>
 	[HttpGet]
 	[Route(CustomRoutes.CreateTaskRoute)]
-	public async Task<IActionResult> Create(int id)
+	public async Task<IActionResult> Create(Guid id)
 	{
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Create), id, nameof(id), _logger);
-		ModelStateHelper.SetModelStateErrorMessageWhenSomeHappendOnPost(ModelState, TempData);
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Create), id, nameof(id), _logger);
+		ModelStateHelper.SetErrorOnPost(ModelState, TempData);
 
 		var respond = await _mediator.Send(new CreateTaskQuery(id));
 
@@ -107,9 +108,9 @@ public class TaskController : Controller
 	[HttpPost]
 	[Route(CustomRoutes.CreateTaskPostRoute)]
 	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> Create(int todoListId, TaskCreateInputVM inputVM)
+	public async Task<IActionResult> Create(Guid todoListId, TaskCreateInputVM inputVM)
 	{
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Create), todoListId, nameof(todoListId), _logger);
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Create), todoListId, nameof(todoListId), _logger);
 
 		var response = await _mediator.Send(new CreateTaskCommand(inputVM, todoListId));
 
@@ -137,11 +138,11 @@ public class TaskController : Controller
 	/// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
 	[HttpGet]
 	[Route(CustomRoutes.TaskEditGetRoute)]
-	public async Task<IActionResult> Edit([FromRoute] int todoListId, [FromRoute] int taskId)
+	public async Task<IActionResult> Edit([FromRoute] Guid todoListId, [FromRoute] Guid taskId)
 	{
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), todoListId, nameof(todoListId), _logger);
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), taskId, nameof(taskId), _logger);
-		ModelStateHelper.SetModelStateErrorMessageWhenSomeHappendOnPost(ModelState, TempData);
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), todoListId, nameof(todoListId), _logger);
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), taskId, nameof(taskId), _logger);
+		ModelStateHelper.SetErrorOnPost(ModelState, TempData);
 
 		var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -164,7 +165,7 @@ public class TaskController : Controller
 	[HttpPost]
 	[Route(CustomRoutes.TaskEditPostRoute)]
 	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> EditPost([FromForm] TaskEditInputVM inputVM)
+	public async Task<IActionResult> Edit([FromForm] TaskEditInputVM inputVM)
 	{
 		// TODO CHECK GUID
 		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(EditPost), inputVM.TodoListId, nameof(inputVM.TodoListId), _logger);
@@ -199,10 +200,10 @@ public class TaskController : Controller
 	/// <exception cref="ArgumentOutOfRangeException">Occurs when one of ids value is invalid.</exception>
 	[HttpGet]
 	[Route(CustomRoutes.TaskDeleteGetRoute)]
-	public async Task<IActionResult> Delete(int todoListId, int taskId)
+	public async Task<IActionResult> Delete(Guid todoListId, Guid taskId)
 	{
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Delete), todoListId, nameof(todoListId), _logger);
-		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Delete), taskId, nameof(taskId), _logger);
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Delete), todoListId, nameof(todoListId), _logger);
+		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Delete), taskId, nameof(taskId), _logger);
 
 		var response = await _mediator.Send(new DeleteTaskQuery(todoListId, taskId));
 

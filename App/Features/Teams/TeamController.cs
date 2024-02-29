@@ -7,7 +7,6 @@ using static App.Common.ControllersConsts;
 using static App.Common.Views.ViewsConsts;
 using App.Features.Projects.Show;
 using App.Features.Teams.Common.Create;
-using App.Features.TodoLists.Create;
 using App.Features.Teams.Common.Edit;
 using App.Features.Teams.Common.Delete;
 using App.Features.Teams.Common.Show;
@@ -30,7 +29,7 @@ public class TeamController : Controller
 	[Route(CustomRoutes.CreateTeamWithinProjectScope)]
 	public async Task<IActionResult> Create(Guid projectId)
 	{
-		ModelStateHelper.SetModelStateErrorMessageWhenSomeHappendOnPost(ModelState, TempData);
+		ModelStateHelper.SetErrorOnPost(ModelState, TempData);
 
 		var response = await _mediator.Send(new CreateTeamWithinProjectQuery(projectId));
 
@@ -67,7 +66,7 @@ public class TeamController : Controller
 	[Route(CustomRoutes.CreateTeamScheme)]
 	public async Task<IActionResult> Create()
 	{
-		ModelStateHelper.SetModelStateErrorMessageWhenSomeHappendOnPost(ModelState, TempData);
+		ModelStateHelper.SetErrorOnPost(ModelState, TempData);
 
 		var response = await _mediator.Send(new CreateTeamAsSchemeQuery());
 
@@ -105,7 +104,7 @@ public class TeamController : Controller
 	{
 		// TODO write GUID exception valudation
 		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), id, nameof(id), _logger);
-		ModelStateHelper.SetModelStateErrorMessageWhenSomeHappendOnPost(ModelState, TempData);
+		ModelStateHelper.SetErrorOnPost(ModelState, TempData);
 
 		var response = await _mediator.Send(new EditTeamWithinProjectScopeQuery(projectId, teamId));
 
@@ -147,7 +146,7 @@ public class TeamController : Controller
 	{
 		// TODO write GUID exception valudation
 		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), id, nameof(id), _logger);
-		ModelStateHelper.SetModelStateErrorMessageWhenSomeHappendOnPost(ModelState, TempData);
+		ModelStateHelper.SetErrorOnPost(ModelState, TempData);
 
 		var response = await _mediator.Send(new EditTeamSchemeQuery(teamId));
 
