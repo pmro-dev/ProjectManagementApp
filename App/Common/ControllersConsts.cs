@@ -1,6 +1,7 @@
 ﻿using App.Features.Boards;
 using App.Features.Budgets;
 using App.Features.Exceptions;
+using App.Features.Incomes;
 using App.Features.Projects;
 using App.Features.Tasks;
 using App.Features.Teams;
@@ -89,15 +90,15 @@ public static class ControllersConsts
 		public const string ShowAction = nameof(TeamController.Show);
 	}
 
-	public readonly struct TagCtrl
-	{
-		public const string Name = "Tag";
-		public const string CreateAction = nameof(TagController.Create);
-		public const string EditAction = nameof(TagController.Edit);
-		public const string DeleteAction = nameof(TagController.Delete);
-		public const string DeletePostAction = nameof(TagController.DeletePost);
-		public const string ShowAction = nameof(TagController.Show);
-	}
+	//public readonly struct TagCtrl
+	//{
+	//	public const string Name = "Tag";
+	//	public const string CreateAction = nameof(TagController.Create);
+	//	public const string EditAction = nameof(TagController.Edit);
+	//	public const string DeleteAction = nameof(TagController.Delete);
+	//	public const string DeletePostAction = nameof(TagController.DeletePost);
+	//	public const string ShowAction = nameof(TagController.Show);
+	//}
 
 	public readonly struct BudgetCtrl
 	{
@@ -107,5 +108,15 @@ public static class ControllersConsts
 		public const string DeleteAction = nameof(BudgetController.Delete);
 		public const string DeletePostAction = nameof(BudgetController.Delete);
 		public const string ShowAction = nameof(BudgetController.Show);
+	}
+
+	public readonly struct IncomeCtrl
+	{
+		public const string Name = "Income";
+		public const string CreateAction = nameof(IncomeController.Create);
+		public const string EditAction = nameof(IncomeController.Edit);
+		public const string DeleteAction = nameof(IncomeController.Delete);
+		public const string DeletePostAction = nameof(IncomeController.Delete);
+		public const string ShowAction = nameof(IncomeController.Show);
 	}
 }

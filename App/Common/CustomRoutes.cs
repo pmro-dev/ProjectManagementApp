@@ -59,9 +59,9 @@ public static class CustomRoutes
 
 	public const string ProjectControllerRoute = ProjectCtrl.Name;
 	//public const string ProjectShowRoute = "/Boards/[action]/[controller]/{projectId:guid}";
-	public const string ProjectShowTodoListsBoardRoute = "/[controller]/{projectId:guid}/Board/[action]";
-	public const string ProjectShowStatisticsBoardRoute = "/[controller]/{projectId:guid}/Board/[action]";
-	public const string ProjectShowTeamsBoardRoute = "/[controller]/{projectId:guid}/Board/[action]";
+	public const string ProjectShowTodoListsBoardRoute = "/[controller]/{projectId:guid}/Boards/[action]";
+	public const string ProjectShowStatisticsBoardRoute = "/[controller]/{projectId:guid}/Boards/[action]";
+	public const string ProjectShowTeamsBoardRoute = "/[controller]/{projectId:guid}/Boards/[action]";
 	public const string ProjectCreateRoute = "/[controller]/[action]";
 	public const string ProjectEditRoute = "/[controller]/{projectId:guid}/[action]";
 
@@ -92,10 +92,18 @@ public static class CustomRoutes
 	#region Budget Routes
 
 	public const string BudgetControllerName = BudgetCtrl.Name;
-	public const string ShowBudget = "/[controller]/{projectId:guid}/Board/[action]";
+	public const string ShowBudget = "/[controller]/{projectId:guid}/Boards/[action]";
 	public const string CreateBudget = $"{_ProjectsPrefix}/{{guid:projectId}}/[controller]/[action]";
 	public const string EditBudget = "/[controller]/{budgetId:guid}/[action]";
-
 	public const string DeleteBudget = "/[controller]/{budgetId:guid}/[action]";
+	#endregion
+
+	#region Income Routes
+	
+	public const string IncomeControllerName = IncomeCtrl.Name;
+	public const string ShowIncome = "/[controller]/{budgetId:guid}/Boards/[action]";
+	public const string CreateIncome = "[controller]/{guid:budgetId}/[action]";
+	public const string EditIncome = "/[controller]/{incomeId:guid}/[action]";
+	public const string DeleteIncome = "/[controller]/{incomeId:guid}/[action]";
 	#endregion
 }

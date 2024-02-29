@@ -56,6 +56,13 @@ public static class ViewsConsts
 		public const string Show = "Show";
 	}
 
+	public readonly struct IncomeViews
+	{
+		public const string Create = "Create";
+		public const string Delete = "Delete";
+		public const string Edit = "Edit";
+		public const string Show = "Show";
+	}
 
 	public readonly struct SharedViews
     {
