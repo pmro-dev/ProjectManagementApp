@@ -135,7 +135,7 @@ public class ProjectController : Controller
 
 		//TODO
 		// Here is specified selector for sorting to do lists by progress made but in the final version, user should choose: sort by the name, best or worst progress... 
-		var response = await _mediator.Send(new ShowProjectTodoListsBoardQuery(id, brieflyTodoList => brieflyTodoList.ProgressMade, currentPageNumber, itemsPerPageAmount));
+		var response = await _mediator.Send(new ShowProjectTodoListsQuery(id, brieflyTodoList => brieflyTodoList.ProgressMade, currentPageNumber, itemsPerPageAmount));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
 			return View(Basics.Show, response.Data);
@@ -156,7 +156,7 @@ public class ProjectController : Controller
 		//TODO
 		// Here is specified selector for sorting to do lists, in the final version, user should choose: sort by the name, best or worst progress... 
 		// Here is specified selector for sorting teams, in the final version, user should choose: sort by the name, best or worst progress... 
-		var response = await _mediator.Send(new ShowProjectStatisticsBoardQuery(id, brieflyTodoList => brieflyTodoList.ProgressMade, brieflyTeams => brieflyTeams.Name, currentPageNumber, itemsPerPageAmount));
+		var response = await _mediator.Send(new ShowProjectStatisticsQuery(id, brieflyTodoList => brieflyTodoList.ProgressMade, brieflyTeams => brieflyTeams.Name, currentPageNumber, itemsPerPageAmount));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
 			return View(Basics.Show, response.Data);
@@ -177,7 +177,7 @@ public class ProjectController : Controller
 		//TODO
 		// Here is specified selector for sorting to do lists, in the final version, user should choose: sort by the name, best or worst progress... 
 		// Here is specified selector for sorting teams, in the final version, user should choose: sort by the name, best or worst progress... 
-		var response = await _mediator.Send(new ShowTeamsOfProjectQuery(id, team => team.Name, currentPageNumber, itemsPerPageAmount));
+		var response = await _mediator.Send(new ShowProjectTeamsQuery(id, team => team.Name, currentPageNumber, itemsPerPageAmount));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
 			return View(Basics.Show, response.Data);

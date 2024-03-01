@@ -1,6 +1,4 @@
-﻿using App.Features.Projects.Show.ProjectManagerBoards.TodoListsBoard;
-
-namespace App.Features.Projects.Show.ProjectManagerBoards.ProjectBoard;
+﻿namespace App.Features.Projects.Show.TodoListsBoard.ViewModels;
 
 public class ProjectBoardTodoListsOutputVM : IProjectBoardTodoListsOutputVM
 {

@@ -1,4 +1,4 @@
-﻿namespace App.Features.Projects.Show.ProjectManagerBoards.TeamsBoard;
+﻿namespace App.Features.Projects.Show.TeamsBoard.ViewModels;
 
 public class TeamBoardTeamMemberVM : ITeamsBoardTeamMemberVM
 {

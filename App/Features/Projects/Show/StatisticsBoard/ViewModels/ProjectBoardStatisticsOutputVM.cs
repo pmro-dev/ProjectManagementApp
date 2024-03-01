@@ -1,6 +1,4 @@
-﻿using App.Features.Projects.Show.ProjectManagerBoards.StatisticsBoard;
-
-namespace App.Features.Projects.Show.ProjectManagerBoards.ProjectBoard;
+﻿namespace App.Features.Projects.Show.StatisticsBoard.ViewModels;
 
 public class ProjectBoardStatisticsOutputVM : IProjectBoardStatisticsOutputVM
 {

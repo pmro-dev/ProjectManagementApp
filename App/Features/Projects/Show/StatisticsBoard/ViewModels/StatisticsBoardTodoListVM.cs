@@ -1,4 +1,4 @@
-﻿namespace App.Features.Projects.Show.ProjectManagerBoards.StatisticsBoard;
+﻿namespace App.Features.Projects.Show.StatisticsBoard.ViewModels;
 
 public class StatisticsBoardTodoListVM : IStatisticsBoardTodoListVM
 {
