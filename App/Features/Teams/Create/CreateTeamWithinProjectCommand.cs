@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace App.Features.Teams.Common.Create;
+namespace App.Features.Teams.Create;
 
 public class CreateTeamWithinProjectCommand : IRequest<CreateTeamWithinProjectCommandResponse>
 {
