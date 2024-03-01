@@ -11,11 +11,11 @@ public class EditTeamSchemeHandler :
 	private readonly IDataUnitOfWork _dataUnitOfWork;
 	private readonly ITeamRepository _teamRepository;
 
-	public EditTeamSchemeHandler(ILogger<EditTeamSchemeHandler> logger, IDataUnitOfWork dataUnitOfWork, ITeamRepository teamRepository)
+	public EditTeamSchemeHandler(IDataUnitOfWork dataUnitOfWork, ILogger<EditTeamSchemeHandler> logger)
 	{
-		_logger = logger;
 		_dataUnitOfWork = dataUnitOfWork;
-		_teamRepository = teamRepository;
+		_teamRepository = _dataUnitOfWork.TeamRepository;
+		_logger = logger;
 	}
 
 	public Task<EditTeamSchemeQueryResponse> Handle(EditTeamSchemeQuery request, CancellationToken cancellationToken)

@@ -253,7 +253,7 @@ public class TeamController : Controller
 		//TODO
 		// Here is specified selector for sorting to do lists, in the final version, user should choose: sort by the name, best or worst progress... 
 		// Here is specified selector for sorting teams, in the final version, user should choose: sort by the name, best or worst progress... 
-		var response = await _mediator.Send(new ShowTeamsOfProjectQuery(projectId, team => team.Name, currentPageNumber, itemsPerPageAmount));
+		var response = await _mediator.Send(new ShowProjectTeamsQuery(projectId, team => team.Name, currentPageNumber, itemsPerPageAmount));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
 			return View(Basics.Show, response.Data);

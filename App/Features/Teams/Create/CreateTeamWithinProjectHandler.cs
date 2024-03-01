@@ -7,14 +7,15 @@ public class CreateTeamWithinProjectHandler :
 	IRequestHandler<CreateTeamWithinProjectQuery, CreateTeamWithinProjectQueryResponse>,
 	IRequestHandler<CreateTeamWithinProjectCommand, CreateTeamWithinProjectCommandResponse>
 {
-	private readonly ILogger<CreateTeamWithinProjectHandler> _logger;
 	private readonly IDataUnitOfWork _dataUnitOfWork;
 	private readonly ITeamRepository _teamRepository;
+	private readonly ILogger<CreateTeamWithinProjectHandler> _logger;
 
-	public CreateTeamWithinProjectHandler(ILogger<CreateTeamWithinProjectHandler> logger, IDataUnitOfWork dataUnitOfWork)
+	public CreateTeamWithinProjectHandler(IDataUnitOfWork dataUnitOfWork, ILogger<CreateTeamWithinProjectHandler> logger)
 	{
-		_logger = logger;
 		_dataUnitOfWork = dataUnitOfWork;
+		_teamRepository = _dataUnitOfWork.TeamRepository;
+		_logger = logger;
 	}
 
 	public Task<CreateTeamWithinProjectQueryResponse> Handle(CreateTeamWithinProjectQuery request, CancellationToken cancellationToken)

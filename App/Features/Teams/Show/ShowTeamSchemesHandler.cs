@@ -7,15 +7,15 @@ public class ShowTeamSchemesHandler :
 	IRequestHandler<ShowAllTeamSchemesQuery, ShowAllTeamSchemesQueryResponse>,
 	IRequestHandler<ShowTeamSchemeQuery, ShowTeamSchemeQueryResponse>
 {
-	private readonly ILogger<ShowTeamSchemesHandler> _logger;
 	private readonly IDataUnitOfWork _dataUnitOfWork;
 	private readonly ITeamRepository _teamRepository;
+	private readonly ILogger<ShowTeamSchemesHandler> _logger;
 
-	public ShowTeamSchemesHandler(IDataUnitOfWork dataUnitOfWork, ITeamRepository teamRepository, ILogger<ShowTeamSchemesHandler> logger)
+	public ShowTeamSchemesHandler(IDataUnitOfWork dataUnitOfWork, ILogger<ShowTeamSchemesHandler> logger)
 	{
-		_logger = logger;
 		_dataUnitOfWork = dataUnitOfWork;
-		_teamRepository = teamRepository;
+		_teamRepository = _dataUnitOfWork.TeamRepository;
+		_logger = logger;
 	}
 
 	public Task<ShowAllTeamSchemesQueryResponse> Handle(ShowAllTeamSchemesQuery request, CancellationToken cancellationToken)

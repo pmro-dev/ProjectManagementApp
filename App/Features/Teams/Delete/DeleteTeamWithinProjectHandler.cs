@@ -11,10 +11,10 @@ public class DeleteTeamWithinProjectHandler :
 	private readonly IDataUnitOfWork _dataUnitOfWork;
 	private readonly ITeamRepository _teamRepository;
 
-	public DeleteTeamWithinProjectHandler(IDataUnitOfWork dataUnitOfWork, ITeamRepository teamRepository, ILogger<DeleteTeamWithinProjectHandler> logger)
+	public DeleteTeamWithinProjectHandler(IDataUnitOfWork dataUnitOfWork, ILogger<DeleteTeamWithinProjectHandler> logger)
 	{
 		_dataUnitOfWork = dataUnitOfWork;
-		_teamRepository = teamRepository;
+		_teamRepository = _dataUnitOfWork.TeamRepository;
 		_logger = logger;
 	}
 

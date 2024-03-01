@@ -40,8 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Projects\Show\Interfaces\" />
-    <Folder Include="Features\Projects\Show\Models\" />
     <Folder Include="Infrastructure\Databases\Identity\Migrations\" />
     <Folder Include="Infrastructure\Databases\App\Migrations\" />
 

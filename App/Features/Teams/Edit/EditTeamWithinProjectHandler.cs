@@ -11,11 +11,11 @@ public class EditTeamWithinProjectHandler :
 	private readonly IDataUnitOfWork _dataUnitOfWork;
 	private readonly ITeamRepository _teamRepository;
 
-	public EditTeamWithinProjectHandler(IDataUnitOfWork dataUnitOfWork, ITeamRepository teamRepository, ILogger<EditTeamWithinProjectHandler> logger)
+	public EditTeamWithinProjectHandler(IDataUnitOfWork dataUnitOfWork, ILogger<EditTeamWithinProjectHandler> logger)
 	{
-		_logger = logger;
 		_dataUnitOfWork = dataUnitOfWork;
-		_teamRepository = teamRepository;
+		_teamRepository = _dataUnitOfWork.TeamRepository;
+		_logger = logger;
 	}
 
 	Task<EditTeamWithinProjectQueryResponse> IRequestHandler<EditTeamWithinProjectQuery, EditTeamWithinProjectQueryResponse>.Handle(EditTeamWithinProjectQuery request, CancellationToken cancellationToken)

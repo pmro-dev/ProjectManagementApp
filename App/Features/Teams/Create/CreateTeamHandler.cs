@@ -7,18 +7,20 @@ public class CreateTeamSchemeHandler :
 	IRequestHandler<CreateTeamAsSchemeQuery, CreateTeamAsSchemeQueryResponse>,
 	IRequestHandler<CreateTeamAsSchemeCommand, CreateTeamAsSchemeCommandResponse>
 {
-	private readonly ILogger<CreateTeamSchemeHandler> _logger;
 	private readonly IDataUnitOfWork _dataUnitOfWork;
 	private readonly ITeamRepository _teamRepository;
+	private readonly ILogger<CreateTeamSchemeHandler> _logger;
 
-	public CreateTeamSchemeHandler(ILogger<CreateTeamSchemeHandler> logger, IDataUnitOfWork dataUnitOfWork)
+	public CreateTeamSchemeHandler(IDataUnitOfWork dataUnitOfWork, ILogger<CreateTeamSchemeHandler> logger)
 	{
-		_logger = logger;
 		_dataUnitOfWork = dataUnitOfWork;
+		_teamRepository = _dataUnitOfWork.TeamRepository;
+		_logger = logger;
 	}
 
 	public Task<CreateTeamAsSchemeQueryResponse> Handle(CreateTeamAsSchemeQuery request, CancellationToken cancellationToken)
 	{
+		throw new NotImplementedException();
 
 	}
 
