@@ -59,10 +59,6 @@ public class TaskController : Controller
 	[Route(CustomRoutes.TaskShowRoute)]
 	public async Task<IActionResult> Show([FromRoute] Guid routeTodoListId, [FromRoute] Guid routeTaskId)
 	{
-		//TODO
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), routeTodoListId, nameof(routeTodoListId), _logger);
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), routeTaskId, nameof(routeTaskId), _logger);
-
 		var response = await _mediator.Send(new ShowTaskQuery(routeTodoListId, routeTaskId));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
@@ -84,7 +80,6 @@ public class TaskController : Controller
 	[Route(CustomRoutes.CreateTaskRoute)]
 	public async Task<IActionResult> Create(Guid id)
 	{
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Create), id, nameof(id), _logger);
 		ModelStateHelper.SetErrorOnPost(ModelState, TempData);
 
 		var respond = await _mediator.Send(new CreateTaskQuery(id));
@@ -110,8 +105,6 @@ public class TaskController : Controller
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> Create(Guid todoListId, TaskCreateInputVM inputVM)
 	{
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Create), todoListId, nameof(todoListId), _logger);
-
 		var response = await _mediator.Send(new CreateTaskCommand(inputVM, todoListId));
 
 		if (response.StatusCode == StatusCodes.Status201Created)
@@ -140,8 +133,6 @@ public class TaskController : Controller
 	[Route(CustomRoutes.TaskEditGetRoute)]
 	public async Task<IActionResult> Edit([FromRoute] Guid todoListId, [FromRoute] Guid taskId)
 	{
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), todoListId, nameof(todoListId), _logger);
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), taskId, nameof(taskId), _logger);
 		ModelStateHelper.SetErrorOnPost(ModelState, TempData);
 
 		var signedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -149,7 +140,7 @@ public class TaskController : Controller
 		var respond = await _mediator.Send(new EditTaskQuery(todoListId, taskId, signedInUserId));
 
 		if (respond.StatusCode == StatusCodes.Status200OK)
-			return View(TaskViews.Edit, respond.Data);
+			return View(Basics.Edit, respond.Data);
 
 		return BadRequest();
 	}
@@ -167,10 +158,6 @@ public class TaskController : Controller
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> Edit([FromForm] TaskEditInputVM inputVM)
 	{
-		// TODO CHECK GUID
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(EditPost), inputVM.TodoListId, nameof(inputVM.TodoListId), _logger);
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(EditPost), inputVM.Id, nameof(inputVM.Id), _logger);
-
 		var response = await _mediator.Send(new EditTaskCommand(inputVM));
 
 		if (response.StatusCode == StatusCodes.Status201Created)
@@ -202,13 +189,10 @@ public class TaskController : Controller
 	[Route(CustomRoutes.TaskDeleteGetRoute)]
 	public async Task<IActionResult> Delete(Guid todoListId, Guid taskId)
 	{
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Delete), todoListId, nameof(todoListId), _logger);
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Delete), taskId, nameof(taskId), _logger);
-
 		var response = await _mediator.Send(new DeleteTaskQuery(todoListId, taskId));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
-			return View(TaskViews.Delete, response.Data);
+			return View(Basics.Delete, response.Data);
 
 		return BadRequest();
 	}
@@ -229,11 +213,6 @@ public class TaskController : Controller
 	public async Task<IActionResult> DeletePost([FromForm] WrapperViewModel<TaskDeleteInputVM, TaskDeleteOutputVM> deleteWrapperVM)
 	{
 		TaskDeleteInputVM deleteInputVM = deleteWrapperVM.InputVM;
-
-		//TODO GUID CHECK
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeletePost), deleteInputVM.TodoListId, nameof(deleteInputVM.TodoListId), _logger);
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeletePost), deleteInputVM.Id, nameof(deleteInputVM.Id), _logger);
-
 		var response = await _mediator.Send(new DeleteTaskCommand(deleteInputVM));
 
 		if (response.StatusCode == StatusCodes.Status200OK)

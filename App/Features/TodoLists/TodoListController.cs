@@ -56,7 +56,7 @@ public class TodoListController : Controller
 		var response = await _mediator.Send(new CreateTodoListQuery(userId));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
-			return View(TodoListViews.Create, response.Data);
+			return View(Basics.Create, response.Data);
 
 		return BadRequest();
 	}
@@ -96,8 +96,6 @@ public class TodoListController : Controller
 	[Route(CustomRoutes.TodoListEditRoute)]
 	public async Task<IActionResult> Edit(Guid id)
 	{
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), id, nameof(id), _logger);
 		ModelStateHelper.SetErrorOnPost(ModelState, TempData);
 
 		var response = await _mediator.Send(new EditTodoListQuery(id));
@@ -105,7 +103,7 @@ public class TodoListController : Controller
 		if (response.StatusCode != StatusCodes.Status200OK)
 			return BadRequest();
 
-		return View(TodoListViews.Edit, response.Data);
+		return View(Basics.Edit, response.Data);
 	}
 
 	/// <summary>
@@ -123,10 +121,6 @@ public class TodoListController : Controller
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> Edit(Guid id, [FromForm] TodoListEditInputVM inputVM)
 	{
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), id, nameof(id), _logger);
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), inputVM.Id, nameof(inputVM.Id), _logger);
-
 		var response = await _mediator.Send(new EditTodoListCommand(inputVM, id));
 
 		if (response.StatusCode == StatusCodesExtension.EntityNameTaken)
@@ -157,13 +151,10 @@ public class TodoListController : Controller
 	[Route(CustomRoutes.TodoListDeleteRoute)]
 	public async Task<IActionResult> Delete(Guid id)
 	{
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Delete), id, nameof(id), _logger);
-
 		var response = await _mediator.Send(new DeleteTodoListQuery(id));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
-			return View(TodoListViews.Delete, response.Data);
+			return View(Basics.Delete, response.Data);
 
 		return BadRequest();
 	}
@@ -182,9 +173,6 @@ public class TodoListController : Controller
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> DeletePost(Guid id)
 	{
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeletePost), id, nameof(id), _logger);
-
 		var response = await _mediator.Send(new DeleteTodoListCommand(id));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
@@ -202,9 +190,6 @@ public class TodoListController : Controller
 	[Route(CustomRoutes.TodoListDuplicateRoute)]
 	public async Task<IActionResult> Duplicate(Guid todoListId)
 	{
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Duplicate), todoListId, nameof(todoListId), _logger);
-
 		var response = await _mediator.Send(new DuplicateTodoListCommand(todoListId));
 
 		if (response.StatusCode == StatusCodes.Status201Created)
@@ -226,15 +211,13 @@ public class TodoListController : Controller
 		int currentPageNumber = pageNumber ?? FirstPageNumber;
 		int itemsPerPageAmount = itemsPerPageCount ?? DefaultItemsPerPageCount;
 
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), id, nameof(id), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), currentPageNumber, nameof(currentPageNumber), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), itemsPerPageAmount, nameof(itemsPerPageAmount), _logger);
 
 		var response = await _mediator.Send(new ShowTodoListQuery(id, filterDueDate, task => task.Deadline, currentPageNumber, itemsPerPageAmount));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
-			return View(TodoListViews.Show, response.Data);
+			return View(Basics.Show, response.Data);
 
 		return BadRequest();
 	}

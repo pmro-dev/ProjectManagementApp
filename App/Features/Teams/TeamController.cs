@@ -4,12 +4,12 @@ using App.Features.Exceptions.Throw;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using static App.Common.ControllersConsts;
-using static App.Common.Views.ViewsConsts;
 using App.Features.Projects.Show;
 using App.Features.Teams.Common.Create;
 using App.Features.Teams.Common.Edit;
 using App.Features.Teams.Common.Delete;
 using App.Features.Teams.Common.Show;
+using static App.Common.Views.ViewsConsts;
 
 namespace App.Features.Teams;
 
@@ -34,7 +34,7 @@ public class TeamController : Controller
 		var response = await _mediator.Send(new CreateTeamWithinProjectQuery(projectId));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
-			return View(TeamViews.Create, response.Data);
+			return View(Basics.Create, response.Data);
 
 		return BadRequest();
 	}
@@ -71,7 +71,7 @@ public class TeamController : Controller
 		var response = await _mediator.Send(new CreateTeamAsSchemeQuery());
 
 		if (response.StatusCode == StatusCodes.Status200OK)
-			return View(TeamViews.Create, response.Data);
+			return View(Basics.Create, response.Data);
 
 		return BadRequest();
 	}
@@ -102,8 +102,6 @@ public class TeamController : Controller
 	[Route(CustomRoutes.EditTeamWithinProjectScope)]
 	public async Task<IActionResult> Edit(Guid projectId, Guid teamId)
 	{
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), id, nameof(id), _logger);
 		ModelStateHelper.SetErrorOnPost(ModelState, TempData);
 
 		var response = await _mediator.Send(new EditTeamWithinProjectScopeQuery(projectId, teamId));
@@ -111,7 +109,7 @@ public class TeamController : Controller
 		if (response.StatusCode != StatusCodes.Status200OK)
 			return BadRequest();
 
-		return View(TeamViews.Edit, response.Data);
+		return View(Basics.Edit, response.Data);
 	}
 
 	[HttpPost]
@@ -119,10 +117,6 @@ public class TeamController : Controller
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> Edit(Guid projectId, Guid teamId, [FromForm] EditTeamInputVM inputVM)
 	{
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), id, nameof(id), _logger);
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), inputVM.Id, nameof(inputVM.Id), _logger);
-
 		var response = await _mediator.Send(new EditTeamWithinProjectScopeCommand(projectId, teamId, inputVM));
 
 		if (response.StatusCode == StatusCodesExtension.EntityNameTaken)
@@ -144,8 +138,6 @@ public class TeamController : Controller
 	[Route(CustomRoutes.EditTeamScheme)]
 	public async Task<IActionResult> Edit(Guid teamId)
 	{
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), id, nameof(id), _logger);
 		ModelStateHelper.SetErrorOnPost(ModelState, TempData);
 
 		var response = await _mediator.Send(new EditTeamSchemeQuery(teamId));
@@ -153,7 +145,7 @@ public class TeamController : Controller
 		if (response.StatusCode != StatusCodes.Status200OK)
 			return BadRequest();
 
-		return View(TeamViews.Edit, response.Data);
+		return View(Basics.Edit, response.Data);
 	}
 
 	[HttpPost]
@@ -161,10 +153,6 @@ public class TeamController : Controller
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> Edit(Guid teamId, [FromForm] EditTeamInputVM inputVM)
 	{
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), id, nameof(id), _logger);
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), inputVM.Id, nameof(inputVM.Id), _logger);
-
 		var response = await _mediator.Send(new EditTeamSchemeCommand(teamId, inputVM));
 
 		if (response.StatusCode == StatusCodesExtension.EntityNameTaken)
@@ -186,13 +174,10 @@ public class TeamController : Controller
 	[Route(CustomRoutes.DeleteTeamWithinProjectScope)]
 	public async Task<IActionResult> Delete(Guid projectId, Guid teamId)
 	{
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Delete), id, nameof(id), _logger);
-
 		var response = await _mediator.Send(new DeleteTeamWithinProjectScopeQuery(projectId, teamId));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
-			return View(TeamViews.Delete, response.Data);
+			return View(Basics.Delete, response.Data);
 
 		return BadRequest();
 	}
@@ -202,9 +187,6 @@ public class TeamController : Controller
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> DeletePost(Guid projectId, Guid teamId)
 	{
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeletePost), id, nameof(id), _logger);
-
 		var response = await _mediator.Send(new DeleteTeamWithinProjectScopeCommand(projectId, teamId));
 
 		// TODO should return to the parent url / view which invoke this action
@@ -218,13 +200,10 @@ public class TeamController : Controller
 	[Route(CustomRoutes.DeleteTeamScheme)]
 	public async Task<IActionResult> Delete(Guid teamId)
 	{
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Delete), id, nameof(id), _logger);
-
 		var response = await _mediator.Send(new DeleteTeamSchemeQuery(teamId));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
-			return View(TeamViews.Delete, response.Data);
+			return View(Basics.Delete, response.Data);
 
 		return BadRequest();
 	}
@@ -234,9 +213,6 @@ public class TeamController : Controller
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> DeletePost(Guid teamId)
 	{
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeletePost), id, nameof(id), _logger);
-
 		var response = await _mediator.Send(new DeleteTeamSchemeCommand(teamId));
 
 		// TODO should return to the parent url / view which invoke this action
@@ -253,15 +229,13 @@ public class TeamController : Controller
 		int currentPageNumber = pageNumber ?? FirstPageNumber;
 		int itemsPerPageAmount = itemsPerPageCount ?? DefaultItemsPerPageCount;
 
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), id, nameof(id), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), currentPageNumber, nameof(currentPageNumber), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), itemsPerPageAmount, nameof(itemsPerPageAmount), _logger);
 
 		var response = await _mediator.Send(new ShowTeamsSchemesQuery(currentPageNumber, itemsPerPageAmount, team => team.Title));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
-			return View(TeamViews.Show, response.Data);
+			return View(Basics.Show, response.Data);
 
 		return BadRequest();
 	}
@@ -273,8 +247,6 @@ public class TeamController : Controller
 		int currentPageNumber = pageNumber ?? FirstPageNumber;
 		int itemsPerPageAmount = itemsPerPageCount ?? DefaultItemsPerPageCount;
 
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), id, nameof(id), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTeams), currentPageNumber, nameof(currentPageNumber), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTeams), itemsPerPageAmount, nameof(itemsPerPageAmount), _logger);
 
@@ -284,7 +256,7 @@ public class TeamController : Controller
 		var response = await _mediator.Send(new ShowTeamsOfProjectQuery(projectId, team => team.Name, currentPageNumber, itemsPerPageAmount));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
-			return View(ProjectViews.Show, response.Data);
+			return View(Basics.Show, response.Data);
 
 		return BadRequest();
 	}

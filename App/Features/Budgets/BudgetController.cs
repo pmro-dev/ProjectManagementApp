@@ -7,9 +7,9 @@ using static App.Common.ControllersConsts;
 using MediatR;
 using App.Features.Budgets.Create;
 using App.Features.Budgets.Edit;
-using static App.Common.Views.ViewsConsts;
 using App.Features.Budgets.Delete;
 using App.Features.Budgets.Show;
+using static App.Common.Views.ViewsConsts;
 
 namespace App.Features.Budgets;
 
@@ -60,7 +60,7 @@ public class BudgetController : Controller
         var respond = await _mediator.Send(new EditBudgetQuery(budgetId));
 
         if (respond.StatusCode == StatusCodes.Status200OK)
-            return View(BudgetViews.Edit, respond.Data);
+            return View(Basics.Edit, respond.Data);
 
         return BadRequest();
     }
@@ -85,7 +85,7 @@ public class BudgetController : Controller
         var response = await _mediator.Send(new DeleteBudgetQuery(budgetId));
 
         if (response.StatusCode == StatusCodes.Status200OK)
-            return View(BudgetViews.Delete, response.Data);
+            return View(Basics.Delete, response.Data);
 
         return BadRequest();
     }

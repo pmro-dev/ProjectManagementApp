@@ -59,7 +59,7 @@ public class IncomeController : Controller
         var respond = await _mediator.Send(new EditIncomeQuery(incomeId));
 
         if (respond.StatusCode == StatusCodes.Status200OK)
-            return View(IncomeViews.Edit, respond.Data);
+            return View(Basics.Edit, respond.Data);
 
         return BadRequest();
     }
@@ -84,7 +84,7 @@ public class IncomeController : Controller
         var response = await _mediator.Send(new DeleteIncomeQuery(incomeId));
 
         if (response.StatusCode == StatusCodes.Status200OK)
-            return View(IncomeViews.Delete, response.Data);
+            return View(Basics.Delete, response.Data);
 
         return BadRequest();
     }

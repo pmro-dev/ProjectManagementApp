@@ -4,13 +4,13 @@ using App.Features.Exceptions.Throw;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using static App.Common.ControllersConsts;
-using static App.Common.Views.ViewsConsts;
 using App.Features.Projects.Create.Models;
 using App.Features.Projects.Edit.Models;
 using App.Features.Projects.Create;
 using App.Features.Projects.Edit;
 using App.Features.Projects.Delete;
 using App.Features.Projects.Show;
+using static App.Common.Views.ViewsConsts;
 
 namespace App.Features.Projects;
 
@@ -64,8 +64,6 @@ public class ProjectController : Controller
 	[Route(CustomRoutes.ProjectEditRoute)]
 	public async Task<IActionResult> Edit(Guid id)
 	{
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), id, nameof(id), _logger);
 		ModelStateHelper.SetErrorOnPost(ModelState, TempData);
 
 		var response = await _mediator.Send(new EditProjectQuery(id));
@@ -73,7 +71,7 @@ public class ProjectController : Controller
 		if (response.StatusCode != StatusCodes.Status200OK)
 			return BadRequest();
 
-		return View(ProjectViews.Edit, response.Data);
+		return View(Basics.Edit, response.Data);
 	}
 
 	[HttpPost]
@@ -81,10 +79,6 @@ public class ProjectController : Controller
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> Edit(Guid id, [FromForm] ProjectEditInputVM inputVM)
 	{
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), id, nameof(id), _logger);
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Edit), inputVM.Id, nameof(inputVM.Id), _logger);
-
 		var response = await _mediator.Send(new EditProjectCommand(inputVM, id));
 
 		if (response.StatusCode == StatusCodesExtension.EntityNameTaken)
@@ -107,13 +101,10 @@ public class ProjectController : Controller
 	[Route(CustomRoutes.ProjectDeleteRoute)]
 	public async Task<IActionResult> Delete(Guid id)
 	{
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Delete), id, nameof(id), _logger);
-
 		var response = await _mediator.Send(new DeleteProjectQuery(id));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
-			return View(ProjectViews.Delete, response.Data);
+			return View(Basics.Delete, response.Data);
 
 		return BadRequest();
 	}
@@ -123,9 +114,6 @@ public class ProjectController : Controller
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> DeletePost(Guid id)
 	{
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(DeletePost), id, nameof(id), _logger);
-
 		var response = await _mediator.Send(new DeleteProjectCommand(id));
 
 		//TODO REDIRECT TO MAIN BOARD OF PROJECTS
@@ -142,8 +130,6 @@ public class ProjectController : Controller
 		int currentPageNumber = pageNumber ?? FirstPageNumber;
 		int itemsPerPageAmount = itemsPerPageCount ?? DefaultItemsPerPageCount;
 
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), id, nameof(id), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTodoLists), currentPageNumber, nameof(currentPageNumber), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTodoLists), itemsPerPageAmount, nameof(itemsPerPageAmount), _logger);
 
@@ -152,7 +138,7 @@ public class ProjectController : Controller
 		var response = await _mediator.Send(new ShowProjectTodoListsBoardQuery(id, brieflyTodoList => brieflyTodoList.ProgressMade, currentPageNumber, itemsPerPageAmount));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
-			return View(ProjectViews.Show, response.Data);
+			return View(Basics.Show, response.Data);
 
 		return BadRequest();
 	}
@@ -164,8 +150,6 @@ public class ProjectController : Controller
 		int currentPageNumber = pageNumber ?? FirstPageNumber;
 		int itemsPerPageAmount = itemsPerPageCount ?? DefaultItemsPerPageCount;
 
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), id, nameof(id), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowStatistics), currentPageNumber, nameof(currentPageNumber), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowStatistics), itemsPerPageAmount, nameof(itemsPerPageAmount), _logger);
 
@@ -175,7 +159,7 @@ public class ProjectController : Controller
 		var response = await _mediator.Send(new ShowProjectStatisticsBoardQuery(id, brieflyTodoList => brieflyTodoList.ProgressMade, brieflyTeams => brieflyTeams.Name, currentPageNumber, itemsPerPageAmount));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
-			return View(ProjectViews.Show, response.Data);
+			return View(Basics.Show, response.Data);
 
 		return BadRequest();
 	}
@@ -187,8 +171,6 @@ public class ProjectController : Controller
 		int currentPageNumber = pageNumber ?? FirstPageNumber;
 		int itemsPerPageAmount = itemsPerPageCount ?? DefaultItemsPerPageCount;
 
-		// TODO write GUID exception valudation
-		//ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(Show), id, nameof(id), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTeams), currentPageNumber, nameof(currentPageNumber), _logger);
 		ExceptionsService.WhenValueLowerThanBottomBoundryThrow(nameof(ShowTeams), itemsPerPageAmount, nameof(itemsPerPageAmount), _logger);
 
@@ -198,7 +180,7 @@ public class ProjectController : Controller
 		var response = await _mediator.Send(new ShowTeamsOfProjectQuery(id, team => team.Name, currentPageNumber, itemsPerPageAmount));
 
 		if (response.StatusCode == StatusCodes.Status200OK)
-			return View(ProjectViews.Show, response.Data);
+			return View(Basics.Show, response.Data);
 
 		return BadRequest();
 	}

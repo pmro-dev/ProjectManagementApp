@@ -2,32 +2,8 @@
 
 public static class ViewsConsts
 {
-    public readonly struct TaskViews
-    {
-        public const string Create = "Create";
-        public const string Delete = "Delete";
-        public const string Show = "Show";
-        public const string Edit = "Edit";
-    }
-
-    public readonly struct TodoListViews
-    {
-        public const string Create = "Create";
-        public const string Delete = "Delete";
-        public const string Edit = "Edit";
-        public const string Show = "Show";
-    }
-
-	public readonly struct ProjectViews
+	public readonly struct Basics
 	{
-		public const string Create = "Create";
-		public const string Delete = "Delete";
-		public const string Edit = "Edit";
-		public const string Show = "Show";
-	}
-
-    public readonly struct TeamViews
-    {
 		public const string Create = "Create";
 		public const string Delete = "Delete";
 		public const string Edit = "Edit";
@@ -47,22 +23,6 @@ public static class ViewsConsts
         public const string Register = "Register";
         public const string DefaultLayout = "_LoginLayout";
     }
-
-    public readonly struct BudgetViews
-    {
-		public const string Create = "Create";
-		public const string Delete = "Delete";
-		public const string Edit = "Edit";
-		public const string Show = "Show";
-	}
-
-	public readonly struct IncomeViews
-	{
-		public const string Create = "Create";
-		public const string Delete = "Delete";
-		public const string Edit = "Edit";
-		public const string Show = "Show";
-	}
 
 	public readonly struct SharedViews
     {
