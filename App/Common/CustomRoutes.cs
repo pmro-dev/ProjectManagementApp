@@ -98,6 +98,7 @@ public static class CustomRoutes
 	public const string DeleteBudget = "/[controller]/{budgetId:guid}/[action]";
 	#endregion
 
+
 	#region Income Routes
 	
 	public const string IncomeControllerName = IncomeCtrl.Name;
@@ -105,5 +106,15 @@ public static class CustomRoutes
 	public const string CreateIncome = "[controller]/{guid:budgetId}/[action]";
 	public const string EditIncome = "/[controller]/{incomeId:guid}/[action]";
 	public const string DeleteIncome = "/[controller]/{incomeId:guid}/[action]";
+	#endregion
+
+
+	#region Billing Routes
+
+	public const string BillingControllerName = BillingCtrl.Name;
+	public const string ShowBilling = "/[controller]/{billingId:guid}/Boards/[action]";
+	public const string CreateBilling = "[controller]/{guid:budgetId}/[action]";
+	public const string EditBilling = "/[controller]/{billingId:guid}/[action]";
+	public const string DeleteBilling = "/[controller]/{billingId:guid}/[action]";
 	#endregion
 }

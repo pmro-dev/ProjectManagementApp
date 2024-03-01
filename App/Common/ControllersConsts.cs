@@ -1,4 +1,5 @@
-﻿using App.Features.Boards;
+﻿using App.Features.Billings;
+using App.Features.Boards;
 using App.Features.Budgets;
 using App.Features.Exceptions;
 using App.Features.Incomes;
@@ -90,16 +91,6 @@ public static class ControllersConsts
 		public const string ShowAction = nameof(TeamController.Show);
 	}
 
-	//public readonly struct TagCtrl
-	//{
-	//	public const string Name = "Tag";
-	//	public const string CreateAction = nameof(TagController.Create);
-	//	public const string EditAction = nameof(TagController.Edit);
-	//	public const string DeleteAction = nameof(TagController.Delete);
-	//	public const string DeletePostAction = nameof(TagController.DeletePost);
-	//	public const string ShowAction = nameof(TagController.Show);
-	//}
-
 	public readonly struct BudgetCtrl
 	{
 		public const string Name = "Budget";
@@ -118,5 +109,15 @@ public static class ControllersConsts
 		public const string DeleteAction = nameof(IncomeController.Delete);
 		public const string DeletePostAction = nameof(IncomeController.Delete);
 		public const string ShowAction = nameof(IncomeController.Show);
+	}
+
+	public readonly struct BillingCtrl
+	{
+		public const string Name = "Billing";
+		public const string CreateAction = nameof(BillingController.Create);
+		public const string EditAction = nameof(BillingController.Edit);
+		public const string DeleteAction = nameof(BillingController.Delete);
+		public const string DeletePostAction = nameof(BillingController.Delete);
+		public const string ShowAction = nameof(BillingController.Show);
 	}
 }
