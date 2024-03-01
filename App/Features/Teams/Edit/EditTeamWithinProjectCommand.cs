@@ -2,13 +2,13 @@
 
 namespace App.Features.Teams.Edit;
 
-public class EditTeamWithinProjectScopeCommand : IRequest<EditTeamWithinProjectScopeCommandResponse>
+public class EditTeamWithinProjectCommand : IRequest<EditTeamWithinProjectCommandResponse>
 {
     public Guid ProjectId { get; }
     public Guid TeamId { get; }
     public EditTeamInputVM InputVM { get; }
 
-    public EditTeamWithinProjectScopeCommand(Guid projectId, Guid teamId, EditTeamInputVM inputVM)
+    public EditTeamWithinProjectCommand(Guid projectId, Guid teamId, EditTeamInputVM inputVM)
     {
         InputVM = inputVM;
         ProjectId = projectId;
@@ -16,7 +16,7 @@ public class EditTeamWithinProjectScopeCommand : IRequest<EditTeamWithinProjectS
     }
 }
 
-public record EditTeamWithinProjectScopeCommandResponse(
+public record EditTeamWithinProjectCommandResponse(
     string? ErrorMessage = null,
     int StatusCode = StatusCodes.Status201Created
 )

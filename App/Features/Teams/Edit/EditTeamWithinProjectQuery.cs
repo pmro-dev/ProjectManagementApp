@@ -3,19 +3,19 @@ using MediatR;
 
 namespace App.Features.Teams.Edit;
 
-public class EditTeamWithinProjectScopeQuery : IRequest<EditTeamWithinProjectScopeResponse>
+public class EditTeamWithinProjectQuery : IRequest<EditTeamWithinProjectQueryResponse>
 {
     public Guid TeamId { get; }
     public Guid ProjectId { get; }
 
-    public EditTeamWithinProjectScopeQuery(Guid projectId, Guid teamId)
+    public EditTeamWithinProjectQuery(Guid projectId, Guid teamId)
     {
         ProjectId = projectId;
         TeamId = teamId;
     }
 }
 
-public record EditTeamWithinProjectScopeResponse(
+public record EditTeamWithinProjectQueryResponse(
     WrapperViewModel<EditTeamInputVM, EditTeamOutputVM>? Data,
     string? ErrorMessage = null,
     int StatusCode = StatusCodes.Status200OK
