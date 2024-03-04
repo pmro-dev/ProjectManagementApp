@@ -6,3 +6,36 @@
     font-size: 0.8em;
     font-weight: 500;
 }
+
+.avatar img {
+    width: 40px;
+    float: left;
+}
+
+.font-7 {
+    font-size: 0.7em;
+}
+
+.font-8 {
+    font-size: 0.8em;
+}
+
+.font-9 {
+    font-size: 0.9em;
+}
+
+.bold-5 {
+    font-weight: 500;
+}
+
+.bold-6 {
+    font-weight: 600;
+}
+
+.bold-7 {
+    font-weight: 700;
+}
+
+.bold-8 {
+    font-weight: 800;
+}

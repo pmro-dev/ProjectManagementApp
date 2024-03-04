@@ -2,246 +2,125 @@
 
 <nav>GŁÓWNA NAWIGACJA TOP</nav>
 
-<div class="container-md">
+<!-- PROJECTS CONTAINER  -->
+<div class="container-xxl">
 
-  <button class="btn btn-primary" (click)="GoToProjectCreation()">
-    NEW PROJECT
-  </button>
+  <div class="row">
+    <div class="col">
+      <button class="btn btn-primary float-start" (click)="GoToProjectCreation()">
+        NEW PROJECT
+      </button>
+    </div>
+  </div>
 
-  <!-- PROJECTS CONTAINER  -->
-  <div class="container-md justify-content-md-center">
-    <!-- Single Project Card -->
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+  <!-- Single Project Card -->
+  <div class="row row-cols-3 row-cols-md-3">
 
-      <div *ngFor="let project of projects">
+    <div *ngFor="let project of projects">
 
-        <div class="col">
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title">PROJECT TITLE</h5>
+      <div class="col my-3">
+        <div class="card h-100 bold-5">
+          <div class="card-body">
 
+            <h5 class="card-title">PROJECT TITLE</h5>
+
+            <div class="row mt-3 font-8 bold-6">
+              <div class="col">
+                <span>CLIENT</span>
+              </div>
+              <div class="col">
+                <span class="float-end">SPENT</span>
+              </div>
+              <div class="col">
+                <span class="float-end">&nbsp;</span>
+              </div>
+              <div class="col">
+                <span class="float-end ">TOTAL</span>
+              </div>
+            </div>
+
+            <div class="row align-items-center mt-2">
+              <div class="col float-start">
+                <img [src]="slackPath" style="max-width: 27px;" />
+                <span class="font-8 ps-2 bold-5">SLACK</span>
+              </div>
+              <div class="col-auto">
+                <span class="float-end ">530 000 $</span>
+              </div>
+              <div class="col-auto">
+                <span class="font-8">( 44% )</span>
+              </div>
+              <div class="col-auto ">
+                <span class="float-end">1 200 000 $</span>
+              </div>
+            </div>
+
+            <div class="row py-4 px-3">
+              <p class="card-text" style="font-size: 0.8em; text-align: justify;">
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+                totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta
+                sunt explicabo.
+                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur
+                magni dolores eos qui ratione voluptatem sequi
+                nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur.
+              </p>
+            </div>
+
+            <div class="row icons">
+              <div class="col">
+                <img [src]="teamsImgPath" />
+                <br />
+                <span>3 Teams</span>
+              </div>
+              <div class="col">
+                <img [src]="listsImgPath" />
+                <br />
+                <span>12 Lists</span>
+              </div>
+              <div class="col">
+                <img [src]="tasksImgPath" />
+                <br />
+                <span>56 Tasks</span>
+              </div>
+              <div class="col">
+                <img [src]="progressImgPath" />
+                <br />
+                <span>In Progress</span>
+              </div>
+            </div>
+
+            <div class="g-2 py-4 font-8 justify-content-center">
               <div class="row">
                 <div class="col">
-                  <span>CLIENT</span>
-                </div>
-                <div class="col">
-                  <span>SPENT</span>
-                </div>
-                <div class="col">
-                  <span>TOTAL</span>
-                </div>
-              </div>
-
-              <div class="row align-items-baseline">
-                <div class="col d-flex align-items-baseline">
-                  <img [src]="slackPath" style="max-width: 30px;" />&nbsp;
-                  <span>SLACK</span>
-                </div>
-                <div class="col">
-                  <span>530 000 $</span>
-                </div>
-                <div class="col">
-                  <span>1 200 000 $</span>
-                </div>
-              </div>
-
-              <div class="row p-4">
-                <p class="card-text" style="font-size: 0.8em; text-align: justify;">
-                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
-                  totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta
-                  sunt explicabo.
-                  Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur
-                  magni dolores eos qui ratione voluptatem sequi
-                  nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur.
-                </p>
-              </div>
-
-              <div class="row icons">
-                <div class="col">
-                  <img [src]="teamsImgPath" />
-                  <br />
-                  <span>3 Teams</span>
-                </div>
-                <div class="col">
-                  <img [src]="listsImgPath" />
-                  <br />
-                  <span>12 Lists</span>
-                </div>
-                <div class="col">
-                  <img [src]="tasksImgPath" />
-                  <br />
-                  <span>56 Tasks</span>
-                </div>
-                <div class="col">
-                  <img [src]="progressImgPath" />
-                  <br />
-                  <span>In Progress</span>
-                </div>
-              </div>
-
-              <div class="card-footer">
-                <div class="row">
-                  <div class="col" style="text-align: left;">
-                    <small class="text-body-secondary">146 days since start</small>
+                  <span class="">Managed by</span>
+                  <div class="avatar mt-3 d-flex align-items-center justify-content-center">
+                    <img [src]="avatarPath" />
+                    <span class="float-start px-2">Aleksandra Kowalska</span>
                   </div>
-                  <div class="col" style="text-align: right;">
-                    <small class="text-body-secondary">46 days left</small>
-                  </div>
+                </div>
+                <div class="col">
+                  <span class="">Owned by</span>
+                  <div class="avatar mt-3 d-flex align-items-center justify-content-center">
+                    <img [src]="avatarPath" />
+                    <span class="float-start px-2">Jan Kowalski</span>
+                  </div>                  
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="row">
-            <div class="col">
-              <span>T ICON</span>
-              <span>3 TEAMS</span>
-            </div>
-
-            <div class="col">
-              <span>L ICON</span>
-              <span>12 LISTS</span>
-            </div>
-
-            <div class="col">
-              <span>T ICON</span>
-              <span>56 TASKS</span>
-            </div>
-
-            <div class="col">
-              <span>P ICON</span>
-              <span>IN PROGRESS</span>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col">
-              <span>MANAGED BY</span>
-              <div class="row">
-                <div class="col">
-                  <img [src]="avatarPath" />
-                </div>
-                <div class="col">
-                  <div>Aleksandra Kowalska</div>
-                </div>
+          <div class="card-footer">
+            <div class="row">
+              <div class="col" style="text-align: left;">
+                <small class="text-body-tertiary font-7">146 days since start</small>
               </div>
-            </div>
-
-            <div class="col">
-              <span>OWNED BY</span>
-              <div class="row">
-                <div class="col">
-                  <img [src]="avatarPath" />
-                </div>
-                <div class="col">
-                  <div>Jaś Kowalski</div>
-                </div>
+              <div class="col" style="text-align: right;">
+                <small class="text-body-secondary font-8">46 days left</small>
               </div>
             </div>
           </div>
-
-          <div class="row">
-            <div class="col">
-              <span></span>
-            </div>
-
-            <div class="col">
-              <span></span>
-            </div>
-          </div>
-
         </div>
       </div>
-
     </div>
-
-  </div>
-
-
-
-  <!--<nav class="navbar navbar-expand-sm navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">
-      <h1>Angular Bootstrap</h1>
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-        </li>
-      </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
-    </div>
-  </div>
-</nav>
-<div class="container-fluid py-3">
-  <div class="row my-3">
-    <div class="col">
-      <label for="exampleFormControlInput1" class="form-label">Email address</label>
-      <input type="email" class="form-control form-control-sm" id="exampleFormControlInput1" placeholder="name@example.com">
-    </div>
-  </div>
-  <div class="row my-3">
-    <div class="col">
-      <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
-      <textarea class="form-control form-control-sm" id="exampleFormControlTextarea1" rows="3"></textarea>
-    </div>
-  </div>
-  <div class="row my-3">
-    <div class="col">
-      <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-        <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label>
-      </div>
-    </div>
-  </div>
-  <div class="row my-3">
-    <div class="col">-->
-  <!--<button class="btn btn-sm btn-outline-primary" (click)="open(demoModal)">Launch demo modal</button>-->
-  <!--</div>
   </div>
 </div>
-
-<ng-template #demoModal let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-  </div>
-  <div class="modal-body">
-    <form>
-      <div class="form-group">
-        <label for="dateOfBirth">Date of birth</label>
-        <div class="input-group">
-          <input id="dateOfBirth" name="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #dp="ngbDatepicker">
-          <button type="button" class="btn btn-outline-secondary bi bi-calendar" (click)="dp.toggle()"></button>
-        </div>
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
-  </div>
-</ng-template>-->
