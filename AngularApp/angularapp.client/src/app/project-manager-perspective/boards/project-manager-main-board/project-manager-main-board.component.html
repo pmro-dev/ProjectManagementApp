@@ -3,120 +3,99 @@
 <nav>GŁÓWNA NAWIGACJA TOP</nav>
 
 <!-- PROJECTS CONTAINER  -->
-<div class="container-xxl">
+<div class="container">
 
-  <div class="row">
-    <div class="col">
-      <button class="btn btn-primary float-start" (click)="GoToProjectCreation()">
-        NEW PROJECT
+  <div class="row justify-content-sm-center justify-content-md-center justify-content-lg-start">
+    <div class="col-auto">
+      <button class="btn btn-new-project" (click)="GoToProjectCreation()">
+          <span>NEW PROJECT</span>
       </button>
     </div>
   </div>
 
-  <!-- Single Project Card -->
-  <div class="row row-cols-3 row-cols-md-3">
+  <div class="row justify-content-center mt-3">
+    <!-- Single Project Card -->
+    <div class="my-3" style="width: 27em;" *ngFor="let project of projects">
+      <div class="card h-100">
+        <div class="card-body">
 
-    <div *ngFor="let project of projects">
+          <h5 class="card-title">PROJECT TITLE</h5>
 
-      <div class="col my-3">
-        <div class="card h-100 bold-5">
-          <div class="card-body">
-
-            <h5 class="card-title">PROJECT TITLE</h5>
-
-            <div class="row mt-3 font-8 bold-6">
-              <div class="col">
-                <span>CLIENT</span>
-              </div>
-              <div class="col">
-                <span class="float-end">SPENT</span>
-              </div>
-              <div class="col">
-                <span class="float-end">&nbsp;</span>
-              </div>
-              <div class="col">
-                <span class="float-end ">TOTAL</span>
-              </div>
+          <dl class="details mt-3">
+            <div>
+              <!-- <img [src]="slackPath" style="max-width: 27px;" /> -->
+              <dt>CLIENT</dt>
+              <dd>SLACK</dd>
             </div>
-
-            <div class="row align-items-center mt-2">
-              <div class="col float-start">
-                <img [src]="slackPath" style="max-width: 27px;" />
-                <span class="font-8 ps-2 bold-5">SLACK</span>
-              </div>
-              <div class="col-auto">
-                <span class="float-end ">530 000 $</span>
-              </div>
-              <div class="col-auto">
-                <span class="font-8">( 44% )</span>
-              </div>
-              <div class="col-auto ">
-                <span class="float-end">1 200 000 $</span>
-              </div>
+            <div>
+              <dt>SPENT</dt>
+              <dd>530 000 $</dd>
             </div>
-
-            <div class="row py-4 px-3">
-              <p class="card-text" style="font-size: 0.8em; text-align: justify;">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
-                totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta
-                sunt explicabo.
-                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur
-                magni dolores eos qui ratione voluptatem sequi
-                nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur.
-              </p>
+            <div>
+              <dt>TOTAL</dt>
+              <dd>1 200 000 $</dd>
             </div>
+          </dl>
 
-            <div class="row icons">
-              <div class="col">
-                <img [src]="teamsImgPath" />
-                <br />
-                <span>3 Teams</span>
-              </div>
-              <div class="col">
-                <img [src]="listsImgPath" />
-                <br />
-                <span>12 Lists</span>
-              </div>
-              <div class="col">
-                <img [src]="tasksImgPath" />
-                <br />
-                <span>56 Tasks</span>
-              </div>
-              <div class="col">
-                <img [src]="progressImgPath" />
-                <br />
-                <span>In Progress</span>
-              </div>
+          <div class="row py-2 px-3">
+            <p class="inside-card-text" style="text-align: justify;">
+              Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+              totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta
+              sunt explicabo.
+              Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur
+              magni dolores eos qui ratione voluptatem sequi
+              nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur.
+            </p>
+          </div>
+
+          <div class="icons row justify-content-center">
+            <div class="col-3">
+              <img [src]="teamsImgPath" />
+              <br />
+              <span>3 Teams</span>
             </div>
-
-            <div class="g-2 py-4 font-8 justify-content-center">
-              <div class="row">
-                <div class="col">
-                  <span class="">Managed by</span>
-                  <div class="avatar mt-3 d-flex align-items-center justify-content-center">
-                    <img [src]="avatarPath" />
-                    <span class="float-start px-2">Aleksandra Kowalska</span>
-                  </div>
-                </div>
-                <div class="col">
-                  <span class="">Owned by</span>
-                  <div class="avatar mt-3 d-flex align-items-center justify-content-center">
-                    <img [src]="avatarPath" />
-                    <span class="float-start px-2">Jan Kowalski</span>
-                  </div>                  
-                </div>
-              </div>
+            <div class="col-3">
+              <img [src]="listsImgPath" />
+              <br />
+              <span>12 Lists</span>
+            </div>
+            <div class="col-3">
+              <img [src]="tasksImgPath" />
+              <br />
+              <span>56 Tasks</span>
+            </div>
+            <div class="col-3">
+              <img [src]="progressImgPath" />
+              <br />
+              <span>In Progress</span>
             </div>
           </div>
 
-          <div class="card-footer">
-            <div class="row">
-              <div class="col" style="text-align: left;">
-                <small class="text-body-tertiary font-7">146 days since start</small>
+          <div class="row my-2 font-8 justify-content-center">
+            <div class="col-auto mt-3">
+              <span>Managed by</span>
+              <div class="avatar mt-3 d-flex align-items-center">
+                <img [src]="avatarPath" />
+                <span class="px-2 text-start">Aleksandra Kowalska</span>
               </div>
-              <div class="col" style="text-align: right;">
-                <small class="text-body-secondary font-8">46 days left</small>
+            </div>
+            <div class="col-auto mt-3">
+              <span>Owned by</span>
+              <div class="avatar mt-3 d-flex align-items-center">
+                <img [src]="avatarPath" />
+                <span class="px-2 text-start">Jan Kowalski</span>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-footer px-4 py-2">
+          <div class="row">
+            <div class="col" style="text-align: left;">
+              <small class="text-body-tertiary font-7">146 days since start</small>
+            </div>
+            <div class="col" style="text-align: right;">
+              <small class="text-body-secondary font-8">46 days left</small>
             </div>
           </div>
         </div>
