@@ -7,29 +7,29 @@ import { Component } from '@angular/core';
 })
 
 export class ProjectManagerMainBoardComponent {
-  avatarPath : string = "/assets/avatars/avatar1-mini.jpg";
-  slackPath : string = "/assets/other/slack-img.png";
-  teamsImgPath : string = "/assets/icons/teamIcon.jpg";
-  listsImgPath : string = "/assets/icons2/noteIcon.jpg";
-  tasksImgPath : string = "/assets/icons2/tasksIcon.jpg";
-  progressImgPath : string = "/assets/icons2/progressIcon.jpg";
+  avatarPath: string = "/assets/avatars/avatar1-mini.jpg";
+  slackPath: string = "/assets/other/slack-img.png";
+  teamsImgPath: string = "/assets/icons/teamIcon.jpg";
+  listsImgPath: string = "/assets/icons2/noteIcon.jpg";
+  tasksImgPath: string = "/assets/icons2/tasksIcon.jpg";
+  progressImgPath: string = "/assets/icons2/progressIcon.jpg";
 
-  projects : Array<{Title : string, Count : number}> = [ 
-    {Title: "Project 1", Count: 12},
-    {Title: "Project 2", Count: 35},
-    {Title: "Project 3", Count: 76}
+  projects: Array<{ Title: string, Count: number }> = [
+    { Title: "Project 1", Count: 12 },
+    { Title: "Project 2", Count: 35 },
+    { Title: "Project 3", Count: 76 }
   ];
 
-constructor(){
-  let cos : Project = {Title : "", Count : 2};
-  this.projects.push(cos);
-}
+  constructor() {
+    let cos: Project = { Title: "Elo", Count: 2 };
+    this.projects.push(cos);
+  }
 
-  GoToProjectCreation() : void{}
+  GoToProjectCreation(): void { }
 
 }
 
 interface Project {
-  Title : string,
-  Count : number
+  Title: string,
+  Count: number
 }

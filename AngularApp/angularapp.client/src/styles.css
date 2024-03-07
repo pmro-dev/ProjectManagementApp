@@ -4,3 +4,80 @@ body {
     font-family: "Spline Sans", "Dosis", Calibri, Tahoma, sans-serif;
     /* font-weight: 500; */
 }
+
+.avatar img {
+    width: 45px;
+    float: left;
+}
+
+.btn-custom-primary {
+    background: linear-gradient(white, white) padding-box,
+    linear-gradient(90.38deg, rgb(0, 120, 194) 4.77%, rgb(0, 71, 255) 42.63%, rgb(132, 83, 210) 65.91%);
+    border-radius: 0.6em;
+    border: 2px solid transparent;
+}
+
+.btn-custom-primary:hover {
+    background: linear-gradient(to right, rgb(24, 139, 211) 0%, rgb(131, 73, 224) 100%);
+}
+
+.btn-custom-primary span {
+    font-weight: 600;
+    font-size: 0.9em;
+    transition: 0.2s;
+    background: linear-gradient(90.38deg, rgb(1, 94, 151) 4.77%, rgb(0, 71, 255) 42.63%, rgb(107, 60, 184) 65.91%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.btn-custom-primary:hover span {
+    color: white;
+}
+
+.card-title {
+    font-weight: 600;
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+    top: 0;
+    transition: top ease 0.15s;
+}
+
+.card:hover {
+    cursor: grab;
+    top: -10px;
+}
+
+.font-7 {
+    font-size: 0.7em;
+}
+
+.font-8 {
+    font-size: 0.8em;
+}
+
+.font-9 {
+    font-size: 0.9em;
+}
+
+.font-10 {
+    font-size: 1em;
+}
+
+.bold-5 {
+    font-weight: 500;
+}
+
+.bold-6 {
+    font-weight: 600;
+}
+
+.bold-7 {
+    font-weight: 700;
+}
+
+.bold-8 {
+    font-weight: 800;
+}

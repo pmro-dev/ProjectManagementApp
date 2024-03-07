@@ -1,0 +1,87 @@
+<p>project-manager-todolists-board works!</p>
+
+<nav>GŁÓWNA NAWIGACJA TOP</nav>
+
+<!-- PROJECTS CONTAINER  -->
+<div class="container">
+
+    <div class="row justify-content-sm-center justify-content-md-center justify-content-lg-start">
+        <div class="col-auto">
+            <button class="btn btn-custom-primary" (click)="GoToTodoListCreation()">
+                <span>NEW TODOLIST</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-3">
+        <!-- Single Project Card -->
+        <div class="my-3" style="width: 27em;" *ngFor="let todolist of todolists">
+            <div class="card h-100">
+
+                <div class="todolist-head pt-3 pb-2">
+                    <h6 class="card-title">TODOLIST TITLE</h6>
+
+                    <div class="setting-box-selection">
+
+                        <i class="setting-icon fa-solid fa-gear"></i>
+
+                        <div class="multi-button">
+                            <button class="fas fa-heart"></button>
+                            <button class="fas fa-comment"></button>
+                            <button class="fas fa-share-alt"></button>
+                            <button class="fas fa-trash"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+
+                    <dl class="details">
+                        <div class="team-box align-items-center">
+                            <img [src]="avatarPath" />
+                            <dd class="font-9 pt-2">{{ todolist.TeamName }}</dd>
+                        </div>
+                        <div>
+                            <dt>TASKS</dt>
+                            <dd class="font-10">15 / 36</dd>
+                            <dd class="font-8">44%</dd>
+                            <dt>COMPLETED</dt>
+                        </div>
+                    </dl>
+
+                    <div class="row inside-body">
+                        <span class="inside-card-text py-2">
+                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+                            laudantium,
+                            totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae
+                            vitae dicta
+                            sunt explicabo.
+                            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
+                            consequuntur
+                            magni dolores eos qui ratione voluptatem sequi
+                            nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur.
+                        </span>
+                        <div class="col-auto py-2 float-start">
+                            <span class="font-8 bold-5">Project: Project Title</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 px-3">
+                        <div class="row">
+                            <span class="col-auto font-8 bold-5 float-start">Managed by</span>
+                        </div>
+
+                        <div class="row avatar mt-2 d-flex align-items-center">
+                            <div class="col-2">
+                                <img [src]="avatarPath" />
+                            </div>
+                            <div class="col-auto">
+                                <span class="float-start font-9 bold-6">Aleksandra Kowalska</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

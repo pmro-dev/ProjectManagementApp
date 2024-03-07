@@ -6,11 +6,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ProjectManagerMainBoardComponent } from './project-manager-perspective/boards/project-manager-main-board/project-manager-main-board.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ProjectManagerTodolistsBoardComponent } from './project-manager-perspective/boards/project-manager-todolists-board/project-manager-todolists-board.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ProjectManagerMainBoardComponent,
+    ProjectManagerTodolistsBoardComponent,
   ],
   imports: [
     BrowserModule, HttpClientModule,
