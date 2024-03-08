@@ -120,7 +120,7 @@
         color: #6558d3;
         cursor: pointer;
         transition: 0.25s cubic-bezier(0.25, 0, 0, 1);
-        box-shadow: 0 0 0rem -0.25rem white;
+        box-shadow: 0 1px 6px 0 #b2a5eb, 0 1px 6px 0 #b2a5eb;
 
         top: 0rem;
         right: 0rem;
@@ -129,7 +129,7 @@
         &:hover {
             background: #6558d3;
             color: #c9bdff;
-            box-shadow: 0 0 1rem -0.25rem white;
+            box-shadow: 0 1px 5px 0 #8477fa, 0 1px 5px 0 #8477fa;
         }
     }
 }

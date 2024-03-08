@@ -48,6 +48,7 @@ body {
 .card:hover {
     cursor: grab;
     top: -10px;
+    box-shadow: 0 4px 8px 0 #b5a9ff, 0 5px 10px 0 #b5a9ff;
 }
 
 .font-7 {
