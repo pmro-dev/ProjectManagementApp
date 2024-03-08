@@ -7,12 +7,14 @@ import { AppComponent } from './app.component';
 import { ProjectManagerMainBoardComponent } from './project-manager-perspective/boards/project-manager-main-board/project-manager-main-board.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProjectManagerTodolistsBoardComponent } from './project-manager-perspective/boards/project-manager-todolists-board/project-manager-todolists-board.component';
+import { ProjectManagerTeamsBoardComponent } from './project-manager-perspective/boards/project-manager-teams-board/project-manager-teams-board.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ProjectManagerMainBoardComponent,
     ProjectManagerTodolistsBoardComponent,
+    ProjectManagerTeamsBoardComponent,
   ],
   imports: [
     BrowserModule, HttpClientModule,

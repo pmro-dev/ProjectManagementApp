@@ -1,0 +1,88 @@
+
+.left-menu{
+    height: 100%;
+    width: 10em;
+    float:left;
+    margin-left: 0px;
+    background-color: red;
+}
+
+.view-title-box {
+    text-align: start;
+}
+
+.team-head-box{
+    /* background-color: rgb(255, 241, 223); */
+    width:auto;
+    padding: 15px 12px;
+    margin-left: 0px;
+    border-radius: 10px;
+}
+
+.icon-eye:hover {
+    cursor: grab;
+}
+
+.team-card {
+    position: relative;
+    width: 325px;
+    height: auto;
+    background-color: rgb(247, 247, 247);
+    border-radius: 10px;
+    margin: 1.5em 1.5em 0px 0px;
+    margin-left: 0px;
+
+    box-shadow: 0 1px 6px 0 #e7e7e7, 0 1px 15px 0 #e7e7e7;
+}
+
+.card-corner {
+    --green: green; 
+    position: absolute;
+    width: 0px;
+    right: 0;
+    top: 0;
+    border-width: 30px 30px 30px 30px;
+    /* border-color: var(--green) var(--green) rgb(247, 247, 247) rgb(247, 247, 247); */
+    border-top-right-radius: 10px;
+    /* box-shadow: 0 10px 0px 0 rgb(247, 247, 247), 0 0px 15px 0 red; */
+    /* box-shadow: 5px -5px 3px red; */
+    /* box-shadow: 3px -2px 5px -3px var(--green), 1px -2px 0px -3px var(--green); */
+    border-style: solid;
+}
+
+.avatar {
+    margin: 0px;
+    padding: 0px 0px 0px 12px;
+}
+
+.avatar img {
+    width: 70px;
+}
+
+.member-data {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    padding-left: 15px;
+    padding-top: 5px;
+    color: rgb(97, 97, 97);
+}
+
+.member-data span {
+    padding: 0px 0px 5px 0px;
+}
+
+.member-stats {
+    margin: 20px 0px 7px 0px;
+    color: rgb(97, 97, 97);
+}
+
+.member-stats div dt {
+    font-size: 0.75em;
+    font-weight: 500;
+}
+
+.member-stats div dd {
+    font-size: 0.7em;
+    font-weight: 500;
+}

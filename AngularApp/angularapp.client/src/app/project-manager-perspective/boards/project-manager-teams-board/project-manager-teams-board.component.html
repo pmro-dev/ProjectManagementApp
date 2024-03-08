@@ -1,0 +1,98 @@
+<p>project-manager-teams-board works!</p>
+
+<div class="row">
+    <div class="col-auto">
+        <div class="left-menu">
+            LEFT MENU
+        </div>
+    </div>
+
+    <div class="col" style="margin-left: 1.5em;">
+        <div class="row view-title-box my-2">
+            <h4 class="col-auto ">TEAMS VIEW</h4>
+            <h5 class="col-auto ">Project Title</h5>
+        </div>
+        <div class="row my-2">
+            <h4 class="text-start">3 Teams</h4>
+        </div>
+        <div class="row my-5" *ngFor="let team of Teams">
+            <div class="team-head-box" [style.background]="team.Color">
+                <div class="row">
+                    <h5 class="text-start">
+                        {{ team.Name }}
+                    </h5>
+                </div>
+                <div class="row text-start flex-row font-9">
+                    <div class="col-auto">
+                        <i class="fa-solid fa-eye-slash icon-eye" style="font-size: 1.2em;"></i>
+                        <!-- #blur {
+                            font-size: 40px;
+                            color: transparent;
+                            text-shadow: 0 0 8px #000;
+                          }
+                        <div id="blur">Blurry Text</div> -->
+                        <!-- <i class="fa-solid fa-eye" style="font-size: 1.2em;"></i> -->
+                    </div>
+                    <div class="col-auto">
+                        <span>5 tasks / person</span>
+                    </div>
+                    <div class="col-auto">
+                        <span>75 000 $ / month</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row my-1">
+                <div class="team-card" *ngFor="let member of team.Members">
+                    <div class="card-corner" [style.border-color]="member.Color" [style.box-shadow]="member.Color"></div>
+                    <div class="row mt-3">
+                        <div class="col-auto avatar">
+                            <img [src]="avatarPath" />
+                        </div>
+                        <div class="col member-data">
+                            <span class="font-10 bold-6 pb-1">
+                                {{ member.FullName }}
+                            </span>
+                            <span class="font-9 bold-5">
+                                {{ member.Position }}
+                            </span>
+                            <span class="font-7 bold-5">
+                                5 Years in the company
+                            </span>
+                            <div class="row font-7 bold-5">
+                                <div class="col">
+                                    <span class="text-start ">
+                                        3 000 $ / month
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    <span class="text-end">
+                                        13% of team budget
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <dl class="row member-stats">
+                        <div class="col">
+                            <dt>Tasks</dt>
+                            <dd>16</dd>
+                        </div>
+                        <div class="col">
+                            <dt>ToDo</dt>
+                            <dd>6</dd>
+                        </div>
+                        <div class="col-auto ">
+                            <dt>In Progress</dt>
+                            <dd>3</dd>
+                        </div>
+                        <div class="col">
+                            <dt>Completed</dt>
+                            <dd>7</dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

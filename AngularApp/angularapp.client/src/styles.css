@@ -51,6 +51,22 @@ body {
     box-shadow: 0 4px 8px 0 #b5a9ff, 0 5px 10px 0 #b5a9ff;
 }
 
+.font-4 {
+    font-size: 0.4em;
+}
+
+.font-5 {
+    font-size: 0.5em;
+}
+
+.font-6 {
+    font-size: 0.6em;
+}
+
+.font-6_5 {
+    font-size: 0.65em;
+}
+
 .font-7 {
     font-size: 0.7em;
 }
