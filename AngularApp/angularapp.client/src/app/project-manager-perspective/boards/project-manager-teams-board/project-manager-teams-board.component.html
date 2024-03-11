@@ -50,16 +50,16 @@
                             <img [src]="avatarPath" />
                         </div>
                         <div class="col member-data">
-                            <span class="font-10 bold-6 pb-1">
+                            <span class="bold-6 pb-1 member-basic-data">
                                 {{ member.FullName }}
                             </span>
-                            <span class="font-9 bold-5">
+                            <span class="bold-5 member-basic-data">
                                 {{ member.Position }}
                             </span>
-                            <span class="font-7 bold-5">
+                            <span class="font-7 bold-5 member-data-to-hide" style="--i:1">
                                 5 Years in the company
                             </span>
-                            <div class="row font-7 bold-5">
+                            <div class="row font-7 bold-5 member-data-to-hide" style="--i:2">
                                 <div class="col">
                                     <span class="text-start ">
                                         3 000 $ / month
@@ -73,7 +73,7 @@
                             </div>
                         </div>
                     </div>
-                    <dl class="row member-stats">
+                    <dl class="row member-stats member-data-to-hide" style="--i:3">
                         <div class="col">
                             <dt>Tasks</dt>
                             <dd>16</dd>

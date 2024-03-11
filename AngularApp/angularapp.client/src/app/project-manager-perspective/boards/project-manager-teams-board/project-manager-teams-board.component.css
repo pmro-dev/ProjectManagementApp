@@ -51,7 +51,15 @@
 }
 
 .avatar img {
-    width: 70px;
+    width: 100px;
+    transition: 0.2s;
+    transform: translateY(30px);    
+}
+
+.team-card:hover .avatar img {
+    font-size: 1.2em;
+    width: 80px;
+    transform: translateY(0px);    
 }
 
 .member-data {
@@ -70,6 +78,45 @@
 .member-stats {
     margin: 20px 0px 7px 0px;
     color: rgb(97, 97, 97);
+}
+
+.member-basic-data {
+    font-size: 1.15em;
+    transition: 0.2s;
+    transform: translateY(45px);
+    
+    &:nth-child(1){
+        font-size: 1.15em;
+    }
+
+    &:nth-child(2) {
+        font-size: 1em;
+    }
+}
+
+.team-card:hover .member-basic-data {
+    font-size: 1em;
+    transform: translateY(0px);
+
+    &:nth-child(1){
+        font-size: 1em;
+    }
+
+    &:nth-child(2) {
+        font-size: 0.85em;
+    }
+}
+
+.member-data-to-hide {
+    transition: 0.15s;
+    transition-delay: calc(0.03s * var(--i));
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.team-card:hover .member-data-to-hide {
+    opacity: 1;
+    transform: translateY(0px);
 }
 
 .member-stats div dt {
