@@ -12,7 +12,6 @@
 }
 
 .team-head-box{
-    /* background-color: rgb(255, 241, 223); */
     width:auto;
     padding: 15px 12px;
     margin-left: 0px;
@@ -36,17 +35,13 @@
 }
 
 .card-corner {
-    --green: green; 
     position: absolute;
     width: 0px;
     right: 0;
     top: 0;
     border-width: 30px 30px 30px 30px;
-    /* border-color: var(--green) var(--green) rgb(247, 247, 247) rgb(247, 247, 247); */
+    transition: 0.12s;
     border-top-right-radius: 10px;
-    /* box-shadow: 0 10px 0px 0 rgb(247, 247, 247), 0 0px 15px 0 red; */
-    /* box-shadow: 5px -5px 3px red; */
-    /* box-shadow: 3px -2px 5px -3px var(--green), 1px -2px 0px -3px var(--green); */
     border-style: solid;
 }
 

@@ -8,6 +8,7 @@ import { ProjectManagerMainBoardComponent } from './project-manager-perspective/
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProjectManagerTodolistsBoardComponent } from './project-manager-perspective/boards/project-manager-todolists-board/project-manager-todolists-board.component';
 import { ProjectManagerTeamsBoardComponent } from './project-manager-perspective/boards/project-manager-teams-board/project-manager-teams-board.component';
+import { TeamCardHighlightDirective } from './project-manager-perspective/boards/project-manager-teams-board/team-card-highlight.directive';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { ProjectManagerTeamsBoardComponent } from './project-manager-perspective
     ProjectManagerMainBoardComponent,
     ProjectManagerTodolistsBoardComponent,
     ProjectManagerTeamsBoardComponent,
+    TeamCardHighlightDirective,
   ],
   imports: [
     BrowserModule, HttpClientModule,
