@@ -8,13 +8,7 @@ Below is my coding history of preperation to training and selecting process (3 w
 
 ![image](https://user-images.githubusercontent.com/34062651/227588476-2e8c3db3-e4ff-498a-bbb7-7a6358d2e68e.png)
 
-Because of my interesting and education in Project Management I decided to develop something similar to monday.com: 
-
-MONDAY.COM:
-
-![image](https://user-images.githubusercontent.com/34062651/227597593-b4a8dbc6-0fa7-45e5-aa13-ecec40c883c0.png)
-
-I designed a few visualizations of app.
+I designed a few visualizations of an app.
 
 ![PM DASHBOARDS](https://user-images.githubusercontent.com/34062651/228310052-f25319eb-1db3-4f94-8d80-f32f99688405.gif)
 
@@ -27,6 +21,8 @@ Shorter / Smaller ideas I put to Trello table -> https://trello.com/b/bxvtZ0xg/p
 [![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=pmro-dev&hide=prs,issues,contribs&show_icons=true&theme=tokyonight)](https://github.com/anuraghazra/github-readme-stats)
 [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=pmro-dev)](https://github.com/anuraghazra/github-readme-stats)
 
+
+***First version was a MVC app but I moved to API approach and presently working on frontend which gonna be based on Angular framework.
 
 Major Ideas to develop in the future:
 - Azure Deployment
