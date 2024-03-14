@@ -51,6 +51,31 @@ body {
     box-shadow: 0 4px 8px 0 #b5a9ff, 0 5px 10px 0 #b5a9ff;
 }
 
+.color-purple {
+    color: #460096;
+}
+
+.color-green {
+    color: #0a6d01;
+}
+
+.color-orange {
+    color: #a16101;
+}
+
+.color-grey {
+    color: rgb(119, 119, 119);
+}
+
+.left-menu{
+    height: 100%;
+    width: 10em;
+    float:left;
+    margin-left: 0px;
+    background-color: red;
+    position: relative;
+}
+
 .font-4 {
     font-size: 0.4em;
 }
@@ -83,6 +108,18 @@ body {
     font-size: 1em;
 }
 
+.font-11 {
+    font-size: 1.1em;
+}
+
+.font-12 {
+    font-size: 1.2em;
+}
+
+.font-13 {
+    font-size: 1.3em;
+}
+
 .bold-5 {
     font-weight: 500;
 }
@@ -98,3 +135,5 @@ body {
 .bold-8 {
     font-weight: 800;
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

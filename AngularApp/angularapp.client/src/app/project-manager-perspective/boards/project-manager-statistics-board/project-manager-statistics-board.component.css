@@ -1,0 +1,58 @@
+.general-stat-container {
+    height: 250px;
+    min-width: 500px;
+    max-width: 700px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 10px;
+    background-color: rgb(247, 247, 247);
+}
+
+.general-stat-inner {
+    padding: 15px 20px 0px 20px;
+    position: relative;
+    height: 100%;
+}
+
+.budget-stat-container {
+    height: 250px;
+    min-width: 500px;
+    max-width: 700px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 10px;
+    background-color: rgb(247, 247, 247);
+}
+
+.general-stat-text {
+    display: flex;
+    flex-direction: column;
+    float: left;
+    text-align: left;
+}
+
+.general-stat-text span {
+    padding-top: 7px;
+    font-weight: 500;
+    color: rgb(100, 100, 100);
+}
+
+.progress-bar-container {
+    width: 70%;
+}
+
+.budget-money span {
+    font-size: 1.5em;
+    padding-bottom: 17px;
+}
+
+.todolist-card {
+    width: 350px;
+    height: 150px;
+    /* background-color: green; */
+    border-radius: 7px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+/* .progress-bar-container .mdc-linear-progress {
+    --mdc-linear-progress-active-indicator-height: 7px;
+    --mdc-linear-progress-track-height: 7px
+} */

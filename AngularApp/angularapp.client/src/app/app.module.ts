@@ -9,6 +9,13 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProjectManagerTodolistsBoardComponent } from './project-manager-perspective/boards/project-manager-todolists-board/project-manager-todolists-board.component';
 import { ProjectManagerTeamsBoardComponent } from './project-manager-perspective/boards/project-manager-teams-board/project-manager-teams-board.component';
 import { TeamCardHighlightDirective } from './project-manager-perspective/boards/project-manager-teams-board/team-card-highlight.directive';
+import { ProjectManagerStatisticsBoardComponent } from './project-manager-perspective/boards/project-manager-statistics-board/project-manager-statistics-board.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {MatButtonModule} from '@angular/material/button';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
   declarations: [
@@ -17,12 +24,17 @@ import { TeamCardHighlightDirective } from './project-manager-perspective/boards
     ProjectManagerTodolistsBoardComponent,
     ProjectManagerTeamsBoardComponent,
     TeamCardHighlightDirective,
+    ProjectManagerStatisticsBoardComponent,
   ],
   imports: [
     BrowserModule, HttpClientModule,
-    AppRoutingModule, NgbModule
+    AppRoutingModule, NgbModule,
+    MatSlideToggleModule, BrowserAnimationsModule,
+    MatProgressBarModule, MatSnackBarModule, MatButtonModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    provideAnimationsAsync()
+  ],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
