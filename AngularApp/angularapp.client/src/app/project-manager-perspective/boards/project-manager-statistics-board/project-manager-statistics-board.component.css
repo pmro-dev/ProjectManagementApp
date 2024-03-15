@@ -47,9 +47,18 @@
 .todolist-card {
     width: 350px;
     height: 150px;
-    /* background-color: green; */
     border-radius: 7px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.avatar-box img{
+    width: 40px;
+}
+
+.team-color-box{
+    width: 50px;
+    height: 20px;
+    background-color: red;
 }
 
 /* .progress-bar-container .mdc-linear-progress {

@@ -11,8 +11,8 @@
                 <span>STATISTICS VIEW | </span>
                 <span>Project Title</span>
             </div>
-            <div class="row">
-                <div class="col-auto">
+            <div class="row mt-3">
+                <div class="col-auto mt-sm-4">
                     <div class="general-stat-container">
                         <div class="general-stat-inner">
                             <div class="row">
@@ -49,7 +49,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-auto">
+                <div class="col-auto mt-sm-4">
                     <div class="budget-stat-container">
                         <div class="row general-stat-inner">
                             <div class="row text-end">
@@ -86,33 +86,44 @@
             </div>
             <div class="row gap-5 justify-content-center">
                 <div class="todolist-card" *ngFor="let list of todoLists">
-                    <div class="px-2 mt-3">
+                    <div class="px-2 mt-2 position-relative h-100 ">
                         <div class="row">
-                            <div class="col text-start font-12 bold-4">
+                            <div class="col text-start pt-2 font-12 bold-4">
                                 <span>{{ list.Title }}</span>
                             </div>
-                            <div class="col">
-                                <div class="col-auto">
-                                    <div>
-                                        <canvas id="TodoListTasksProgressChart" height="60px">
-                                            {{ todoListTasksProgressChart }}
-                                        </canvas>
-                                    </div>
+                            <div class="col-auto d-flex flex-row flex-nowrap justify-content-end">
+                                <div class="col-auto" style="width: 125px;">
+                                    <canvas id="{{ list.Title + 'Chart' }}" height="55px"></canvas>
                                 </div>
-                                <div class="col-auto text-end" style="font-size: 1.7em;">66%</div>
+                                <div class="col-auto text-end ps-2" style="font-size: 1.7em; padding-top: 12px;">
+                                    66%</div>
                             </div>
                         </div>
-                        <div class="row mt-3">
+                        <div class="row pt-1">
                             <div class="col d-flex flex-column text-start font-8 bold-5">
                                 <span>TOTAL TASKS: {{ list.TasksCount }}</span>
                                 <span>TASKS TODO: {{ list.TasksCount - list.TasksCompleted }}</span>
                                 <span>COMPLETED TASKS: {{ list.TasksCompleted }}</span>
                             </div>
-                            <div class="col">
-                                <div class="row"></div>
-                                <div class="row"></div>
+                            <div class="col text-end ">
+                                <div class="row flex-row">
+                                    <div class="col">
+                                        <span> {{ list.TeamLiderName }}</span>
+                                    </div>
+                                    <div class="col-auto avatar-box">
+                                        <img [src]="avatarPath" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <div class="row flex-row position-absolute" style="right:9px; bottom: 18px;">
+                            <div class="col-auto">
+                                <span>{{ list.TeamName }}</span>
+                            </div>
+                            <div class="col-auto">
+                                <div appTodolistCardTeamColor teamColor="{{ list.TeamColor }}" class="team-color-box">&nbsp;</div>
+                            </div>
+                        </div>                        
                     </div>
                 </div>
             </div>
