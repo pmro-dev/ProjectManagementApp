@@ -17,6 +17,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { TodolistCardTeamColorDirective } from './project-manager-perspective/boards/project-manager-statistics-board/todolist-card-team-color.directive';
+import { TodolistCardColorDirective } from './project-manager-perspective/boards/project-manager-statistics-board/todolist-card-color.directive';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { TodolistCardTeamColorDirective } from './project-manager-perspective/bo
     ProjectManagerTeamsBoardComponent,
     TeamCardHighlightDirective,
     ProjectManagerStatisticsBoardComponent,
-    TodolistCardTeamColorDirective
+    TodolistCardTeamColorDirective,
+    TodolistCardColorDirective
   ],
   imports: [
     BrowserModule, HttpClientModule,

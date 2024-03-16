@@ -16,32 +16,35 @@ export class ProjectManagerStatisticsBoardComponent {
   public todoListTasksProgressChart: any;
   public avatarPath: string = "/assets/avatars/avatar1-mini.jpg";
   public todoLists: Array<TodoList> = [
-    {  
-      Title : "UX Design",
-      TasksCount : 17,
-      TasksCompleted : 6,
-      TeamName : "Króliczki Charliego",
-      TeamLiderName : "Jaś Fasola",
-      TeamColor : "purple",
-      Chart : null
+    {
+      Title: "UX Design",
+      Color: "rgb(236, 240, 250)",
+      TasksCount: 17,
+      TasksCompleted: 6,
+      TeamName: "Króliczki Charliego",
+      TeamLiderName: "Jaś Fasola",
+      TeamColor: "purple",
+      Chart: null
     },
     {
-      Title : "Web Theme",
-      TasksCount : 12,
-      TasksCompleted : 9,
-      TeamName : "Morele",
-      TeamLiderName : "Angelika Prodiż",
-      TeamColor : "green",
-      Chart : null
+      Title: "Web Theme",
+      Color: "rgb(236, 250, 238)",
+      TasksCount: 12,
+      TasksCompleted: 9,
+      TeamName: "Morele",
+      TeamLiderName: "Angelika Prodiż",
+      TeamColor: "green",
+      Chart: null
     },
     {
-      Title : "Event Makieta",
-      TasksCount : 20,
-      TasksCompleted : 15,
-      TeamName : "Robaczki",
-      TeamLiderName : "Ewelina Roszpunka",
-      TeamColor : "yellow",
-      Chart : null
+      Title: "Event Makieta",
+      Color: "rgb(245, 236, 250)",
+      TasksCount: 20,
+      TasksCompleted: 15,
+      TeamName: "Robaczki",
+      TeamLiderName: "Ewelina Roszpunka",
+      TeamColor: "yellow",
+      Chart: null
     }
   ]
 
@@ -50,7 +53,7 @@ export class ProjectManagerStatisticsBoardComponent {
   }
 
   ngAfterViewInit(): void {
-    let temp : string;
+    let temp: string;
 
     this.todoLists.forEach(todolist => {
       temp = todolist.Title + "Chart";
@@ -68,8 +71,8 @@ export class ProjectManagerStatisticsBoardComponent {
       label: 'Budget',
       data: [25, 75, 10],
       backgroundColor: [
-        'rgb(190, 148, 238)',
         'rgb(148, 238, 148)',
+        'rgb(190, 148, 238)',
         'rgb(238, 148, 148)'
       ],
       hoverOffset: 4
@@ -159,7 +162,7 @@ export class ProjectManagerStatisticsBoardComponent {
   };
 
 
-  createTodoListTasksChart(id : string, data : any, title : string, max : number) : Chart {
+  createTodoListTasksChart(id: string, data: any, title: string, max: number): Chart {
     return new Chart(id, {
       type: 'bar',
       data: data,
@@ -183,7 +186,7 @@ export class ProjectManagerStatisticsBoardComponent {
               display: false
             },
             ticks: {
-              display: false,           
+              display: false,
             },
             border: {
               display: false
@@ -205,7 +208,7 @@ export class ProjectManagerStatisticsBoardComponent {
           }
         }
       }
-    });    
+    });
   }
 
   createCharts() {
@@ -219,7 +222,7 @@ export class ProjectManagerStatisticsBoardComponent {
           legend: {
             display: false
           }
-        },        
+        },
       }
     });
 
@@ -246,7 +249,7 @@ export class ProjectManagerStatisticsBoardComponent {
               display: false
             },
             ticks: {
-              display: false,           
+              display: false,
             },
             border: {
               display: false
@@ -293,7 +296,7 @@ export class ProjectManagerStatisticsBoardComponent {
               display: false
             },
             ticks: {
-              display: false,           
+              display: false,
             },
             border: {
               display: false
@@ -315,16 +318,21 @@ export class ProjectManagerStatisticsBoardComponent {
           }
         }
       }
-    }); 
+    });
+  }
+
+  ReadMoreTodoLists(){
+    console.log("WORKING READ MORE!")
   }
 }
 
 interface TodoList {
-  Title : string;
-  TasksCount : number;
-  TasksCompleted : number;
-  TeamName : string;
-  TeamLiderName : string;
-  TeamColor : string;
-  Chart : any;
+  Title: string;
+  Color: string;
+  TasksCount: number;
+  TasksCompleted: number;
+  TeamName: string;
+  TeamLiderName: string;
+  TeamColor: string;
+  Chart: any;
 }

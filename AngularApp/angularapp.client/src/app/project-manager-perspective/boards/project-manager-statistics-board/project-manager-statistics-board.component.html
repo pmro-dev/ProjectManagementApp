@@ -82,10 +82,10 @@
     <div class="row">
         <div class="row">
             <div class="row text-start my-4">
-                <span>5 TODO LISTS</span>
+                <span>{{ todoLists.length }} TODO LISTS</span>
             </div>
             <div class="row gap-5 justify-content-center">
-                <div class="todolist-card" *ngFor="let list of todoLists">
+                <div class="todolist-card" appTodolistCardColor *ngFor="let list of todoLists" [CardColor]="list.Color">
                     <div class="px-2 mt-2 position-relative h-100 ">
                         <div class="row">
                             <div class="col text-start pt-2 font-12 bold-4">
@@ -125,6 +125,9 @@
                             </div>
                         </div>                        
                     </div>
+                </div>
+                <div class="row justify-content-center align-content-center ">
+                    <button class="btn btn-primary" (click)="ReadMoreTodoLists()" style="width: 150px; height: 45px;">MORE</button>
                 </div>
             </div>
         </div>
