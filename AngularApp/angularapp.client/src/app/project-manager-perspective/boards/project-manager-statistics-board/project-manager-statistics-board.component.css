@@ -61,6 +61,37 @@
     background-color: red;
 }
 
+.team-card {
+    width: 325px;
+    border-radius: 7px;
+}
+
+.team-inner-box {
+    width: 350px;
+    background-color: transparent;
+    border-top: 2px solid rgb(235, 235, 235, .5);
+    border-left: 2px solid rgb(235, 235, 235);
+}
+
+.members-count-box {
+    background-color: rgb(243, 243, 243);
+}
+
+.avatars-box img {
+    width: 32px;
+    margin: 4px;
+}
+
+.b-color-grey {
+    background-color: rgb(185, 185, 185);
+    color: white;
+    transition: 0.2s;
+
+    &:hover {
+    background-color: rgb(158, 158, 158);
+    }
+}
+
 /* .progress-bar-container .mdc-linear-progress {
     --mdc-linear-progress-active-indicator-height: 7px;
     --mdc-linear-progress-track-height: 7px

@@ -79,56 +79,102 @@
         </div>
     </div>
 
+
     <div class="row">
-        <div class="row">
-            <div class="row text-start my-4">
-                <span>{{ todoLists.length }} TODO LISTS</span>
-            </div>
-            <div class="row gap-5 justify-content-center">
-                <div class="todolist-card" appTodolistCardColor *ngFor="let list of todoLists" [CardColor]="list.Color">
-                    <div class="px-2 mt-2 position-relative h-100 ">
-                        <div class="row">
-                            <div class="col text-start pt-2 font-12 bold-4">
-                                <span>{{ list.Title }}</span>
-                            </div>
-                            <div class="col-auto d-flex flex-row flex-nowrap justify-content-end">
-                                <div class="col-auto" style="width: 125px;">
-                                    <canvas id="{{ list.Title + 'Chart' }}" height="55px"></canvas>
-                                </div>
-                                <div class="col-auto text-end ps-2" style="font-size: 1.7em; padding-top: 12px;">
-                                    66%</div>
-                            </div>
+        <div class="row text-start my-4">
+            <span>{{ todoLists.length }} TODO LISTS</span>
+        </div>
+        <div class="row gap-5 justify-content-center">
+            <div class="todolist-card" appTodolistCardColor *ngFor="let list of todoLists" [CardColor]="list.Color">
+                <div class="px-2 mt-2 position-relative h-100">
+                    <div class="row">
+                        <div class="col text-start pt-2 font-12 bold-4">
+                            <span>{{ list.Title }}</span>
                         </div>
-                        <div class="row pt-1">
-                            <div class="col d-flex flex-column text-start font-8 bold-5">
-                                <span>TOTAL TASKS: {{ list.TasksCount }}</span>
-                                <span>TASKS TODO: {{ list.TasksCount - list.TasksCompleted }}</span>
-                                <span>COMPLETED TASKS: {{ list.TasksCompleted }}</span>
+                        <div class="col-auto d-flex flex-row flex-nowrap justify-content-end">
+                            <div class="col-auto" style="width: 125px;">
+                                <canvas id="{{ list.Title + 'Chart' }}" height="55px"></canvas>
                             </div>
-                            <div class="col text-end ">
-                                <div class="row flex-row">
-                                    <div class="col">
-                                        <span> {{ list.TeamLiderName }}</span>
-                                    </div>
-                                    <div class="col-auto avatar-box">
-                                        <img [src]="avatarPath" />
-                                    </div>
+                            <div class="col-auto text-end ps-2" style="font-size: 1.7em; padding-top: 12px;">
+                                66%</div>
+                        </div>
+                    </div>
+                    <div class="row pt-1">
+                        <div class="col d-flex flex-column text-start font-8 bold-5">
+                            <span>TOTAL TASKS: {{ list.TasksCount }}</span>
+                            <span>TASKS TODO: {{ list.TasksCount - list.TasksCompleted }}</span>
+                            <span>COMPLETED TASKS: {{ list.TasksCompleted }}</span>
+                        </div>
+                        <div class="col text-end ">
+                            <div class="row flex-row">
+                                <div class="col">
+                                    <span> {{ list.TeamLiderName }}</span>
+                                </div>
+                                <div class="col-auto avatar-box">
+                                    <img [src]="avatarPath" />
                                 </div>
                             </div>
                         </div>
-                        <div class="row flex-row position-absolute" style="right:9px; bottom: 18px;">
-                            <div class="col-auto">
-                                <span>{{ list.TeamName }}</span>
-                            </div>
-                            <div class="col-auto">
-                                <div appTodolistCardTeamColor teamColor="{{ list.TeamColor }}" class="team-color-box">&nbsp;</div>
-                            </div>
-                        </div>                        
+                    </div>
+                    <div class="row flex-row position-absolute" style="right:9px; bottom: 18px;">
+                        <div class="col-auto">
+                            <span>{{ list.TeamName }}</span>
+                        </div>
+                        <div class="col-auto">
+                            <div appTodolistCardTeamColor teamColor="{{ list.TeamColor }}" class="team-color-box">
+                                &nbsp;</div>
+                        </div>
                     </div>
                 </div>
-                <div class="row justify-content-center align-content-center ">
-                    <button class="btn btn-primary" (click)="ReadMoreTodoLists()" style="width: 150px; height: 45px;">MORE</button>
+            </div>
+            <div class="row justify-content-center align-content-center ">
+                <button class="btn b-color-grey" (click)="ReadMoreTodoLists()"
+                    style="width: 150px; height: 45px;">MORE</button>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="row text-start">
+            <h2>{{ teams.length }} TEAMS</h2>
+        </div>
+        <div class="row gap-5 justify-content-center">
+            <div class="team-card" *ngFor="let team of teams">
+                <div class="position-relative h-100">
+                    <div class="row text-start py-2">
+                        <span style="font-size: 1.3em;"> {{ team.Name.toUpperCase() }}</span>
+                    </div>
+                    <div class="row team-inner-box position-relative ps-2 color-grey">
+                        <div class="row pt-3">
+                            <div class="col-auto">
+                                <span class="bold-5 font-12">Members </span>
+                            </div>
+                            <div class="col-auto">
+                                <div class="members-count-box">
+                                    <span class="font-8 p-2">20</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom: 40px;">
+                            <div class="avatars-box text-start pt-3">
+                                <span *ngFor="let member of team.Members" matTooltip="{{ member.Name }}" [matTooltipPosition]="'above'">
+                                    <img [src]="member.AvatarPath" />
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row position-absolute bottom-0 text-start font-9">
+                            <div class="col">
+                                <span>75 000$ / month</span>
+                            </div>
+                            <div class="col">
+                                <span>5 tasks / person</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+            <div class="row justify-content-center align-content-center ">
+                <button class="btn b-color-grey" (click)="ReadMoreTeams()"
+                    style="width: 150px; height: 45px;">MORE</button>
             </div>
         </div>
     </div>

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-// import { ChartModule } from 'primeng/chart';
 import Chart from 'chart.js/auto';
+// import { ChartModule } from 'primeng/chart';
 // import { MatProgressBarModule } from '@angular/material/progress-bar';
 // import { MatSnackBarModule } from '@angular/material/snack-bar';
 
@@ -46,7 +46,37 @@ export class ProjectManagerStatisticsBoardComponent {
       TeamColor: "yellow",
       Chart: null
     }
-  ]
+  ];
+
+  public teams: Array<Team> = [
+    {  
+      Name: "Króliczki Charliego",
+      MonthlyCost: 75000,
+      Members: [
+        {Name : "Joanna Dragan", AvatarPath : this.avatarPath}, {Name : "Elżbieta Bażant",AvatarPath : this.avatarPath},
+        {Name : "Krzysztof Frankowski", AvatarPath : this.avatarPath}, {Name : "Kryspin Baptyst", AvatarPath : this.avatarPath},
+        {Name : "Aniela Dzik", AvatarPath : this.avatarPath}, {Name : "Henry Otomaton", AvatarPath : this.avatarPath}              
+      ]
+    },
+    {  
+      Name: "Fata Morgana",
+      MonthlyCost: 75000,
+      Members: [
+        {Name : "Joanna Dragan", AvatarPath : this.avatarPath}, {Name : "Joanna Dragan", AvatarPath : this.avatarPath},
+        {Name : "Joanna Dragan", AvatarPath : this.avatarPath}, {Name : "Joanna Dragan", AvatarPath : this.avatarPath},
+        {Name : "Joanna Dragan", AvatarPath : this.avatarPath}, {Name : "Joanna Dragan", AvatarPath : this.avatarPath}              
+      ]
+    },
+    {  
+      Name: "Bon Apetit",
+      MonthlyCost: 75000,
+      Members: [
+        {Name : "Joanna Dragan", AvatarPath : this.avatarPath}, {Name : "Joanna Dragan", AvatarPath : this.avatarPath},
+        {Name : "Joanna Dragan", AvatarPath : this.avatarPath}, {Name : "Joanna Dragan", AvatarPath : this.avatarPath},
+        {Name : "Joanna Dragan", AvatarPath : this.avatarPath}, {Name : "Joanna Dragan", AvatarPath : this.avatarPath}              
+      ]
+    },        
+  ];
 
   ngOnInit(): void {
     this.createCharts();
@@ -321,9 +351,13 @@ export class ProjectManagerStatisticsBoardComponent {
     });
   }
 
-  ReadMoreTodoLists(){
-    console.log("WORKING READ MORE!")
+  ReadMoreTodoLists() {
+    console.log("WORKING READ MORE TODOLISTS!")
   }
+
+  ReadMoreTeams() {
+    console.log("WORKING READ MORE TEAMS!")
+  }  
 }
 
 interface TodoList {
@@ -335,4 +369,15 @@ interface TodoList {
   TeamLiderName: string;
   TeamColor: string;
   Chart: any;
+}
+
+interface Team {
+  Name: string;
+  MonthlyCost: number;
+  Members: Array<TeamMember>
+}
+
+interface TeamMember {
+  Name : string;
+  AvatarPath: string;
 }

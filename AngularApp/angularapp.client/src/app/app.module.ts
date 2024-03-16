@@ -18,6 +18,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { TodolistCardTeamColorDirective } from './project-manager-perspective/boards/project-manager-statistics-board/todolist-card-team-color.directive';
 import { TodolistCardColorDirective } from './project-manager-perspective/boards/project-manager-statistics-board/todolist-card-color.directive';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { TodolistCardColorDirective } from './project-manager-perspective/boards
     BrowserModule, HttpClientModule,
     AppRoutingModule, NgbModule,
     MatSlideToggleModule, BrowserAnimationsModule,
-    MatProgressBarModule, MatSnackBarModule, MatButtonModule
+    MatProgressBarModule, MatSnackBarModule, MatButtonModule,
+    MatTooltipModule
   ],
   providers: [
     provideAnimationsAsync()
