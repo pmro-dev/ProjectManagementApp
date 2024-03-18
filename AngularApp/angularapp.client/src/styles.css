@@ -2,7 +2,15 @@
 
 body {
     font-family: "Spline Sans", "Dosis", Calibri, Tahoma, sans-serif;
-    /* font-weight: 500; */
+    background:
+        radial-gradient(circle farthest-side at 0% 50%, #ffffff 23.5%, #0000 0)33.6px 48px,
+        radial-gradient(circle farthest-side at 0% 50%, #fafafa 24%, #0000 0)30.4px 48px,
+        linear-gradient(#ffffff 14%, #0000 0, #0000 85%, #ffffff 0)0 0,
+        linear-gradient(150deg, #ffffff 24%, #fafafa 0, #fafafa 26%, #0000 0, #0000 74%, #fafafa 0, #fafafa 76%, #ffffff 0)0 0,
+        linear-gradient(30deg, #ffffff 24%, #fafafa 0, #fafafa 26%, #0000 0, #0000 74%, #fafafa 0, #fafafa 76%, #ffffff 0)0 0,
+        linear-gradient(90deg, #fafafa 2%, #ffffff 0, #ffffff 98%, #fafafa 0%)0 0 #ffffff;
+    background-size: 64px 96px;
+    background-color: #ffffff;
 }
 
 .avatar img {
@@ -12,7 +20,7 @@ body {
 
 .btn-custom-primary {
     background: linear-gradient(white, white) padding-box,
-    linear-gradient(90.38deg, rgb(0, 120, 194) 4.77%, rgb(0, 71, 255) 42.63%, rgb(132, 83, 210) 65.91%);
+        linear-gradient(90.38deg, rgb(0, 120, 194) 4.77%, rgb(0, 71, 255) 42.63%, rgb(132, 83, 210) 65.91%);
     border-radius: 0.6em;
     border: 2px solid transparent;
 }
@@ -60,17 +68,49 @@ body {
 }
 
 .color-orange {
-    color: #a16101;
+    color: rgb(161, 97, 1);
+}
+
+.bcolor-orange {
+    background-color: rgb(255, 183, 152);
+}
+
+.bcolor-light-orange {
+    background-color: rgb(255, 230, 219);
 }
 
 .color-grey {
     color: rgb(119, 119, 119);
 }
 
-.left-menu{
+.color-purple {
+    color: rgb(95, 0, 197);
+}
+
+.bcolor-purple {
+    background-color: rgb(210, 167, 255);
+}
+
+.bcolor-light-purple {
+    background-color: rgb(242, 230, 255);
+}
+
+.color-yellow {
+    color: rgb(148, 145, 0);
+}
+
+.bcolor-yellow {
+    background-color: rgb(245, 242, 50);
+}
+
+.bcolor-light-yellow {
+    background-color: rgb(255, 255, 160);
+}
+
+.left-menu {
     height: 100%;
     width: 10em;
-    float:left;
+    float: left;
     margin-left: 0px;
     background-color: red;
     position: relative;
@@ -120,6 +160,10 @@ body {
     font-size: 1.3em;
 }
 
+.font-14 {
+    font-size: 1.4em;
+}
+
 .bold-5 {
     font-weight: 500;
 }
@@ -135,5 +179,13 @@ body {
 .bold-8 {
     font-weight: 800;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}

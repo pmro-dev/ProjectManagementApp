@@ -49,40 +49,50 @@ export class ProjectManagerStatisticsBoardComponent {
   ];
 
   public teams: Array<Team> = [
-    {  
+    {
       Name: "Króliczki Charliego",
       MonthlyCost: 75000,
       Members: [
-        {Name : "Joanna Dragan", AvatarPath : this.avatarPath}, {Name : "Elżbieta Bażant",AvatarPath : this.avatarPath},
-        {Name : "Krzysztof Frankowski", AvatarPath : this.avatarPath}, {Name : "Kryspin Baptyst", AvatarPath : this.avatarPath},
-        {Name : "Aniela Dzik", AvatarPath : this.avatarPath}, {Name : "Henry Otomaton", AvatarPath : this.avatarPath}              
+        { Name: "Joanna Dragan", AvatarPath: this.avatarPath }, { Name: "Elżbieta Bażant", AvatarPath: this.avatarPath },
+        { Name: "Krzysztof Frankowski", AvatarPath: this.avatarPath }, { Name: "Kryspin Baptyst", AvatarPath: this.avatarPath },
+        { Name: "Aniela Dzik", AvatarPath: this.avatarPath }, { Name: "Henry Otomaton", AvatarPath: this.avatarPath }
       ]
     },
-    {  
+    {
       Name: "Fata Morgana",
       MonthlyCost: 75000,
       Members: [
-        {Name : "Joanna Dragan", AvatarPath : this.avatarPath}, {Name : "Joanna Dragan", AvatarPath : this.avatarPath},
-        {Name : "Joanna Dragan", AvatarPath : this.avatarPath}, {Name : "Joanna Dragan", AvatarPath : this.avatarPath},
-        {Name : "Joanna Dragan", AvatarPath : this.avatarPath}, {Name : "Joanna Dragan", AvatarPath : this.avatarPath}              
+        { Name: "Joanna Dragan", AvatarPath: this.avatarPath }, { Name: "Joanna Dragan", AvatarPath: this.avatarPath },
+        { Name: "Joanna Dragan", AvatarPath: this.avatarPath }, { Name: "Joanna Dragan", AvatarPath: this.avatarPath },
+        { Name: "Joanna Dragan", AvatarPath: this.avatarPath }, { Name: "Joanna Dragan", AvatarPath: this.avatarPath }
       ]
     },
-    {  
+    {
       Name: "Bon Apetit",
       MonthlyCost: 75000,
       Members: [
-        {Name : "Joanna Dragan", AvatarPath : this.avatarPath}, {Name : "Joanna Dragan", AvatarPath : this.avatarPath},
-        {Name : "Joanna Dragan", AvatarPath : this.avatarPath}, {Name : "Joanna Dragan", AvatarPath : this.avatarPath},
-        {Name : "Joanna Dragan", AvatarPath : this.avatarPath}, {Name : "Joanna Dragan", AvatarPath : this.avatarPath}              
+        { Name: "Joanna Dragan", AvatarPath: this.avatarPath }, { Name: "Joanna Dragan", AvatarPath: this.avatarPath },
+        { Name: "Joanna Dragan", AvatarPath: this.avatarPath }, { Name: "Joanna Dragan", AvatarPath: this.avatarPath },
+        { Name: "Joanna Dragan", AvatarPath: this.avatarPath }, { Name: "Joanna Dragan", AvatarPath: this.avatarPath }
       ]
-    },        
+    },
   ];
+
+  public membersCount: number = 0;
 
   ngOnInit(): void {
     this.createCharts();
   }
 
+  countMembers(): number {
+    let tempCount = 0;
+    this.teams.forEach(team => tempCount = tempCount + team.Members.length);
+    return tempCount;
+  }
+
   ngAfterViewInit(): void {
+    this.membersCount = this.countMembers();
+
     let temp: string;
 
     this.todoLists.forEach(todolist => {
@@ -357,7 +367,7 @@ export class ProjectManagerStatisticsBoardComponent {
 
   ReadMoreTeams() {
     console.log("WORKING READ MORE TEAMS!")
-  }  
+  }
 }
 
 interface TodoList {
@@ -378,6 +388,6 @@ interface Team {
 }
 
 interface TeamMember {
-  Name : string;
+  Name: string;
   AvatarPath: string;
 }

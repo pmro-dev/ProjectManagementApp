@@ -6,84 +6,138 @@
 
 <div class="col">
     <div class="row">
-        <div class="col-auto">
-            <div class="row">
-                <span>STATISTICS VIEW | </span>
-                <span>Project Title</span>
-            </div>
-            <div class="row mt-3">
-                <div class="col-auto mt-sm-4">
-                    <div class="general-stat-container">
-                        <div class="general-stat-inner">
-                            <div class="row">
-                                <div class="col-auto general-stat-text">
-                                    <span class="font-10 bold-5">GENERAL STATS</span>
-                                    <span>TodoLists: 8</span>
-                                    <span>Total Tasks: 56</span>
-                                    <span>Todo Tasks: 25</span>
-                                    <span>Tasks In Progress: 12</span>
-                                    <span>Tasks Completed: 15</span>
+        <div class="row">
+            <span>STATISTICS VIEW | </span>
+            <span>Project Title</span>
+            <div class="row justify-content-center ">
+                <div class="col-auto">
+                    <div class="text-center p-2">
+                        <div class="head-stat bcolor-light-purple color-purple">
+                            <div class="row px-2 align-items-center gap-2">
+                                <div class="col-auto icon-background bcolor-purple d-flex align-content-center">
+                                    <i class="fa-solid fa-table-list font-14"></i>
                                 </div>
-                                <div class="col">
-                                    <div class="me-5">
-                                        <div class="row justify-content-end">
-                                            <div class="progress-bar-container">
-                                                <canvas class="float-end" id="TasksProgressChart" height="60px">
-                                                    {{ tasksProgressChart }}
-                                                </canvas>
-                                            </div>
-                                        </div>
-                                        <div class="row justify-content-end">
-                                            <div class="progress-bar-container">
-                                                <canvas class="float-end" id="TodoListsProgressChart" height="52px">
-                                                    {{ todoListsProgressChart }}
-                                                </canvas>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="col-auto px-1">
+                                    <span class="font-10">TODO LISTS</span>
                                 </div>
                             </div>
-                            <div class="row text-end" style="position: absolute; bottom: 15px;">
-                                <span>129 days till the deadline 20.06.2024</span>
+                            <div class="row pt-3">
+                                <span class="font-14">
+                                    {{ todoLists.length }}
+                                </span>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="text-center p-2">
+                        <div class="head-stat bcolor-light-orange color-orange">
+                            <div class="row px-2 align-items-center gap-2">
+                                <div class="col-auto icon-background bcolor-orange d-flex align-content-center">
+                                    <i class="fa-solid fa-people-roof font-14"></i>
+                                </div>
+                                <div class="col-auto px-1">
+                                    <span class="font-10">TEAMS</span>
+                                </div>
+                            </div>
+                            <div class="row pt-3">
+                                <span class="font-14">
+                                    {{ teams.length }}
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-auto mt-sm-4">
-                    <div class="budget-stat-container">
-                        <div class="row general-stat-inner">
-                            <div class="row text-end">
-                                <span class="font-13 bold-5 color-grey ">Budget</span>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="d-flex flex-column align-items-start budget-money">
-                                        <span class="color-green">1 200 000$</span>
-                                        <span class="color-purple">650 000$</span>
-                                        <span class="color-orange">100 000$</span>
-                                    </div>
+                <div class="col-auto">
+                    <div class="text-center p-2">
+                        <div class="head-stat bcolor-light-yellow color-yellow">
+                            <div class="row px-2 align-items-center gap-2">
+                                <div class="col-auto icon-background bcolor-yellow d-flex align-content-center">
+                                    <i class="fa-solid fa-people-group font-14"></i>
                                 </div>
-                                <div class="col">
-                                    <div class="chart-container">
-                                        <canvas id="BudgetChart">{{ budgetChart }}</canvas>
-                                    </div>
+                                <div class="col-auto px-1">
+                                    <span class="font-10">MEMBERS</span>
                                 </div>
                             </div>
-                            <div class="row text-start" style="position: absolute; bottom: 15px;">
-                                <span>Client Company Name</span>
+                            <div class="row pt-3">
+                                <span class="font-14">
+                                    {{ membersCount }}
+                                </span>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-auto mt-sm-4">
+                <div class="general-stat-container position-relative">
+                    <div class="general-stat-inner">
+                        <div class="row">
+                            <div class="col-auto general-stat-text">
+                                <span class="font-10 bold-5">GENERAL STATS</span>
+                                <span>Total Tasks: 56</span>
+                                <span>Todo Tasks: 25</span>
+                                <span>Tasks In Progress: 12</span>
+                                <span>Tasks Completed: 15</span>
+                            </div>
+                            <div class="col">
+                                <div class="me-5">
+                                    <div class="row justify-content-end">
+                                        <div class="progress-bar-container">
+                                            <canvas class="float-end" id="TodoListsProgressChart" height="52px">
+                                                {{ todoListsProgressChart }}
+                                            </canvas>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-end">
+                                        <div class="progress-bar-container">
+                                            <canvas class="float-end" id="TasksProgressChart" height="60px">
+                                                {{ tasksProgressChart }}
+                                            </canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="position: absolute; bottom: 15px; right: 25px;">
+                        <span class="font-8 color-grey">129 days till the deadline 20.06.2024</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto mt-sm-4">
+                <div class="budget-stat-container position-relative ">
+                    <div class="row general-stat-inner">
+                        <div class="row justify-content-end pb-2">
+                            <div class="col-auto text-end">
+                                <span class="font-13 bold-5 color-grey ">Budget</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="d-flex flex-column align-items-start budget-money">
+                                    <span class="color-green">1 200 000$</span>
+                                    <span class="color-purple">650 000$</span>
+                                    <span class="color-orange">100 000$</span>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="chart-container">
+                                    <canvas id="BudgetChart">{{ budgetChart }}</canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row text-start" style="position: absolute; bottom: 15px; left: 15px;">
+                        <span>Client Company Name</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-
-    <div class="row">
-        <div class="row text-start my-4">
-            <span>{{ todoLists.length }} TODO LISTS</span>
-        </div>
+    <div class="row justify-content-center my-5">
         <div class="row gap-5 justify-content-center">
             <div class="todolist-card" appTodolistCardColor *ngFor="let list of todoLists" [CardColor]="list.Color">
                 <div class="px-2 mt-2 position-relative h-100">
@@ -121,8 +175,11 @@
                             <span>{{ list.TeamName }}</span>
                         </div>
                         <div class="col-auto">
-                            <div appTodolistCardTeamColor teamColor="{{ list.TeamColor }}" class="team-color-box">
-                                &nbsp;</div>
+                            <div class="team-color-box">
+                                <svg id="10015.io" viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+                                    <path appTodolistCardTeamColor teamColor="{{ list.TeamColor }}" d="M378.5,333Q347,426,250.5,407.5Q154,389,82,314.5Q10,240,76,155Q142,70,232.5,83Q323,96,366.5,168Q410,240,378.5,333Z" />
+                                </svg>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -133,10 +190,8 @@
             </div>
         </div>
     </div>
-    <div class="row mt-5">
-        <div class="row text-start">
-            <h2>{{ teams.length }} TEAMS</h2>
-        </div>
+
+    <div class="row mt-5 justify-content-center">
         <div class="row gap-5 justify-content-center">
             <div class="team-card" *ngFor="let team of teams">
                 <div class="position-relative h-100">
@@ -156,7 +211,8 @@
                         </div>
                         <div class="row" style="margin-bottom: 40px;">
                             <div class="avatars-box text-start pt-3">
-                                <span *ngFor="let member of team.Members" matTooltip="{{ member.Name }}" [matTooltipPosition]="'above'">
+                                <span *ngFor="let member of team.Members" matTooltip="{{ member.Name }}"
+                                    [matTooltipPosition]="'above'">
                                     <img [src]="member.AvatarPath" />
                                 </span>
                             </div>

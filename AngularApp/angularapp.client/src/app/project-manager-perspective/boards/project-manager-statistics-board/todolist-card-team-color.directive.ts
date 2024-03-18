@@ -10,6 +10,6 @@ export class TodolistCardTeamColorDirective {
   @Input() teamColor: string = 'rgb(247, 247, 247)';
 
   ngOnInit(): void {
-    this.renderer.setStyle(this.elemRef.nativeElement, 'background-color', this.teamColor);
+    this.renderer.setStyle(this.elemRef.nativeElement, 'fill', this.teamColor);
   }
 }
