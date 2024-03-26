@@ -109,11 +109,47 @@ body {
 
 .left-menu {
     height: 100%;
-    width: 10em;
+    width: 11em;
     float: left;
     margin-left: 0px;
-    background-color: red;
     position: relative;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.left-menu-box {
+    height: 100%;
+    width: 100%;
+}
+
+.left-menu-box ul {
+    padding: 0;
+    width: 100%;
+}
+
+.left-menu-box li {
+    text-align: start;
+    font-weight: 500;
+    font-size: 1em;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 16px;
+}
+
+.left-menu-box li:hover {
+    background-color: rgb(236, 236, 236);
+}
+
+.left-menu-box li:active {
+    background-color: rgb(212, 212, 212) !important;
+}
+
+.left-menu-box i {
+    padding-right: 10px;
+    font-size: 1.2em;
+}
+
+.btn-fullx {
+    width: 100%;
 }
 
 .font-4 {
