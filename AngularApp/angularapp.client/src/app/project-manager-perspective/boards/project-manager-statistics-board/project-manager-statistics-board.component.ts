@@ -60,7 +60,7 @@ export class ProjectManagerStatisticsBoardComponent {
     },
     {
       Name: "Fata Morgana",
-      MonthlyCost: 75000,
+      MonthlyCost: 50000,
       Members: [
         { Name: "Joanna Dragan", AvatarPath: this.avatarPath }, { Name: "Joanna Dragan", AvatarPath: this.avatarPath },
         { Name: "Joanna Dragan", AvatarPath: this.avatarPath }, { Name: "Joanna Dragan", AvatarPath: this.avatarPath },
@@ -69,7 +69,7 @@ export class ProjectManagerStatisticsBoardComponent {
     },
     {
       Name: "Bon Apetit",
-      MonthlyCost: 75000,
+      MonthlyCost: 30000,
       Members: [
         { Name: "Joanna Dragan", AvatarPath: this.avatarPath }, { Name: "Joanna Dragan", AvatarPath: this.avatarPath },
         { Name: "Joanna Dragan", AvatarPath: this.avatarPath }, { Name: "Joanna Dragan", AvatarPath: this.avatarPath },
