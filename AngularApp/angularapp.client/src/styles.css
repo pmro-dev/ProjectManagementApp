@@ -1,16 +1,17 @@
-/* You can add global styles to this file, and also import other style files */
+html,
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    font-family: "Spline Sans", "Dosis", Calibri, Tahoma, sans-serif !important;
+}
+
+html {
+    position: relative;
+}
 
 body {
-    font-family: "Spline Sans", "Dosis", Calibri, Tahoma, sans-serif;
-    /* background:
-        radial-gradient(circle farthest-side at 0% 50%, #ffffff 23.5%, #0000 0)33.6px 48px,
-        radial-gradient(circle farthest-side at 0% 50%, #fafafa 24%, #0000 0)30.4px 48px,
-        linear-gradient(#ffffff 14%, #0000 0, #0000 85%, #ffffff 0)0 0,
-        linear-gradient(150deg, #ffffff 24%, #fafafa 0, #fafafa 26%, #0000 0, #0000 74%, #fafafa 0, #fafafa 76%, #ffffff 0)0 0,
-        linear-gradient(30deg, #ffffff 24%, #fafafa 0, #fafafa 26%, #0000 0, #0000 74%, #fafafa 0, #fafafa 76%, #ffffff 0)0 0,
-        linear-gradient(90deg, #fafafa 2%, #ffffff 0, #ffffff 98%, #fafafa 0%)0 0 #ffffff;
-    background-size: 64px 96px;
-    background-color: #ffffff; */
+    margin: 0;
 }
 
 .avatar img {
@@ -107,12 +108,21 @@ body {
     background-color: rgb(255, 255, 160);
 }
 
+.color-blue {
+    color: rgb(0, 13, 197);
+}
+
+.color-light-blue {
+    color: rgb(9, 241, 230);
+}
+
 .left-menu {
     height: 100%;
-    width: 11em;
+    min-width: 150px;
     float: left;
     margin-left: 0px;
-    position: relative;
+    position: fixed;
+    padding-top: 60px;
     box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
 }
 
@@ -129,8 +139,8 @@ body {
 .left-menu-box li {
     text-align: start;
     font-weight: 500;
-    font-size: 1em;
-    padding-top: 10px;
+    font-size: 0.9rem;
+    padding-top: 15px;
     padding-bottom: 10px;
     padding-left: 16px;
 }
@@ -145,7 +155,65 @@ body {
 
 .left-menu-box i {
     padding-right: 10px;
-    font-size: 1.2em;
+    font-size: 1.1rem;
+}
+
+.nav-menu {
+    z-index: 1000;
+    background-color: white;
+    position: fixed;
+    padding: 6px 0 6px 0;
+    height: 60px;
+    width: 100%;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
+    flex-wrap: nowrap;
+}
+
+.nav-logo {
+    height: 60px;
+    padding-left: 30px;
+}
+
+.nav-logo img {
+    max-height: 70%;
+    width: auto;
+}
+
+.content-wrapper {
+    padding: 60px 0 0 165px;
+}
+
+.burger-box div {
+    background-color: rgb(238, 238, 238);
+}
+
+.burger-box div:hover {
+    /* background-color: rgb(226, 226, 226); */
+    border: 1px solid rgb(194, 194, 194);
+}
+
+.nav-user-avatar img {
+    height: auto;
+    width: 4vh;
+}
+
+.btn-gradient-filled {
+    font-size: 1.3rem;
+    font-weight: 900;
+    padding: 0 20px 0 20px;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    border: none;
+    transition:all 1s ease-in-out;
+
+    background-image:linear-gradient(to right, rgb(200, 140, 220) 0%, rgb(95, 0, 197) 20%,  rgb(9, 241, 230) 100%);
+    background-size: 150% 100%;
+    background-position: top left;
+    transition:all 0.2s ease-in-out;
+}
+
+.btn-gradient-filled:hover {
+    background-position: top left 100%;
 }
 
 .btn-fullx {
@@ -214,14 +282,4 @@ body {
 
 .bold-8 {
     font-weight: 800;
-}
-
-html,
-body {
-    height: 100%;
-}
-
-body {
-    margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
 }

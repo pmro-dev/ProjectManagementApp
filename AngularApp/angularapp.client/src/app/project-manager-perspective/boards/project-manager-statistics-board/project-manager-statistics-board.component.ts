@@ -15,6 +15,9 @@ export class ProjectManagerStatisticsBoardComponent {
   public todoListsProgressChart: any;
   public todoListTasksProgressChart: any;
   public avatarPath: string = "/assets/avatars/avatar1-mini.jpg";
+  public appLogoPath: string = "/assets/other/appLogo.jpg";
+  public userAvatarPath: string = "/assets/avatars/avatar1-mini.jpg";
+  public currentUserName: string = "Jan Kowalski";
   public todoLists: Array<TodoList> = [
     {
       Title: "UX Design",

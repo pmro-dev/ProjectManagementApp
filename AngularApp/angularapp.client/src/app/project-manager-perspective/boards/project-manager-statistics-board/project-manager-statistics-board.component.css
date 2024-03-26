@@ -61,9 +61,9 @@
 }
 
 .team-color-box {
-    width: 50px;
+    /* width: 50px; */
     height: auto;
-    padding: inherit;
+    /* padding: inherit; */
 }
 
 .team-color-box svg {
