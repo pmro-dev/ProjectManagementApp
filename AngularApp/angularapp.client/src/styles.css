@@ -2,7 +2,7 @@
 
 body {
     font-family: "Spline Sans", "Dosis", Calibri, Tahoma, sans-serif;
-    background:
+    /* background:
         radial-gradient(circle farthest-side at 0% 50%, #ffffff 23.5%, #0000 0)33.6px 48px,
         radial-gradient(circle farthest-side at 0% 50%, #fafafa 24%, #0000 0)30.4px 48px,
         linear-gradient(#ffffff 14%, #0000 0, #0000 85%, #ffffff 0)0 0,
@@ -10,7 +10,7 @@ body {
         linear-gradient(30deg, #ffffff 24%, #fafafa 0, #fafafa 26%, #0000 0, #0000 74%, #fafafa 0, #fafafa 76%, #ffffff 0)0 0,
         linear-gradient(90deg, #fafafa 2%, #ffffff 0, #ffffff 98%, #fafafa 0%)0 0 #ffffff;
     background-size: 64px 96px;
-    background-color: #ffffff;
+    background-color: #ffffff; */
 }
 
 .avatar img {
