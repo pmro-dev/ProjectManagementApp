@@ -19,6 +19,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { TodolistCardTeamColorDirective } from './project-manager-perspective/boards/project-manager-statistics-board/todolist-card-team-color.directive';
 import { TodolistCardColorDirective } from './project-manager-perspective/boards/project-manager-statistics-board/todolist-card-color.directive';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { BurgerHoverEffectDirective } from './project-manager-perspective/boards/project-manager-statistics-board/burger-hover-effect.directive';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     TeamCardHighlightDirective,
     ProjectManagerStatisticsBoardComponent,
     TodolistCardTeamColorDirective,
-    TodolistCardColorDirective
+    TodolistCardColorDirective,
+    BurgerHoverEffectDirective
   ],
   imports: [
     BrowserModule, HttpClientModule,

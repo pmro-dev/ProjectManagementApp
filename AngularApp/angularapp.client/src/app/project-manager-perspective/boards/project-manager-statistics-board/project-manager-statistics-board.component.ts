@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import Chart from 'chart.js/auto';
 // import { ChartModule } from 'primeng/chart';
 // import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -18,6 +18,7 @@ export class ProjectManagerStatisticsBoardComponent {
   public appLogoPath: string = "/assets/other/appLogo.jpg";
   public userAvatarPath: string = "/assets/avatars/avatar1-mini.jpg";
   public currentUserName: string = "Jan Kowalski";
+
   public todoLists: Array<TodoList> = [
     {
       Title: "UX Design",
@@ -84,6 +85,8 @@ export class ProjectManagerStatisticsBoardComponent {
   public membersCount: number = 0;
 
   ngOnInit(): void {
+    this.membersCount = this.countMembers();
+
     this.createCharts();
   }
 
@@ -94,7 +97,6 @@ export class ProjectManagerStatisticsBoardComponent {
   }
 
   ngAfterViewInit(): void {
-    this.membersCount = this.countMembers();
 
     let temp: string;
 

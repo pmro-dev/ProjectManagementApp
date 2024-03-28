@@ -1,20 +1,31 @@
+<!-- navigation top menu -->
 <div class="row nav-menu color-grey align-items-center">
-    <div class="col-auto nav-logo d-flex align-items-center">
-        <img [src]="appLogoPath" />
+
+    <!-- left burger menu on mobile -->
+    <div appBurgerHoverEffect [outerElem]="leftMenu" class="col-auto left-burger burger-box ps-4 d-sm-block d-md-block d-lg-none">
+        <div class="btn">
+            <i class="fa-solid fa-bars"></i>
+        </div>
     </div>
-    <div class="col-auto">
-        <div>
+
+    <!-- nav title with logo -->
+    <div class="col-auto ms-sm-auto ms-md-auto ms-lg-0 nav-logo d-flex align-items-center">
+        <img [src]="appLogoPath" />
+        <div class="nav-title">
             <span class="font-12">Project Title | </span>
             <span class="font-10">Dashboard Name</span>
         </div>
     </div>
-    <div class="col"></div>
-    <div class="col-auto burger-box d-sm-block d-md-block d-lg-none">
+
+    <!-- right burger menu on mobile -->
+    <div class="col-auto ms-auto burger-box d-sm-block d-md-block d-lg-none">
         <div class="btn">
             <i class="fa-solid fa-right-from-bracket"></i>
         </div>
     </div>
-    <div class="col-auto d-sm-none d-md-none d-lg-block">
+
+    <!-- nav user info on large -->
+    <div class="col-auto ms-auto d-sm-none d-md-none d-lg-block">
         <div class="row align-items-center">
             <div class="col-auto">
                 <span class="bold-5">{{ currentUserName }}</span>
@@ -29,7 +40,9 @@
     </div>
 </div>
 
-<div class="left-menu">
+<!-- left sidebar menu -->
+<!-- <div class="left-menu d-md-none d-sm-none d-lg-block"> -->
+<div #leftMenu class="left-menu">
     <div class="left-menu-box">
         <ul class="btn-group-vertical">
             <li class="btn btn-fullx"><i class="fa-solid fa-arrow-left"></i>BACK</li>
@@ -42,136 +55,143 @@
     </div>
 </div>
 
+<!-- body content -->
 <div class="content-wrapper">
-    <div class="row">
-        <div class="row justify-content-center">
-            <div class="col-auto mt-sm-3">
-                <div class="text-center">
-                    <div class="head-stat bcolor-light-purple color-purple">
-                        <div class="row px-2 align-items-center gap-2">
-                            <div class="col-auto icon-background bcolor-purple d-flex align-content-center">
-                                <i class="fa-solid fa-table-list font-14"></i>
-                            </div>
-                            <div class="col-auto px-1">
-                                <span class="font-10">TODO LISTS</span>
-                            </div>
+
+    <!-- header project's stats -->
+    <div class="row justify-content-center">
+        <div class="col-auto mt-sm-3">
+            <div class="text-center">
+                <div class="head-stat bcolor-light-purple color-purple">
+                    <div class="row px-2 align-items-center gap-2">
+                        <div class="col-auto icon-background bcolor-purple d-flex align-content-center">
+                            <i class="fa-solid fa-table-list font-14"></i>
                         </div>
-                        <div class="row pt-3">
-                            <span class="font-14">
-                                {{ todoLists.length }}
-                            </span>
+                        <div class="col-auto px-1">
+                            <span class="font-10">TODO LISTS</span>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-auto mt-sm-3">
-                <div class="text-center">
-                    <div class="head-stat bcolor-light-orange color-orange">
-                        <div class="row px-2 align-items-center gap-2">
-                            <div class="col-auto icon-background bcolor-orange d-flex align-content-center">
-                                <i class="fa-solid fa-people-roof font-14"></i>
-                            </div>
-                            <div class="col-auto px-1">
-                                <span class="font-10">TEAMS</span>
-                            </div>
-                        </div>
-                        <div class="row pt-3">
-                            <span class="font-14">
-                                {{ teams.length }}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-auto mt-sm-3">
-                <div class="text-center">
-                    <div class="head-stat bcolor-light-yellow color-yellow">
-                        <div class="row px-2 align-items-center gap-2">
-                            <div class="col-auto icon-background bcolor-yellow d-flex align-content-center">
-                                <i class="fa-solid fa-people-group font-14"></i>
-                            </div>
-                            <div class="col-auto px-1">
-                                <span class="font-10">MEMBERS</span>
-                            </div>
-                        </div>
-                        <div class="row pt-3">
-                            <span class="font-14">
-                                {{ membersCount }}
-                            </span>
-                        </div>
+                    <div class="row pt-3">
+                        <span class="font-14">
+                            {{ todoLists.length }}
+                        </span>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="row justify-content-center">
-            <div class="col-auto mt-sm-4">
-                <div class="general-stat-container position-relative">
-                    <div class="general-stat-inner">
-                        <div class="row">
-                            <div class="col-auto general-stat-text">
-                                <span class="font-13 bold-4 color-grey">General Stats</span>
-                                <span>Total Tasks: 56</span>
-                                <span>Todo Tasks: 25</span>
-                                <span>Tasks In Progress: 12</span>
-                                <span>Tasks Completed: 15</span>
-                            </div>
-                            <div class="col">
-                                <div class="me-5">
-                                    <div class="row justify-content-end">
-                                        <div class="progress-bar-container">
-                                            <canvas class="float-end" id="TodoListsProgressChart" height="52px">
-                                                {{ todoListsProgressChart }}
-                                            </canvas>
-                                        </div>
-                                    </div>
-                                    <div class="row justify-content-end">
-                                        <div class="progress-bar-container">
-                                            <canvas class="float-end" id="TasksProgressChart" height="60px">
-                                                {{ tasksProgressChart }}
-                                            </canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+        <div class="col-auto mt-sm-3">
+            <div class="text-center">
+                <div class="head-stat bcolor-light-orange color-orange">
+                    <div class="row px-2 align-items-center gap-2">
+                        <div class="col-auto icon-background bcolor-orange d-flex align-content-center">
+                            <i class="fa-solid fa-people-roof font-14"></i>
+                        </div>
+                        <div class="col-auto px-1">
+                            <span class="font-10">TEAMS</span>
                         </div>
                     </div>
-                    <div class="row" style="position: absolute; bottom: 15px; right: 25px;">
-                        <span class="font-8 color-grey">129 days till the deadline 20.06.2024</span>
+                    <div class="row pt-3">
+                        <span class="font-14">
+                            {{ teams.length }}
+                        </span>
                     </div>
                 </div>
             </div>
-            <div class="col-auto mt-sm-4">
-                <div class="budget-stat-container position-relative ">
-                    <div class="row general-stat-inner">
-                        <div class="row justify-content-end pb-2">
-                            <div class="col-auto text-end">
-                                <span class="font-13 bold-4 color-grey">Budget</span>
-                            </div>
+        </div>
+        <div class="col-auto mt-sm-3">
+            <div class="text-center">
+                <div class="head-stat bcolor-light-yellow color-yellow">
+                    <div class="row px-2 align-items-center gap-2">
+                        <div class="col-auto icon-background bcolor-yellow d-flex align-content-center">
+                            <i class="fa-solid fa-people-group font-14"></i>
                         </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="d-flex flex-column align-items-start budget-money">
-                                    <span class="color-green">1 200 000$</span>
-                                    <span class="color-purple">650 000$</span>
-                                    <span class="color-orange">100 000$</span>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="chart-container">
-                                    <canvas id="BudgetChart">{{ budgetChart }}</canvas>
-                                </div>
-                            </div>
+                        <div class="col-auto px-1">
+                            <span class="font-10">MEMBERS</span>
                         </div>
                     </div>
-                    <div class="row text-start" style="position: absolute; bottom: 15px; left: 15px;">
-                        <span class="color-grey font-9">Client Company Name</span>
+                    <div class="row pt-3">
+                        <span class="font-14">
+                            {{ membersCount }}
+                        </span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- project's stats container -->
+    <div class="row justify-content-center">
+
+        <!-- general project's stats -->
+        <div class="col-auto mt-sm-4">
+            <div class="general-stat-container position-relative">
+                <div class="general-stat-inner">
+                    <div class="row">
+                        <div class="col-auto general-stat-text">
+                            <span class="font-13 bold-4 color-grey">General Stats</span>
+                            <span>Total Tasks: 56</span>
+                            <span>Todo Tasks: 25</span>
+                            <span>Tasks In Progress: 12</span>
+                            <span>Tasks Completed: 15</span>
+                        </div>
+                        <div class="col">
+                            <div class="me-5">
+                                <div class="row justify-content-end">
+                                    <div class="progress-bar-container">
+                                        <canvas class="float-end" id="TodoListsProgressChart" height="52px">
+                                            {{ todoListsProgressChart }}
+                                        </canvas>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-end">
+                                    <div class="progress-bar-container">
+                                        <canvas class="float-end" id="TasksProgressChart" height="60px">
+                                            {{ tasksProgressChart }}
+                                        </canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="position: absolute; bottom: 15px; right: 25px;">
+                    <span class="font-8 color-grey">129 days till the deadline 20.06.2024</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- project's budget stats -->
+        <div class="col-auto mt-sm-4">
+            <div class="budget-stat-container position-relative ">
+                <div class="row general-stat-inner">
+                    <div class="row justify-content-end pb-2">
+                        <div class="col-auto text-end">
+                            <span class="font-13 bold-4 color-grey">Budget</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="d-flex flex-column align-items-start budget-money">
+                                <span class="color-green">1 200 000$</span>
+                                <span class="color-purple">650 000$</span>
+                                <span class="color-orange">100 000$</span>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="chart-container">
+                                <canvas id="BudgetChart">{{ budgetChart }}</canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row text-start" style="position: absolute; bottom: 15px; left: 15px;">
+                    <span class="color-grey font-9">Client Company Name</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- all project's todo lists container -->
     <div class="row justify-content-center gap-5 my-5">
         <div class="todolist-card" appTodolistCardColor *ngFor="let list of todoLists" [CardColor]="list.Color">
             <div class="px-2 mt-2 position-relative h-100">
@@ -226,6 +246,7 @@
         </div>
     </div>
 
+    <!-- all project's teams container -->
     <div class="row mt-5 justify-content-center">
         <div class="row gap-5 justify-content-center">
             <div class="team-card" *ngFor="let team of teams">
