@@ -20,29 +20,32 @@ import { TodolistCardTeamColorDirective } from './project-manager-perspective/bo
 import { TodolistCardColorDirective } from './project-manager-perspective/boards/project-manager-statistics-board/todolist-card-color.directive';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BurgerHoverEffectDirective } from './project-manager-perspective/boards/project-manager-statistics-board/burger-hover-effect.directive';
+import { TodolistBoardComponent } from './common-boards/todolist-board/todolist-board.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ProjectManagerMainBoardComponent,
-    ProjectManagerTodolistsBoardComponent,
-    ProjectManagerTeamsBoardComponent,
-    TeamCardHighlightDirective,
-    ProjectManagerStatisticsBoardComponent,
-    TodolistCardTeamColorDirective,
-    TodolistCardColorDirective,
-    BurgerHoverEffectDirective
-  ],
-  imports: [
-    BrowserModule, HttpClientModule,
-    AppRoutingModule, NgbModule,
-    MatSlideToggleModule, BrowserAnimationsModule,
-    MatProgressBarModule, MatSnackBarModule, MatButtonModule,
-    MatTooltipModule
-  ],
-  providers: [
-    provideAnimationsAsync()
-  ],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent,
+        ProjectManagerMainBoardComponent,
+        ProjectManagerTodolistsBoardComponent,
+        ProjectManagerTeamsBoardComponent,
+        TeamCardHighlightDirective,
+        ProjectManagerStatisticsBoardComponent,
+        TodolistCardTeamColorDirective,
+        TodolistCardColorDirective,
+        BurgerHoverEffectDirective,
+        // TodolistBoardComponent
+    ],
+    providers: [
+        provideAnimationsAsync()
+    ],
+    bootstrap: [AppComponent],
+    imports: [
+        BrowserModule, HttpClientModule,
+        AppRoutingModule, NgbModule,
+        MatSlideToggleModule, BrowserAnimationsModule,
+        MatProgressBarModule, MatSnackBarModule, MatButtonModule,
+        MatTooltipModule,
+        TodolistBoardComponent
+    ]
 })
 export class AppModule { }
