@@ -33,7 +33,6 @@ import { TodolistBoardComponent } from './common-boards/todolist-board/todolist-
         TodolistCardTeamColorDirective,
         TodolistCardColorDirective,
         BurgerHoverEffectDirective,
-        // TodolistBoardComponent
     ],
     providers: [
         provideAnimationsAsync()
