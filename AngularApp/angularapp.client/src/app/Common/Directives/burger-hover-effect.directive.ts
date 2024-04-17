@@ -21,7 +21,7 @@ export class BurgerHoverEffectDirective {
   }
 
   @HostListener('click') click(eventData: Event) {
-    if(this.isShowed){
+    if (this.isShowed) {
       this.renderer.setStyle(this.outerElem, 'transform', `translateX(-100%)`);
       this.isShowed = false;
     }
