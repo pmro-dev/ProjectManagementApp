@@ -59,54 +59,163 @@
 <!-- body content -->
 <div class="content-wrapper">
 
-  <div class="table-container">
-    <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
-      @for (item of columnsData; track item) {
-      <ng-container matColumnDef="{{item.columnType }}">
-        <th mat-header-cell *matHeaderCellDef> {{ item.columnName }} </th>
-        <td mat-cell *matCellDef="let element">
-
-          <div *ngIf="!isItString(element[item.columnType])">
-            <common-html-renderer [customContent]="element[item.columnType]"></common-html-renderer>
+  <p-table #dt1 [value]="tasksData" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [globalFilterFields]="['name', 'title', 'shortDescription', 'teamMate.name', 'status']">
+    <ng-template pTemplate="caption">
+      <div class="flex">
+        <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+          (click)="clear(dt1)">CLEAR</button>
+        <span class="p-input-icon-left ml-auto">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="dt1.filterGlobal($any($event.target).value, 'contains')"
+            placeholder="Search keyword" />
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="min-width:15rem">
+          <div class="flex align-items-center">
+            Title
+            <p-columnFilter type="text" field="title" display="menu"></p-columnFilter>
           </div>
-          <div *ngIf="isItString(element[item.columnType])">
-            <p> {{ element[item.columnType] }}</p>
+        </th>
+        <th style="min-width:15rem">
+          <div class="flex align-items-center">
+            Short Description
+            <p-columnFilter type="text" field="shortDescription" display="menu"></p-columnFilter>
           </div>
-        </td>
-      </ng-container>
-      }
-      <ng-container matColumnDef="expand">
-        <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-icon-button aria-label="expand row"
-            (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
-            @if (expandedElement === element) {
-            <mat-icon>keyboard_arrow_up</mat-icon>
-            } @else {
-            <mat-icon>keyboard_arrow_down</mat-icon>
-            }
-          </button>
-        </td>
-      </ng-container>
+        </th>
+        <th style="min-width:15rem">
+          <div class="flex align-items-center">
+            Team Mate
+            <p-columnFilter field="teamMate.name" matchMode="in" display="menu" [showMatchModes]="false"
+              [showOperator]="false" [showAddButton]="false">
+              <ng-template pTemplate="header">
+                <div class="px-3 pt-3 pb-0">
+                  <span class="font-bold">Team Mate Picker</span>
+                </div>
+              </ng-template>
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiSelect [ngModel]="value" [options]="teamMates" placeholder="Any"
+                  (onChange)="filter($event.value)" optionLabel="name">
+                  <ng-template let-option pTemplate="item">
+                    <div class="inline-block vertical-align-middle">
+                      <img [alt]="option.label" src="{{ option.image }}" width="24" class="vertical-align-middle" />
+                      <span class="ml-1 mt-1">{{ option.name }}</span>
+                    </div>
+                  </ng-template>
+                </p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
+          </div>
+        </th>
+        <th style="min-width:10rem">
+          <div class="flex align-items-center">
+            Days Left
+            <p-columnFilter type="numeric" field="daysLeft" display="menu"></p-columnFilter>
+          </div>
+        </th>
+        <th style="min-width:10rem">
+          <div class="flex align-items-center">
+            Deadline
+            <!-- <p-columnFilter type="date" field="date" display="menu"></p-columnFilter> -->
+          </div>
+        </th>
+        <th style="min-width:10rem">
+          <div class="flex align-items-center">
+            Status
+            <p-columnFilter field="status" matchMode="equals" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+              <ng-template pTemplate="header">
+                <div class="px-3 pt-3 pb-0">
+                  <span class="font-bold">Status Picker</span>
+                </div>
+              </ng-template>
 
-      <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-      <ng-container matColumnDef="expandedDetail">
-        <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
-          <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-            <div class="example-element-description">
-              {{element.description}}
-              <span class="example-element-description-attribution"> -- Wikipedia </span>
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-dropdown [ngModel]="value" [options]="taskStatuses" (onChange)="filter($event.value)" placeholder="Any" [showClear]="true">
+                    <ng-template let-option pTemplate="item">
+                        <p-tag [value]="option.value" [severity]="getSeverity(option.label)"></p-tag>
+                    </ng-template>
+                </p-dropdown>
+            </ng-template>
+            </p-columnFilter>
+
+          </div>
+        </th>
+        <th style="min-width:10rem">
+          <div class="flex align-items-center">
+            Tags / statuses picker
+            <!-- <p-columnFilter field="status" matchMode="equals" display="menu">
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)" placeholder="Any">
+                  <ng-template let-option pTemplate="item">
+                    <p-tag [value]="option.value" [severity]="getSeverity(option.label)"></p-tag>
+                  </ng-template>
+                </p-dropdown>
+              </ng-template>
+            </p-columnFilter> -->
+          </div>
+        </th>
+
+        <!-- <th style="min-width:10rem">
+            <div class="flex align-items-center">
+              Activity
+              <p-columnFilter field="activity" matchMode="between" display="menu" [showMatchModes]="false"
+                [showOperator]="false" [showAddButton]="false">
+                <ng-template pTemplate="filter" let-filter="filterCallback">
+                  <p-slider [ngModel]="activityValues" [range]="true" (onSlideEnd)="filter($event.values)"
+                    styleClass="m-3"></p-slider>
+                  <div class="flex align-items-center px-2">
+                    <span>{{ activityValues[0] }}</span>
+                    <span>{{ activityValues[1] }}</span>
+                  </div>
+                </ng-template>
+              </p-columnFilter>
             </div>
-          </div>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
-      <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;" class="example-element-row"
-        [class.example-expanded-row]="expandedElement === element"
-        (click)="expandedElement = expandedElement === element ? null : element">
+          </th> -->
+        <!-- <th style="width: 3rem">
+            <div class="flex align-items-center">
+              Verified
+              <p-columnFilter type="boolean" field="verified" display="menu"></p-columnFilter>
+            </div>
+          </th> -->
       </tr>
-      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-    </table>
-  </div>
+    </ng-template>
+    <ng-template pTemplate="body" let-task>
+      <tr>
+        <td>
+          {{ task.title }}
+        </td>
+        <td>
+          {{ task.shortDescription }}
+        </td>
+        <td>
+          <img [alt]="task.teamMate.name" src="{{ task.teamMate.image }}" width="32" style="vertical-align: middle" />
+          <span class="ml-1 vertical-align-middle">{{ task.teamMate.name }}</span>
+        </td>
+        <td>
+          {{ task.daysLeft }}
+        </td>
+        <td>
+          {{ task.deadline }}
+          <!-- {{ task.deadline | date: 'MM/dd/yyyy' }} -->
+        </td>
+        <td>
+          <p-tag [value]="task.status" [severity]="getSeverity(task.status)"></p-tag>
+        </td>
+        <td>
+          {{ task.status }}
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7">No tasks found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
 </div>

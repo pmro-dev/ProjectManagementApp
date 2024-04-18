@@ -1,7 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { AfterViewInit, Component, ViewChild, NgModule } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { NgFor, NgIf } from '@angular/common';
@@ -10,6 +7,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CommonModuleModule } from '../../Common/modules/common.module';
 import { HtmlRendererComponent } from '../../Common/html-renderer/html-renderer.component';
+import { Table } from 'primeng/table';
+import { TableModule } from 'primeng/table';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TagModule } from 'primeng/tag';
+import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
   selector: 'app-todolist-board',
@@ -23,52 +26,72 @@ import { HtmlRendererComponent } from '../../Common/html-renderer/html-renderer.
     ]),
   ],
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule, MatPaginatorModule, NgFor, MatButtonModule,
-    MatIconModule, CommonModuleModule, HtmlRendererComponent, NgIf],
+  imports: [MatFormFieldModule, MatInputModule,
+    NgFor, MatButtonModule,
+    MatIconModule, CommonModuleModule, HtmlRendererComponent, NgIf, TableModule, MultiSelectModule, FormsModule, ReactiveFormsModule, TagModule, DropdownModule],
 })
 
-export class TodolistBoardComponent implements AfterViewInit {
+export class TodolistBoardComponent {
 
-  columnsData: Array<IItemsToDisplay> = [
-    { columnType: "title", columnName: "Title" },
-    { columnType: "shortDescription", columnName: "Short Description" },
-    { columnType: "teamMateName", columnName: "TeamMate Name" },
-    { columnType: "status", columnName: "Status" },
-    { columnType: "daysLeft", columnName: "Days Left" },
-    { columnType: "deadline", columnName: "Deadline" },
-    { columnType: "tags", columnName: "Tags" }
-  ];
+  statuses!: any[];
+  loading: boolean = true;
+  activityValues: number[] = [0, 100];
 
-  columnsToDisplay: string[] = ['title', 'shortDescription', 'teamMateName', 'status', 'daysLeft', 'deadline', 'tags'];
-  columnsNamesToDisplay: string[] = ['Title', 'Short Description', 'TeamMate Name', 'Status', 'Days Left', 'Deadline', 'Tags'];
-  columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
-  expandedElement: ITaskData | null;
-  dataSource: MatTableDataSource<ITaskData>;
+  ngOnInit(): void {
+    this.loading = false;
+  }
+
+  clear(table: Table) {
+    table.clear();
+  }
+
+  getSeverity(status: string) {
+    switch (status.toUpperCase()) {
+      case TaskStatusType.Abandoned:
+        return "danger";
+
+      case TaskStatusType.Done:
+        return "success";
+
+      case TaskStatusType.NextToDo:
+        return "info";
+
+      case TaskStatusType.InProgress:
+        return "warning";
+
+      default:
+        return "";
+    }
+  }
+
   public appLogoPath: string = "/assets/other/appLogo.jpg";
   public userAvatarPath: string = "/assets/avatars/avatar1-mini.jpg";
   public currentUserName: string = "Jan Kowalski";
-
   public avatarPath: string = "/assets/avatars/avatar1-mini.jpg";;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  mateTemp: Representative = { name: "Izer Kućma", image: "/assets/avatars/avatar1-mini.jpg" };
 
-  constructor() {
-    this.dataSource = new MatTableDataSource(this.tasksData);
-  }
+  public teamMates = [
+    { name: "1 Izer Kućma", image: "/assets/avatars/avatar1-mini.jpg" },
+    { name: "Jan Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
+    { name: "3 Izer Kućma", image: "/assets/avatars/avatar1-mini.jpg" },
+    { name: "4 Izer Kućma", image: "/assets/avatars/avatar1-mini.jpg" },
+  ];
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
+  public taskStatuses = [
+    { label: TaskStatusType.NextToDo.toString(), value: TaskStatusType.NextToDo.toString() },
+    { label: TaskStatusType.InProgress.toString(), value: TaskStatusType.InProgress.toString() },
+    { label: TaskStatusType.Done.toString(), value: TaskStatusType.Done.toString() },
+    { label: TaskStatusType.Abandoned.toString(), value: TaskStatusType.Abandoned.toString() },
+  ];
 
-  public tasksData: Array<ITaskData> = [
+  public tasksData = [
     {
       title: "Task 1",
       shortDescription: "Some task description short",
       description: "1 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMateName: this.generateHTMLElement(),
-      status: TaskStatusType.NextToDo,
+      teamMate: this.mateTemp,
+      status: TaskStatusType.NextToDo.toString(),
       daysLeft: 15,
       deadline: "15.04.2023",
       tags: ["First Tag", "Second Tag"]
@@ -77,8 +100,8 @@ export class TodolistBoardComponent implements AfterViewInit {
       title: "Task 2",
       shortDescription: "Some task description short",
       description: "2 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMateName: this.generateHTMLElement(),
-      status: TaskStatusType.NextToDo,
+      teamMate: { name: "Jan Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
+      status: TaskStatusType.Done.toString(),
       daysLeft: 15,
       deadline: "15.04.2023",
       tags: ["First Tag", "Second Tag"]
@@ -87,8 +110,8 @@ export class TodolistBoardComponent implements AfterViewInit {
       title: "Task 3",
       shortDescription: "Some task description short",
       description: "3 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMateName: this.generateHTMLElement(),
-      status: TaskStatusType.NextToDo,
+      teamMate: this.mateTemp,
+      status: TaskStatusType.Abandoned.toString(),
       daysLeft: 15,
       deadline: "15.04.2023",
       tags: ["First Tag", "Second Tag"]
@@ -97,8 +120,8 @@ export class TodolistBoardComponent implements AfterViewInit {
       title: "Task 4",
       shortDescription: "Some task description short",
       description: "4 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMateName: this.generateHTMLElement(),
-      status: TaskStatusType.NextToDo,
+      teamMate: this.mateTemp,
+      status: TaskStatusType.InProgress.toString(),
       daysLeft: 15,
       deadline: "15.04.2023",
       tags: ["First Tag", "Second Tag"]
@@ -107,8 +130,8 @@ export class TodolistBoardComponent implements AfterViewInit {
       title: "Task 5",
       shortDescription: "Some task description short",
       description: "5 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMateName: this.generateHTMLElement(),
-      status: TaskStatusType.NextToDo,
+      teamMate: this.mateTemp,
+      status: TaskStatusType.NextToDo.toString(),
       daysLeft: 15,
       deadline: "15.04.2023",
       tags: ["First Tag", "Second Tag"]
@@ -117,8 +140,8 @@ export class TodolistBoardComponent implements AfterViewInit {
       title: "Task 6",
       shortDescription: "Some task description short",
       description: "6 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMateName: this.generateHTMLElement(),
-      status: TaskStatusType.NextToDo,
+      teamMate: this.mateTemp,
+      status: TaskStatusType.NextToDo.toString(),
       daysLeft: 15,
       deadline: "15.04.2023",
       tags: ["First Tag", "Second Tag"]
@@ -127,8 +150,8 @@ export class TodolistBoardComponent implements AfterViewInit {
       title: "Task 7",
       shortDescription: "Some task description short",
       description: "7 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMateName: this.generateHTMLElement(),
-      status: TaskStatusType.NextToDo,
+      teamMate: this.mateTemp,
+      status: TaskStatusType.NextToDo.toString(),
       daysLeft: 15,
       deadline: "15.04.2023",
       tags: ["First Tag", "Second Tag"]
@@ -137,8 +160,8 @@ export class TodolistBoardComponent implements AfterViewInit {
       title: "Task 8",
       shortDescription: "Some task description short",
       description: "8 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMateName: this.generateHTMLElement(),
-      status: TaskStatusType.NextToDo,
+      teamMate: this.mateTemp,
+      status: TaskStatusType.NextToDo.toString(),
       daysLeft: 15,
       deadline: "15.04.2023",
       tags: ["First Tag", "Second Tag"]
@@ -147,8 +170,8 @@ export class TodolistBoardComponent implements AfterViewInit {
       title: "Task 9",
       shortDescription: "Some task description short",
       description: "9 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMateName: this.generateHTMLElement(),
-      status: TaskStatusType.NextToDo,
+      teamMate: this.mateTemp,
+      status: TaskStatusType.NextToDo.toString(),
       daysLeft: 15,
       deadline: "15.04.2023",
       tags: ["First Tag", "Second Tag"]
@@ -157,58 +180,18 @@ export class TodolistBoardComponent implements AfterViewInit {
       title: "Task 10",
       shortDescription: "Some task description short",
       description: "10 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMateName: this.generateHTMLElement(),
-      status: TaskStatusType.NextToDo,
+      teamMate: this.mateTemp,
+      status: TaskStatusType.NextToDo.toString(),
       daysLeft: 15,
       deadline: "15.04.2023",
       tags: ["First Tag", "Second Tag"]
     },
   ];
+}
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-
-  generateHTMLElement(text?: string): HTMLElement {
-
-    let itemHTMLBox: HTMLElement;
-
-    if (text == null) {
-      itemHTMLBox = document.createElement('div');
-
-      let childImg = document.createElement('img');
-      childImg.setAttribute('src', '/assets/avatars/avatar1-mini.jpg');
-      childImg.style.width = '40px';
-      childImg.style.height = 'auto';
-      itemHTMLBox.appendChild(childImg);
-
-      let childP: HTMLElement = document.createElement('p');
-      childP.innerText = "Izer Kućma";
-      // childP.style.backgroundColor = 'red';
-
-      itemHTMLBox.appendChild(childP);
-    }
-    else {
-      itemHTMLBox = document.createElement('p');
-      itemHTMLBox.innerText = 'text';
-    }
-
-    return itemHTMLBox;
-  }
-
-  isItString(val: any): boolean {
-    if (typeof val == 'object') { 
-      return false;
-    }
-    else {
-      return true;
-    }
-  }
+export interface Representative {
+  name?: string;
+  image?: string
 }
 
 export enum TaskStatusType {
@@ -222,8 +205,8 @@ export interface ITaskData {
   title: string;
   shortDescription: string;
   description: string;
-  teamMateName: HTMLElement;
-  status: TaskStatusType;
+  teamMate: Representative;
+  status: string;
   daysLeft: number;
   deadline: string;
   tags: Array<string>;
