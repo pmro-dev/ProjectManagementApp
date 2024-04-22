@@ -16,7 +16,7 @@ export class BurgerHoverEffectDirective {
   ngOnChanges(changes: SimpleChanges): void {
 
     if (changes['isShowedIn'] && changes['isShowedIn'].previousValue !== undefined) {
-      if (this.isShowed) {
+      if (changes['isShowedIn'].currentValue) {
         this.show();
       }
       else {
