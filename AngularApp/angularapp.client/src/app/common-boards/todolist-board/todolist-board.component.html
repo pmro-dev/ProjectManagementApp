@@ -1,154 +1,107 @@
-<!-- navigation top menu -->
-<div class="row nav-menu color-grey align-items-center">
+<nav-top-menu [mobileMenuIn]="mobileMenuViaManager" (isMenuShowed)="onMenuShowChange($event)" [mobileMenuShowIn]="isMenuShow"></nav-top-menu>
 
-  <!-- left burger menu on mobile -->
-  <div appBurgerHoverEffect [outerElem]="leftMenu"
-    class="col-auto left-burger burger-box ps-4 d-sm-block d-md-block d-lg-none">
-    <div class="btn">
-      <i class="fa-solid fa-bars"></i>
-    </div>
-  </div>
-
-  <!-- nav title with logo -->
-  <div class="col-auto ms-sm-auto ms-md-auto ms-lg-0 nav-logo d-flex align-items-center">
-    <img [src]="appLogoPath" />
-    <div class="nav-title">
-      <span class="font-12">Project Title | </span>
-      <span class="font-10">Dashboard Name</span>
-    </div>
-  </div>
-
-  <!-- right burger menu on mobile -->
-  <div class="col-auto ms-auto burger-box d-sm-block d-md-block d-lg-none">
-    <div class="btn">
-      <i class="fa-solid fa-right-from-bracket"></i>
-    </div>
-  </div>
-
-  <!-- nav user info on large -->
-  <div class="col-auto ms-auto d-sm-none d-md-none d-lg-block">
-    <div class="row align-items-center">
-      <div class="col-auto">
-        <span class="bold-5">{{ currentUserName }}</span>
-      </div>
-      <div class="col-auto nav-user-avatar">
-        <img [src]="userAvatarPath" />
-      </div>
-      <div class="col-auto h-100">
-        <div class="btn btn-gradient-filled h-100">LOGOUT</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- left sidebar menu -->
-<!-- <div class="left-menu d-md-none d-sm-none d-lg-block"> -->
-<div #leftMenu class="left-menu">
-  <div class="left-menu-box">
-    <ul class="btn-group-vertical">
-      <li class="btn btn-fullx"><i class="fa-solid fa-arrow-left"></i>BACK</li>
-      <li class="btn btn-fullx"><i class="fa-regular fa-pen-to-square"></i>EDIT</li>
-      <li class="btn btn-fullx"><i class="fa-solid fa-chart-line"></i>STATS</li>
-      <li class="btn btn-fullx"><i class="fa-solid fa-people-group"></i>TEAMS</li>
-      <li class="btn btn-fullx"><i class="fa-solid fa-list"></i>TODO LISTS</li>
-      <li class="btn btn-fullx"><i class="fa-regular fa-comments"></i>CHAT</li>
-    </ul>
-  </div>
-</div>
+<!-- <nav-left-menu (GiveMenuToParent)="onMobileMenuGenerate($event)"></nav-left-menu> -->
+<nav-left-menu (PushMenuToParent)="onLeftMenuPush($event)"></nav-left-menu>
 
 <!-- body content -->
+<div #bodyWall class="bodyWall" [hidden]="!isMenuShow" (click)="onBodyWallClick()"></div>
+
 <div class="content-wrapper">
-
-  <p-table #dt1 [value]="tasksData" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
-    [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-    [globalFilterFields]="['name', 'title', 'shortDescription', 'teamMate.name', 'status']">
-    <ng-template pTemplate="caption">
-      <div class="flex">
-        <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
-          (click)="clear(dt1)">CLEAR</button>
-        <span class="p-input-icon-left ml-auto">
-          <i class="pi pi-search"></i>
-          <input pInputText type="text" (input)="dt1.filterGlobal($any($event.target).value, 'contains')"
-            placeholder="Search keyword" />
+    <p-table #dt1 [value]="tasksData" dataKey="id" editMode="row" [rows]="10" [showCurrentPageReport]="true"
+      [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [globalFilterFields]="['name', 'title', 'shortDescription', 'teamMate.name', 'status']">
+      <ng-template pTemplate="caption">
+        <span class="text-start float-start mx-3 color-grey font-9">
+          {{ todoListName }}
         </span>
-      </div>
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr>
-        <th style="min-width:15rem">
-          <div class="flex align-items-center">
-            Title
-            <p-columnFilter type="text" field="title" display="menu"></p-columnFilter>
-          </div>
-        </th>
-        <th style="min-width:15rem">
-          <div class="flex align-items-center">
-            Short Description
-            <p-columnFilter type="text" field="shortDescription" display="menu"></p-columnFilter>
-          </div>
-        </th>
-        <th style="min-width:15rem">
-          <div class="flex align-items-center">
-            Team Mate
-            <p-columnFilter field="teamMate.name" matchMode="in" display="menu" [showMatchModes]="false"
-              [showOperator]="false" [showAddButton]="false">
-              <ng-template pTemplate="header">
-                <div class="px-3 pt-3 pb-0">
-                  <span class="font-bold">Team Mate Picker</span>
-                </div>
-              </ng-template>
-              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <p-multiSelect [ngModel]="value" [options]="teamMates" placeholder="Any"
-                  (onChange)="filter($event.value)" optionLabel="name">
-                  <ng-template let-option pTemplate="item">
-                    <div class="inline-block vertical-align-middle">
-                      <img [alt]="option.label" src="{{ option.image }}" width="24" class="vertical-align-middle" />
-                      <span class="ml-1 mt-1">{{ option.name }}</span>
-                    </div>
-                  </ng-template>
-                </p-multiSelect>
-              </ng-template>
-            </p-columnFilter>
-          </div>
-        </th>
-        <th style="min-width:10rem">
-          <div class="flex align-items-center">
-            Days Left
-            <p-columnFilter type="numeric" field="daysLeft" display="menu"></p-columnFilter>
-          </div>
-        </th>
-        <th style="min-width:10rem">
-          <div class="flex align-items-center">
-            Deadline
-            <!-- <p-columnFilter type="date" field="date" display="menu"></p-columnFilter> -->
-          </div>
-        </th>
-        <th style="min-width:10rem">
-          <div class="flex align-items-center">
-            Status
-            <p-columnFilter field="status" matchMode="equals" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
-              <ng-template pTemplate="header">
-                <div class="px-3 pt-3 pb-0">
-                  <span class="font-bold">Status Picker</span>
-                </div>
-              </ng-template>
-
-              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <p-dropdown [ngModel]="value" [options]="taskStatuses" (onChange)="filter($event.value)" placeholder="Any" [showClear]="true">
+        <div class="flex">
+          <button pButton label="Clear" class="p-button-outlined mx-3" icon="pi pi-filter-slash"
+            (click)="clear(dt1, dt2)"></button>
+          <span class="p-input-icon-left ml-auto">
+            <i class="pi pi-search"></i>
+            <input #dt2 pInputText type="text" (input)="dt1.filterGlobal($any($event.target).value, 'contains')"
+              placeholder="Search keyword" />
+          </span>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="min-width:15rem">
+            <div class="flex align-items-center">
+              Title
+              <p-columnFilter type="text" field="title" display="menu"></p-columnFilter>
+            </div>
+          </th>
+          <th style="min-width:15rem">
+            <div class="flex align-items-center">
+              Short Description
+              <p-columnFilter type="text" field="shortDescription" display="menu"></p-columnFilter>
+            </div>
+          </th>
+          <th style="min-width:15rem">
+            <div class="flex align-items-center">
+              Team Mate
+              <p-columnFilter field="teamMate.name" matchMode="in" display="menu" [showMatchModes]="false"
+                [showOperator]="false" [showAddButton]="false">
+                <ng-template pTemplate="header">
+                  <div class="px-3 pt-3 pb-0">
+                    <span class="font-bold">Team Mate Picker</span>
+                  </div>
+                </ng-template>
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect [ngModel]="value" [options]="teamMates" placeholder="Any"
+                    (onChange)="filter($event.value)" optionLabel="name">
                     <ng-template let-option pTemplate="item">
-                        <p-tag [value]="option.value" [severity]="getSeverity(option.label)"></p-tag>
+                      <div class="inline-block vertical-align-middle">
+                        <img [alt]="option.label" src="{{ option.image }}" width="24" class="vertical-align-middle" />
+                        <span class="ml-1 mt-1">{{ option.name }}</span>
+                      </div>
                     </ng-template>
-                </p-dropdown>
-            </ng-template>
-            </p-columnFilter>
+                  </p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </div>
+          </th>
+          <th style="min-width:10rem">
+            <div class="flex align-items-center">
+              Days Left
+              <p-columnFilter type="numeric" field="daysLeft" display="menu"></p-columnFilter>
+            </div>
+          </th>
+          <th style="min-width:10rem">
+            <div class="flex align-items-center">
+              Deadline
+              <p-columnFilter type="date" field="date" display="menu"></p-columnFilter>
+            </div>
+          </th>
+          <th style="min-width:10rem">
+            <div class="flex align-items-center">
+              Status
+              <p-columnFilter field="status" matchMode="equals" display="menu" [showMatchModes]="false"
+                [showOperator]="false" [showAddButton]="false">
+                <ng-template pTemplate="header">
+                  <div class="px-3 pt-3 pb-0">
+                    <span class="font-bold">Status Picker</span>
+                  </div>
+                </ng-template>
 
-          </div>
-        </th>
-        <th style="min-width:10rem">
-          <div class="flex align-items-center">
-            Tags / statuses picker
-            <!-- <p-columnFilter field="status" matchMode="equals" display="menu">
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-dropdown [ngModel]="value" [options]="taskStatuses" (onChange)="filter($event.value)"
+                    placeholder="Any" [showClear]="true">
+                    <ng-template let-option pTemplate="item">
+                      <p-tag [value]="option.value" [severity]="getSeverity(option.label)"></p-tag>
+                    </ng-template>
+                  </p-dropdown>
+                </ng-template>
+              </p-columnFilter>
+
+            </div>
+          </th>
+          <th style="min-width:10rem">
+            <div class="flex align-items-center">
+              Tags
+              <!-- <p-columnFilter field="status" matchMode="equals" display="menu">
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                 <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)" placeholder="Any">
                   <ng-template let-option pTemplate="item">
@@ -157,10 +110,10 @@
                 </p-dropdown>
               </ng-template>
             </p-columnFilter> -->
-          </div>
-        </th>
+            </div>
+          </th>
 
-        <!-- <th style="min-width:10rem">
+          <!-- <th style="min-width:10rem">
             <div class="flex align-items-center">
               Activity
               <p-columnFilter field="activity" matchMode="between" display="menu" [showMatchModes]="false"
@@ -176,46 +129,67 @@
               </p-columnFilter>
             </div>
           </th> -->
-        <!-- <th style="width: 3rem">
+          <!-- <th style="width: 3rem">
             <div class="flex align-items-center">
               Verified
               <p-columnFilter type="boolean" field="verified" display="menu"></p-columnFilter>
             </div>
           </th> -->
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-task>
-      <tr>
-        <td>
-          {{ task.title }}
-        </td>
-        <td>
-          {{ task.shortDescription }}
-        </td>
-        <td>
-          <img [alt]="task.teamMate.name" src="{{ task.teamMate.image }}" width="32" style="vertical-align: middle" />
-          <span class="ml-1 vertical-align-middle">{{ task.teamMate.name }}</span>
-        </td>
-        <td>
-          {{ task.daysLeft }}
-        </td>
-        <td>
-          {{ task.deadline }}
-          <!-- {{ task.deadline | date: 'MM/dd/yyyy' }} -->
-        </td>
-        <td>
-          <p-tag [value]="task.status" [severity]="getSeverity(task.status)"></p-tag>
-        </td>
-        <td>
-          {{ task.status }}
-        </td>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="emptymessage">
-      <tr>
-        <td colspan="7">No tasks found.</td>
-      </tr>
-    </ng-template>
-  </p-table>
-
+          <th>
+            <span>
+              <i class="pi pi-pen-to-square bold-6 font-11"></i>
+            </span>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-task let-editing="editing" let-ri="rowIndex">
+        <tr [pEditableRow]="task">
+          <td>
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <input pInputText type="text" [(ngModel)]="task.title">
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ task.title }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td>
+            {{ task.shortDescription }}
+          </td>
+          <td>
+            <img [alt]="task.teamMate.name" src="{{ task.teamMate.image }}" width="32" style="vertical-align: middle" />
+            <span class="mx-2 ml-1 vertical-align-middle">{{ task.teamMate.name }}</span>
+          </td>
+          <td>
+            {{ task.daysLeft }}
+          </td>
+          <td>
+            <!-- {{ task.deadline }} -->
+            {{ task.deadline | date: 'dd MMM' }}
+          </td>
+          <td>
+            <p-tag [value]="task.status" [severity]="getSeverity(task.status)"></p-tag>
+          </td>
+          <td>
+            <p-tag class="mx-1" *ngFor="let tag of task.tags" [value]="tag"></p-tag>
+          </td>
+          <td>
+            <div class="flex align-items-center justify-content-center gap-2">
+              <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                (click)="onRowEditInit(task)" class="p-button-rounded p-button-text"></button>
+              <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                (click)="onRowEditSave(task)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+              <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                (click)="onRowEditCancel(task, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7">No tasks found.</td>
+        </tr>
+      </ng-template>
+    </p-table>
 </div>

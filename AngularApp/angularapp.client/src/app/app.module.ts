@@ -99,7 +99,7 @@ import { SplitterModule } from 'primeng/splitter';
 // import { StepperModule } from 'primeng/stepper';
 import { StepsModule } from 'primeng/steps';
 import { TabMenuModule } from 'primeng/tabmenu';
-import { Table, TableModule } from 'primeng/table';
+import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
 import { TagModule } from 'primeng/tag';
 import { TerminalModule } from 'primeng/terminal';
@@ -119,9 +119,8 @@ import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { RippleModule } from 'primeng/ripple';
 import { StyleClassModule } from 'primeng/styleclass';
-import { MessageService } from 'primeng/api';
+// import { MessageService } from 'primeng/api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-// import { CustomerService } from 'src/service/customerservice';
 
 @NgModule({
     declarations: [
@@ -132,7 +131,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         TeamCardHighlightDirective,
         ProjectManagerStatisticsBoardComponent,
         TodolistCardTeamColorDirective,
-        TodolistCardColorDirective
+        TodolistCardColorDirective,
     ],
     providers: [
         provideAnimationsAsync()
@@ -248,6 +247,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         CardModule,
         RippleModule,
         StyleClassModule
+    ],
+    exports:[
+        TodolistBoardComponent
     ]
 })
 export class AppModule { }

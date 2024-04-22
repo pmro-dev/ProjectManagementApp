@@ -1,33 +1,48 @@
-import { Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2, SimpleChanges } from '@angular/core';
 
 @Directive({
   selector: '[appBurgerHoverEffect]'
 })
+
 export class BurgerHoverEffectDirective {
 
-  constructor(private elemRef: ElementRef, private renderer: Renderer2) { }
+  constructor(private renderer: Renderer2) { }
 
-  @Input() outerElem?: HTMLDivElement;
+  @Input() outerElem?: ElementRef;
   private isShowed: boolean = false;
+  @Output() isShowedOutput = new EventEmitter<boolean>();
+  @Input() isShowedIn: boolean;
 
-  ngAfterViewInit() {
-    if (!this.outerElem) {
-      console.error('outerElem is not provided!');
-      return;
+  ngOnChanges(changes: SimpleChanges): void {
+
+    if (changes['isShowedIn'] && changes['isShowedIn'].previousValue !== undefined) {
+      if (this.isShowed) {
+        this.show();
+      }
+      else {
+        this.hide();
+      }
     }
+  }
 
-    this.outerElem = this.outerElem;
+  hide() {
+    this.renderer.setStyle(this.outerElem?.nativeElement, 'transform', `translateX(-100%)`);
     this.isShowed = false;
+    this.isShowedOutput.emit(this.isShowed);
+  }
+
+  show() {
+    this.renderer.setStyle(this.outerElem?.nativeElement, 'transform', `translateX(0%)`);
+    this.isShowed = true;
+    this.isShowedOutput.emit(this.isShowed);
   }
 
   @HostListener('click') click(eventData: Event) {
     if (this.isShowed) {
-      this.renderer.setStyle(this.outerElem, 'transform', `translateX(-100%)`);
-      this.isShowed = false;
+      this.hide();
     }
     else {
-      this.renderer.setStyle(this.outerElem, 'transform', `translateX(0%)`);
-      this.isShowed = true;
+      this.show();
     }
   }
 }
