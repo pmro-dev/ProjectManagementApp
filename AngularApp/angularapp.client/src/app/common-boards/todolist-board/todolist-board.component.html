@@ -1,4 +1,5 @@
-<nav-top-menu [mobileMenuIn]="mobileMenuViaManager" (isMenuShowed)="onMenuShowChange($event)" [mobileMenuShowIn]="isMenuShow"></nav-top-menu>
+<nav-top-menu [mobileMenuIn]="mobileMenuViaManager" (isMenuShowed)="onMenuShowChange($event)"
+  [mobileMenuShowIn]="isMenuShow"></nav-top-menu>
 
 <!-- <nav-left-menu (GiveMenuToParent)="onMobileMenuGenerate($event)"></nav-left-menu> -->
 <nav-left-menu (PushMenuToParent)="onLeftMenuPush($event)"></nav-left-menu>
@@ -7,101 +8,142 @@
 <div #bodyWall class="bodyWall" [hidden]="!isMenuShow" (click)="onBodyWallClick()"></div>
 
 <div class="content-wrapper">
-    <p-table #dt1 [value]="tasksData" dataKey="id" editMode="row" [rows]="10" [showCurrentPageReport]="true"
-      [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-      [globalFilterFields]="['name', 'title', 'shortDescription', 'teamMate.name', 'status']">
-      <ng-template pTemplate="caption">
-        <span class="text-start float-start mx-3 color-grey font-9">
-          {{ todoListName }}
+
+  <p-table #dt1 [value]="tasksData" dataKey="id" editMode="row" [rows]="10" [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [globalFilterFields]="['name', 'title', 'shortDescription', 'teamMate.name', 'status']">
+
+    <ng-template pTemplate="caption">
+
+      <span class="text-start float-start mx-3 color-grey font-9">
+        {{ todoListName }}
+      </span>
+
+      <div class="flex">
+
+        <button pButton label="Clear" class="p-button-outlined mx-3" icon="pi pi-filter-slash"
+          (click)="clear(dt1, dt2)"></button>
+
+        <span class="p-input-icon-left ml-auto">
+
+          <i class="pi pi-search"></i>
+
+          <input #dt2 pInputText type="text" (input)="dt1.filterGlobal($any($event.target).value, 'contains')"
+            placeholder="Search keyword" />
+
         </span>
-        <div class="flex">
-          <button pButton label="Clear" class="p-button-outlined mx-3" icon="pi pi-filter-slash"
-            (click)="clear(dt1, dt2)"></button>
-          <span class="p-input-icon-left ml-auto">
-            <i class="pi pi-search"></i>
-            <input #dt2 pInputText type="text" (input)="dt1.filterGlobal($any($event.target).value, 'contains')"
-              placeholder="Search keyword" />
-          </span>
-        </div>
-      </ng-template>
-      <ng-template pTemplate="header">
-        <tr>
-          <th style="min-width:15rem">
-            <div class="flex align-items-center">
-              Title
-              <p-columnFilter type="text" field="title" display="menu"></p-columnFilter>
-            </div>
-          </th>
-          <th style="min-width:15rem">
-            <div class="flex align-items-center">
-              Short Description
-              <p-columnFilter type="text" field="shortDescription" display="menu"></p-columnFilter>
-            </div>
-          </th>
-          <th style="min-width:15rem">
-            <div class="flex align-items-center">
-              Team Mate
-              <p-columnFilter field="teamMate.name" matchMode="in" display="menu" [showMatchModes]="false"
-                [showOperator]="false" [showAddButton]="false">
-                <ng-template pTemplate="header">
-                  <div class="px-3 pt-3 pb-0">
-                    <span class="font-bold">Team Mate Picker</span>
-                  </div>
-                </ng-template>
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <p-multiSelect [ngModel]="value" [options]="teamMates" placeholder="Any"
-                    (onChange)="filter($event.value)" optionLabel="name">
-                    <ng-template let-option pTemplate="item">
-                      <div class="inline-block vertical-align-middle">
-                        <img [alt]="option.label" src="{{ option.image }}" width="24" class="vertical-align-middle" />
-                        <span class="ml-1 mt-1">{{ option.name }}</span>
-                      </div>
-                    </ng-template>
-                  </p-multiSelect>
-                </ng-template>
-              </p-columnFilter>
-            </div>
-          </th>
-          <th style="min-width:10rem">
-            <div class="flex align-items-center">
-              Days Left
-              <p-columnFilter type="numeric" field="daysLeft" display="menu"></p-columnFilter>
-            </div>
-          </th>
-          <th style="min-width:10rem">
-            <div class="flex align-items-center">
-              Deadline
-              <p-columnFilter type="date" field="date" display="menu"></p-columnFilter>
-            </div>
-          </th>
-          <th style="min-width:10rem">
-            <div class="flex align-items-center">
-              Status
-              <p-columnFilter field="status" matchMode="equals" display="menu" [showMatchModes]="false"
-                [showOperator]="false" [showAddButton]="false">
-                <ng-template pTemplate="header">
-                  <div class="px-3 pt-3 pb-0">
-                    <span class="font-bold">Status Picker</span>
-                  </div>
-                </ng-template>
 
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <p-dropdown [ngModel]="value" [options]="taskStatuses" (onChange)="filter($event.value)"
-                    placeholder="Any" [showClear]="true">
-                    <ng-template let-option pTemplate="item">
-                      <p-tag [value]="option.value" [severity]="getSeverity(option.label)"></p-tag>
-                    </ng-template>
-                  </p-dropdown>
-                </ng-template>
-              </p-columnFilter>
+      </div>
 
-            </div>
-          </th>
-          <th style="min-width:10rem">
-            <div class="flex align-items-center">
-              Tags
-              <!-- <p-columnFilter field="status" matchMode="equals" display="menu">
+    </ng-template>
+
+    <ng-template pTemplate="header">
+
+      <tr>
+        <th style="min-width:15rem">
+          <div class="flex align-items-center">
+
+            Title
+
+            <p-columnFilter type="text" field="title" display="menu"></p-columnFilter>
+          </div>
+        </th>
+
+        <th style="min-width:15rem">
+          <div class="flex align-items-center">
+
+            Short Description
+
+            <p-columnFilter type="text" field="shortDescription" display="menu"></p-columnFilter>
+          </div>
+        </th>
+
+        <th style="min-width:15rem">
+          <div class="flex align-items-center">
+
+            Team Mate
+
+            <p-columnFilter field="teamMate.name" matchMode="in" display="menu" [showMatchModes]="false"
+              [showOperator]="false" [showAddButton]="false">
+
+              <ng-template pTemplate="header">
+                <div class="px-3 pt-3 pb-0">
+                  <span class="font-bold">Team Mate Picker</span>
+                </div>
+              </ng-template>
+
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiSelect [ngModel]="value" [options]="teamMates" placeholder="Any"
+                  (onChange)="filter($event.value)" optionLabel="name">
+
+                  <ng-template let-option pTemplate="item">
+                    <div class="inline-block vertical-align-middle">
+                      <img [alt]="option.label" src="{{ option.image }}" width="24" class="vertical-align-middle" />
+                      <span class="ml-1 mt-1">{{ option.name }}</span>
+                    </div>
+                  </ng-template>
+
+                </p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
+          </div>
+        </th>
+
+        <th style="min-width:10rem">
+
+          <div class="flex align-items-center">
+
+            Days Left
+
+            <p-columnFilter type="numeric" field="daysLeft" display="menu"></p-columnFilter>
+          </div>
+        </th>
+
+        <th style="min-width:10rem">
+
+          <div class="flex align-items-center">
+
+            Deadline
+
+            <p-columnFilter type="date" field="date" display="menu"></p-columnFilter>
+          </div>
+        </th>
+
+        <th style="min-width:10rem">
+          <div class="flex align-items-center">
+
+            Status
+
+            <p-columnFilter field="status" matchMode="equals" display="menu" [showMatchModes]="false"
+              [showOperator]="false" [showAddButton]="false">
+
+              <ng-template pTemplate="header">
+
+                <div class="px-3 pt-3 pb-0">
+                  <span class="font-bold">Status Picker</span>
+                </div>
+
+              </ng-template>
+
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-dropdown [ngModel]="value" [options]="taskStatuses" (onChange)="filter($event.value)"
+                  placeholder="Any" [showClear]="true">
+
+                  <ng-template let-option pTemplate="item">
+                    <p-tag [value]="option.value" [severity]="getSeverity(option.label)"></p-tag>
+                  </ng-template>
+
+                </p-dropdown>
+              </ng-template>
+            </p-columnFilter>
+          </div>
+        </th>
+
+        <th style="min-width:10rem">
+          <div class="flex align-items-center">
+            Tags
+            <!-- <p-columnFilter field="status" matchMode="equals" display="menu">
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                 <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)" placeholder="Any">
                   <ng-template let-option pTemplate="item">
@@ -110,10 +152,10 @@
                 </p-dropdown>
               </ng-template>
             </p-columnFilter> -->
-            </div>
-          </th>
+          </div>
+        </th>
 
-          <!-- <th style="min-width:10rem">
+        <!-- <th style="min-width:10rem">
             <div class="flex align-items-center">
               Activity
               <p-columnFilter field="activity" matchMode="between" display="menu" [showMatchModes]="false"
@@ -129,67 +171,156 @@
               </p-columnFilter>
             </div>
           </th> -->
-          <!-- <th style="width: 3rem">
+        <!-- <th style="width: 3rem">
             <div class="flex align-items-center">
               Verified
               <p-columnFilter type="boolean" field="verified" display="menu"></p-columnFilter>
             </div>
           </th> -->
-          <th>
-            <span>
-              <i class="pi pi-pen-to-square bold-6 font-11"></i>
-            </span>
-          </th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-task let-editing="editing" let-ri="rowIndex">
-        <tr [pEditableRow]="task">
-          <td>
-            <p-cellEditor>
-              <ng-template pTemplate="input">
-                <input pInputText type="text" [(ngModel)]="task.title">
-              </ng-template>
-              <ng-template pTemplate="output">
-                {{ task.title }}
-              </ng-template>
-            </p-cellEditor>
-          </td>
-          <td>
-            {{ task.shortDescription }}
-          </td>
-          <td>
-            <img [alt]="task.teamMate.name" src="{{ task.teamMate.image }}" width="32" style="vertical-align: middle" />
-            <span class="mx-2 ml-1 vertical-align-middle">{{ task.teamMate.name }}</span>
-          </td>
-          <td>
-            {{ task.daysLeft }}
-          </td>
-          <td>
-            <!-- {{ task.deadline }} -->
-            {{ task.deadline | date: 'dd MMM' }}
-          </td>
-          <td>
-            <p-tag [value]="task.status" [severity]="getSeverity(task.status)"></p-tag>
-          </td>
-          <td>
-            <p-tag class="mx-1" *ngFor="let tag of task.tags" [value]="tag"></p-tag>
-          </td>
-          <td>
-            <div class="flex align-items-center justify-content-center gap-2">
-              <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                (click)="onRowEditInit(task)" class="p-button-rounded p-button-text"></button>
-              <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
-                (click)="onRowEditSave(task)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
-              <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
-                (click)="onRowEditCancel(task, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
-            </div>
-          </td>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="emptymessage">
-        <tr>
-          <td colspan="7">No tasks found.</td>
-        </tr>
-      </ng-template>
-    </p-table>
+        <th>
+
+          <span>
+            <i class="pi pi-pen-to-square bold-6 font-11"></i>
+          </span>
+        </th>
+
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-task let-editing="editing" let-ri="rowIndex">
+      <tr [pEditableRow]="task">
+        <td>
+          <p-cellEditor>
+
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="task.title">
+            </ng-template>
+
+            <ng-template pTemplate="output">
+              {{ task.title }}
+            </ng-template>
+
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <p-cellEditor>
+
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="task.shortDescription">
+            </ng-template>
+
+            <ng-template pTemplate="output">
+              {{ task.shortDescription }}
+            </ng-template>
+
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <p-cellEditor>
+
+            <ng-template pTemplate="input">
+              <p-dropdown [options]="teamMates" [(ngModel)]="task.teamMate" [style]="{'width':'100%'}">
+
+                <ng-template pTemplate="selectedItem">
+                  <div class="flex align-items-center gap-2" *ngIf="task.teamMate">
+                    <img [alt]="task.teamMate.name" src="{{ task.teamMate.image }}" width="24"
+                      class="vertical-align-middle" />
+                    <span class="ml-1 mt-1">{{ task.teamMate.name }}</span>
+                  </div>
+                </ng-template>
+
+                <ng-template pTemplate="item" let-teamMate>
+                  <div class="flex align-items-center gap-2">
+                    <img [alt]="teamMate.name" src="{{ teamMate.image }}" width="24" class="vertical-align-middle" />
+                    <span class="ml-1 mt-1">{{ teamMate.name }}</span>
+                  </div>
+                </ng-template>
+
+              </p-dropdown>
+            </ng-template>
+
+            <ng-template pTemplate="output">
+              <img [alt]="task.teamMate.name" src="{{ task.teamMate.image }}" width="32"
+                style="vertical-align: middle" />
+              <span class="mx-2 ml-1 vertical-align-middle">{{ task.teamMate.name }}</span>
+            </ng-template>
+
+          </p-cellEditor>
+        </td>
+
+        <td>
+          {{ task.daysLeft }}
+        </td>
+
+        <td>
+          <p-cellEditor>
+
+            <ng-template pTemplate="input">
+              <p-calendar [(ngModel)]="task.deadline" [showIcon]="true"></p-calendar>
+            </ng-template>
+
+            <ng-template pTemplate="output">
+              {{ task.deadline | date: 'dd MMM' }}
+            </ng-template>
+
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <p-cellEditor>
+
+            <ng-template pTemplate="input">
+              <p-dropdown [options]="taskStatuses" [(ngModel)]="task.status" [style]="{'width':'100%'}">
+                <ng-template pTemplate="selectedItem">
+                  <div class="flex align-items-center gap-2" *ngIf="task.status">
+                    <p-tag [value]="task.status" [severity]="getSeverity(task.status)"></p-tag>
+                  </div>
+                </ng-template>
+
+                <ng-template pTemplate="item" let-taskStatus>
+                  <div class="flex align-items-center gap-2">
+                    <p-tag [value]="taskStatus.value" [severity]="getSeverity(taskStatus.value)"></p-tag>
+                  </div>
+                </ng-template>
+
+              </p-dropdown>
+            </ng-template>
+
+            <ng-template pTemplate="output">
+              <p-tag [value]="task.status" [severity]="getSeverity(task.status)"></p-tag>
+            </ng-template>
+
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <p-tag class="mx-1" *ngFor="let tag of task.tags" [value]="tag"></p-tag>
+        </td>
+
+        <td>
+          <div class="flex align-items-center justify-content-center gap-2">
+
+            <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+              (click)="onRowEditInit(task)" class="p-button-rounded p-button-text"></button>
+
+            <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+              (click)="onRowEditSave(task)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+
+            <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+              (click)="onRowEditCancel(task, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7">No tasks found.</td>
+      </tr>
+    </ng-template>
+
+  </p-table>
 </div>

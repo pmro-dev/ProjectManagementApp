@@ -15,6 +15,7 @@ import { TagModule } from 'primeng/tag';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'app-todolist-board',
@@ -30,15 +31,13 @@ import { InputTextModule } from 'primeng/inputtext';
   standalone: true,
   imports: [MatFormFieldModule, MatInputModule, NgFor, MatButtonModule, MatIconModule, CommonModuleModule,
     HtmlRendererComponent, NgIf, TableModule, MultiSelectModule, FormsModule, ReactiveFormsModule,
-    TagModule, DropdownModule, ButtonModule, InputTextModule, DatePipe],
+    TagModule, DropdownModule, ButtonModule, InputTextModule, DatePipe, CalendarModule],
 })
 
 export class TodolistBoardComponent {
 
-  statuses!: any[];
   loading: boolean = true;
   activityValues: number[] = [0, 100];
-  mateTemp: Representative = { name: "Izer Kućma", image: "/assets/avatars/avatar1-mini.jpg" };
   public appLogoPath: string = "/assets/other/appLogo.jpg";
   public userAvatarPath: string = "/assets/avatars/avatar1-mini.jpg";
   public currentUserName: string = "Jan Kowalski";
@@ -47,8 +46,16 @@ export class TodolistBoardComponent {
   mobileMenuViaManager: ElementRef;
   isMenuShow: boolean;
   @ViewChild('innerBody') innerBody: ElementRef;
+  selectedTeamMate: Representative;
 
-  onBodyWallClick(){
+  constructor() {
+    this.teamMates = [];
+    this.tasksData.forEach((task) => {
+      this.teamMates.push(task.teamMate);
+    });
+  }
+
+  onBodyWallClick() {
     this.isMenuShow = !this.isMenuShow;
   }
 
@@ -62,7 +69,9 @@ export class TodolistBoardComponent {
 
   ngOnInit(): void {
     this.loading = false;
-    this.tasksData.forEach((task) => (task.deadline = new Date(<Date>task.deadline)));
+    this.tasksData.forEach((task) => {
+      task.deadline = new Date(<Date>task.deadline);
+    });
   }
 
   clear(table: Table, inputField: HTMLInputElement) {
@@ -90,15 +99,21 @@ export class TodolistBoardComponent {
   }
 
   onRowEditInit(task: ITaskData) { }
-  onRowEditSave(task: ITaskData) { }
+
+  onRowEditSave(taskIn: ITaskData) {
+    let index = this.tasksData.findIndex(task => task.id == taskIn.id);
+    this.tasksData[index].daysLeft = this.getDayDiff(new Date(), <Date>taskIn.deadline);
+  }
+  
   onRowEditCancel(task: ITaskData, index: number) { }
 
-  public teamMates = [
-    { name: "1 Izer Kućma", image: "/assets/avatars/avatar1-mini.jpg" },
-    { name: "Jan Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
-    { name: "3 Izer Kućma", image: "/assets/avatars/avatar1-mini.jpg" },
-    { name: "4 Izer Kućma", image: "/assets/avatars/avatar1-mini.jpg" },
-  ];
+  private getDayDiff(startDate: Date, endDate: Date): number {
+    const msInDay = 24 * 60 * 60 * 1000;
+  
+    return Math.round(
+      Math.abs(Number(endDate) - Number(startDate)) / msInDay
+    );
+  }
 
   public taskStatuses = [
     { label: TaskStatusType.NextToDo.toString(), value: TaskStatusType.NextToDo.toString() },
@@ -107,18 +122,20 @@ export class TodolistBoardComponent {
     { label: TaskStatusType.Abandoned.toString(), value: TaskStatusType.Abandoned.toString() },
   ];
 
-  public tasksData: ITaskData[] = [
+  public tasksData: Array<ITaskData> = [
     {
+      id: "1",
       title: "Task 1",
       shortDescription: "Some task description short",
       description: "1 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMate: this.mateTemp,
+      teamMate: { name: "Grzegorz Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
       status: TaskStatusType.NextToDo.toString(),
       daysLeft: 15,
       deadline: '2015-09-13',
       tags: ["First Tag", "Second Tag"]
     },
     {
+      id: "2",
       title: "Task 2",
       shortDescription: "Some task description short",
       description: "2 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
@@ -129,86 +146,96 @@ export class TodolistBoardComponent {
       tags: ["First Tag", "Second Tag"]
     },
     {
+      id: "3",
       title: "Task 3",
       shortDescription: "Some task description short",
       description: "3 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMate: this.mateTemp,
+      teamMate: { name: "Marek Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
       status: TaskStatusType.Abandoned.toString(),
       daysLeft: 15,
       deadline: '2015-09-13',
       tags: ["First Tag", "Second Tag"]
     },
     {
+      id: "4",
       title: "Task 4",
       shortDescription: "Some task description short",
       description: "4 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMate: this.mateTemp,
+      teamMate: { name: "Krzysztof Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
       status: TaskStatusType.InProgress.toString(),
       daysLeft: 15,
       deadline: '2015-09-13',
       tags: ["First Tag", "Second Tag"]
     },
     {
+      id: "5",
       title: "Task 5",
       shortDescription: "Some task description short",
       description: "5 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMate: this.mateTemp,
+      teamMate: { name: "Elżbieta Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
       status: TaskStatusType.NextToDo.toString(),
       daysLeft: 15,
       deadline: '2015-09-13',
       tags: ["First Tag", "Second Tag"]
     },
     {
+      id: "6",
       title: "Task 6",
       shortDescription: "Some task description short",
       description: "6 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMate: this.mateTemp,
+      teamMate: { name: "Maroni Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
       status: TaskStatusType.NextToDo.toString(),
       daysLeft: 15,
       deadline: '2015-09-13',
       tags: ["First Tag", "Second Tag"]
     },
     {
+      id: "7",
       title: "Task 7",
       shortDescription: "Some task description short",
       description: "7 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMate: this.mateTemp,
+      teamMate: { name: "Jusuf Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
       status: TaskStatusType.NextToDo.toString(),
       daysLeft: 15,
       deadline: '2015-09-13',
       tags: ["First Tag", "Second Tag"]
     },
     {
+      id: "8",
       title: "Task 8",
       shortDescription: "Some task description short",
       description: "8 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMate: this.mateTemp,
+      teamMate: { name: "Neli Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
       status: TaskStatusType.NextToDo.toString(),
       daysLeft: 15,
       deadline: '2015-09-13',
       tags: ["First Tag", "Second Tag"]
     },
     {
+      id: "9",
       title: "Task 9",
       shortDescription: "Some task description short",
       description: "9 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMate: this.mateTemp,
+      teamMate: { name: "Potato Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
       status: TaskStatusType.NextToDo.toString(),
       daysLeft: 15,
       deadline: '2015-09-13',
       tags: ["# First Tag", "# Second Tag"]
     },
     {
+      id: "10",
       title: "Task 10",
       shortDescription: "Some task description short",
       description: "10 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMate: this.mateTemp,
+      teamMate: { name: "Lincz Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
       status: TaskStatusType.NextToDo.toString(),
       daysLeft: 15,
       deadline: '2015-09-13',
       tags: ["# First Tag", "# Second Tag"]
-    },
+    }
   ];
+
+  public teamMates: Representative[];
 }
 
 export interface Representative {
@@ -224,6 +251,7 @@ export enum TaskStatusType {
 }
 
 export interface ITaskData {
+  id: string;
   title: string;
   shortDescription: string;
   description: string;
