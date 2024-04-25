@@ -16,6 +16,8 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
+import { ChipModule } from 'primeng/chip';
+import { ChipsModule } from 'primeng/chips';
 
 @Component({
   selector: 'app-todolist-board',
@@ -31,25 +33,28 @@ import { CalendarModule } from 'primeng/calendar';
   standalone: true,
   imports: [MatFormFieldModule, MatInputModule, NgFor, MatButtonModule, MatIconModule, CommonModuleModule,
     HtmlRendererComponent, NgIf, TableModule, MultiSelectModule, FormsModule, ReactiveFormsModule,
-    TagModule, DropdownModule, ButtonModule, InputTextModule, DatePipe, CalendarModule],
+    TagModule, DropdownModule, ButtonModule, InputTextModule, DatePipe, CalendarModule, ChipModule, ChipsModule],
 })
 
 export class TodolistBoardComponent {
 
+  @ViewChild('innerBody') innerBody: ElementRef;
+  appLogoPath: string = "/assets/other/appLogo.jpg";
+  userAvatarPath: string = "/assets/avatars/avatar1-mini.jpg";
+  currentUserName: string = "Jan Kowalski";
+  avatarPath: string = "/assets/avatars/avatar1-mini.jpg";;
+  todoListName: string = "Current TodoList Name";
   loading: boolean = true;
   activityValues: number[] = [0, 100];
-  public appLogoPath: string = "/assets/other/appLogo.jpg";
-  public userAvatarPath: string = "/assets/avatars/avatar1-mini.jpg";
-  public currentUserName: string = "Jan Kowalski";
-  public avatarPath: string = "/assets/avatars/avatar1-mini.jpg";;
-  public todoListName: string = "Current TodoList Name";
   mobileMenuViaManager: ElementRef;
   isMenuShow: boolean;
-  @ViewChild('innerBody') innerBody: ElementRef;
   selectedTeamMate: Representative;
+  tagsToRemoveOfSelectedTask: string[] = [];
+  clonedTasks : { [s: string]: ITaskData } = {};
 
   constructor() {
     this.teamMates = [];
+
     this.tasksData.forEach((task) => {
       this.teamMates.push(task.teamMate);
     });
@@ -98,18 +103,54 @@ export class TodolistBoardComponent {
     }
   }
 
-  onRowEditInit(task: ITaskData) { }
+  onRowEditInit(task: ITaskData) {
+    this.clonedTasks[task.id] = { ...task };
+  }
 
   onRowEditSave(taskIn: ITaskData) {
     let index = this.tasksData.findIndex(task => task.id == taskIn.id);
     this.tasksData[index].daysLeft = this.getDayDiff(new Date(), <Date>taskIn.deadline);
+
+    if (this.isNotCollectionEmpty(this.tagsToRemoveOfSelectedTask)) {
+      this.printStringData(this.tagsToRemoveOfSelectedTask, "Tags to remove:");
+    }
+
+    this.clearDataSource(this.tagsToRemoveOfSelectedTask);
+    this.printStringData(this.tagsToRemoveOfSelectedTask, "clear");
   }
-  
-  onRowEditCancel(task: ITaskData, index: number) { }
+
+  onRowEditCancel(taskIn: ITaskData, index: number) {
+    this.tasksData[index] = this.clonedTasks[taskIn.id]
+    this.clearDataSource(this.tagsToRemoveOfSelectedTask);
+    this.printStringData(this.tagsToRemoveOfSelectedTask, "clear");
+  }
+
+  onChipRemove(tag: string, event: any) {
+    this.tagsToRemoveOfSelectedTask.push(tag)
+
+    console.log("Added Tag to remove:" + tag);
+  }
+
+  private printStringData(source: string[], message: string): void {
+    console.log(message);
+    source.forEach(item => {
+      console.log(item);
+    })
+  }
+
+  private clearDataSource(source: string[]) {
+    while (source.length > 0) {
+      source.pop();
+    }
+  }
+
+  private isNotCollectionEmpty(source: any[]): boolean {
+    return source.length > 0;
+  }
 
   private getDayDiff(startDate: Date, endDate: Date): number {
     const msInDay = 24 * 60 * 60 * 1000;
-  
+
     return Math.round(
       Math.abs(Number(endDate) - Number(startDate)) / msInDay
     );
@@ -132,7 +173,7 @@ export class TodolistBoardComponent {
       status: TaskStatusType.NextToDo.toString(),
       daysLeft: 15,
       deadline: '2015-09-13',
-      tags: ["First Tag", "Second Tag"]
+      tags: ["First Tag", "Second Tag", "Third Tag", "Fourth Tag"]
     },
     {
       id: "2",

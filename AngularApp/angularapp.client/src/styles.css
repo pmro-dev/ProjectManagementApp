@@ -248,6 +248,15 @@ body {
     width: 100%;
 }
 
+.p-chip {
+    background-color: #3B82F6;
+    font-weight: 600;
+    color: white;
+    font-size: 0.7em;
+    margin: 3px 3px 3px 3px;
+    padding: 5px 10px 5px 10px;
+}
+
 .font-4 {
     font-size: 0.4em;
 }

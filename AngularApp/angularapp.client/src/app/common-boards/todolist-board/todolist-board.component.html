@@ -296,7 +296,23 @@
         </td>
 
         <td>
-          <p-tag class="mx-1" *ngFor="let tag of task.tags" [value]="tag"></p-tag>
+
+          <p-cellEditor>
+
+            <ng-template pTemplate="input">
+              <p-chip (onRemove)="onChipRemove(tag, $event)" *ngFor="let tag of task.tags.slice(0,4), index as enumerator" [removable]="true">
+                {{tag}}
+              </p-chip>
+            </ng-template>
+
+            <ng-template pTemplate="output">
+              <p-chip (onRemove)="onChipRemove(tag, $event)" *ngFor="let tag of task.tags.slice(0,4), index as enumerator" [removable]="false">
+                {{tag}}
+              </p-chip>
+            </ng-template>
+
+          </p-cellEditor>
+
         </td>
 
         <td>
