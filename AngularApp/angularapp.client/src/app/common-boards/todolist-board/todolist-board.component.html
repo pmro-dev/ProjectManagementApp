@@ -296,23 +296,28 @@
         </td>
 
         <td>
-
           <p-cellEditor>
 
             <ng-template pTemplate="input">
-              <p-chip (onRemove)="onChipRemove(tag, $event)" *ngFor="let tag of task.tags.slice(0,4), index as enumerator" [removable]="true">
-                {{tag}}
+              <p-chip *ngFor="let tag of task.tags.slice(0,4), index as tagIndex" (onRemove)="onChipRemove(task, tag)"
+                [removable]="true">
+                {{tag.title}}
+              </p-chip>
+
+              <br />
+
+              <p-chip class="chipSeeMore" (click)="onSeeMore(task)" [removable]="false">
+                SEE ALL
               </p-chip>
             </ng-template>
 
             <ng-template pTemplate="output">
-              <p-chip (onRemove)="onChipRemove(tag, $event)" *ngFor="let tag of task.tags.slice(0,4), index as enumerator" [removable]="false">
-                {{tag}}
+              <p-chip *ngFor="let tag of task.tags.slice(0,4), index as enumerator" [removable]="false">
+                {{tag.title}}
               </p-chip>
             </ng-template>
 
           </p-cellEditor>
-
         </td>
 
         <td>
@@ -340,3 +345,7 @@
 
   </p-table>
 </div>
+
+<app-tags-dialog [show]="showDialog" [dataSource]="taskForDialog" (visibilityChange)="onVisibilityChange($event)"></app-tags-dialog>
+
+  <!-- (taskTagsChange)="onTagsChange($event)" -->

@@ -257,6 +257,27 @@ body {
     padding: 5px 10px 5px 10px;
 }
 
+.chipSeeMore .p-chip {
+    background-color: red !important;
+}
+
+.chipSeeMore:hover {
+    cursor: pointer;
+}
+
+.p-dialog-mask {
+    cursor: default;
+}
+
+.p-dialog-header {
+    background-color: rgb(238, 238, 238);
+    padding: 1.2rem;
+}
+
+.p-dialog-content {
+    padding-top: 1.2em;
+}
+
 .font-4 {
     font-size: 0.4em;
 }

@@ -1,0 +1,21 @@
+<div class="card flex justify-content-center">
+    <p-dialog header="Header" [(visible)]="show" [modal]="true" (onHide)="onCancel()" [style]="{ width: '25rem' }">
+        <ng-template pTemplate="header">
+            <div class="inline-flex align-items-center justify-content-center gap-2">
+                <span class="font-bold white-space-nowrap">
+                    TASK TITLE
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="input">
+            <p-chip (onRemove)="onChipRemove(tag)" *ngFor="let tag of dataSource.tags"
+                [removable]="true">
+                {{tag.title}}
+            </p-chip>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <p-button label="Cancel" [text]="true" severity="secondary" (click)="onCancel()" />
+            <p-button label="Save" [outlined]="true" severity="secondary" (click)="onSave()" />
+        </ng-template>
+    </p-dialog>
+</div>

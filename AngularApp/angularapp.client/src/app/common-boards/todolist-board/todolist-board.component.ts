@@ -17,7 +17,12 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
 import { ChipModule } from 'primeng/chip';
-import { ChipsModule } from 'primeng/chips';
+import { TagsDialogComponent } from '../../Common/Components/Dialogs/tags-dialog/tags-dialog.component';
+import { ITaskModel } from '../../Common/Models/TaskModel';
+import { ITagModel } from '../../Common/Models/TagModel';
+import { IRepresentativeModel } from '../../Common/Models/RepresentativeModel';
+import TaskStatusHelper, { ITaskStatus } from '../../Common/Models/TaskStatusHelper';
+import { TaskDataSourceService } from './taskDataSourceService';
 
 @Component({
   selector: 'app-todolist-board',
@@ -32,8 +37,9 @@ import { ChipsModule } from 'primeng/chips';
   ],
   standalone: true,
   imports: [MatFormFieldModule, MatInputModule, NgFor, MatButtonModule, MatIconModule, CommonModuleModule,
-    HtmlRendererComponent, NgIf, TableModule, MultiSelectModule, FormsModule, ReactiveFormsModule,
-    TagModule, DropdownModule, ButtonModule, InputTextModule, DatePipe, CalendarModule, ChipModule, ChipsModule],
+    HtmlRendererComponent, NgIf, TableModule, MultiSelectModule, FormsModule, ReactiveFormsModule, TagModule,
+    DropdownModule, ButtonModule, InputTextModule, DatePipe, CalendarModule, ChipModule, TagsDialogComponent],
+  providers: [TaskDataSourceService]
 })
 
 export class TodolistBoardComponent {
@@ -42,22 +48,24 @@ export class TodolistBoardComponent {
   appLogoPath: string = "/assets/other/appLogo.jpg";
   userAvatarPath: string = "/assets/avatars/avatar1-mini.jpg";
   currentUserName: string = "Jan Kowalski";
-  avatarPath: string = "/assets/avatars/avatar1-mini.jpg";;
+  avatarPath: string = "/assets/avatars/avatar1-mini.jpg";
   todoListName: string = "Current TodoList Name";
   loading: boolean = true;
   activityValues: number[] = [0, 100];
   mobileMenuViaManager: ElementRef;
   isMenuShow: boolean;
-  selectedTeamMate: Representative;
-  tagsToRemoveOfSelectedTask: string[] = [];
-  clonedTasks : { [s: string]: ITaskData } = {};
+  selectedTeamMate: IRepresentativeModel;
+  selectedTaskTagsToRemove: number[] = [];
+  showDialog: boolean = false;
+  taskForDialog: ITaskModel;
+  teamMates: IRepresentativeModel[];
+  tasksData: ITaskModel[];
+  taskStatuses: ITaskStatus[];
 
-  constructor() {
-    this.teamMates = [];
-
-    this.tasksData.forEach((task) => {
-      this.teamMates.push(task.teamMate);
-    });
+  constructor(private taskDataSourceService: TaskDataSourceService) {
+    this.teamMates = taskDataSourceService.getTeamMates();
+    this.tasksData = taskDataSourceService.getData();
+    this.taskStatuses = TaskStatusHelper.getTaskStatuses();
   }
 
   onBodyWallClick() {
@@ -74,9 +82,6 @@ export class TodolistBoardComponent {
 
   ngOnInit(): void {
     this.loading = false;
-    this.tasksData.forEach((task) => {
-      task.deadline = new Date(<Date>task.deadline);
-    });
   }
 
   clear(table: Table, inputField: HTMLInputElement) {
@@ -84,229 +89,59 @@ export class TodolistBoardComponent {
     inputField.value = ""
   }
 
-  getSeverity(status: string) {
-    switch (status.toUpperCase()) {
-      case TaskStatusType.Abandoned:
-        return "danger";
-
-      case TaskStatusType.Done:
-        return "success";
-
-      case TaskStatusType.NextToDo:
-        return "info";
-
-      case TaskStatusType.InProgress:
-        return "warning";
-
-      default:
-        return "";
-    }
+  getSeverity(status: string): string {
+    return TaskStatusHelper.getSeverity(status);
   }
 
-  onRowEditInit(task: ITaskData) {
-    this.clonedTasks[task.id] = { ...task };
+  onChipRemove(taskData: ITaskModel, tagToRemove: ITagModel) {
+    taskData.tags = taskData.tags.filter(tag => tag.id != tagToRemove.id).slice();
   }
 
-  onRowEditSave(taskIn: ITaskData) {
+  onRowEditInit(task: ITaskModel) {
+  }
+
+  onRowEditSave(taskIn: ITaskModel) {
+    this.taskDataSourceService.updateTaskData(taskIn);
+
     let index = this.tasksData.findIndex(task => task.id == taskIn.id);
-    this.tasksData[index].daysLeft = this.getDayDiff(new Date(), <Date>taskIn.deadline);
+    this.tasksData[index] = taskIn;
+  }
 
-    if (this.isNotCollectionEmpty(this.tagsToRemoveOfSelectedTask)) {
-      this.printStringData(this.tagsToRemoveOfSelectedTask, "Tags to remove:");
+  onRowEditCancel(taskIn: ITaskModel, index: number) {
+    this.tasksData[index] = this.taskDataSourceService.getSingle(taskIn.id);
+  }
+
+  onSeeMore(source: ITaskModel) {
+    this.taskForDialog = source;
+    console.log("SEE MORE CLICKED");
+    this.showDialog = true;
+  }
+
+  onVisibilityChange(newValue: boolean) {
+    this.showDialog = newValue;
+  }
+
+  private printData(source: any[], message: string): void {
+    if (this.isStringArray(source)) {
+      console.log(message);
+      source.forEach(item => {
+        console.log(item);
+      });
     }
-
-    this.clearDataSource(this.tagsToRemoveOfSelectedTask);
-    this.printStringData(this.tagsToRemoveOfSelectedTask, "clear");
-  }
-
-  onRowEditCancel(taskIn: ITaskData, index: number) {
-    this.tasksData[index] = this.clonedTasks[taskIn.id]
-    this.clearDataSource(this.tagsToRemoveOfSelectedTask);
-    this.printStringData(this.tagsToRemoveOfSelectedTask, "clear");
-  }
-
-  onChipRemove(tag: string, event: any) {
-    this.tagsToRemoveOfSelectedTask.push(tag)
-
-    console.log("Added Tag to remove:" + tag);
-  }
-
-  private printStringData(source: string[], message: string): void {
-    console.log(message);
-    source.forEach(item => {
-      console.log(item);
-    })
-  }
-
-  private clearDataSource(source: string[]) {
-    while (source.length > 0) {
-      source.pop();
+    else if (this.isITagDataArray(source)) {
+      console.log(message);
+      source.forEach(item => {
+        console.log(item.title);
+      });
     }
   }
 
-  private isNotCollectionEmpty(source: any[]): boolean {
-    return source.length > 0;
+  private isStringArray(value: any[]): value is string[] {
+    return typeof value[0] === 'string';
   }
 
-  private getDayDiff(startDate: Date, endDate: Date): number {
-    const msInDay = 24 * 60 * 60 * 1000;
-
-    return Math.round(
-      Math.abs(Number(endDate) - Number(startDate)) / msInDay
-    );
+  private isITagDataArray(value: any[]): value is ITagModel[] {
+    let temp: ITagModel = { id: -10, title: "cos" };
+    return typeof value[0] == typeof temp;
   }
-
-  public taskStatuses = [
-    { label: TaskStatusType.NextToDo.toString(), value: TaskStatusType.NextToDo.toString() },
-    { label: TaskStatusType.InProgress.toString(), value: TaskStatusType.InProgress.toString() },
-    { label: TaskStatusType.Done.toString(), value: TaskStatusType.Done.toString() },
-    { label: TaskStatusType.Abandoned.toString(), value: TaskStatusType.Abandoned.toString() },
-  ];
-
-  public tasksData: Array<ITaskData> = [
-    {
-      id: "1",
-      title: "Task 1",
-      shortDescription: "Some task description short",
-      description: "1 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMate: { name: "Grzegorz Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
-      status: TaskStatusType.NextToDo.toString(),
-      daysLeft: 15,
-      deadline: '2015-09-13',
-      tags: ["First Tag", "Second Tag", "Third Tag", "Fourth Tag"]
-    },
-    {
-      id: "2",
-      title: "Task 2",
-      shortDescription: "Some task description short",
-      description: "2 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMate: { name: "Jan Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
-      status: TaskStatusType.Done.toString(),
-      daysLeft: 15,
-      deadline: '2015-09-13',
-      tags: ["First Tag", "Second Tag"]
-    },
-    {
-      id: "3",
-      title: "Task 3",
-      shortDescription: "Some task description short",
-      description: "3 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMate: { name: "Marek Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
-      status: TaskStatusType.Abandoned.toString(),
-      daysLeft: 15,
-      deadline: '2015-09-13',
-      tags: ["First Tag", "Second Tag"]
-    },
-    {
-      id: "4",
-      title: "Task 4",
-      shortDescription: "Some task description short",
-      description: "4 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMate: { name: "Krzysztof Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
-      status: TaskStatusType.InProgress.toString(),
-      daysLeft: 15,
-      deadline: '2015-09-13',
-      tags: ["First Tag", "Second Tag"]
-    },
-    {
-      id: "5",
-      title: "Task 5",
-      shortDescription: "Some task description short",
-      description: "5 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMate: { name: "Elżbieta Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
-      status: TaskStatusType.NextToDo.toString(),
-      daysLeft: 15,
-      deadline: '2015-09-13',
-      tags: ["First Tag", "Second Tag"]
-    },
-    {
-      id: "6",
-      title: "Task 6",
-      shortDescription: "Some task description short",
-      description: "6 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMate: { name: "Maroni Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
-      status: TaskStatusType.NextToDo.toString(),
-      daysLeft: 15,
-      deadline: '2015-09-13',
-      tags: ["First Tag", "Second Tag"]
-    },
-    {
-      id: "7",
-      title: "Task 7",
-      shortDescription: "Some task description short",
-      description: "7 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMate: { name: "Jusuf Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
-      status: TaskStatusType.NextToDo.toString(),
-      daysLeft: 15,
-      deadline: '2015-09-13',
-      tags: ["First Tag", "Second Tag"]
-    },
-    {
-      id: "8",
-      title: "Task 8",
-      shortDescription: "Some task description short",
-      description: "8 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMate: { name: "Neli Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
-      status: TaskStatusType.NextToDo.toString(),
-      daysLeft: 15,
-      deadline: '2015-09-13',
-      tags: ["First Tag", "Second Tag"]
-    },
-    {
-      id: "9",
-      title: "Task 9",
-      shortDescription: "Some task description short",
-      description: "9 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMate: { name: "Potato Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
-      status: TaskStatusType.NextToDo.toString(),
-      daysLeft: 15,
-      deadline: '2015-09-13',
-      tags: ["# First Tag", "# Second Tag"]
-    },
-    {
-      id: "10",
-      title: "Task 10",
-      shortDescription: "Some task description short",
-      description: "10 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
-      teamMate: { name: "Lincz Kowalski", image: "/assets/avatars/avatar1-mini.jpg" },
-      status: TaskStatusType.NextToDo.toString(),
-      daysLeft: 15,
-      deadline: '2015-09-13',
-      tags: ["# First Tag", "# Second Tag"]
-    }
-  ];
-
-  public teamMates: Representative[];
-}
-
-export interface Representative {
-  name?: string;
-  image?: string
-}
-
-export enum TaskStatusType {
-  NextToDo = "NEXT TODO",
-  InProgress = "IN PROGRESS",
-  Done = "DONE",
-  Abandoned = "ABANDONED"
-}
-
-export interface ITaskData {
-  id: string;
-  title: string;
-  shortDescription: string;
-  description: string;
-  teamMate: Representative;
-  status: string;
-  daysLeft: number;
-  deadline: string | Date;
-  tags: Array<string>;
-}
-
-export interface ITodoListData {
-  title: string;
-  description: string;
-  tasks: Array<ITaskData>;
-  projectTitle: string;
-  teamName: string;
 }
