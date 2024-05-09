@@ -18,7 +18,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
 import { ChipModule } from 'primeng/chip';
 import { TagsDialogComponent } from '../../Common/Components/Dialogs/tags-dialog/tags-dialog.component';
-import { ITaskModel } from '../../Common/Models/TaskModel';
+import { ITaskModel, TaskModel } from '../../Common/Models/TaskModel';
 import { ITagModel } from '../../Common/Models/TagModel';
 import { IRepresentativeModel } from '../../Common/Models/RepresentativeModel';
 import TaskStatusHelper, { ITaskStatus } from '../../Common/Models/TaskStatusHelper';
@@ -61,6 +61,7 @@ export class TodolistBoardComponent {
   teamMates: IRepresentativeModel[];
   tasksData: ITaskModel[];
   taskStatuses: ITaskStatus[];
+  clonedTask: ITaskModel;
 
   constructor(private taskDataSourceService: TaskDataSourceService) {
     this.teamMates = taskDataSourceService.getTeamMates();
@@ -98,6 +99,7 @@ export class TodolistBoardComponent {
   }
 
   onRowEditInit(task: ITaskModel) {
+    this.clonedTask = TaskModel.createTaskModel(task);
   }
 
   onRowEditSave(taskIn: ITaskModel) {
@@ -108,7 +110,7 @@ export class TodolistBoardComponent {
   }
 
   onRowEditCancel(taskIn: ITaskModel, index: number) {
-    this.tasksData[index] = this.taskDataSourceService.getSingle(taskIn.id);
+    this.tasksData[index] = this.clonedTask;
   }
 
   onSeeMore(source: ITaskModel) {
@@ -119,29 +121,5 @@ export class TodolistBoardComponent {
 
   onVisibilityChange(newValue: boolean) {
     this.showDialog = newValue;
-  }
-
-  private printData(source: any[], message: string): void {
-    if (this.isStringArray(source)) {
-      console.log(message);
-      source.forEach(item => {
-        console.log(item);
-      });
-    }
-    else if (this.isITagDataArray(source)) {
-      console.log(message);
-      source.forEach(item => {
-        console.log(item.title);
-      });
-    }
-  }
-
-  private isStringArray(value: any[]): value is string[] {
-    return typeof value[0] === 'string';
-  }
-
-  private isITagDataArray(value: any[]): value is ITagModel[] {
-    let temp: ITagModel = { id: -10, title: "cos" };
-    return typeof value[0] == typeof temp;
   }
 }

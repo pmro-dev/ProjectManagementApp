@@ -150,7 +150,7 @@ export class TaskDataSourceService {
             let temp = this.dataSource.find(task => task.id == index);
 
             if (temp != null) {
-                return this.createTaskModel(temp);
+                return TaskModel.createTaskModel(temp);
             }
         }
 
@@ -178,14 +178,6 @@ export class TaskDataSourceService {
 
         return Math.round(
             Math.abs(Number(endDate) - Number(startDate)) / msInDay
-        );
-    }
-
-    private createTaskModel(taskSource: ITaskModel) : ITaskModel{
-        return new TaskModel(
-            taskSource.id, taskSource.title, taskSource.shortDescription, 
-            taskSource.description, taskSource.teamMate, taskSource.status, 
-            taskSource.daysLeft, taskSource.deadline, taskSource.tags
         );
     }
 }

@@ -1,5 +1,5 @@
 import { IRepresentativeModel } from "./RepresentativeModel";
-import { ITagModel } from "./TagModel";
+import { ITagModel, TagModel } from './TagModel';
 
 export interface ITaskModel {
     id: string;
@@ -46,4 +46,15 @@ export class TaskModel implements ITaskModel {
         this.deadline = deadline
         this.tags = tags
     }
+
+    public static createTaskModel(taskSource: ITaskModel) : ITaskModel{
+        let tempTags: ITagModel[] = [];
+        taskSource.tags.forEach(tag => tempTags.push(TagModel.createTagModel(tag)));
+
+        return new TaskModel(
+            taskSource.id, taskSource.title, taskSource.shortDescription, 
+            taskSource.description, taskSource.teamMate, taskSource.status, 
+            taskSource.daysLeft, taskSource.deadline, tempTags
+        );
+    }  
 }

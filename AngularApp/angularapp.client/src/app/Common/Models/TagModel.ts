@@ -11,4 +11,8 @@ export class TagModel implements ITagModel {
         this.id = id
         this.title = title
     }
+
+    public static createTagModel(tagSource: ITagModel) : ITagModel{
+        return new TagModel(tagSource.id, tagSource.title);
+    }      
 }
