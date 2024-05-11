@@ -1,14 +1,16 @@
 export interface IRepresentativeModel {
-    name: string;
+    fullName: string;
+    firstName: string;
     image: string
 }
 
 export class RepresentativeModel implements IRepresentativeModel {
-    name: string;
+    fullName: string;
+    firstName: string;
     image: string;
 
     constructor(name: string, image: string) {
-        this.name = name
+        this.fullName = name
         this.image = image
     }
 }

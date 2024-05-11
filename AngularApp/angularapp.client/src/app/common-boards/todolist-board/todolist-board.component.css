@@ -17,3 +17,11 @@
   position: absolute;
   z-index: 1;
 }
+
+.th-w-std th {
+  min-width: 10rem;
+}
+
+.th-w-s {
+  min-width: 3rem !important;
+}

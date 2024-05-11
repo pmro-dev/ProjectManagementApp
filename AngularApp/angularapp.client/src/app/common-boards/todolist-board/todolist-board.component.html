@@ -12,7 +12,7 @@
   <p-table #dt1 [value]="tasksData" dataKey="id" editMode="row" [rows]="10" [showCurrentPageReport]="true"
     [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-    [globalFilterFields]="['name', 'title', 'shortDescription', 'teamMate.name', 'status']">
+    [globalFilterFields]="['name', 'title', 'shortDescription', 'teamMate.name', 'status']" class="th-w-std">
 
     <ng-template pTemplate="caption">
 
@@ -41,7 +41,7 @@
     <ng-template pTemplate="header">
 
       <tr>
-        <th style="min-width:15rem">
+        <th>
           <div class="flex align-items-center">
 
             Title
@@ -50,7 +50,7 @@
           </div>
         </th>
 
-        <th style="min-width:15rem">
+        <th>
           <div class="flex align-items-center">
 
             Short Description
@@ -59,7 +59,7 @@
           </div>
         </th>
 
-        <th style="min-width:15rem">
+        <th>
           <div class="flex align-items-center">
 
             Team Mate
@@ -90,7 +90,7 @@
           </div>
         </th>
 
-        <th style="min-width:10rem">
+        <th class="th-w-s">
 
           <div class="flex align-items-center">
 
@@ -100,7 +100,7 @@
           </div>
         </th>
 
-        <th style="min-width:10rem">
+        <th>
 
           <div class="flex align-items-center">
 
@@ -110,7 +110,7 @@
           </div>
         </th>
 
-        <th style="min-width:10rem">
+        <th>
           <div class="flex align-items-center">
 
             Status
@@ -140,7 +140,7 @@
           </div>
         </th>
 
-        <th style="min-width:10rem">
+        <th>
           <div class="flex align-items-center">
             Tags
             <!-- <p-columnFilter field="status" matchMode="equals" display="menu">
@@ -177,8 +177,7 @@
               <p-columnFilter type="boolean" field="verified" display="menu"></p-columnFilter>
             </div>
           </th> -->
-        <th>
-
+        <th class="th-w-s">
           <span>
             <i class="pi pi-pen-to-square bold-6 font-11"></i>
           </span>
@@ -221,20 +220,22 @@
           <p-cellEditor>
 
             <ng-template pTemplate="input">
-              <p-dropdown [options]="teamMates" [(ngModel)]="task.teamMate" [style]="{'width':'100%'}">
+              <p-dropdown [options]="teamMates" [(ngModel)]="task.teamMate" [style]="{'width':'100%'}"
+                class="ul-no-padding">
 
                 <ng-template pTemplate="selectedItem">
-                  <div class="flex align-items-center gap-2" *ngIf="task.teamMate">
-                    <img [alt]="task.teamMate.name" src="{{ task.teamMate.image }}" width="24"
+                  <div class="flex align-items-center" *ngIf="task.teamMate">
+                    <img [alt]="task.teamMate.fullName" src="{{ task.teamMate.image }}" width="24"
                       class="vertical-align-middle" />
-                    <span class="ml-1 mt-1">{{ task.teamMate.name }}</span>
+                    <span class="mx-2 ml-1 mt-1">{{ task.teamMate.firstName }}</span>
                   </div>
                 </ng-template>
 
                 <ng-template pTemplate="item" let-teamMate>
-                  <div class="flex align-items-center gap-2">
-                    <img [alt]="teamMate.name" src="{{ teamMate.image }}" width="24" class="vertical-align-middle" />
-                    <span class="ml-1 mt-1">{{ teamMate.name }}</span>
+                  <div class="flex align-items-center">
+                    <img [alt]="teamMate.fullName" src="{{ teamMate.image }}" width="24"
+                      class="vertical-align-middle" />
+                    <span class="mx-2 ml-1 mt-1">{{ teamMate.firstName }}</span>
                   </div>
                 </ng-template>
 
@@ -242,9 +243,9 @@
             </ng-template>
 
             <ng-template pTemplate="output">
-              <img [alt]="task.teamMate.name" src="{{ task.teamMate.image }}" width="32"
+              <img [alt]="task.teamMate.fullName" src="{{ task.teamMate.image }}" width="32"
                 style="vertical-align: middle" />
-              <span class="mx-2 ml-1 vertical-align-middle">{{ task.teamMate.name }}</span>
+              <span class="mx-2 ml-1 vertical-align-middle">{{ task.teamMate.firstName }}</span>
             </ng-template>
 
           </p-cellEditor>
@@ -258,7 +259,9 @@
           <p-cellEditor>
 
             <ng-template pTemplate="input">
-              <p-calendar [(ngModel)]="task.deadline" [showIcon]="true"></p-calendar>
+              <p-calendar id="calendar" [(ngModel)]="datePick" [showIcon]="true" [showButtonBar]="true"
+                (onShow)="onDatePickerShow(task)" (onSelect)="onDateSelect(task)" (onClose)="onCalendarClose()">
+              </p-calendar>
             </ng-template>
 
             <ng-template pTemplate="output">
@@ -272,7 +275,8 @@
           <p-cellEditor>
 
             <ng-template pTemplate="input">
-              <p-dropdown [options]="taskStatuses" [(ngModel)]="task.status" [style]="{'width':'100%'}">
+              <p-dropdown [options]="taskStatuses" [(ngModel)]="task.status" [style]="{'width':'100%'}"
+                class="ul-no-padding">
                 <ng-template pTemplate="selectedItem">
                   <div class="flex align-items-center gap-2" *ngIf="task.status">
                     <p-tag [value]="task.status" [severity]="getSeverity(task.status)"></p-tag>
@@ -299,12 +303,10 @@
           <p-cellEditor>
 
             <ng-template pTemplate="input">
-              <p-chip *ngFor="let tag of task.tags.slice(0,4), index as tagIndex" (onRemove)="onChipRemove(task, tag)"
+              <p-chip *ngFor="let tag of task.tags.slice(0,3), index as tagIndex" (onRemove)="onChipRemove(task, tag)"
                 [removable]="true">
                 {{tag.title}}
               </p-chip>
-
-              <br />
 
               <p-chip class="chipSeeMore" (click)="onSeeMore(task)" [removable]="false">
                 SEE ALL
@@ -312,7 +314,7 @@
             </ng-template>
 
             <ng-template pTemplate="output">
-              <p-chip *ngFor="let tag of task.tags.slice(0,4), index as enumerator" [removable]="false">
+              <p-chip *ngFor="let tag of task.tags.slice(0,3), index as enumerator" [removable]="false">
                 {{tag.title}}
               </p-chip>
             </ng-template>
@@ -346,6 +348,5 @@
   </p-table>
 </div>
 
-<app-tags-dialog [show]="showDialog" [dataSource]="taskForDialog" (visibilityChange)="onVisibilityChange($event)"></app-tags-dialog>
-
-  <!-- (taskTagsChange)="onTagsChange($event)" -->
+<app-tags-dialog [show]="showDialog" [dataSource]="taskForDialog"
+  (visibilityChange)="onVisibilityChange($event)"></app-tags-dialog>

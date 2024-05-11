@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Renderer2, RendererStyleFlags2 } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DatePipe, NgFor, NgIf } from '@angular/common';
@@ -44,7 +44,6 @@ import { TaskDataSourceService } from './taskDataSourceService';
 
 export class TodolistBoardComponent {
 
-  @ViewChild('innerBody') innerBody: ElementRef;
   appLogoPath: string = "/assets/other/appLogo.jpg";
   userAvatarPath: string = "/assets/avatars/avatar1-mini.jpg";
   currentUserName: string = "Jan Kowalski";
@@ -62,11 +61,66 @@ export class TodolistBoardComponent {
   tasksData: ITaskModel[];
   taskStatuses: ITaskStatus[];
   clonedTask: ITaskModel;
+  datePick: Date | string;
+  IsReminderTurn: boolean = false;
 
-  constructor(private taskDataSourceService: TaskDataSourceService) {
+  constructor(private taskDataSourceService: TaskDataSourceService, private elementRef: ElementRef, private renderer: Renderer2) {
     this.teamMates = taskDataSourceService.getTeamMates();
     this.tasksData = taskDataSourceService.getData();
     this.taskStatuses = TaskStatusHelper.getTaskStatuses();
+  }
+
+  onDatePickerShow(taskIn: ITaskModel) {
+    const calendar = this.elementRef.nativeElement.querySelector(".p-highlight");
+    console.log(calendar);
+
+    const buttonsBar = this.elementRef.nativeElement.querySelector(".p-datepicker-buttonbar");
+
+    const customElement = document.createElement('button');
+    customElement.className = "reminderButton";
+
+    customElement.innerHTML = 'Reminder';
+    customElement.style.color = "red";
+    customElement.style.fontWeight = "700";
+
+    this.renderer.appendChild(buttonsBar, customElement);
+    this.renderer.addClass(customElement, "p-button");
+    this.renderer.addClass(customElement, "p-button-text");
+
+    customElement.addEventListener('mouseenter', () => {
+      customElement.style.backgroundColor = "rgb(255, 0, 0, 0.04)";
+    });
+
+    customElement.addEventListener('mouseleave', () => {
+      customElement.style.backgroundColor = '';
+    });
+
+    customElement.addEventListener('focus', () => {
+      customElement.style.boxShadow = "0 0 0 2px #ffffff, 0 0 0 4px rgb(255, 0, 0, 0.4), 0 1px 2px 0 black";
+    });
+
+    customElement.addEventListener('click', () => {
+      this.IsReminderTurn = true;
+      this.datePick = new Date(taskIn.reminder);
+    });
+  }
+
+  onDateSelect(taskIn: ITaskModel) {
+
+    if (this.IsReminderTurn) {
+      this.IsReminderTurn = false;
+      taskIn.reminder = this.datePick;
+    }
+    else {
+      taskIn.deadline = this.datePick;
+    }
+
+    console.log("Reminder date = " + taskIn.reminder);
+    console.log("Deadline date = " + taskIn.deadline);
+  }
+
+  onCalendarClose() {
+    this.IsReminderTurn = false;
   }
 
   onBodyWallClick() {
@@ -100,6 +154,7 @@ export class TodolistBoardComponent {
 
   onRowEditInit(task: ITaskModel) {
     this.clonedTask = TaskModel.createTaskModel(task);
+    this.datePick = task.deadline;
   }
 
   onRowEditSave(taskIn: ITaskModel) {

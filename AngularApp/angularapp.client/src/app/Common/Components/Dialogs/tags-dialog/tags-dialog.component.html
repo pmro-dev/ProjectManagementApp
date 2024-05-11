@@ -10,7 +10,7 @@
         </ng-template>
 
         <ng-template pTemplate="input">
-            <input #tagInput pInputText (keyup.enter)="onEnterPress(tagInput.value); tagInput.value=''" type="text" />
+            <input #tagInput pInputText (keyup.enter)="onEnterPress(tagInput.value); tagInput.value=''" type="text" placeholder="type new tag"/>
 
             <div class="chipsBox">
                 <p-chip (onRemove)="onChipRemove(tag)" *ngFor="let tag of dataSource.tags" [removable]="true">

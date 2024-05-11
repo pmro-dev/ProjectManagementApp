@@ -5,3 +5,7 @@
 .p-inputtext {
     padding: 0.4rem 0.4rem;
 }
+
+.p-inputtext::placeholder {
+    opacity: 0.6;
+}
