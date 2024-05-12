@@ -259,8 +259,9 @@
           <p-cellEditor>
 
             <ng-template pTemplate="input">
-              <p-calendar id="calendar" [(ngModel)]="datePick" [showIcon]="true" [showButtonBar]="true"
-                (onShow)="onDatePickerShow(task)" (onSelect)="onDateSelect(task)" (onClose)="onCalendarClose()">
+              <p-calendar #calendar [(ngModel)]="datePick" [showIcon]="true" [showButtonBar]="true"
+                (onShow)="onDatePickerShow(task)" (onSelect)="onDateSelect(task)" (onClose)="onCalendarClose(task.deadline)"
+                class="reminder">
               </p-calendar>
             </ng-template>
 

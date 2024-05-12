@@ -1,4 +1,4 @@
-import { Component, ElementRef, Renderer2, RendererStyleFlags2 } from '@angular/core';
+import { Component, ElementRef, HostBinding, Renderer2, ViewChild } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DatePipe, NgFor, NgIf } from '@angular/common';
@@ -62,47 +62,51 @@ export class TodolistBoardComponent {
   taskStatuses: ITaskStatus[];
   clonedTask: ITaskModel;
   datePick: Date | string;
-  IsReminderTurn: boolean = false;
+  @HostBinding('class.custom-highlight') IsReminderTurn: boolean = false;
+  @ViewChild("calendar", { static: false }) calendarChild: any;
+  calendar: any;
+  customButton: HTMLButtonElement;
+  private reminderDateTemp: Date | string;
 
   constructor(private taskDataSourceService: TaskDataSourceService, private elementRef: ElementRef, private renderer: Renderer2) {
     this.teamMates = taskDataSourceService.getTeamMates();
     this.tasksData = taskDataSourceService.getData();
     this.taskStatuses = TaskStatusHelper.getTaskStatuses();
+    this.createCustomHTMLElements();
+  }
+
+  createCustomHTMLElements() {
+    this.customButton = document.createElement('button');
+    this.customButton.className = "reminderButton";
+    this.customButton.innerHTML = 'Reminder';
+    this.customButton.style.color = "red";
+    this.customButton.style.fontWeight = "700";
+
+    this.customButton.addEventListener('mouseenter', () => {
+      this.customButton.style.backgroundColor = "rgb(255, 0, 0, 0.04)";
+    });
+
+    this.customButton.addEventListener('mouseleave', () => {
+      this.customButton.style.backgroundColor = '';
+    });
+
+    this.customButton.addEventListener('focus', () => {
+      this.customButton.style.boxShadow = "0 0 0 2px #ffffff, 0 0 0 4px rgb(255, 0, 0, 0.4), 0 1px 2px 0 black";
+    });
+
+    this.customButton.addEventListener('click', () => {
+      this.IsReminderTurn = true;
+      this.datePick = new Date(this.reminderDateTemp);
+    });    
   }
 
   onDatePickerShow(taskIn: ITaskModel) {
-    const calendar = this.elementRef.nativeElement.querySelector(".p-highlight");
-    console.log(calendar);
-
     const buttonsBar = this.elementRef.nativeElement.querySelector(".p-datepicker-buttonbar");
 
-    const customElement = document.createElement('button');
-    customElement.className = "reminderButton";
-
-    customElement.innerHTML = 'Reminder';
-    customElement.style.color = "red";
-    customElement.style.fontWeight = "700";
-
-    this.renderer.appendChild(buttonsBar, customElement);
-    this.renderer.addClass(customElement, "p-button");
-    this.renderer.addClass(customElement, "p-button-text");
-
-    customElement.addEventListener('mouseenter', () => {
-      customElement.style.backgroundColor = "rgb(255, 0, 0, 0.04)";
-    });
-
-    customElement.addEventListener('mouseleave', () => {
-      customElement.style.backgroundColor = '';
-    });
-
-    customElement.addEventListener('focus', () => {
-      customElement.style.boxShadow = "0 0 0 2px #ffffff, 0 0 0 4px rgb(255, 0, 0, 0.4), 0 1px 2px 0 black";
-    });
-
-    customElement.addEventListener('click', () => {
-      this.IsReminderTurn = true;
-      this.datePick = new Date(taskIn.reminder);
-    });
+    this.renderer.appendChild(buttonsBar, this.customButton);
+    this.renderer.addClass(this.customButton, "p-button");
+    this.renderer.addClass(this.customButton, "p-button-text");
+    this.reminderDateTemp = taskIn.reminder;
   }
 
   onDateSelect(taskIn: ITaskModel) {
@@ -119,8 +123,9 @@ export class TodolistBoardComponent {
     console.log("Deadline date = " + taskIn.deadline);
   }
 
-  onCalendarClose() {
+  onCalendarClose(deadline: Date) {
     this.IsReminderTurn = false;
+    this.datePick = deadline;
   }
 
   onBodyWallClick() {
