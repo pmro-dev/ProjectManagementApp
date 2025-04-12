@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ProjectManagerMainBoardComponent } from './project-manager-perspective/boards/project-manager-main-board/project-manager-main-board.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+// import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProjectManagerTodolistsBoardComponent } from './project-manager-perspective/boards/project-manager-todolists-board/project-manager-todolists-board.component';
 import { ProjectManagerTeamsBoardComponent } from './project-manager-perspective/boards/project-manager-teams-board/project-manager-teams-board.component';
 import { TeamCardHighlightDirective } from './project-manager-perspective/boards/project-manager-teams-board/team-card-highlight.directive';
@@ -23,7 +23,7 @@ import { CommonModule } from '@angular/common';
 import { CommonModuleModule } from './Common/modules/common.module';
 import { HtmlRendererComponent } from './Common/html-renderer/html-renderer.component';
 
-// Import PrimeNG modules
+// Import PrimeNG modulesng add @angular/material
 import { AccordionModule } from 'primeng/accordion';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { AvatarModule } from 'primeng/avatar';
@@ -72,7 +72,7 @@ import { MenubarModule } from 'primeng/menubar';
 import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { MeterGroupModule } from 'primeng/metergroup';
+// import { MeterGroupModule } from 'primeng/metergroup';
 import { OrderListModule } from 'primeng/orderlist';
 import { OrganizationChartModule } from 'primeng/organizationchart';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
@@ -139,7 +139,8 @@ import { TagsDialogComponent } from './Common/Components/Dialogs/tags-dialog/tag
     bootstrap: [AppComponent],
     imports: [
         BrowserModule, HttpClientModule,
-        AppRoutingModule, NgbModule,
+        AppRoutingModule,
+        // NgbModule,
         MatSlideToggleModule, BrowserAnimationsModule,
         MatProgressBarModule, MatSnackBarModule, MatButtonModule,
         MatTooltipModule,
@@ -202,7 +203,7 @@ import { TagsDialogComponent } from './Common/Components/Dialogs/tags-dialog/tag
         MessageModule,
         MessagesModule,
         MultiSelectModule,
-        MeterGroupModule,
+        // MeterGroupModule,
         OrganizationChartModule,
         OrderListModule,
         OverlayPanelModule,

@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CommonModuleModule } from '../../Common/modules/common.module';
-import { HtmlRendererComponent } from '../../Common/html-renderer/html-renderer.component';
+// import { HtmlRendererComponent } from '../../Common/html-renderer/html-renderer.component';
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -37,7 +37,8 @@ import { TaskDataSourceService } from './taskDataSourceService';
   ],
   standalone: true,
   imports: [MatFormFieldModule, MatInputModule, NgFor, MatButtonModule, MatIconModule, CommonModuleModule,
-    HtmlRendererComponent, NgIf, TableModule, MultiSelectModule, FormsModule, ReactiveFormsModule, TagModule,
+    // HtmlRendererComponent,
+    NgIf, TableModule, MultiSelectModule, FormsModule, ReactiveFormsModule, TagModule,
     DropdownModule, ButtonModule, InputTextModule, DatePipe, CalendarModule, ChipModule, TagsDialogComponent],
   providers: [TaskDataSourceService]
 })
@@ -97,7 +98,7 @@ export class TodolistBoardComponent {
     this.customButton.addEventListener('click', () => {
       this.IsReminderTurn = true;
       this.datePick = new Date(this.reminderDateTemp);
-    });    
+    });
   }
 
   onDatePickerShow(taskIn: ITaskModel) {
