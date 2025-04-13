@@ -1,10 +1,10 @@
-export interface IRepresentativeModel {
+export interface IRepresentative {
     fullName: string;
     firstName: string;
     image: string
 }
 
-export class RepresentativeModel implements IRepresentativeModel {
+export class Representative implements IRepresentative {
     fullName: string;
     firstName: string;
     image: string;

@@ -5,7 +5,7 @@ import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { CommonModuleModule } from '../../Common/modules/common.module';
+import { CommonModuleModule } from '../../common/modules/common.module';
 // import { HtmlRendererComponent } from '../../Common/html-renderer/html-renderer.component';
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
@@ -17,12 +17,13 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
 import { ChipModule } from 'primeng/chip';
-import { TagsDialogComponent } from '../../Common/Components/Dialogs/tags-dialog/tags-dialog.component';
-import { ITaskModel, TaskModel } from '../../Common/Models/TaskModel';
-import { ITagModel } from '../../Common/Models/TagModel';
-import { IRepresentativeModel } from '../../Common/Models/RepresentativeModel';
-import TaskStatusHelper, { ITaskStatus } from '../../Common/Models/TaskStatusHelper';
-import { TaskDataSourceService } from './taskDataSourceService';
+import { TagsDialogComponent } from '../../common/components/dialogs/tags-dialog/tags-dialog.component';
+import { ITask, Task } from '../../common/models/task.model';
+import { ITag } from '../../common/models/tag.model';
+import { IRepresentative } from '../../common/models/representative.model';
+import { TaskDataSourceService } from '../../common/mocks/task-data-source.service';
+import { ITaskStatus } from '../../common/models/task-status.model';
+import TaskStatusHelper from '../../common/helpers/task-status-helper';
 
 @Component({
   selector: 'app-todolist-board',
@@ -54,14 +55,14 @@ export class TodolistBoardComponent {
   activityValues: number[] = [0, 100];
   mobileMenuViaManager: ElementRef;
   isMenuShow: boolean;
-  selectedTeamMate: IRepresentativeModel;
+  selectedTeamMate: IRepresentative;
   selectedTaskTagsToRemove: number[] = [];
   showDialog: boolean = false;
-  taskForDialog: ITaskModel;
-  teamMates: IRepresentativeModel[];
-  tasksData: ITaskModel[];
+  taskForDialog: ITask;
+  teamMates: IRepresentative[];
+  tasksData: ITask[];
   taskStatuses: ITaskStatus[];
-  clonedTask: ITaskModel;
+  clonedTask: ITask;
   datePick: Date | string;
   @HostBinding('class.custom-highlight') IsReminderTurn: boolean = false;
   @ViewChild("calendar", { static: false }) calendarChild: any;
@@ -101,7 +102,7 @@ export class TodolistBoardComponent {
     });
   }
 
-  onDatePickerShow(taskIn: ITaskModel) {
+  onDatePickerShow(taskIn: ITask) {
     const buttonsBar = this.elementRef.nativeElement.querySelector(".p-datepicker-buttonbar");
 
     this.renderer.appendChild(buttonsBar, this.customButton);
@@ -110,7 +111,7 @@ export class TodolistBoardComponent {
     this.reminderDateTemp = taskIn.reminder;
   }
 
-  onDateSelect(taskIn: ITaskModel) {
+  onDateSelect(taskIn: ITask) {
 
     if (this.IsReminderTurn) {
       this.IsReminderTurn = false;
@@ -154,27 +155,27 @@ export class TodolistBoardComponent {
     return TaskStatusHelper.getSeverity(status);
   }
 
-  onChipRemove(taskData: ITaskModel, tagToRemove: ITagModel) {
+  onChipRemove(taskData: ITask, tagToRemove: ITag) {
     taskData.tags = taskData.tags.filter(tag => tag.id != tagToRemove.id).slice();
   }
 
-  onRowEditInit(task: ITaskModel) {
-    this.clonedTask = TaskModel.createTaskModel(task);
+  onRowEditInit(task: ITask) {
+    this.clonedTask = Task.createTaskModel(task);
     this.datePick = task.deadline;
   }
 
-  onRowEditSave(taskIn: ITaskModel) {
+  onRowEditSave(taskIn: ITask) {
     this.taskDataSourceService.updateTaskData(taskIn);
 
     let index = this.tasksData.findIndex(task => task.id == taskIn.id);
     this.tasksData[index] = taskIn;
   }
 
-  onRowEditCancel(taskIn: ITaskModel, index: number) {
+  onRowEditCancel(taskIn: ITask, index: number) {
     this.tasksData[index] = this.clonedTask;
   }
 
-  onSeeMore(source: ITaskModel) {
+  onSeeMore(source: ITask) {
     this.taskForDialog = source;
     console.log("SEE MORE CLICKED");
     this.showDialog = true;

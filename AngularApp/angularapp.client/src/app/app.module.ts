@@ -7,7 +7,7 @@ import { ProjectManagerMainBoardComponent } from './project-manager-perspective/
 // import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProjectManagerTodolistsBoardComponent } from './project-manager-perspective/boards/project-manager-todolists-board/project-manager-todolists-board.component';
 import { ProjectManagerTeamsBoardComponent } from './project-manager-perspective/boards/project-manager-teams-board/project-manager-teams-board.component';
-import { TeamCardHighlightDirective } from './project-manager-perspective/boards/project-manager-teams-board/team-card-highlight.directive';
+import { TeamCardHighlightDirective } from './project-manager-perspective/boards/project-manager-teams-board/directives/team-card-highlight.directive';
 import { ProjectManagerStatisticsBoardComponent } from './project-manager-perspective/boards/project-manager-statistics-board/project-manager-statistics-board.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -15,13 +15,13 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {MatButtonModule} from '@angular/material/button';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { TodolistCardTeamColorDirective } from './project-manager-perspective/boards/project-manager-statistics-board/todolist-card-team-color.directive';
-import { TodolistCardColorDirective } from './project-manager-perspective/boards/project-manager-statistics-board/todolist-card-color.directive';
+import { TodolistCardTeamColorDirective } from './project-manager-perspective/boards/project-manager-statistics-board/directives/todolist-card-team-color.directive';
+import { TodolistCardColorDirective } from './project-manager-perspective/boards/project-manager-statistics-board/directives/todolist-card-color.directive';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TodolistBoardComponent } from './common-boards/todolist-board/todolist-board.component';
 import { CommonModule } from '@angular/common';
-import { CommonModuleModule } from './Common/modules/common.module';
-import { HtmlRendererComponent } from './Common/html-renderer/html-renderer.component';
+import { CommonModuleModule } from './common/modules/common.module';
+import { HtmlRendererComponent } from './common/html-renderer/html-renderer.component';
 
 // Import PrimeNG modulesng add @angular/material
 import { AccordionModule } from 'primeng/accordion';
@@ -119,8 +119,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { RippleModule } from 'primeng/ripple';
 import { StyleClassModule } from 'primeng/styleclass';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TagsDialogComponent } from './Common/Components/Dialogs/tags-dialog/tags-dialog.component';
-
+import { TagsDialogComponent } from './common/components/dialogs/tags-dialog/tags-dialog.component';
+import { ProjectManagerProjectComponent } from './project-manager-perspective/boards/project-manager-main-board/project-manager-project/project-manager-project.component';
 
 @NgModule({
     declarations: [
@@ -132,6 +132,7 @@ import { TagsDialogComponent } from './Common/Components/Dialogs/tags-dialog/tag
         ProjectManagerStatisticsBoardComponent,
         TodolistCardTeamColorDirective,
         TodolistCardColorDirective,
+        ProjectManagerProjectComponent,
     ],
     providers: [
         provideAnimationsAsync()

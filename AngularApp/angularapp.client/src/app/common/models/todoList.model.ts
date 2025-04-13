@@ -1,36 +1,38 @@
-import { ITaskModel } from "./TaskModel";
-import { ITagModel } from "./TagModel";
+import { ITask } from "./task.model";
+import { ITag } from "./tag.model";
 
-export interface ITodoListModel {
+export interface ITodoList {
     title: string;
     description: string;
-    tasks: Array<ITaskModel>;
+    tasks: Array<ITask>;
     projectTitle: string;
-    teamName: string;
-    tags: Array<ITagModel>;
+    tags: Array<ITag>;
 }
 
-export class TodoListModel implements ITodoListModel {
+export class TodoList implements ITodoList {
     title: string;
     description: string;
-    tasks: ITaskModel[];
+    tasks: ITask[];
     projectTitle: string;
     teamName: string;
-    tags: ITagModel[];
+    teamLiderName: string;
+    tags: ITag[];
 
     constructor(
         title: string,
         description: string,
-        tasks: ITaskModel[],
+        tasks: ITask[],
         projectTitle: string,
         teamName: string,
-        tags: ITagModel[]
+        teamLiderName: string,
+        tags: ITag[]
     ) {
         this.title = title
         this.description = description
         this.tasks = tasks
         this.projectTitle = projectTitle
         this.teamName = teamName
+        this.teamLiderName = teamLiderName
         this.tags = tags
     }
 }

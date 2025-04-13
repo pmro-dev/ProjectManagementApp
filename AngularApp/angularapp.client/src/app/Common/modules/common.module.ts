@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BurgerHoverEffectDirective } from '../Directives/burger-hover-effect.directive';
-import { NavLeftMenuComponent } from '../Components/Navigations/Sidebar/nav-left-menu/nav-left-menu.component';
-import { NavTopMenuComponent } from '../Components/Navigations/Top-Menu/nav-top-menu/nav-top-menu.component';
+import { NavLeftMenuComponent } from '../components/navigations/sidebar/nav-left-menu/nav-left-menu.component';
+import { NavTopMenuComponent } from '../components/navigations/top-menu/nav-top-menu/nav-top-menu.component';
+import { BurgerHoverEffectDirective } from '../directives/burger-hover-effect.directive';
 
 @NgModule({
   declarations: [
@@ -19,4 +19,5 @@ import { NavTopMenuComponent } from '../Components/Navigations/Top-Menu/nav-top-
     NavTopMenuComponent
   ]
 })
+
 export class CommonModuleModule { }

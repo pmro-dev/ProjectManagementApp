@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Project, ProjectImages } from './project-manager-project/project.model';
 
 @Component({
   selector: 'app-project-manager-main-board',
@@ -14,22 +15,23 @@ export class ProjectManagerMainBoardComponent {
   tasksImgPath: string = "/assets/icons2/tasksIcon.jpg";
   progressImgPath: string = "/assets/icons2/progressIcon.jpg";
 
-  projects: Array<{ Title: string, Count: number }> = [
-    { Title: "Project 1", Count: 12 },
-    { Title: "Project 2", Count: 35 },
-    { Title: "Project 3", Count: 76 }
-  ];
-
-  constructor() {
-    let cos: Project = { Title: "Elo", Count: 2 };
-    this.projects.push(cos);
+  projectImages: ProjectImages = {
+    AvatarPath: "/assets/avatars/avatar1-mini.jpg",
+    SlackPath: "/assets/other/slack-img.png",
+    TeamsImgPath: "/assets/icons/teamIcon.jpg",
+    ListsImgPath: "/assets/icons2/noteIcon.jpg",
+    TasksImgPath: "/assets/icons2/tasksIcon.jpg",
+    ProgressImgPath: "/assets/icons2/progressIcon.jpg",
   }
 
+  projects: Array<Project> = [
+    { Id: 0, Title: "Project 1", Count: 12 },
+    { Id: 1, Title: "Project 2", Count: 35 },
+    { Id: 2, Title: "Project 3", Count: 76 }
+  ];
+
+  constructor() {}
   GoToProjectCreation(): void { }
-
 }
 
-interface Project {
-  Title: string,
-  Count: number
-}
+

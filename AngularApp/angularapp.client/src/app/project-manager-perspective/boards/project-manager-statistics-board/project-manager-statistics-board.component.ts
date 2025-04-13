@@ -1,5 +1,6 @@
 import { Component, ElementRef } from '@angular/core';
 import Chart from 'chart.js/auto';
+import { IProjectTodoList } from './models/project-todolist.model';
 // import { ChartModule } from 'primeng/chart';
 // import { MatProgressBarModule } from '@angular/material/progress-bar';
 // import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -19,40 +20,52 @@ export class ProjectManagerStatisticsBoardComponent {
   public userAvatarPath: string = "/assets/avatars/avatar1-mini.jpg";
   public currentUserName: string = "Jan Kowalski";
 
-  public todoLists: Array<TodoList> = [
+  public todoLists: Array<IProjectTodoList> = [
     {
-      Title: "UX Design",
-      Color: "rgb(236, 240, 250)",
-      TasksCount: 17,
-      TasksCompleted: 6,
-      TeamName: "Króliczki Charliego",
-      TeamLiderName: "Jaś Fasola",
-      TeamColor: "purple",
-      Chart: null
+      title: "UX Design",
+      description:"dadasda",
+      projectTitle: "Project 1",
+      tasks: [],
+      tasksCount: 17,
+      tasksCompleted: 6,
+      teamName: "Króliczki Charliego",
+      teamLiderName: "Jaś Fasola",
+      color: "rgb(236, 240, 250)",
+      teamColor: "purple",
+      tags: [],
+      chart: null
     },
     {
-      Title: "Web Theme",
-      Color: "rgb(236, 250, 238)",
-      TasksCount: 12,
-      TasksCompleted: 9,
-      TeamName: "Morele",
-      TeamLiderName: "Angelika Prodiż",
-      TeamColor: "green",
-      Chart: null
+      title: "Web Theme",
+      description:"dadasda",
+      projectTitle: "Project 2",
+      tasks: [],
+      tasksCount: 12,
+      tasksCompleted: 9,
+      teamName: "Morele",
+      teamLiderName: "Angelika Prodiż",
+      color: "rgb(236, 250, 238)",
+      teamColor: "green",
+      tags: [],
+      chart: null
     },
     {
-      Title: "Event Makieta",
-      Color: "rgb(245, 236, 250)",
-      TasksCount: 20,
-      TasksCompleted: 15,
-      TeamName: "Robaczki",
-      TeamLiderName: "Ewelina Roszpunka",
-      TeamColor: "yellow",
-      Chart: null
+      title: "Event Makieta",
+      description:"dadasda",
+      projectTitle: "Project 2",
+      tasks: [],
+      tasksCount: 20,
+      tasksCompleted: 15,
+      teamName: "Robaczki",
+      teamLiderName: "Ewelina Roszpunka",
+      teamColor: "yellow",
+      color: "rgb(245, 236, 250)",
+      tags: [],
+      chart: null
     }
   ];
 
-  public teams: Array<Team> = [
+  public teams: Array<ITeam> = [
     {
       Name: "Króliczki Charliego",
       MonthlyCost: 75000,
@@ -101,8 +114,8 @@ export class ProjectManagerStatisticsBoardComponent {
     let temp: string;
 
     this.todoLists.forEach(todolist => {
-      temp = todolist.Title + "Chart";
-      todolist.Chart = this.createTodoListTasksChart(temp, this.todoListTasksProgressData, "TodoLists Tasks Progress", 6)
+      temp = todolist.title + "Chart";
+      todolist.chart = this.createTodoListTasksChart(temp, this.todoListTasksProgressData, "TodoLists Tasks Progress", 6)
     });
   }
 
@@ -257,7 +270,6 @@ export class ProjectManagerStatisticsBoardComponent {
   }
 
   createCharts() {
-
     this.budgetChart = new Chart("BudgetChart", {
       type: 'doughnut',
       data: this.budgetData,
@@ -373,26 +385,4 @@ export class ProjectManagerStatisticsBoardComponent {
   ReadMoreTeams() {
     console.log("WORKING READ MORE TEAMS!")
   }
-}
-
-interface TodoList {
-  Title: string;
-  Color: string;
-  TasksCount: number;
-  TasksCompleted: number;
-  TeamName: string;
-  TeamLiderName: string;
-  TeamColor: string;
-  Chart: any;
-}
-
-interface Team {
-  Name: string;
-  MonthlyCost: number;
-  Members: Array<TeamMember>
-}
-
-interface TeamMember {
-  Name: string;
-  AvatarPath: string;
 }

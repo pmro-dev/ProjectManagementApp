@@ -1,43 +1,43 @@
-import { IRepresentativeModel } from "./RepresentativeModel";
-import { ITagModel, TagModel } from './TagModel';
+import { IRepresentative } from "./representative.model";
+import { ITag, Tag } from './tag.model';
 
-export interface ITaskModel {
+export interface ITask {
     id: string;
     title: string;
     shortDescription: string;
     description: string;
-    teamMate: IRepresentativeModel;
+    teamMate: IRepresentative;
     status: string;
     daysLeft: number;
     deadline: string | Date;
     reminder: string | Date;
-    tags: Array<ITagModel>;
+    tags: Array<ITag>;
 }
 
-export class TaskModel implements ITaskModel {
+export class Task implements ITask {
 
     id: string;
     title: string;
     shortDescription: string;
     description: string;
-    teamMate: IRepresentativeModel;
+    teamMate: IRepresentative;
     status: string;
     daysLeft: number;
     deadline: string | Date;
     reminder: string | Date;
-    tags: ITagModel[];
+    tags: ITag[];
 
     constructor(
         id: string,
         title: string,
         shortDescription: string,
         description: string,
-        teamMate: IRepresentativeModel,
+        teamMate: IRepresentative,
         status: string,
         daysLeft: number,
         deadline: string | Date,
         reminder: string | Date,
-        tags: ITagModel[]
+        tags: ITag[]
     ) {
         this.id = id
         this.title = title
@@ -51,11 +51,11 @@ export class TaskModel implements ITaskModel {
         this.reminder = reminder
     }
 
-    public static createTaskModel(taskSource: ITaskModel): ITaskModel {
-        let tempTags: ITagModel[] = [];
-        taskSource.tags.forEach(tag => tempTags.push(TagModel.createTagModel(tag)));
+    public static createTaskModel(taskSource: ITask): ITask {
+        let tempTags: ITag[] = [];
+        taskSource.tags.forEach(tag => tempTags.push(Tag.createTagModel(tag)));
 
-        return new TaskModel(
+        return new Task(
             taskSource.id, taskSource.title, taskSource.shortDescription,
             taskSource.description, taskSource.teamMate, taskSource.status,
             taskSource.daysLeft, taskSource.deadline, taskSource.reminder, tempTags

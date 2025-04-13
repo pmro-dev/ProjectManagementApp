@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { ITagModel } from '../../Common/Models/TagModel';
-import { ITaskModel, TaskModel } from '../../Common/Models/TaskModel';
-import { IRepresentativeModel } from '../../Common/Models/RepresentativeModel';
-import { TaskStatusType } from '../../Common/Models/TaskStatusHelper';
+import { IRepresentative } from '../models/representative.model';
+import { ITag } from '../models/tag.model';
+import { ITask, Task } from '../models/task.model';
+import { TaskStatus } from '../enums/task-status.enum';
 
 @Injectable()
 export class TaskDataSourceService {
 
-    private teamMates: IRepresentativeModel[] = [];
+    private teamMates: IRepresentative[] = [];
 
-    private tagsData: Array<ITagModel> = [
+    private tagsData: Array<ITag> = [
         { id: 1, title: "First Tag" },
         { id: 2, title: "Second Tag" },
         { id: 3, title: "Third Tag" },
@@ -18,14 +18,14 @@ export class TaskDataSourceService {
         { id: 6, title: "Sixth Tag" },
     ];
 
-    private dataSource: Array<ITaskModel> = [
+    private dataSource: Array<ITask> = [
         {
             id: "1",
             title: "Task 1",
             shortDescription: "Some task description short",
             description: "1 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
             teamMate: { fullName: "Grzegorz Kowalski", firstName: "Grzegorz", image: "/assets/avatars/avatar1-mini.jpg" },
-            status: TaskStatusType.NextToDo.toString(),
+            status: TaskStatus.NextToDo.toString(),
             daysLeft: 15,
             deadline: '2015-09-13',
             reminder: '2015-09-13',
@@ -37,7 +37,7 @@ export class TaskDataSourceService {
             shortDescription: "Some task description short",
             description: "2 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
             teamMate: { fullName: "Jan Kowalski", firstName: "Jan", image: "/assets/avatars/avatar1-mini.jpg" },
-            status: TaskStatusType.Done.toString(),
+            status: TaskStatus.Done.toString(),
             daysLeft: 15,
             deadline: '2015-09-13',
             reminder: '2015-09-13',
@@ -49,7 +49,7 @@ export class TaskDataSourceService {
             shortDescription: "Some task description short",
             description: "3 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
             teamMate: { fullName: "Marek Kowalski", firstName: "Marek", image: "/assets/avatars/avatar1-mini.jpg" },
-            status: TaskStatusType.Abandoned.toString(),
+            status: TaskStatus.Abandoned.toString(),
             daysLeft: 15,
             reminder: '2015-09-13',
             deadline: '2015-09-13',
@@ -61,7 +61,7 @@ export class TaskDataSourceService {
             shortDescription: "Some task description short",
             description: "4 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
             teamMate: { fullName: "Krzysztof Kowalski", firstName: "Krzysztof", image: "/assets/avatars/avatar1-mini.jpg" },
-            status: TaskStatusType.InProgress.toString(),
+            status: TaskStatus.InProgress.toString(),
             daysLeft: 15,
             reminder: '2015-09-13',
             deadline: '2015-09-13',
@@ -73,7 +73,7 @@ export class TaskDataSourceService {
             shortDescription: "Some task description short",
             description: "5 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
             teamMate: { fullName: "Elżbieta Kowalski", firstName: "Elżbieta", image: "/assets/avatars/avatar1-mini.jpg" },
-            status: TaskStatusType.NextToDo.toString(),
+            status: TaskStatus.NextToDo.toString(),
             daysLeft: 15,
             reminder: '2015-09-13',
             deadline: '2015-09-13',
@@ -85,7 +85,7 @@ export class TaskDataSourceService {
             shortDescription: "Some task description short",
             description: "6 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
             teamMate: { fullName: "Maroni Kowalski", firstName: "Maroni", image: "/assets/avatars/avatar1-mini.jpg" },
-            status: TaskStatusType.NextToDo.toString(),
+            status: TaskStatus.NextToDo.toString(),
             daysLeft: 15,
             reminder: '2015-09-13',
             deadline: '2015-09-13',
@@ -97,7 +97,7 @@ export class TaskDataSourceService {
             shortDescription: "Some task description short",
             description: "7 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
             teamMate: { fullName: "Jusuf Kowalski", firstName: "Jusuf", image: "/assets/avatars/avatar1-mini.jpg" },
-            status: TaskStatusType.NextToDo.toString(),
+            status: TaskStatus.NextToDo.toString(),
             daysLeft: 15,
             reminder: '2015-09-13',
             deadline: '2015-09-13',
@@ -109,7 +109,7 @@ export class TaskDataSourceService {
             shortDescription: "Some task description short",
             description: "8 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
             teamMate: { fullName: "Neli Kowalski", firstName: "Neli", image: "/assets/avatars/avatar1-mini.jpg" },
-            status: TaskStatusType.NextToDo.toString(),
+            status: TaskStatus.NextToDo.toString(),
             daysLeft: 15,
             reminder: '2015-09-13',
             deadline: '2015-09-13',
@@ -121,7 +121,7 @@ export class TaskDataSourceService {
             shortDescription: "Some task description short",
             description: "9 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
             teamMate: { fullName: "Potato Kowalski", firstName: "Potato", image: "/assets/avatars/avatar1-mini.jpg" },
-            status: TaskStatusType.NextToDo.toString(),
+            status: TaskStatus.NextToDo.toString(),
             daysLeft: 15,
             reminder: '2015-09-13',
             deadline: '2015-09-13',
@@ -133,7 +133,7 @@ export class TaskDataSourceService {
             shortDescription: "Some task description short",
             description: "10 Lorem ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum ipsum lorem ipsum",
             teamMate: { fullName: "Lincz Kowalski", firstName: "Lincz", image: "/assets/avatars/avatar1-mini.jpg" },
-            status: TaskStatusType.NextToDo.toString(),
+            status: TaskStatus.NextToDo.toString(),
             daysLeft: 15,
             reminder: '2015-09-13',
             deadline: '2015-09-13',
@@ -152,7 +152,7 @@ export class TaskDataSourceService {
         return this.dataSource.map(task => ({ ...task }));
     }
 
-    getSingle(index: any): ITaskModel {
+    getSingle(index: any): ITask {
         if (typeof index == 'number') {
             return this.dataSource.map(task => ({ ...task }))[index];
         }
@@ -160,7 +160,7 @@ export class TaskDataSourceService {
             let temp = this.dataSource.find(task => task.id == index);
 
             if (temp != null) {
-                return TaskModel.createTaskModel(temp);
+                return Task.createTaskModel(temp);
             }
         }
 
@@ -171,7 +171,7 @@ export class TaskDataSourceService {
         return this.teamMates.slice();
     }
 
-    updateTaskData(taskIn: ITaskModel) {
+    updateTaskData(taskIn: ITask) {
         let index = this.dataSource.findIndex(task => task.id == taskIn.id);
 
         if (index == null) {
