@@ -43,7 +43,9 @@
             </div>
 
             <div class="row my-1">
-                <div class="team-card" *ngFor="let member of team.Members" appTeamCardHighlight [borderColor]="member.Color" [defaultBorderColor]="member.Color">
+              @for (member of team.Members; track member.FullName)
+              {
+                <div class="team-card" appTeamCardHighlight [borderColor]="member.Color" [defaultBorderColor]="member.Color">
                     <div id="cardCorner" class="card-corner"></div>
                     <div class="row mt-3">
                         <div class="col-auto avatar">
@@ -92,6 +94,7 @@
                         </div>
                     </dl>
                 </div>
+              }
             </div>
         </div>
     </div>

@@ -1,7 +1,8 @@
 import { Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/core';
 
 @Directive({
-  selector: '[appTeamCardHighlight]'
+  selector: '[appTeamCardHighlight]',
+  standalone: true
 })
 export class TeamCardHighlightDirective {
 

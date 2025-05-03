@@ -1,6 +1,9 @@
-import { Component, ElementRef } from '@angular/core';
-import Chart from 'chart.js/auto';
+import { Component } from '@angular/core';
 import { IProjectTodoList } from './models/project-todolist.model';
+import { PmStatisticsBoardService } from './project-manager-statistics-board.service';
+import { TodolistCardColorDirective } from './directives/todolist-card-color.directive';
+import { TodolistCardTeamColorDirective } from './directives/todolist-card-team-color.directive';
+import { MatTooltipModule } from '@angular/material/tooltip';
 // import { ChartModule } from 'primeng/chart';
 // import { MatProgressBarModule } from '@angular/material/progress-bar';
 // import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -8,374 +11,46 @@ import { IProjectTodoList } from './models/project-todolist.model';
 @Component({
   selector: 'app-project-manager-statistics-board',
   templateUrl: './project-manager-statistics-board.component.html',
-  styleUrl: './project-manager-statistics-board.component.css'
+  styleUrl: './project-manager-statistics-board.component.css',
+  standalone: true,
+  imports: [ TodolistCardColorDirective, TodolistCardTeamColorDirective, MatTooltipModule ]
 })
 export class ProjectManagerStatisticsBoardComponent {
   public budgetChart: any;
   public tasksProgressChart: any;
   public todoListsProgressChart: any;
   public todoListTasksProgressChart: any;
-  public avatarPath: string = "/assets/avatars/avatar1-mini.jpg";
   public appLogoPath: string = "/assets/other/appLogo.jpg";
   public userAvatarPath: string = "/assets/avatars/avatar1-mini.jpg";
   public currentUserName: string = "Jan Kowalski";
-
-  public todoLists: Array<IProjectTodoList> = [
-    {
-      title: "UX Design",
-      description:"dadasda",
-      projectTitle: "Project 1",
-      tasks: [],
-      tasksCount: 17,
-      tasksCompleted: 6,
-      teamName: "Króliczki Charliego",
-      teamLiderName: "Jaś Fasola",
-      color: "rgb(236, 240, 250)",
-      teamColor: "purple",
-      tags: [],
-      chart: null
-    },
-    {
-      title: "Web Theme",
-      description:"dadasda",
-      projectTitle: "Project 2",
-      tasks: [],
-      tasksCount: 12,
-      tasksCompleted: 9,
-      teamName: "Morele",
-      teamLiderName: "Angelika Prodiż",
-      color: "rgb(236, 250, 238)",
-      teamColor: "green",
-      tags: [],
-      chart: null
-    },
-    {
-      title: "Event Makieta",
-      description:"dadasda",
-      projectTitle: "Project 2",
-      tasks: [],
-      tasksCount: 20,
-      tasksCompleted: 15,
-      teamName: "Robaczki",
-      teamLiderName: "Ewelina Roszpunka",
-      teamColor: "yellow",
-      color: "rgb(245, 236, 250)",
-      tags: [],
-      chart: null
-    }
-  ];
-
-  public teams: Array<ITeam> = [
-    {
-      Name: "Króliczki Charliego",
-      MonthlyCost: 75000,
-      Members: [
-        { Name: "Joanna Dragan", AvatarPath: this.avatarPath }, { Name: "Elżbieta Bażant", AvatarPath: this.avatarPath },
-        { Name: "Krzysztof Frankowski", AvatarPath: this.avatarPath }, { Name: "Kryspin Baptyst", AvatarPath: this.avatarPath },
-        { Name: "Aniela Dzik", AvatarPath: this.avatarPath }, { Name: "Henry Otomaton", AvatarPath: this.avatarPath }
-      ]
-    },
-    {
-      Name: "Fata Morgana",
-      MonthlyCost: 50000,
-      Members: [
-        { Name: "Joanna Dragan", AvatarPath: this.avatarPath }, { Name: "Joanna Dragan", AvatarPath: this.avatarPath },
-        { Name: "Joanna Dragan", AvatarPath: this.avatarPath }, { Name: "Joanna Dragan", AvatarPath: this.avatarPath },
-        { Name: "Joanna Dragan", AvatarPath: this.avatarPath }, { Name: "Joanna Dragan", AvatarPath: this.avatarPath }
-      ]
-    },
-    {
-      Name: "Bon Apetit",
-      MonthlyCost: 30000,
-      Members: [
-        { Name: "Joanna Dragan", AvatarPath: this.avatarPath }, { Name: "Joanna Dragan", AvatarPath: this.avatarPath },
-        { Name: "Joanna Dragan", AvatarPath: this.avatarPath }, { Name: "Joanna Dragan", AvatarPath: this.avatarPath },
-        { Name: "Joanna Dragan", AvatarPath: this.avatarPath }, { Name: "Joanna Dragan", AvatarPath: this.avatarPath }
-      ]
-    },
-  ];
-
+  public avatarPath: string = "";
+  public todoLists: Array<IProjectTodoList> = [];
+  public teams: Array<ITeam> = [];
   public membersCount: number = 0;
+
+  constructor(statisticsService: PmStatisticsBoardService)
+  {
+    this.todoLists = statisticsService.getTodoLists();
+    this.teams = statisticsService.getTeams();
+    this.avatarPath = statisticsService.avatarPath;
+  }
 
   ngOnInit(): void {
     this.membersCount = this.countMembers();
+  }
 
-    this.createCharts();
+  ngAfterViewInit(): void {
+    // let temp: string;
+    // this.todoLists.forEach(todolist => {
+    //   temp = todolist.title + "Chart";
+    //   todolist.chart = this.createTodoListTasksChart(temp, this.todoListTasksProgressData, "TodoLists Tasks Progress", 6)
+    // });
   }
 
   countMembers(): number {
     let tempCount = 0;
     this.teams.forEach(team => tempCount = tempCount + team.Members.length);
     return tempCount;
-  }
-
-  ngAfterViewInit(): void {
-
-    let temp: string;
-
-    this.todoLists.forEach(todolist => {
-      temp = todolist.title + "Chart";
-      todolist.chart = this.createTodoListTasksChart(temp, this.todoListTasksProgressData, "TodoLists Tasks Progress", 6)
-    });
-  }
-
-  private budgetData = {
-    labels: [
-      'Budget Spent',
-      'Budget Left',
-      'Over Budget'
-    ],
-    datasets: [{
-      label: 'Budget',
-      data: [25, 75, 10],
-      backgroundColor: [
-        'rgb(148, 238, 148)',
-        'rgb(190, 148, 238)',
-        'rgb(238, 148, 148)'
-      ],
-      hoverOffset: 4
-    }]
-  };
-
-  private tasksProgressData = {
-    labels: ['STATUS'],
-    datasets: [
-      {
-        label: 'COMPLETED',
-        data: [15],
-        backgroundColor: 'rgb(148, 238, 148)',
-        borderRadius: 2,
-        barPercentage: 1,
-        borderSkip: false
-      },
-      {
-        label: 'IN PROGRESS',
-        data: [12],
-        backgroundColor: 'rgb(190, 148, 238)',
-        borderRadius: 2,
-        barPercentage: 1,
-        borderSkip: false,
-      },
-      {
-        label: 'TODO',
-        data: [25],
-        backgroundColor: 'rgb(238, 148, 148)',
-        borderRadius: 2,
-        barPercentage: 1,
-        borderSkip: false
-      }
-    ]
-  };
-
-  private todoListsProgressData = {
-    labels: ['STATUS'],
-    datasets: [
-      {
-        label: 'COMPLETED',
-        data: [2],
-        backgroundColor: 'rgb(148, 238, 148)',
-        borderRadius: 2,
-        barPercentage: 1,
-        borderSkip: false
-      },
-      {
-        label: 'IN PROGRESS',
-        data: [5],
-        backgroundColor: 'rgb(190, 148, 238)',
-        borderRadius: 2,
-        barPercentage: 1,
-        borderSkip: false,
-      }
-    ]
-  };
-
-  private todoListTasksProgressData = {
-    labels: ['STATUS'],
-    datasets: [
-      {
-        label: 'COMPLETED',
-        data: [1],
-        backgroundColor: 'rgb(148, 238, 148)',
-        borderRadius: 2,
-        barPercentage: 0.5,
-        borderSkip: false
-      },
-      {
-        label: 'IN PROGRESS',
-        data: [2],
-        backgroundColor: 'rgb(190, 148, 238)',
-        borderRadius: 2,
-        barPercentage: 0.5,
-        borderSkip: false,
-      },
-      {
-        label: 'TODO',
-        data: [3],
-        backgroundColor: 'rgb(238, 148, 148)',
-        borderRadius: 2,
-        barPercentage: 0.5,
-        borderSkip: false
-      }
-    ]
-  };
-
-
-  createTodoListTasksChart(id: string, data: any, title: string, max: number): Chart {
-    return new Chart(id, {
-      type: 'bar',
-      data: data,
-      options: {
-        maintainAspectRatio: false,
-        responsive: true,
-        indexAxis: 'y',
-        plugins: {
-          title: {
-            display: false,
-            text: title
-          },
-          legend: {
-            display: false
-          }
-        },
-        scales: {
-          x: {
-            stacked: true,
-            grid: {
-              display: false
-            },
-            ticks: {
-              display: false,
-            },
-            border: {
-              display: false
-            },
-            min: 0,
-            max: max,
-          },
-          y: {
-            stacked: true,
-            grid: {
-              display: false
-            },
-            ticks: {
-              display: false,
-            },
-            border: {
-              display: false
-            }
-          }
-        }
-      }
-    });
-  }
-
-  createCharts() {
-    this.budgetChart = new Chart("BudgetChart", {
-      type: 'doughnut',
-      data: this.budgetData,
-      options: {
-        aspectRatio: 1.8,
-        plugins: {
-          legend: {
-            display: false
-          }
-        },
-      }
-    });
-
-    this.tasksProgressChart = new Chart("TasksProgressChart", {
-      type: 'bar',
-      data: this.tasksProgressData,
-      options: {
-        maintainAspectRatio: false,
-        responsive: true,
-        indexAxis: 'y',
-        plugins: {
-          title: {
-            display: true,
-            text: 'TASKS PROGRESS'
-          },
-          legend: {
-            display: false
-          }
-        },
-        scales: {
-          x: {
-            stacked: true,
-            grid: {
-              display: false
-            },
-            ticks: {
-              display: false,
-            },
-            border: {
-              display: false
-            },
-            min: 0,
-            max: 52,
-          },
-          y: {
-            stacked: true,
-            grid: {
-              display: false
-            },
-            ticks: {
-              display: false,
-            },
-            border: {
-              display: false
-            }
-          }
-        }
-      }
-    });
-
-    this.todoListsProgressChart = new Chart("TodoListsProgressChart", {
-      type: 'bar',
-      data: this.todoListsProgressData,
-      options: {
-        maintainAspectRatio: false,
-        responsive: true,
-        indexAxis: 'y',
-        plugins: {
-          title: {
-            display: true,
-            text: 'TODOLISTS PROGRESS'
-          },
-          legend: {
-            display: false
-          }
-        },
-        scales: {
-          x: {
-            stacked: true,
-            grid: {
-              display: false
-            },
-            ticks: {
-              display: false,
-            },
-            border: {
-              display: false
-            },
-            min: 0,
-            max: 7,
-          },
-          y: {
-            stacked: true,
-            grid: {
-              display: false
-            },
-            ticks: {
-              display: false,
-            },
-            border: {
-              display: false
-            }
-          }
-        }
-      }
-    });
   }
 
   ReadMoreTodoLists() {

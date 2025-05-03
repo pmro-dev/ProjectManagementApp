@@ -136,15 +136,17 @@
 
     <!-- all project's todo lists container -->
     <div class="row justify-content-center gap-5 my-5">
-        <div class="todolist-card" appTodolistCardColor *ngFor="let list of todoLists" [CardColor]="list.Color">
+      @for (list of todoLists; track $index)
+      {
+        <div class="todolist-card" appTodolistCardColor [CardColor]="list.color">
             <div class="px-2 mt-2 position-relative h-100">
                 <div class="row">
                     <div class="col text-start pt-2 font-12 bold-4">
-                        <span>{{ list.Title }}</span>
+                        <span>{{ list.title }}</span>
                     </div>
                     <div class="col-auto d-flex flex-row flex-nowrap justify-content-end">
                         <div class="col-auto" style="width: 125px;">
-                            <canvas id="{{ list.Title + 'Chart' }}" height="55px"></canvas>
+                            <canvas id="{{ list.title + 'Chart' }}" height="55px"></canvas>
                         </div>
                         <div class="col-auto text-end ps-2" style="font-size: 1.7em; padding-top: 12px;">
                             66%</div>
@@ -152,14 +154,14 @@
                 </div>
                 <div class="row pt-1">
                     <div class="col d-flex flex-column text-start font-8 bold-5">
-                        <span>TOTAL TASKS: {{ list.TasksCount }}</span>
-                        <span>TASKS TODO: {{ list.TasksCount - list.TasksCompleted }}</span>
-                        <span>COMPLETED TASKS: {{ list.TasksCompleted }}</span>
+                        <span>TOTAL TASKS: {{ list.tasksCount }}</span>
+                        <span>TASKS TODO: {{ list.tasksCount - list.tasksCompleted }}</span>
+                        <span>COMPLETED TASKS: {{ list.tasksCompleted }}</span>
                     </div>
                     <div class="col text-end">
                         <div class="row flex-row align-items-center">
                             <div class="col">
-                                <span> {{ list.TeamLiderName }}</span>
+                                <span> {{ list.teamLiderName }}</span>
                             </div>
                             <div class="col-auto avatar-box">
                                 <img [src]="avatarPath" />
@@ -169,13 +171,13 @@
                 </div>
                 <div class="row flex-row position-absolute align-items-center" style="right:9px; bottom: 18px;">
                     <div class="float-start w-auto">
-                        <span>{{ list.TeamName }}</span>
+                        <span>{{ list.teamName }}</span>
                     </div>
                     <div class="float-end w-auto ps-0">
                         <div class="team-color-box text-end">
                             <svg id="10015.io" viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg"
                                 xmlns:xlink="http://www.w3.org/1999/xlink">
-                                <path appTodolistCardTeamColor teamColor="{{ list.TeamColor }}"
+                                <path appTodolistCardTeamColor teamColor="{{ list.teamColor }}"
                                     d="M378.5,333Q347,426,250.5,407.5Q154,389,82,314.5Q10,240,76,155Q142,70,232.5,83Q323,96,366.5,168Q410,240,378.5,333Z" />
                             </svg>
                         </div>
@@ -183,6 +185,7 @@
                 </div>
             </div>
         </div>
+      }
         <div class="row justify-content-center align-content-center ">
             <button class="btn b-color-grey" (click)="ReadMoreTodoLists()"
                 style="width: 150px; height: 45px;">MORE</button>
@@ -192,7 +195,9 @@
     <!-- all project's teams container -->
     <div class="row mt-5 justify-content-center">
         <div class="row gap-5 justify-content-center">
-            <div class="team-card" *ngFor="let team of teams">
+          @for (team of teams; track $index)
+          {
+            <div class="team-card">
                 <div class="position-relative h-100">
                     <div class="row text-start py-2">
                         <span style="font-size: 1.3em;"> {{ team.Name.toUpperCase() }}</span>
@@ -210,10 +215,12 @@
                         </div>
                         <div class="row" style="margin-bottom: 40px;">
                             <div class="avatars-box text-start pt-3">
-                                <span *ngFor="let member of team.Members" matTooltip="{{ member.Name }}"
-                                    [matTooltipPosition]="'above'">
+                              @for (member of team.Members; track $index)
+                              {
+                                <span matTooltip="{{ member.Name }}" [matTooltipPosition]="'above'">
                                     <img [src]="member.AvatarPath" />
                                 </span>
+                              }
                             </div>
                         </div>
                         <div class="row position-absolute bottom-0 text-start font-9">
@@ -227,6 +234,7 @@
                     </div>
                 </div>
             </div>
+          }
             <div class="row justify-content-center align-content-center ">
                 <button class="btn b-color-grey" (click)="ReadMoreTeams()"
                     style="width: 150px; height: 45px;">MORE</button>

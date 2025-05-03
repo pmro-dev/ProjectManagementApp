@@ -4,7 +4,7 @@
     <div class="card-body">
 
       <header>
-        <h5 class="card-title">{{ project.Title }}</h5>
+        <h5 class="card-title">{{ project().Title }}</h5>
       </header>
 
       <dl class="details mt-3">
@@ -36,22 +36,22 @@
 
       <div class="icons row justify-content-center">
         <div class="col-3">
-          <img [src]="images.TeamsImgPath" />
+          <img [src]="images().TeamsImgPath" />
           <br />
           <span>3 Teams</span>
         </div>
         <div class="col-3">
-          <img [src]="images.ListsImgPath" />
+          <img [src]="images().ListsImgPath" />
           <br />
           <span>12 Lists</span>
         </div>
         <div class="col-3">
-          <img [src]="images.TasksImgPath" />
+          <img [src]="images().TasksImgPath" />
           <br />
           <span>56 Tasks</span>
         </div>
         <div class="col-3">
-          <img [src]="images.ProgressImgPath" />
+          <img [src]="images().ProgressImgPath" />
           <br />
           <span>In Progress</span>
         </div>
@@ -61,14 +61,14 @@
         <div class="col-auto mt-3">
           <span>Managed by</span>
           <div class="avatar mt-3 d-flex align-items-center">
-            <img [src]="images.AvatarPath" />
+            <img [src]="images().AvatarPath" />
             <span class="px-2 text-start">Aleksandra Kowalska</span>
           </div>
         </div>
         <div class="col-auto mt-3">
           <span>Owned by</span>
           <div class="avatar mt-3 d-flex align-items-center">
-            <img [src]="images.AvatarPath" />
+            <img [src]="images().AvatarPath" />
             <span class="px-2 text-start">Jan Kowalski</span>
           </div>
         </div>
